@@ -6,7 +6,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
 import { SmartImage } from '@/components/media/SmartImage'
-import { TourGrid } from '@/components/tours/TourGrid'
+import { TourCarousel } from '@/components/tours/TourCarousel'
 import { articleSchema, breadcrumbSchema, faqSchema, jsonLdScript } from '@/lib/jsonld'
 import { buildMetadata } from '@/lib/seo'
 import { getBlogPostBySlug, getBlogSlugs } from '@/server/queries/content'
@@ -179,7 +179,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <p className="mt-2 text-sm text-lenga-600">
               Reservá online las excursiones mencionadas en esta guía.
             </p>
-            <TourGrid tours={relatedTours.items} columns={3} className="mt-6" />
+            <div className="mt-6">
+              <TourCarousel tours={relatedTours.items} ariaLabel="Experiencias relacionadas" />
+            </div>
           </section>
         ) : null}
       </article>

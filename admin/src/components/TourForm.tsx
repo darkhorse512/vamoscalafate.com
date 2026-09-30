@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import { ChevronDown, Loader2, Plus, Trash2 } from 'lucide-react'
 import { slugify } from '@vamos/shared'
 import { Alert, Button } from '@/components/ui/primitives'
+import { GalleryField } from './ImageField'
 import { createTourAction, updateTourAction } from '@/server/actions/tours'
 import type { TourFormData } from '@/lib/tour-form-data'
 import { cn } from '@/lib/utils'
@@ -113,7 +114,8 @@ export function TourForm({
         sortOrder: index,
       })),
 
-      imageIds: [],
+      imageIds: form.imageIds,
+      coverImageId: form.coverImageId || form.imageIds[0] || null,
       videoIds: [],
       relatedTourIds: [],
       seo: form.seo,
@@ -547,6 +549,17 @@ export function TourForm({
           <Plus className="size-3.5" aria-hidden="true" />
           Agregar opción
         </Button>
+      </Section>
+
+      <Section title={`Galería (${form.imageIds.length})`} defaultOpen>
+        <GalleryField
+          label="Imágenes de la excursión"
+          hint="La portada es la que aparece en las tarjetas y al compartir el enlace. Arrastrá archivos directamente en el selector para subirlos."
+          value={form.imageIds}
+          coverId={form.coverImageId}
+          onChange={(ids) => update('imageIds', ids)}
+          onCoverChange={(id) => update('coverImageId', id)}
+        />
       </Section>
 
       <Section title="Qué incluye y qué no">

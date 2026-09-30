@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, ChevronDown, Loader2, Minus, Plus, ShieldCheck } from 'lucide-react'
 import { ROUTES, formatDuration, formatMoney, todayUTC } from '@vamos/shared'
 import type { TourDetail } from '@vamos/types'
@@ -44,10 +44,27 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
   const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
   const [pickupId, setPickupId] = useState('')
-  const [slots, setSlots] = useState<Slot[]>([])
-  const [loadingSlots, setLoadingSlots] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  /**
+   * Availability is keyed state, not a bare list.
+   *
+   * `slotState.key` records which (option, date) the stored slots belong to,
+   * so "loading" and "which slots apply" are DERIVED rather than tracked in
+   * separate booleans that can disagree with each other.
+   *
+   * This also makes the widget robust to the value being set programmatically
+   * — browser autofill, a bfcache restore, or a form library — none of which
+   * reliably fire a React change event. Driving the fetch from an onChange
+   * handler misses all of those.
+   */
+  const [slotState, setSlotState] = useState<{
+    key: string
+    slots: Slot[]
+    error: string | null
+  }>({ key: '', slots: [], error: null })
   const [submitting, setSubmitting] = useState(false)
+
+  // Lets the widget read a value the browser set without a React event.
+  const dateInputRef = useRef<HTMLInputElement>(null)
 
   const option = useMemo(
     () => tour.options.find((o) => o.id === optionId) ?? tour.options[0],
@@ -68,17 +85,57 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
     }
   }, [])
 
-  /** Loads the slots for a chosen option + date. */
-  const loadSlots = useCallback(
-    async (selectedOptionId: string, selectedDate: string) => {
-      if (!selectedOptionId || !selectedDate) {
-        setSlots([])
-        return
-      }
+  /**
+   * Recovers a date the browser already holds.
+   *
+   * Three cases set an input's value without React seeing a change event:
+   * a visitor typing before hydration finishes, browser autofill, and a
+   * back/forward (bfcache) restore. Without this the control silently resets
+   * and the visitor's selection is lost.
+   *
+   * The update runs after an await so the effect body never triggers a
+   * synchronous re-render.
+   */
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      await Promise.resolve()
+      if (cancelled) return
+      const current = dateInputRef.current?.value
+      if (current) setDate((existing) => existing || current)
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
-      setLoadingSlots(true)
-      setError(null)
+  /** Identifies the availability request the current selection needs. */
+  const requestKey = optionId && date ? `${optionId}|${date}` : ''
 
+  // Derived: no separate loading flag to fall out of sync with the data.
+  const loadingSlots = requestKey !== '' && slotState.key !== requestKey
+  const slotError = slotState.key === requestKey ? slotState.error : null
+
+  // Memoised so the identity is stable between renders — it feeds a useMemo
+  // below, and a fresh array each render would defeat that memo.
+  const slots = useMemo(
+    () => (slotState.key === requestKey ? slotState.slots : []),
+    [slotState, requestKey],
+  )
+
+  /**
+   * Fetches availability whenever the option or date changes.
+   *
+   * Every state update happens after an await, so the effect body never
+   * triggers a synchronous re-render.
+   */
+  useEffect(() => {
+    if (!requestKey) return
+
+    const [selectedOptionId, selectedDate] = requestKey.split('|') as [string, string]
+    let cancelled = false
+
+    void (async () => {
       try {
         const response = await fetch(
           `/api/availability?optionId=${encodeURIComponent(selectedOptionId)}&date=${encodeURIComponent(selectedDate)}`,
@@ -87,25 +144,34 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
         if (!response.ok) throw new Error('availability request failed')
 
         const data = (await response.json()) as { slots: Slot[] }
-        setSlots(data.slots)
+        if (cancelled) return
 
-        // Auto-select when there is only one departure, so the visitor is not
-        // asked to make a choice that has only one answer.
-        if (data.slots.length === 1) setDepartureTime(data.slots[0]!.departureTime)
-        else setDepartureTime(null)
+        setSlotState({
+          key: requestKey,
+          slots: data.slots,
+          error:
+            data.slots.length === 0
+              ? 'No hay salidas disponibles para esa fecha. Probá con otra.'
+              : null,
+        })
 
-        if (data.slots.length === 0) {
-          setError('No hay salidas disponibles para esa fecha. Probá con otra.')
-        }
+        // Auto-select when there is only one departure: asking the visitor to
+        // choose between one option is friction with no purpose.
+        setDepartureTime(data.slots.length === 1 ? data.slots[0]!.departureTime : null)
       } catch {
-        setError('No pudimos consultar la disponibilidad. Intentá de nuevo en unos segundos.')
-        setSlots([])
-      } finally {
-        setLoadingSlots(false)
+        if (cancelled) return
+        setSlotState({
+          key: requestKey,
+          slots: [],
+          error: 'No pudimos consultar la disponibilidad. Intentá de nuevo en unos segundos.',
+        })
       }
-    },
-    [],
-  )
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [requestKey])
 
   const activeSlot = useMemo(
     () => slots.find((s) => s.departureTime === departureTime) ?? (slots.length === 1 ? slots[0] : null),
@@ -203,10 +269,8 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                 id="bw-option"
                 value={optionId}
                 onChange={(event) => {
-                  const nextOption = event.target.value
-                  setOptionId(nextOption)
+                  setOptionId(event.target.value)
                   setDepartureTime(null)
-                  if (date) void loadSlots(nextOption, date)
                 }}
                 className="w-full appearance-none rounded-control border border-stone-300 bg-white py-2.5 pl-3 pr-9 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
               >
@@ -233,18 +297,12 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
             </label>
             <input
               id="bw-date"
+              ref={dateInputRef}
               type="date"
               min={minDate}
               max={maxDate}
               value={date}
-              onChange={(event) => {
-                const next = event.target.value
-                setDate(next)
-                // Fetch on the interaction that caused it, rather than from an
-                // effect watching `date`: one render pass instead of a cascade.
-                if (next) void loadSlots(optionId, next)
-                else setSlots([])
-              }}
+              onChange={(event) => setDate(event.target.value)}
               className="w-full rounded-control border border-stone-300 bg-white px-3 py-2.5 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
             />
           </div>
@@ -342,9 +400,9 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           ) : null}
 
           {/* Messages */}
-          {error ? (
+          {slotError ? (
             <p role="alert" className="rounded-control bg-[#fbf4e6] px-3 py-2.5 text-xs text-[#8a6014]">
-              {error}
+              {slotError}
             </p>
           ) : null}
 

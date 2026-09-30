@@ -53,6 +53,9 @@ test.describe('tour catalogue', () => {
     const allCount = await page.getByRole('article').count()
 
     await page.goto('/excursiones?categoria=navegaciones')
+    // Wait for the filtered result to render before counting; counting
+    // straight after navigation races the first paint.
+    await expect(page.getByRole('article').first()).toBeVisible()
     const filteredCount = await page.getByRole('article').count()
 
     expect(filteredCount).toBeGreaterThan(0)
@@ -142,7 +145,9 @@ test.describe('tour detail', () => {
   })
 
   test('booking widget carries the selection through to the reservation page', async ({ page }) => {
-    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas')
+    // networkidle so the widget has hydrated: driving a React-controlled
+    // input before that races the first client render.
+    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
 
     const target = new Date(Date.now() + 12 * 86_400_000).toISOString().slice(0, 10)
     await page.locator('#bw-date').fill(target)
@@ -250,5 +255,33 @@ test.describe('error handling', () => {
     const response = await page.goto('/esta-pagina-no-existe')
     expect(response?.status()).toBe(404)
     await expect(page.getByText(/No encontramos esta página/i)).toBeVisible()
+  })
+})
+
+/**
+ * The admin host must never be indexable. These are plain HTTP assertions
+ * about what a crawler receives, so they belong here rather than in the
+ * authenticated admin project — a session cookie would redirect /login and
+ * change the response under test.
+ */
+test.describe('admin host is never indexable', () => {
+  const ADMIN_URL = process.env.E2E_ADMIN_URL ?? 'http://localhost:3001'
+
+  test('robots.txt disallows everything', async ({ request }) => {
+    const response = await request.get(`${ADMIN_URL}/robots.txt`)
+    const text = await response.text()
+
+    expect(text).toContain('Disallow: /')
+    // No sitemap: nothing on this host is ever public.
+    expect(text).not.toContain('Sitemap:')
+  })
+
+  test('sends noindex and no-store on every response', async ({ request }) => {
+    const response = await request.get(`${ADMIN_URL}/login`)
+    const headers = response.headers()
+
+    expect(headers['x-robots-tag']).toContain('noindex')
+    // Admin responses are per-user and must never be cached by a proxy.
+    expect(headers['cache-control']).toContain('no-store')
   })
 })

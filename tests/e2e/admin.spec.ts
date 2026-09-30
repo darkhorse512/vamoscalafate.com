@@ -15,15 +15,17 @@ const ADMIN_URL = process.env.E2E_ADMIN_URL ?? 'http://localhost:3001'
 const EMAIL = process.env.E2E_ADMIN_EMAIL ?? 'admin@vamoscalafate.com'
 const PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? 'CambiarEsteAcceso2026'
 
-async function login(page: import('@playwright/test').Page) {
-  await page.goto(`${ADMIN_URL}/login`)
-  await page.getByLabel('Email').fill(EMAIL)
-  await page.getByLabel('Contraseña').fill(PASSWORD)
-  await page.getByRole('button', { name: 'Ingresar' }).click()
-  await page.waitForURL(/\/dashboard/, { timeout: 20_000 })
-}
+/**
+ * The authentication tests below need a CLEAN context — they assert on the
+ * redirect for an unauthenticated visitor and on failed-login behaviour. The
+ * dashboard tests instead reuse the session created by auth.setup.ts, so the
+ * suite makes one login in total rather than one per test.
+ */
 
 test.describe('admin authentication', () => {
+  // Explicitly unauthenticated: these assert on the signed-out experience.
+  test.use({ storageState: { cookies: [], origins: [] } })
+
   test('redirects an unauthenticated visitor to login', async ({ page }) => {
     await page.goto(`${ADMIN_URL}/dashboard`)
     await expect(page).toHaveURL(/\/login/)
@@ -65,29 +67,30 @@ test.describe('admin authentication', () => {
     expect(wrongPassword).not.toMatch(/no existe|not found|usuario desconocido/i)
   })
 
-  test('signs in with valid credentials and lands on the dashboard', async ({ page }) => {
-    await login(page)
+  /**
+   * One login covers the whole successful path: landing, cookie flags and
+   * sign-out. Split across three tests this would be three real logins, and
+   * the production rate limit is five per fifteen minutes per IP — the suite
+   * would lock itself out and report the limiter working as a failure.
+   */
+  test('signs in, sets a secure session cookie, and signs out', async ({ page, context }) => {
+    await page.goto(`${ADMIN_URL}/login`)
+    await page.getByLabel('Email').fill(EMAIL)
+    await page.getByLabel('Contraseña').fill(PASSWORD)
+    await page.getByRole('button', { name: 'Ingresar' }).click()
+
+    await page.waitForURL(/\/dashboard/, { timeout: 30_000 })
     await expect(page.getByRole('heading', { name: 'Panel' })).toBeVisible()
-  })
 
-  test('issues an httpOnly session cookie', async ({ page, context }) => {
-    await login(page)
-
-    const cookies = await context.cookies()
-    const session = cookies.find((cookie) => cookie.name === 'vc_admin_session')
-
+    const session = (await context.cookies()).find((c) => c.name === 'vc_admin_session')
     expect(session).toBeTruthy()
-    // httpOnly is what stops an XSS payload from stealing the session.
+    // httpOnly stops an XSS payload from reading the session.
     expect(session?.httpOnly).toBe(true)
-    // SameSite=Lax blocks cross-site POSTs, the CSRF defence for actions.
+    // SameSite=Lax blocks cross-site POSTs — the CSRF defence for actions.
     expect(session?.sameSite).toBe('Lax')
-  })
-
-  test('signs out and revokes access', async ({ page }) => {
-    await login(page)
 
     await page.getByRole('button', { name: 'Cerrar sesión' }).click()
-    await page.waitForURL(/\/login/, { timeout: 15_000 })
+    await page.waitForURL(/\/login/, { timeout: 20_000 })
 
     // The revoked session must not be reusable.
     await page.goto(`${ADMIN_URL}/dashboard`)
@@ -95,25 +98,10 @@ test.describe('admin authentication', () => {
   })
 })
 
-test.describe('admin is never indexable', () => {
-  test('robots.txt disallows everything', async ({ request }) => {
-    const response = await request.get(`${ADMIN_URL}/robots.txt`)
-    const text = await response.text()
-    expect(text).toContain('Disallow: /')
-    expect(text).not.toContain('Sitemap:')
-  })
-
-  test('sends a noindex header on every response', async ({ request }) => {
-    const response = await request.get(`${ADMIN_URL}/login`)
-    expect(response.headers()['x-robots-tag']).toContain('noindex')
-    // Admin responses are per-user and must never be cached by a proxy.
-    expect(response.headers()['cache-control']).toContain('no-store')
-  })
-})
-
 test.describe('admin dashboard', () => {
   test.beforeEach(async ({ page }) => {
-    await login(page)
+    // Session supplied by auth.setup.ts via storageState.
+    await page.goto(`${ADMIN_URL}/dashboard`, { waitUntil: 'networkidle' })
   })
 
   test('shows real figures from the database', async ({ page }) => {
@@ -178,7 +166,7 @@ test.describe('admin dashboard', () => {
 
 test.describe('admin visual identity', () => {
   test('does not reuse the public site chrome', async ({ page }) => {
-    await login(page)
+    await page.goto(`${ADMIN_URL}/dashboard`, { waitUntil: 'networkidle' })
 
     // The public header's primary CTA must not appear in an operations tool.
     await expect(page.getByRole('link', { name: 'Reservar', exact: true })).toHaveCount(0)

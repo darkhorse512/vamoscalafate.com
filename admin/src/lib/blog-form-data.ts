@@ -15,6 +15,7 @@ export type BlogFormData = {
   status: string
   categoryId: string
   destinationId: string
+  heroImageId: string
   tagIds: string[]
   featured: boolean
   publishedAt: string
@@ -32,7 +33,7 @@ export type BlogFormData = {
 
 export const EMPTY_POST: BlogFormData = {
   title: '', slug: '', excerpt: '', content: '', status: 'DRAFT',
-  categoryId: '', destinationId: '', tagIds: [], featured: false, publishedAt: '',
+  categoryId: '', destinationId: '', heroImageId: '', tagIds: [], featured: false, publishedAt: '',
   seo: {
     title: '', description: '', canonicalUrl: '', ogTitle: '',
     ogDescription: '', ogImageUrl: '', noindex: false, nofollow: false,

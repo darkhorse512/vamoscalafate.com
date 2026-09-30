@@ -188,3 +188,108 @@ export async function updateMediaAction(input: unknown): Promise<ActionResult<vo
     return actionError(publicError.code, publicError.message)
   }
 }
+
+/**
+ * Lists media for the picker.
+ *
+ * Paginated and filterable: a library with hundreds of photographs must not
+ * load in one response just to attach one image.
+ */
+export async function listMediaAction(args: {
+  page?: number
+  query?: string
+  type?: 'IMAGE' | 'VIDEO' | 'DOCUMENT'
+}): Promise<
+  ActionResult<{
+    items: {
+      id: string
+      url: string
+      filename: string
+      altText: string
+      type: string
+      width: number | null
+      height: number | null
+      sizeLabel: string
+    }[]
+    total: number
+    hasMore: boolean
+  }>
+> {
+  try {
+    await requirePermission('media:read')
+
+    const page = Math.max(1, args.page ?? 1)
+    const pageSize = 24
+
+    const where = {
+      ...(args.type ? { type: args.type } : {}),
+      ...(args.query
+        ? {
+            OR: [
+              { filename: { contains: args.query, mode: 'insensitive' as const } },
+              { altText: { contains: args.query, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    }
+
+    const [rows, total] = await Promise.all([
+      prisma.media.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        select: {
+          id: true, url: true, filename: true, altText: true,
+          type: true, width: true, height: true, size: true,
+        },
+      }),
+      prisma.media.count({ where }),
+    ])
+
+    return actionOk({
+      items: rows.map((m) => ({
+        id: m.id,
+        url: m.url,
+        filename: m.filename,
+        altText: m.altText ?? '',
+        type: m.type,
+        width: m.width,
+        height: m.height,
+        sizeLabel: m.size > 0 ? `${Math.round(m.size / 1024)} KB` : 'externo',
+      })),
+      total,
+      hasMore: page * pageSize < total,
+    })
+  } catch (error) {
+    const publicError = toPublicError(error)
+    return actionError(publicError.code, publicError.message)
+  }
+}
+
+/** Resolves a set of ids to their URLs, for rendering a form's current selection. */
+export async function getMediaByIdsAction(
+  ids: string[],
+): Promise<ActionResult<{ id: string; url: string; filename: string; altText: string }[]>> {
+  try {
+    await requirePermission('media:read')
+    if (ids.length === 0) return actionOk([])
+
+    const rows = await prisma.media.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, url: true, filename: true, altText: true },
+    })
+
+    // Preserve the caller's ordering — it is the gallery's display order.
+    const byId = new Map(rows.map((r) => [r.id, r]))
+    return actionOk(
+      ids
+        .map((id) => byId.get(id))
+        .filter((r): r is NonNullable<typeof r> => Boolean(r))
+        .map((r) => ({ ...r, altText: r.altText ?? '' })),
+    )
+  } catch (error) {
+    const publicError = toPublicError(error)
+    return actionError(publicError.code, publicError.message)
+  }
+}

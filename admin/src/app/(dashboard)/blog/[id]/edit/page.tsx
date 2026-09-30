@@ -44,6 +44,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
     status: post.status,
     categoryId: post.categoryId ?? '',
     destinationId: post.destinationId ?? '',
+    heroImageId: post.heroImageId ?? '',
     tagIds: post.tags.map((t) => t.tagId),
     featured: post.featured,
     publishedAt: toLocalInput(post.publishedAt),

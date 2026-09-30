@@ -236,6 +236,30 @@
     );
   }
 
+  /*
+   * Hero scrim.
+   *
+   * Weighted to the left, where the headline sits, so the right half of the
+   * artwork stays visible. A uniform overlay dark enough for legibility
+   * flattens the whole image and wastes it.
+   */
+  .scrim-hero {
+    background:
+      linear-gradient(
+        to right,
+        rgb(13 28 26 / 0.86) 0%,
+        rgb(13 28 26 / 0.7) 32%,
+        rgb(13 28 26 / 0.28) 62%,
+        rgb(13 28 26 / 0.12) 100%
+      ),
+      linear-gradient(
+        to top,
+        rgb(13 28 26 / 0.55) 0%,
+        rgb(13 28 26 / 0.1) 38%,
+        rgb(13 28 26 / 0.22) 100%
+      );
+  }
+
   .scrim-full {
     background: linear-gradient(
       to top,

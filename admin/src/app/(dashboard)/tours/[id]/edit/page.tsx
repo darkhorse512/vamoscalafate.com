@@ -21,6 +21,7 @@ export default async function EditTourPage({ params }: { params: Promise<{ id: s
     prisma.tour.findUnique({
       where: { id },
       include: {
+        images: { orderBy: { sortOrder: 'asc' } },
         options: { orderBy: { sortOrder: 'asc' } },
         itinerary: { orderBy: { sortOrder: 'asc' } },
         pickupLocations: { orderBy: { sortOrder: 'asc' } },

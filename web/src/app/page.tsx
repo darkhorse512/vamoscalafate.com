@@ -8,7 +8,8 @@ import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 import { Hero } from '@/components/marketing/Hero'
 import { CtaBanner } from '@/components/marketing/CtaBanner'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { TourGrid } from '@/components/tours/TourGrid'
+import { TourCarousel } from '@/components/tours/TourCarousel'
+import { DestinationCarousel } from '@/components/marketing/DestinationCarousel'
 import { SmartImage } from '@/components/media/SmartImage'
 import { HomeSearch } from '@/components/marketing/HomeSearch'
 import {
@@ -77,7 +78,13 @@ export default async function HomePage() {
             description="Del frente del Perito Moreno a los glaciares que solo se alcanzan navegando."
             link={{ href: ROUTES.tours, label: 'Ver todas las excursiones' }}
           />
-          <TourGrid tours={featured} columns={3} priorityCount={3} className="mt-9" />
+          <div className="mt-9">
+            <TourCarousel
+              tours={featured}
+              ariaLabel="Excursiones destacadas"
+              priorityCount={3}
+            />
+          </div>
         </section>
 
         {/* ── 4. Why Vamos Calafate ─────────────────────────────────────── */}
@@ -163,7 +170,9 @@ export default async function HomePage() {
                 description="Del aeropuerto al centro y de El Calafate a El Chaltén, con seguimiento del vuelo."
                 link={{ href: ROUTES.transfers, label: 'Ver todos los traslados' }}
               />
-              <TourGrid tours={transfers.items} columns={3} className="mt-9" />
+              <div className="mt-9">
+                <TourCarousel tours={transfers.items} ariaLabel="Traslados disponibles" />
+              </div>
             </div>
           </section>
         ) : null}
@@ -177,34 +186,9 @@ export default async function HomePage() {
             link={{ href: ROUTES.destinations, label: 'Ver todos los destinos' }}
           />
 
-          <ul className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {destinations.slice(0, 3).map((destination) => (
-              <li key={destination.id}>
-                <Link
-                  href={ROUTES.destination(destination.slug)}
-                  className="group relative flex aspect-[5/4] flex-col justify-end overflow-hidden rounded-card"
-                >
-                  <SmartImage
-                    media={destination.heroImage}
-                    seed={destination.slug}
-                    alt={destination.name}
-                    sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 31vw"
-                    className="transition-transform duration-500 group-hover:scale-[1.05]"
-                  />
-                  <div className="absolute inset-0 scrim-bottom" />
-
-                  <div className="relative p-5">
-                    <h3 className="font-display text-lg font-semibold text-white">
-                      {destination.name}
-                    </h3>
-                    <p className="mt-1.5 line-clamp-2 text-[0.8125rem] leading-relaxed text-white/80">
-                      {destination.shortIntro}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-9">
+            <DestinationCarousel destinations={destinations} ariaLabel="Destinos de la región" />
+          </div>
         </section>
 
         {/* ── 8. Hotels & businesses ────────────────────────────────────── */}

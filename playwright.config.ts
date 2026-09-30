@@ -28,12 +28,30 @@ export default defineConfig({
   },
 
   projects: [
+    /**
+     * Signs in once and hands the session to the admin tests. Without this,
+     * each test's own login exhausts the five-attempt rate limit and the run
+     * fails on the limiter doing its job.
+     */
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       // mobile.spec.ts asserts on the drawer and the sticky booking bar, both
-      // of which are correctly hidden at desktop width.
-      testIgnore: /mobile\.spec\.ts/,
+      // of which are correctly hidden at desktop width. admin.spec.ts runs in
+      // its own authenticated project below.
+      testIgnore: [/mobile\.spec\.ts/, /admin\.spec\.ts/, /auth\.setup\.ts/],
+    },
+
+    {
+      name: 'admin',
+      testMatch: /admin\.spec\.ts/,
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'tests/e2e/.auth/admin.json',
+      },
     },
     // The mobile booking path is the primary conversion route, so it is
     // covered as a first-class target rather than an afterthought.

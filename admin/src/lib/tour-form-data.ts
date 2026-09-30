@@ -55,6 +55,8 @@ export type TourFormData = {
   cancellationPolicy: string
   featured: boolean
   sortOrder: number
+  imageIds: string[]
+  coverImageId: string
   options: OptionDraft[]
   itinerary: StepDraft[]
   pickupLocations: PickupDraft[]
@@ -77,6 +79,7 @@ export const EMPTY_TOUR: TourFormData = {
   location: '', minAge: '', maxGroupSize: '', languages: 'Español, Inglés',
   highlights: '', included: '', excluded: '', importantInfo: '', cancellationPolicy: '',
   featured: false, sortOrder: 0,
+  imageIds: [], coverImageId: '',
   options: [
     {
       name: 'Regular', description: '', price: 0, childPrice: '', currency: 'ARS',
@@ -116,6 +119,7 @@ export function tourToFormData(tour: {
   cancellationPolicy: string | null
   featured: boolean
   sortOrder: number
+  images: { mediaId: string; isCover: boolean; sortOrder: number }[]
   options: {
     id: string; name: string; description: string | null; priceCents: number
     childPriceCents: number | null; currency: string; durationMinutes: number
@@ -157,6 +161,10 @@ export function tourToFormData(tour: {
     cancellationPolicy: tour.cancellationPolicy ?? '',
     featured: tour.featured,
     sortOrder: tour.sortOrder,
+    imageIds: [...tour.images]
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((image) => image.mediaId),
+    coverImageId: tour.images.find((image) => image.isCover)?.mediaId ?? '',
     options: tour.options.map((option) => ({
       id: option.id,
       name: option.name,

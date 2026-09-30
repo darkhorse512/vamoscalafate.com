@@ -10,7 +10,7 @@ import { BookingWidget } from '@/components/booking/BookingWidget'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
 import { Gallery } from '@/components/media/Gallery'
-import { TourGrid } from './TourGrid'
+import { TourCarousel } from './TourCarousel'
 import { breadcrumbSchema, faqSchema, jsonLdScript, tourSchema } from '@/lib/jsonld'
 import { toEmbedUrl } from '@/lib/utils'
 
@@ -348,7 +348,9 @@ export function TourDetailPage({
             <h2 className="font-display text-xl font-semibold text-lenga-950">
               Otras experiencias que te pueden interesar
             </h2>
-            <TourGrid tours={related} columns={3} className="mt-6" />
+            <div className="mt-6">
+              <TourCarousel tours={related} ariaLabel="Experiencias relacionadas" />
+            </div>
           </section>
         ) : null}
 

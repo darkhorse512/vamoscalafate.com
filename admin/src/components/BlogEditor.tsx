@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import { Eye, Loader2 } from 'lucide-react'
 import { readingTimeMinutes, slugify } from '@vamos/shared'
 import { Alert, Button } from '@/components/ui/primitives'
+import { SingleImageField } from './ImageField'
 import { saveBlogPostAction } from '@/server/actions/content'
 import type { BlogFormData } from '@/lib/blog-form-data'
 import { cn } from '@/lib/utils'
@@ -192,6 +193,16 @@ export function BlogEditor({
               {form.content.trim().split(/\s+/).filter(Boolean).length} palabras ·{' '}
               {readingTimeMinutes(form.content)} min de lectura
             </p>
+          </section>
+
+          <section className="admin-panel space-y-4 p-4">
+            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Imagen principal</h2>
+            <SingleImageField
+              label="Imagen de portada"
+              hint="Encabeza el artículo y se usa al compartirlo en redes. Recomendado 1600×900 px o mayor."
+              value={form.heroImageId}
+              onChange={(id) => update('heroImageId', id)}
+            />
           </section>
 
           <section className="admin-panel space-y-4 p-4">

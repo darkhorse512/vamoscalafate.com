@@ -6,7 +6,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
 import { SmartImage } from '@/components/media/SmartImage'
-import { TourGrid } from '@/components/tours/TourGrid'
+import { TourCarousel } from '@/components/tours/TourCarousel'
 import { breadcrumbSchema, destinationSchema, faqSchema, jsonLdScript } from '@/lib/jsonld'
 import { buildMetadata } from '@/lib/seo'
 import { getDestinationBySlug, getDestinationSlugs, listBlogPosts } from '@/server/queries/content'
@@ -147,7 +147,9 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
           <p className="mt-2 text-sm text-lenga-600">
             Experiencias que podés reservar online para conocer este destino.
           </p>
-          <TourGrid tours={tours.items} columns={3} className="mt-6" />
+          <div className="mt-6">
+            <TourCarousel tours={tours.items} ariaLabel={`Excursiones en ${destination.name}`} />
+          </div>
         </section>
       ) : null}
 
