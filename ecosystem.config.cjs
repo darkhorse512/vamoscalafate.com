@@ -54,6 +54,13 @@ module.exports = {
         // Node port must never be reachable from the Internet.
         HOSTNAME: '127.0.0.1',
       },
+      // Consumed by `pm2 start --env production`. Without it PM2 warns that
+      // the environment is undefined and falls back to `env`.
+      env_production: {
+        NODE_ENV: 'production',
+        PORT: 3000,
+        HOSTNAME: '127.0.0.1',
+      },
       out_file: '/var/log/vamoscalafate/web.out.log',
       error_file: '/var/log/vamoscalafate/web.err.log',
     },
@@ -63,6 +70,11 @@ module.exports = {
       cwd: path.join(ROOT, 'admin'),
       script: path.join(ROOT, 'admin', '.next', 'standalone', 'admin', 'server.js'),
       env: {
+        NODE_ENV: 'production',
+        PORT: 3001,
+        HOSTNAME: '127.0.0.1',
+      },
+      env_production: {
         NODE_ENV: 'production',
         PORT: 3001,
         HOSTNAME: '127.0.0.1',

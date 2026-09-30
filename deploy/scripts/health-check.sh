@@ -12,6 +12,12 @@ set -uo pipefail
 QUIET="${1:-}"
 FAILURES=0
 
+# The applications run under the `vamos` user, so PM2's state lives in that
+# user's home. Cron runs this as root, which has its own PM2 home and would
+# otherwise report both processes as missing.
+PM2_USER="${PM2_USER:-vamos}"
+export PM2_HOME="${PM2_HOME:-/home/$PM2_USER/.pm2}"
+
 say() { [ "$QUIET" = "--quiet" ] || echo "$1"; }
 
 check() {
@@ -28,16 +34,21 @@ say "Vamos Calafate health check - $(date -u +%FT%TZ)"
 say ""
 
 # ── Application processes ──────────────────────────────────────────────────
+PM2_LIST="$(pm2 jlist 2>/dev/null || echo '[]')"
+
 for app in vamoscalafate-web vamoscalafate-admin; do
-  if pm2 jlist 2>/dev/null | grep -q "\"name\":\"$app\""; then
-    STATUS="$(pm2 jlist | node -e "
-      let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{
+  STATUS="$(printf '%s' "$PM2_LIST" | node -e "
+    let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{
+      try {
         const p=JSON.parse(d).find(x=>x.name==='$app');
-        console.log(p ? p.pm2_env.status : 'missing');
-      })" 2>/dev/null)"
-    [ "$STATUS" = "online" ] && check "$app process" ok || check "$app process" "status=$STATUS"
+        console.log(p ? p.pm2_env.status : 'not managed by pm2');
+      } catch { console.log('could not read pm2 state'); }
+    })" 2>/dev/null || echo 'could not read pm2 state')"
+
+  if [ "$STATUS" = "online" ]; then
+    check "$app process" ok
   else
-    check "$app process" "not managed by pm2"
+    check "$app process" "$STATUS"
   fi
 done
 
@@ -51,8 +62,10 @@ ADMIN="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:3
 # ── Database ───────────────────────────────────────────────────────────────
 ENV_FILE="${ENV_FILE:-/var/www/vamoscalafate/web/.env}"
 if [ -f "$ENV_FILE" ]; then
-  DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"'')"
-  if psql "$DATABASE_URL" -c 'SELECT 1' > /dev/null 2>&1; then
+  # shellcheck source=lib-dburl.sh
+  . "$(dirname "$(readlink -f "$0")")/lib-dburl.sh"
+  DATABASE_URL="$(read_database_url "$ENV_FILE")"
+  if psql "$(libpq_url "$DATABASE_URL")" -c 'SELECT 1' > /dev/null 2>&1; then
     check "database reachable" ok
   else
     check "database reachable" "connection failed"

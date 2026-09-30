@@ -23,8 +23,14 @@ if [ -z "$DUMP_FILE" ] || [ ! -f "$DUMP_FILE" ]; then
   exit 1
 fi
 
-DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"'')"
+# shellcheck source=lib-dburl.sh
+. "$(dirname "$(readlink -f "$0")")/lib-dburl.sh"
+
+DATABASE_URL="$(read_database_url "$ENV_FILE")"
 [ -n "$DATABASE_URL" ] || { echo "DATABASE_URL not found in $ENV_FILE" >&2; exit 1; }
+
+# libpq tools reject Prisma's extra query parameters.
+PG_URL="$(libpq_url "$DATABASE_URL")"
 
 echo "About to restore:"
 echo "  dump:     $DUMP_FILE"
@@ -37,7 +43,7 @@ read -r -p "Type 'restore' to continue: " CONFIRM
 # A safety dump of the current state, in case the restore is the mistake.
 SAFETY="/var/backups/vamoscalafate/pre-restore-$(date -u +%Y%m%dT%H%M%SZ).dump"
 echo "Taking a safety dump of the current database → $SAFETY"
-pg_dump --dbname="$DATABASE_URL" --format=custom --compress=9 --file="$SAFETY"
+pg_dump --dbname="$PG_URL" --format=custom --compress=9 --file="$SAFETY"
 
 echo "Stopping application processes…"
 pm2 stop vamoscalafate-web vamoscalafate-admin || true
@@ -45,7 +51,7 @@ pm2 stop vamoscalafate-web vamoscalafate-admin || true
 echo "Restoring…"
 # --clean --if-exists drops existing objects first; without it the restore
 # collides with the current schema.
-pg_restore --dbname="$DATABASE_URL" \
+pg_restore --dbname="$PG_URL" \
            --clean --if-exists \
            --no-owner --no-privileges \
            --jobs=2 \

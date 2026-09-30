@@ -23,6 +23,9 @@ log() { logger -t "$LOG_TAG" "$1"; echo "[$(date -u +%FT%TZ)] $1"; }
 
 fail() {
   log "FAILED: $1"
+  # Remove any partial output. A zero-byte file sitting in the backup
+  # directory looks like a backup and is the worst possible failure mode.
+  [ -n "${DUMP_FILE:-}" ] && [ -f "$DUMP_FILE" ] && rm -f "$DUMP_FILE"
   exit 1
 }
 
@@ -33,9 +36,15 @@ trap 'fail "unexpected error on line $LINENO"' ERR
 ENV_FILE="${ENV_FILE:-/var/www/vamoscalafate/web/.env}"
 [ -f "$ENV_FILE" ] || fail "environment file not found: $ENV_FILE"
 
-# shellcheck disable=SC2046
-DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"'')"
+# shellcheck source=lib-dburl.sh
+. "$(dirname "$(readlink -f "$0")")/lib-dburl.sh"
+
+DATABASE_URL="$(read_database_url "$ENV_FILE")"
 [ -n "$DATABASE_URL" ] || fail "DATABASE_URL not set in $ENV_FILE"
+
+# Prisma's connection string carries parameters libpq rejects; strip them.
+PG_URL="$(libpq_url "$DATABASE_URL")"
+PG_SCHEMA="$(url_schema "$DATABASE_URL")"
 
 mkdir -p "$BACKUP_DIR"
 chmod 700 "$BACKUP_DIR"
@@ -46,7 +55,8 @@ log "starting backup → $DUMP_FILE"
 
 # -Fc  custom format (compressed, selectively restorable)
 # --no-owner / --no-privileges keeps the dump portable across roles.
-pg_dump --dbname="$DATABASE_URL" \
+pg_dump --dbname="$PG_URL" \
+        --schema="$PG_SCHEMA" \
         --format=custom \
         --compress=9 \
         --no-owner \
@@ -60,6 +70,13 @@ SIZE="$(du -h "$DUMP_FILE" | cut -f1)"
 
 # A dump that cannot be listed is not a backup. Verify before trusting it.
 pg_restore --list "$DUMP_FILE" > /dev/null || fail "dump failed verification"
+
+# A technically-valid but empty dump is also not a backup.
+BYTES="$(stat -c %s "$DUMP_FILE")"
+[ "$BYTES" -gt 10240 ] || fail "dump is only ${BYTES} bytes — refusing to call that a backup"
+
+TABLES="$(pg_restore --list "$DUMP_FILE" | grep -c "TABLE DATA" || true)"
+[ "$TABLES" -gt 10 ] || fail "dump contains only ${TABLES} tables — expected the full schema"
 
 log "backup complete ($SIZE), verified"
 
