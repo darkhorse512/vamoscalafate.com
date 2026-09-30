@@ -1,0 +1,36 @@
+{
+  "name": "@vamos/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build && node ../scripts/prepare-standalone.mjs web",
+    "start": "node .next/standalone/web/server.js",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "start:dev": "next start --port 3000"
+  },
+  "dependencies": {
+    "@vamos/db": "workspace:*",
+    "@vamos/email": "workspace:*",
+    "@vamos/shared": "workspace:*",
+    "@vamos/types": "workspace:*",
+    "@vamos/validation": "workspace:*",
+    "lucide-react": "^1.49.0",
+    "next": "16.3.7",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "16.3.7",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "typescript": "5.9.3"
+  }
+}

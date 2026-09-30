@@ -1,0 +1,253 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VAMOS CALAFATE — design system
+
+   A Patagonia palette: glacier blues drawn from meltwater, the deep greens of
+   lenga forest, and the warm stone neutrals of the steppe. Accents are
+   deliberately restrained — the photography carries the colour, the interface
+   stays out of its way.
+
+   Deliberately avoided: heavy border radii, multi-stop gradients and the
+   card-on-card stacking that makes a travel site read as a SaaS dashboard.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Glacier: primary. Ice blue, cool and slightly desaturated ─────────── */
+  --color-glacier-50: #f0f7fa;
+  --color-glacier-100: #dcedf4;
+  --color-glacier-200: #bcdce9;
+  --color-glacier-300: #8dc3d8;
+  --color-glacier-400: #56a2c1;
+  --color-glacier-500: #3585a7;
+  --color-glacier-600: #2a6c8c;
+  --color-glacier-700: #255872;
+  --color-glacier-800: #244a5f;
+  --color-glacier-900: #223f51;
+  --color-glacier-950: #142836;
+
+  /* ── Lenga: deep forest green, used for ink and dark surfaces ─────────── */
+  --color-lenga-50: #f1f7f4;
+  --color-lenga-100: #dcebe3;
+  --color-lenga-200: #bbd7c9;
+  --color-lenga-300: #90bba8;
+  --color-lenga-400: #639a84;
+  --color-lenga-500: #447e69;
+  --color-lenga-600: #336453;
+  --color-lenga-700: #2b5145;
+  --color-lenga-800: #254238;
+  --color-lenga-900: #21372f;
+  --color-lenga-950: #10221f;
+
+  /* ── Stone: warm neutrals from the steppe. Never cool grey ────────────── */
+  --color-stone-50: #faf9f7;
+  --color-stone-100: #f5f2ed;
+  --color-stone-200: #e9e4da;
+  --color-stone-300: #d8d0c1;
+  --color-stone-400: #bdb09b;
+  --color-stone-500: #a5947c;
+  --color-stone-600: #8d7b64;
+  --color-stone-700: #756453;
+  --color-stone-800: #615347;
+  --color-stone-900: #50463d;
+  --color-stone-950: #2a241f;
+
+  /* ── Calafate: the berry the town is named for. Used sparingly ────────── */
+  --color-calafate-400: #7b6398;
+  --color-calafate-500: #634d80;
+  --color-calafate-600: #503e69;
+
+  /* ── Ochre: single warm accent for prices and high-intent CTAs ────────── */
+  --color-ochre-400: #d19a3f;
+  --color-ochre-500: #b97f25;
+  --color-ochre-600: #98651c;
+
+  /* ── Semantic ─────────────────────────────────────────────────────────── */
+  --color-success: #2f6f4f;
+  --color-warning: #8a6014;
+  --color-danger: #9b3232;
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, 'Times New Roman', serif;
+
+  /* Fluid display sizes — no layout jump between breakpoints. */
+  --text-display-sm: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-display-md: clamp(2.125rem, 1.6rem + 2.4vw, 3.25rem);
+  --text-display-lg: clamp(2.5rem, 1.7rem + 3.6vw, 4.5rem);
+
+  /* ── Elevation: soft and low-contrast. Patagonian light is diffuse ────── */
+  --shadow-subtle: 0 1px 2px rgb(16 34 31 / 0.05), 0 1px 3px rgb(16 34 31 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(16 34 31 / 0.04), 0 8px 24px rgb(16 34 31 / 0.08);
+  --shadow-float: 0 4px 8px rgb(16 34 31 / 0.05), 0 16px 48px rgb(16 34 31 / 0.12);
+
+  --radius-card: 0.5rem;
+  --radius-control: 0.375rem;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* Consumed by sticky headers and scroll-margin so anchor links don't hide
+       their target underneath the fixed header. */
+    --header-height: 4rem;
+  }
+
+  * {
+    @apply border-stone-200;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-[0.9375rem] leading-relaxed text-lenga-800 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold tracking-tight text-lenga-950;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, consistent focus treatment. Never remove the indicator —
+     keyboard users navigate the whole booking flow with it. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-glacier-600 ring-offset-2 ring-offset-white;
+  }
+
+  /* Anchor targets clear the sticky header. */
+  :target {
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
+  }
+
+  /* Honour the OS reduced-motion setting: animation is decoration, and some
+     people get motion sickness from it. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Remove the number spinners that make passenger counters look like forms. */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* ── Components ─────────────────────────────────────────────────────────── */
+
+@layer components {
+  /* Skip link: visible only once focused. */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100]
+           focus:rounded-md focus:bg-lenga-950 focus:px-4 focus:py-2.5 focus:text-sm
+           focus:font-semibold focus:text-white;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8;
+  }
+
+  .container-prose {
+    @apply mx-auto w-full max-w-[68ch] px-5 sm:px-6;
+  }
+
+  /* Long-form editorial typography for blog posts, destinations and legal
+     pages. Tuned for reading, not for density. */
+  .prose-vamos {
+    @apply text-[1.0625rem] leading-[1.75] text-lenga-800;
+  }
+  .prose-vamos > * + * { @apply mt-5; }
+  .prose-vamos h2 {
+    @apply mt-12 mb-4 font-display text-2xl font-semibold text-lenga-950 sm:text-[1.75rem];
+  }
+  .prose-vamos h3 {
+    @apply mt-9 mb-3 font-display text-xl font-semibold text-lenga-950;
+  }
+  .prose-vamos ul { @apply my-5 space-y-2 pl-5; }
+  .prose-vamos ol { @apply my-5 list-decimal space-y-2 pl-5; }
+  .prose-vamos ul > li { @apply relative pl-4; }
+  .prose-vamos ul > li::before {
+    content: '';
+    @apply absolute left-0 top-[0.7em] size-1.5 rounded-full bg-glacier-400;
+  }
+  .prose-vamos a {
+    @apply font-medium text-glacier-700 underline decoration-glacier-300 underline-offset-[3px]
+           transition-colors hover:text-glacier-800 hover:decoration-glacier-600;
+  }
+  .prose-vamos strong { @apply font-semibold text-lenga-950; }
+  .prose-vamos blockquote {
+    @apply my-7 border-l-[3px] border-glacier-400 bg-stone-50 py-4 pl-5 pr-4 text-lenga-700 italic;
+  }
+  .prose-vamos table {
+    @apply my-7 w-full border-collapse text-[0.9375rem];
+  }
+  .prose-vamos th {
+    @apply border-b-2 border-stone-300 px-3 py-2.5 text-left font-semibold text-lenga-950;
+  }
+  .prose-vamos td { @apply border-b border-stone-200 px-3 py-2.5 align-top; }
+  .prose-vamos hr { @apply my-10 border-stone-200; }
+  .prose-vamos code {
+    @apply rounded bg-stone-100 px-1.5 py-0.5 text-[0.875em] text-lenga-900;
+  }
+
+  /* Ken-burns drift on the hero. Suppressed under reduced-motion by the
+     base-layer rule above. */
+  .hero-drift {
+    animation: hero-drift 28s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes hero-drift {
+  from { transform: scale(1.04) translate3d(0, 0, 0); }
+  to   { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
+}
+
+@layer utilities {
+  /* Legibility layer over photography — a vertical ramp rather than a flat
+     tint, so the image stays visible where text is not. */
+  .scrim-bottom {
+    background: linear-gradient(
+      to top,
+      rgb(16 34 31 / 0.85) 0%,
+      rgb(16 34 31 / 0.55) 28%,
+      rgb(16 34 31 / 0.15) 60%,
+      transparent 100%
+    );
+  }
+
+  .scrim-full {
+    background: linear-gradient(
+      to top,
+      rgb(16 34 31 / 0.8) 0%,
+      rgb(16 34 31 / 0.4) 45%,
+      rgb(16 34 31 / 0.35) 100%
+    );
+  }
+
+  .text-balance { text-wrap: balance; }
+
+  /* Hides the scrollbar on horizontal mobile rails without disabling scroll. */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
