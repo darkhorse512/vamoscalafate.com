@@ -82,14 +82,43 @@ certbot certonly --webroot -w /var/www/certbot \
   --email "$EMAIL" --agree-tos --no-eff-email --non-interactive
 
 step "Installing Certbot's recommended TLS options"
-# The full config includes these; Certbot only writes them when it manages
-# nginx itself, so fetch them if they are missing.
-[ -f /etc/letsencrypt/options-ssl-nginx.conf ] || \
-  curl -fsS -o /etc/letsencrypt/options-ssl-nginx.conf \
-    https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot/_internal/tls_configs/options-ssl-nginx.conf
-[ -f /etc/letsencrypt/ssl-dhparams.pem ] || \
-  curl -fsS -o /etc/letsencrypt/ssl-dhparams.pem \
-    https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem
+# The full nginx config includes these two files. Certbot only writes them to
+# /etc/letsencrypt when it manages nginx itself (`--nginx`), and we use
+# `certonly`, so copy them from the installed package.
+#
+# Sourced locally rather than downloaded: the upstream raw-GitHub paths move
+# between releases, and a 404 mid-deploy is a poor failure mode.
+if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
+  SRC="$(find /usr/lib/python3 /usr/lib/python3.* /usr/share \
+          -name options-ssl-nginx.conf -path '*tls_configs*' 2>/dev/null | head -1 || true)"
+  if [ -n "$SRC" ]; then
+    cp "$SRC" /etc/letsencrypt/options-ssl-nginx.conf
+    echo "  copied options-ssl-nginx.conf from $SRC"
+  else
+    # Last resort: a conservative modern policy equivalent to Certbot's.
+    cat > /etc/letsencrypt/options-ssl-nginx.conf <<'TLSCONF'
+ssl_session_cache shared:le_nginx_SSL:10m;
+ssl_session_timeout 1440m;
+ssl_session_tickets off;
+ssl_protocols TLSv1.2 TLSv1.3;
+ssl_prefer_server_ciphers off;
+ssl_ciphers "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+TLSCONF
+    echo "  wrote a built-in TLS policy (certbot's copy not found)"
+  fi
+fi
+
+if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
+  SRC="$(find /usr/lib/python3 /usr/lib/python3.* /usr/share \
+          -name ssl-dhparams.pem 2>/dev/null | head -1 || true)"
+  if [ -n "$SRC" ]; then
+    cp "$SRC" /etc/letsencrypt/ssl-dhparams.pem
+    echo "  copied ssl-dhparams.pem from $SRC"
+  else
+    echo "  generating dhparams (this takes a minute)…"
+    openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048 2>/dev/null
+  fi
+fi
 
 step "Switching to the full TLS configuration"
 cp "$APP_DIR/deploy/nginx/snippets/"*.conf /etc/nginx/snippets/
