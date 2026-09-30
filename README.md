@@ -292,13 +292,50 @@ sudo systemctl status certbot.timer   # renewal is automatic
 
 ---
 
-## 13. Resend email configuration
+## 13. Email configuration
 
-**REQUIRED EXTERNAL CONFIGURATION.** Until this is done, `EMAIL_TRANSPORT`
-stays `console`: messages are logged and **nothing is delivered**. Delivery is
-never faked or reported as successful.
+The transport works with **any SMTP server**. Until one is configured,
+`EMAIL_TRANSPORT` stays `console`: messages are logged and **nothing is
+delivered**. Delivery is never faked or reported as successful.
 
-1. Create an API key at <https://resend.com/api-keys> → `RESEND_SMTP_PASSWORD`
+Verify whichever option you pick from the admin:
+**Ajustes → Probar el envío de correo**. It sends a real message and reports
+the true outcome, including "not delivered, only logged".
+
+### Option A — a mailbox on your own domain (simplest)
+
+Uses an existing mailbox such as `reservas@vamoscalafate.com`.
+
+```ini
+EMAIL_TRANSPORT="smtp"
+SMTP_HOST="mail.vamoscalafate.com"
+SMTP_PORT="465"
+SMTP_USER="reservas@vamoscalafate.com"
+SMTP_PASSWORD="the mailbox password"
+EMAIL_FROM="Vamos Calafate <reservas@vamoscalafate.com>"
+```
+
+**No new DNS records are needed** — the domain's existing SPF and DKIM already
+authorise its own mail host.
+
+Trade-off: shared-hosting SMTP usually caps daily volume (often a few hundred
+messages) and gives no delivery reporting. Fine to launch with; move to
+Option B if volume grows or confirmations start landing in spam.
+
+`EMAIL_FROM` must be an address the mailbox is allowed to send as — usually
+the mailbox itself, or an alias of it.
+
+### Option B — Resend (better at volume)
+
+```ini
+EMAIL_TRANSPORT="smtp"
+SMTP_HOST="smtp.resend.com"
+SMTP_PORT="465"
+SMTP_USER="resend"
+SMTP_PASSWORD="re_..."
+```
+
+1. Create an API key at <https://resend.com/api-keys> → `SMTP_PASSWORD`
 2. Add and verify `vamoscalafate.com` at <https://resend.com/domains>
 3. Publish the DNS records Resend generates (the values are account-specific):
 
@@ -309,12 +346,28 @@ never faked or reported as successful.
    | MX   | `send.vamoscalafate.com` | bounce handling |
    | TXT  | `_dmarc`                 | DMARC   |
 
-4. Set `EMAIL_TRANSPORT=smtp` and restart.
+4. Set `EMAIL_TRANSPORT=smtp` and `pm2 reload all`.
 
 Use a verified sender such as `reservas@vamoscalafate.com`. **Do not** use
 `onboarding@resend.dev` in production.
 
-Verify from the admin: **Ajustes → Estado de las integraciones**.
+> **A domain may have only ONE root SPF record.** Use Resend's `send.`
+> subdomain verification so the existing SPF is left untouched. Never add a
+> second `v=spf1` TXT record on the apex — that breaks authentication for all
+> mail from the domain. See [docs/DNS.md](./docs/DNS.md).
+
+### Which addresses can be used
+
+Any address on the domain, set independently:
+
+| Variable | Used for |
+|---|---|
+| `EMAIL_FROM` | The `From:` on customer mail. Must be an address the SMTP account may send as |
+| `EMAIL_REPLY_TO` | Where customer replies go |
+| `EMAIL_ADMIN` | Internal notifications: new bookings, listing requests, contact form |
+
+They can all differ — for example send from `reservas@`, take replies at
+`reservas@`, and route internal alerts to `ventas@`.
 
 ---
 

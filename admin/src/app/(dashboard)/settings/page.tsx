@@ -5,6 +5,7 @@ import { prisma } from '@vamos/db'
 import {
   isEmailConfigured, isPaymentProviderConfigured, publicEnv, serverEnv,
 } from '@vamos/shared'
+import { EmailTester } from '@/components/EmailTester'
 import { SettingsEditor } from '@/components/SettingsEditor'
 import { PageHeader } from '@/components/ui/primitives'
 import { requirePermission } from '@/server/auth'
@@ -147,6 +148,10 @@ export default async function SettingsPage() {
           Las credenciales se configuran en el archivo <code className="font-mono">.env</code> del
           servidor y requieren reiniciar el proceso con PM2. Nunca se editan desde este panel.
         </p>
+
+        <div className="mt-4">
+          <EmailTester defaultTo={env.EMAIL_ADMIN ?? 'ventas@vamoscalafate.com'} />
+        </div>
       </section>
 
       <section className="mb-8">

@@ -29,6 +29,29 @@ const serverSchema = z.object({
   AUTH_COOKIE_DOMAIN: z.string().optional(),
 
   EMAIL_TRANSPORT: z.enum(['smtp', 'console']).default('console'),
+
+  /**
+   * Generic SMTP credentials. Work with ANY provider — Resend, a mailbox on
+   * the domain's own mail host, Amazon SES, Postmark, Mailgun.
+   *
+   * These take precedence over the RESEND_SMTP_* names below, which are kept
+   * so existing configurations keep working.
+   */
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASSWORD: z.string().optional(),
+  /**
+   * Set to "false" only for a mail server with a self-signed or mismatched
+   * certificate — shared hosting sometimes has one. It disables certificate
+   * verification, so the connection is encrypted but not authenticated.
+   */
+  SMTP_TLS_REJECT_UNAUTHORIZED: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+
+  // Resend-specific aliases, retained for compatibility.
   RESEND_SMTP_HOST: z.string().default('smtp.resend.com'),
   RESEND_SMTP_PORT: z.coerce.number().int().positive().default(465),
   RESEND_SMTP_USERNAME: z.string().default('resend'),
@@ -136,8 +159,43 @@ export function isPaymentProviderConfigured(provider: 'mercadopago' | 'stripe'):
   return Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET)
 }
 
+/**
+ * Resolves the effective SMTP settings.
+ *
+ * Generic SMTP_* wins; RESEND_SMTP_* is the fallback. Returns null when no
+ * password is configured under either naming, which is what keeps the system
+ * from claiming mail is being delivered when it is not.
+ */
+export function smtpSettings(): {
+  host: string
+  port: number
+  user: string
+  password: string
+  secure: boolean
+  rejectUnauthorized: boolean
+} | null {
+  const env = serverEnv()
+
+  const password = env.SMTP_PASSWORD || env.RESEND_SMTP_PASSWORD
+  if (!password) return null
+
+  const host = env.SMTP_HOST || env.RESEND_SMTP_HOST
+  const port = env.SMTP_PORT ?? env.RESEND_SMTP_PORT
+  const user = env.SMTP_USER || env.RESEND_SMTP_USERNAME
+
+  return {
+    host,
+    port,
+    user,
+    password,
+    // 465 is implicit TLS; 587 and 25 start plaintext and upgrade via STARTTLS.
+    secure: port === 465,
+    rejectUnauthorized: env.SMTP_TLS_REJECT_UNAUTHORIZED,
+  }
+}
+
 /** True when real email delivery is configured. Otherwise mail is logged only. */
 export function isEmailConfigured(): boolean {
   const env = serverEnv()
-  return env.EMAIL_TRANSPORT === 'smtp' && Boolean(env.RESEND_SMTP_PASSWORD)
+  return env.EMAIL_TRANSPORT === 'smtp' && smtpSettings() !== null
 }

@@ -625,3 +625,49 @@ export async function updateSiteSettingAction(
     return actionError(publicError.code, publicError.message)
   }
 }
+
+/**
+ * Sends a test message to the signed-in administrator.
+ *
+ * Reports the true outcome: when no SMTP credentials are configured the
+ * transport returns `delivered: false` and this surfaces that, rather than
+ * showing a success message for mail that was only logged.
+ */
+export async function sendTestEmailAction(
+  to: string,
+): Promise<ActionResult<{ delivered: boolean; detail: string }>> {
+  try {
+    const session = await requirePermission('settings:read')
+
+    const { sendTestEmail } = await import('@vamos/email')
+    const result = await sendTestEmail(to)
+
+    await recordAudit({
+      action: 'UPDATE',
+      entityType: 'SiteSetting',
+      entityId: 'email.test',
+      summary: `Prueba de correo a ${to}: ${result.delivered ? 'entregada' : 'no entregada'}`,
+      actorId: session.id,
+      actorEmail: session.email,
+    })
+
+    if (result.delivered) {
+      return actionOk({
+        delivered: true,
+        detail: `Enviado correctamente (id ${result.messageId}). Revisá la bandeja de ${to}, incluida la carpeta de spam.`,
+      })
+    }
+
+    return actionOk({
+      delivered: false,
+      detail:
+        result.reason === 'not_configured'
+          ? 'No se envió: falta configurar SMTP_PASSWORD o EMAIL_TRANSPORT sigue en "console". El mensaje solo se registró en el log.'
+          : `El servidor de correo rechazó el envío: ${result.error ?? 'sin detalle'}`,
+    })
+  } catch (error) {
+    log.error('Test email failed', error)
+    const publicError = toPublicError(error)
+    return actionError(publicError.code, publicError.message)
+  }
+}
