@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
  * Homepage hero.
  *
  * When no hero photograph has been uploaded yet, this falls back to a drawn
- * Patagonian scene rather than stock imagery — presenting a generic photo as
+ * Patagonian scene rather than stock imagery - presenting a generic photo as
  * El Calafate would misrepresent the destination. Replace `media` with a real
  * image as soon as one exists; the composition is designed to take one.
  *

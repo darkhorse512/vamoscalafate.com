@@ -5,7 +5,7 @@ import type { Resource } from '@vamos/shared'
  *
  * Each item declares the `resource` it needs. The sidebar filters itself
  * against the signed-in user's role, so a BOOKING_MANAGER simply never sees
- * the blog section. Hiding the link is a usability measure — the actual access
+ * the blog section. Hiding the link is a usability measure - the actual access
  * control is the requirePermission() call inside each page.
  */
 

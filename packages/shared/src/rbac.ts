@@ -1,5 +1,5 @@
 /**
- * Role-based access control — the single source of truth.
+ * Role-based access control - the single source of truth.
  *
  * Authorization is resolved from this in-process matrix so that a permission
  * check costs no database round-trip (middleware and every server action run
@@ -77,7 +77,7 @@ const CONTENT_RESOURCES: Resource[] = ['tours', 'categories', 'destinations', 'a
 const EDITORIAL_RESOURCES: Resource[] = ['blog', 'destinations', 'hotels', 'businesses', 'media']
 
 /**
- * SUPER_ADMIN is intentionally not enumerated — `can()` short-circuits for it,
+ * SUPER_ADMIN is intentionally not enumerated - `can()` short-circuits for it,
  * so adding a new resource never accidentally locks the owner out.
  */
 export const ROLE_PERMISSIONS: Record<AdminRoleKey, Permission[]> = {
@@ -151,7 +151,7 @@ export function canAccessResource(role: AdminRoleKey, resource: Resource): boole
   return can(role, `${resource}:read`)
 }
 
-/** Every permission a role holds — used to render the admin's role screen. */
+/** Every permission a role holds - used to render the admin's role screen. */
 export function permissionsForRole(role: AdminRoleKey): Permission[] {
   if (role === 'SUPER_ADMIN') {
     return RESOURCES.flatMap((r) => [...ALL_ACTIONS, 'refund' as Action].map((a) => `${r}:${a}` as Permission))

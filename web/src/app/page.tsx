@@ -26,8 +26,8 @@ export const metadata: Metadata = {
  * Homepage.
  *
  * A Server Component throughout: the only client JavaScript is the header,
- * the search box and the consent banner. Everything else — hero, grids,
- * editorial — is HTML on first paint.
+ * the search box and the consent banner. Everything else - hero, grids,
+ * editorial - is HTML on first paint.
  *
  * Data is fetched in parallel; a waterfall of sequential awaits here would
  * add a full round-trip per section to TTFB.
@@ -114,7 +114,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── 5. Explore El Calafate — categories ───────────────────────── */}
+        {/* ── 5. Explore El Calafate - categories ───────────────────────── */}
         <section className="container-page py-16 sm:py-20">
           <SectionHeading
             eyebrow="Explorá por tipo de experiencia"

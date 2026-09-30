@@ -65,7 +65,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   /**
    * Contextual tours for this article. Linking editorial to the destination's
-   * products is the core of the internal-linking model in spec §35 — a guide
+   * products is the core of the internal-linking model in spec §35 - a guide
    * about the Perito Moreno should reach the excursions that go there.
    */
   const relatedTours = post.destination

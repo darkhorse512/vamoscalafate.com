@@ -15,7 +15,7 @@ import { bookingService } from '@/server/services/booking'
  * from the database, where it was set by a signature-verified webhook.
  *
  * A visitor who edits the URL to `?estado=exito` sees whatever the database
- * actually says — never a confirmation that did not happen.
+ * actually says - never a confirmation that did not happen.
  */
 export const metadata: Metadata = noindexMetadata(
   'Resultado del pago',

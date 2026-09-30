@@ -4,7 +4,7 @@ import { z } from 'zod'
  * Primitives reused across every schema.
  *
  * These are the server-side contract. Client-side validation exists purely to
- * give fast feedback — every mutation re-parses its input with these schemas
+ * give fast feedback - every mutation re-parses its input with these schemas
  * before touching the database.
  */
 

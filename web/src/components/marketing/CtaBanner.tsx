@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { ButtonLink } from '@/components/ui/Button'
 
-/** Closing call to action. One primary path, one secondary — never a wall. */
+/** Closing call to action. One primary path, one secondary - never a wall. */
 export function CtaBanner({
   eyebrow,
   title,

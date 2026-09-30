@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   VAMOS CALAFATE — ADMIN design system
+   VAMOS CALAFATE - ADMIN design system
 
    Deliberately DIFFERENT from the public site (spec §68). The public site is
    editorial and photographic; this is a dense operations tool. Here that means
@@ -13,7 +13,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* Cool slate neutrals — distinct from the public site's warm stone. */
+  /* Cool slate neutrals - distinct from the public site's warm stone. */
   --color-slate-50: #f8fafb;
   --color-slate-100: #f1f4f6;
   --color-slate-200: #e3e8ec;

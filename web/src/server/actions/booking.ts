@@ -13,7 +13,7 @@ const log = logger.scoped('action:booking')
 /**
  * Booking server actions.
  *
- * Server Actions are public HTTP endpoints — the fact that a form calls them
+ * Server Actions are public HTTP endpoints - the fact that a form calls them
  * does not restrict who can. Every one of them therefore re-validates its
  * input with Zod and re-prices from the database, exactly as a REST handler
  * would.
@@ -78,7 +78,7 @@ export async function createBookingAction(
  * Starts a provider checkout and redirects.
  *
  * `redirect()` throws a control-flow signal that Next.js catches, so it must
- * be called OUTSIDE the try/catch — inside, the catch would swallow it and
+ * be called OUTSIDE the try/catch - inside, the catch would swallow it and
  * the redirect would silently never happen.
  */
 export async function startCheckoutAction(input: unknown): Promise<ActionResult<never> | never> {

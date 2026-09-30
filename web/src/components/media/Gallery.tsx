@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
  * dialog: Escape closes it, arrow keys navigate, background scroll is locked
  * and focus is returned to the trigger on close.
  *
- * The first image is `priority` — on a tour page it is the LCP element, and
+ * The first image is `priority` - on a tour page it is the LCP element, and
  * lazy-loading it would delay the largest paint by a full round-trip.
  */
 export function Gallery({
@@ -80,7 +80,7 @@ export function Gallery({
             <SmartImage
               media={media}
               seed={`${seed}-${index}`}
-              alt={`${title} — imagen ${index + 1}`}
+              alt={`${title} - imagen ${index + 1}`}
               sizes="86vw"
               priority={index === 0}
             />
@@ -110,7 +110,7 @@ export function Gallery({
             <SmartImage
               media={media}
               seed={`${seed}-${index}`}
-              alt={`${title} — imagen ${index + 1}`}
+              alt={`${title} - imagen ${index + 1}`}
               sizes={index === 0 ? '(max-width: 1023px) 50vw, 40vw' : '20vw'}
               priority={index === 0}
               className="transition-transform duration-500 group-hover:scale-[1.04]"
@@ -132,7 +132,7 @@ export function Gallery({
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={`${title} — imagen ${lightboxIndex + 1} de ${images.length}`}
+          aria-label={`${title} - imagen ${lightboxIndex + 1} de ${images.length}`}
           className="fixed inset-0 z-[90] flex items-center justify-center bg-lenga-950/95 p-4"
         >
           <button
@@ -170,7 +170,7 @@ export function Gallery({
               <SmartImage
                 media={images[lightboxIndex]}
                 seed={`${seed}-lightbox`}
-                alt={`${title} — imagen ${lightboxIndex + 1}`}
+                alt={`${title} - imagen ${lightboxIndex + 1}`}
                 sizes="(max-width: 1023px) 100vw, 1024px"
                 quality={88}
                 className="object-contain"

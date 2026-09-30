@@ -12,7 +12,7 @@ import { extractAttribution } from '@/lib/utils'
 /**
  * Reservation step: customer details and review.
  *
- * Never indexed — it is a transient state in a funnel, and indexing it would
+ * Never indexed - it is a transient state in a funnel, and indexing it would
  * put a half-finished checkout in search results (spec §33).
  *
  * The selection arrives in the URL but is NOT trusted: the tour, option,

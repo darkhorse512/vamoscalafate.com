@@ -48,7 +48,7 @@ export function SmartImage({
     sizes,
     quality,
     priority,
-    // Above-the-fold images must not be lazy — that delays the LCP element.
+    // Above-the-fold images must not be lazy - that delays the LCP element.
     loading: priority ? ('eager' as const) : ('lazy' as const),
     className: cn('object-cover', className),
     ...(media.blurDataUrl

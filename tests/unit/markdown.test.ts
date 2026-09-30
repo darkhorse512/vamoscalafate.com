@@ -11,7 +11,7 @@ import { markdownToHtml } from '../../web/src/components/content/Markdown'
  * model: a compromised editor account, or content pasted from elsewhere,
  * must not be able to execute script.
  */
-describe('markdown renderer — XSS safety', () => {
+describe('markdown renderer - XSS safety', () => {
   it('escapes a raw script tag', () => {
     const html = markdownToHtml('<script>alert(1)</script>')
     expect(html).not.toContain('<script>')
@@ -20,7 +20,7 @@ describe('markdown renderer — XSS safety', () => {
 
   it('escapes an img onerror handler into inert text', () => {
     const html = markdownToHtml('<img src=x onerror=alert(1)>')
-    // The attribute text survives, but only as escaped character data — there
+    // The attribute text survives, but only as escaped character data - there
     // is no element for the handler to attach to, so it can never fire.
     expect(html).not.toContain('<img')
     expect(html).toContain('&lt;img')
@@ -51,7 +51,7 @@ describe('markdown renderer — XSS safety', () => {
   })
 })
 
-describe('markdown renderer — output', () => {
+describe('markdown renderer - output', () => {
   it('renders headings demoted by one level', () => {
     // The page owns its <h1>; document headings must not create a second one.
     expect(markdownToHtml('# Título')).toContain('<h2>')

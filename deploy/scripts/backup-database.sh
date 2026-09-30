@@ -2,11 +2,11 @@
 #
 # PostgreSQL backup for Vamos Calafate.
 #
-# Install as a daily cron job — see DEPLOYMENT.md:
+# Install as a daily cron job - see DEPLOYMENT.md:
 #   0 3 * * * /var/www/vamoscalafate/deploy/scripts/backup-database.sh
 #
 # Produces a compressed custom-format dump, which `pg_restore` can restore
-# selectively (a single table, say) — a plain SQL dump cannot.
+# selectively (a single table, say) - a plain SQL dump cannot.
 #
 # NOTE: this script only creates local backups. Local-only backups do not
 # survive the loss of the server. Copy them off-host; the OFFSITE_TARGET
@@ -67,7 +67,7 @@ log "backup complete ($SIZE), verified"
 DELETED="$(find "$BACKUP_DIR" -name 'vamoscalafate-*.dump' -mtime "+$RETENTION_DAYS" -print -delete | wc -l)"
 log "pruned $DELETED backups older than $RETENTION_DAYS days"
 
-# ── OFFSITE COPY — NOT CONFIGURED ──────────────────────────────────────────
+# ── OFFSITE COPY - NOT CONFIGURED ──────────────────────────────────────────
 # Backups on the same machine as the database are lost with that machine.
 # Add ONE of the following and remove this notice once it is working:
 #
@@ -78,7 +78,7 @@ log "pruned $DELETED backups older than $RETENTION_DAYS days"
 #   aws s3 cp "$DUMP_FILE" "s3://$BACKUP_BUCKET/vamoscalafate/" --storage-class STANDARD_IA
 #
 if [ -z "${OFFSITE_CONFIGURED:-}" ]; then
-  log "WARNING: no offsite copy configured — this backup exists only on this server"
+  log "WARNING: no offsite copy configured - this backup exists only on this server"
 fi
 
 trap - ERR

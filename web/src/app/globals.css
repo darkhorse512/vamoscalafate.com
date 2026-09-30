@@ -1,11 +1,11 @@
 @import 'tailwindcss';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   VAMOS CALAFATE — design system
+   VAMOS CALAFATE - design system
 
    A Patagonia palette: glacier blues drawn from meltwater, the deep greens of
    lenga forest, and the warm stone neutrals of the steppe. Accents are
-   deliberately restrained — the photography carries the colour, the interface
+   deliberately restrained - the photography carries the colour, the interface
    stays out of its way.
 
    Deliberately avoided: heavy border radii, multi-stop gradients and the
@@ -71,7 +71,7 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, 'Times New Roman', serif;
 
-  /* Fluid display sizes — no layout jump between breakpoints. */
+  /* Fluid display sizes - no layout jump between breakpoints. */
   --text-display-sm: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
   --text-display-md: clamp(2.125rem, 1.6rem + 2.4vw, 3.25rem);
   --text-display-lg: clamp(2.5rem, 1.7rem + 3.6vw, 4.5rem);
@@ -118,7 +118,7 @@
     text-wrap: pretty;
   }
 
-  /* A single, consistent focus treatment. Never remove the indicator —
+  /* A single, consistent focus treatment. Never remove the indicator -
      keyboard users navigate the whole booking flow with it. */
   :focus-visible {
     @apply outline-none ring-2 ring-glacier-600 ring-offset-2 ring-offset-white;
@@ -224,7 +224,7 @@
 }
 
 @layer utilities {
-  /* Legibility layer over photography — a vertical ramp rather than a flat
+  /* Legibility layer over photography - a vertical ramp rather than a flat
      tint, so the image stays visible where text is not. */
   .scrim-bottom {
     background: linear-gradient(

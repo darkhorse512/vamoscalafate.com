@@ -10,7 +10,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
     <Link
       href="/"
       className={cn('group inline-flex items-center gap-2.5', className)}
-      aria-label="Vamos Calafate — inicio"
+      aria-label="Vamos Calafate - inicio"
     >
       <span
         className={cn(

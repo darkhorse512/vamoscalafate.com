@@ -17,7 +17,7 @@ import { ConfirmDialog } from './ConfirmDialog'
  * state machine regardless.
  *
  * Destructive actions (cancel, refund) go through a confirmation dialog that
- * requires a typed reason — that reason is both audited and emailed.
+ * requires a typed reason - that reason is both audited and emailed.
  */
 
 const TRANSITIONS: Record<string, { to: string; label: string; destructive?: boolean }[]> = {

@@ -287,7 +287,7 @@ export function TourDetailPage({
               </section>
             ) : null}
 
-            {/* Reviews — only real, approved ones are ever shown. */}
+            {/* Reviews - only real, approved ones are ever shown. */}
             <section className="mt-12">
               <h2 className="font-display text-xl font-semibold text-lenga-950">Reseñas</h2>
               {tour.reviews.length > 0 ? (
@@ -352,7 +352,7 @@ export function TourDetailPage({
           </section>
         ) : null}
 
-        {/* Related destination guide — internal linking */}
+        {/* Related destination guide - internal linking */}
         {tour.destination ? (
           <section className="mt-12 rounded-card border border-stone-200 bg-stone-50 p-6 sm:p-8">
             <h2 className="font-display text-lg font-semibold text-lenga-950">

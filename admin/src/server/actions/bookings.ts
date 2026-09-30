@@ -158,7 +158,7 @@ export async function refundBookingAction(input: unknown): Promise<ActionResult<
       action: 'REFUND',
       entityType: 'Payment',
       entityId: parsed.data.paymentId,
-      summary: `Reembolso de ${result.refundedCents / 100} procesado — ${parsed.data.reason}`,
+      summary: `Reembolso de ${result.refundedCents / 100} procesado - ${parsed.data.reason}`,
       after: { refundedCents: result.refundedCents, status: result.status },
       actorId: session.id,
       actorEmail: session.email,

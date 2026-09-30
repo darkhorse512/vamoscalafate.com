@@ -9,7 +9,7 @@ import type { SearchResponse, SearchResult, SearchResultType } from '@vamos/type
  * `contains` + `mode: 'insensitive'` compiles to ILIKE, which is adequate at
  * this catalogue's scale and needs no extra infrastructure. If the catalogue
  * grows past a few thousand rows, replace the per-model queries with a single
- * query against a Postgres `tsvector` column — the `SearchResponse` contract
+ * query against a Postgres `tsvector` column - the `SearchResponse` contract
  * stays the same, so nothing above this layer changes.
  *
  * Results are never cached: search is per-visitor and low-volume, and caching

@@ -55,7 +55,7 @@ export async function TourChannelPage({
     getTourFacets(channel),
   ])
 
-  // A page number past the end is a 404, not an empty grid — it stops thin
+  // A page number past the end is a 404, not an empty grid - it stops thin
   // paginated URLs accumulating in the index.
   if (filters.page > 1 && result.items.length === 0) notFound()
 

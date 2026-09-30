@@ -10,7 +10,7 @@ import { analytics } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
 /**
- * Booking widget — the primary conversion surface.
+ * Booking widget - the primary conversion surface.
  *
  * Design decisions that matter here:
  *
@@ -161,7 +161,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
     if (departureTime) params.set('horario', departureTime)
     if (pickupId) params.set('pickup', pickupId)
 
-    // Carry campaign attribution forward — dropping it here would make every
+    // Carry campaign attribution forward - dropping it here would make every
     // paid conversion look organic.
     const currentParams = new URLSearchParams(window.location.search)
     for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid']) {
@@ -212,7 +212,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               >
                 {tour.options.map((o) => (
                   <option key={o.id} value={o.id}>
-                    {o.name} — {formatMoney(o.priceCents, o.currency)}
+                    {o.name} - {formatMoney(o.priceCents, o.currency)}
                   </option>
                 ))}
               </select>
@@ -423,7 +423,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
         </div>
       </div>
 
-      {/* Sticky mobile bar — the widget above scrolls away on a phone. */}
+      {/* Sticky mobile bar - the widget above scrolls away on a phone. */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200 bg-white/97 px-4 py-3 backdrop-blur lg:hidden">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">

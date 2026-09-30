@@ -8,7 +8,7 @@ const log = logger.scoped('admin:payments')
  * Refund execution.
  *
  * The admin app talks to the provider APIs directly for refunds rather than
- * proxying through the public site — a refund is an operator action, and
+ * proxying through the public site - a refund is an operator action, and
  * routing it through a public endpoint would mean exposing one.
  *
  * Provider credentials live only in this process's environment.

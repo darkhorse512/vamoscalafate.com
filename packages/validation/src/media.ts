@@ -5,7 +5,7 @@ import { cuidSchema, urlSchema } from './common.ts'
  * Upload constraints.
  *
  * Only these MIME types are accepted, and the server additionally sniffs the
- * file's magic bytes — a client-declared Content-Type is attacker-controlled
+ * file's magic bytes - a client-declared Content-Type is attacker-controlled
  * and must never be the only check. SVG is deliberately excluded: it can carry
  * script and would be a stored-XSS vector when served from our own origin.
  */
@@ -46,7 +46,7 @@ export const mediaUpdateSchema = z.object({
   caption: z.string().max(500).optional(),
 })
 
-/** Video is referenced by URL — the platform does not host video files. */
+/** Video is referenced by URL - the platform does not host video files. */
 export const mediaVideoSchema = z.object({
   externalUrl: urlSchema.refine(
     (v) => /(?:youtube\.com|youtu\.be|vimeo\.com)/i.test(v),

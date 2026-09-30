@@ -8,7 +8,7 @@ import { headers } from 'next/headers'
  * (see deploy/nginx/vamoscalafate.conf); if it did not, every visitor would
  * share one rate-limit bucket.
  *
- * Only the FIRST entry is used — later entries are client-supplied and can be
+ * Only the FIRST entry is used - later entries are client-supplied and can be
  * forged. This is safe precisely because Nginx overwrites the header.
  */
 export function clientIp(requestHeaders: Headers): string {

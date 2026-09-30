@@ -12,7 +12,7 @@ import { buildQuery, cn } from '@/lib/utils'
  *
  * Filter state lives entirely in the URL, which makes every filtered view
  * shareable, linkable and back-button-correct. Changing a filter pushes a new
- * URL and the server re-queries — the browser never receives the full
+ * URL and the server re-queries - the browser never receives the full
  * catalogue to filter client-side.
  *
  * `useTransition` keeps the current results visible and interactive while the

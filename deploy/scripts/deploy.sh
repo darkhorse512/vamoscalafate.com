@@ -24,7 +24,7 @@ step() { echo; echo "── $1 ────────────────�
 fail() {
   echo
   echo "DEPLOY FAILED at: $1" >&2
-  echo "The previous version is still running — PM2 was not reloaded." >&2
+  echo "The previous version is still running - PM2 was not reloaded." >&2
   exit 1
 }
 

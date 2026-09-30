@@ -180,7 +180,7 @@ export function renderText(options: {
   }
 
   if (options.footerNote) lines.push(options.footerNote, '')
-  lines.push('—', `${SITE.name} · El Calafate, Santa Cruz, Argentina`, SITE.url)
+  lines.push('-', `${SITE.name} · El Calafate, Santa Cruz, Argentina`, SITE.url)
 
   return lines.join('\n')
 }

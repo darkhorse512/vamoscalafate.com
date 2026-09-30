@@ -84,7 +84,7 @@ export default async function PaymentsPage({
       header: 'ID del proveedor',
       cell: (row) => (
         <span className="font-mono text-[0.75rem] text-slate-500">
-          {row.providerPaymentId ?? '—'}
+          {row.providerPaymentId ?? '-'}
         </span>
       ),
     },
@@ -99,7 +99,7 @@ export default async function PaymentsPage({
       header: 'Reembolsado',
       numeric: true,
       cell: (row) =>
-        row.refundedCents > 0 ? formatMoney(row.refundedCents, row.currency) : '—',
+        row.refundedCents > 0 ? formatMoney(row.refundedCents, row.currency) : '-',
     },
     { key: 'status', header: 'Estado', cell: (row) => <StatusBadge status={row.status} /> },
     {

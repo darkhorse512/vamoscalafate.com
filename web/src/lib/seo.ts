@@ -6,7 +6,7 @@ import { SITE, absoluteUrl, truncate } from '@vamos/shared'
  * Metadata builder.
  *
  * Every indexable page goes through `buildMetadata`, which guarantees a
- * canonical URL, an absolute OG image and coherent title/description — the
+ * canonical URL, an absolute OG image and coherent title/description - the
  * three things most often missed when metadata is written page by page.
  *
  * Admin-set SeoMetadata always wins over the derived defaults.

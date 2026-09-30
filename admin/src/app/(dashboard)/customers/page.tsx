@@ -51,7 +51,7 @@ export default async function CustomersPage({
         id: true, firstName: true, lastName: true, email: true,
         phone: true, country: true, createdAt: true,
         bookings: {
-          // Lifetime value counts only settled bookings — a cancelled one
+          // Lifetime value counts only settled bookings - a cancelled one
           // never represented revenue.
           where: { status: { in: ['PAID', 'CONFIRMED', 'COMPLETED'] } },
           select: { totalCents: true },
@@ -66,8 +66,8 @@ export default async function CustomersPage({
     id: customer.id,
     name: `${customer.firstName} ${customer.lastName}`,
     email: customer.email,
-    phone: customer.phone ?? '—',
-    country: customer.country ?? '—',
+    phone: customer.phone ?? '-',
+    country: customer.country ?? '-',
     bookings: customer._count.bookings,
     spentCents: customer.bookings.reduce((sum, b) => sum + b.totalCents, 0),
     createdAt: customer.createdAt,

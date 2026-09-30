@@ -6,7 +6,7 @@ import { requireSession } from '@/server/auth'
  * Authenticated shell.
  *
  * `requireSession()` runs here, so every route in this group is gated by a
- * real database-backed session check — not only by the edge middleware, which
+ * real database-backed session check - not only by the edge middleware, which
  * can see the cookie but cannot validate it.
  *
  * Individual pages additionally call `requirePermission()` for the specific

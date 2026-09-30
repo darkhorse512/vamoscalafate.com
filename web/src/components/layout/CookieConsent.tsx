@@ -10,7 +10,7 @@ import { setConsent, useConsent } from '@/lib/use-consent'
  *
  * Opt-in, not opt-out: nothing beyond strictly necessary storage is used until
  * the visitor accepts. Declining is a single click with the same visual weight
- * as accepting — a "reject" button hidden behind a settings dialog is a dark
+ * as accepting - a "reject" button hidden behind a settings dialog is a dark
  * pattern, not consent.
  *
  * Rendered only after mount so the server HTML and the first client render
@@ -20,7 +20,7 @@ export function CookieConsent() {
   const consent = useConsent()
 
   // `null` means "not yet decided". The server snapshot is also null, so the
-  // banner is absent from the server HTML and appears on hydration — which
+  // banner is absent from the server HTML and appears on hydration - which
   // keeps the two renders in agreement.
   if (consent !== null) return null
 

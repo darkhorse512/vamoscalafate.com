@@ -11,7 +11,7 @@ import { recordAudit } from '../audit'
 const log = logger.scoped('admin:users')
 
 /**
- * Administrator account management — the most sensitive surface in the app.
+ * Administrator account management - the most sensitive surface in the app.
  *
  * Guard rails:
  *   · Only SUPER_ADMIN reaches these (the `users:*` permissions belong to no
@@ -19,7 +19,7 @@ const log = logger.scoped('admin:users')
  *   · A user cannot change their own role or deactivate themselves, which
  *     would let the last owner lock everyone out.
  *   · Deactivating an account revokes its sessions immediately.
- *   · Password hashes never appear in an audit snapshot — see audit.ts.
+ *   · Password hashes never appear in an audit snapshot - see audit.ts.
  */
 
 const BCRYPT_COST = 12

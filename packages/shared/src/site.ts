@@ -4,7 +4,7 @@ import { publicEnv } from './env.ts'
  * Static brand and business facts.
  *
  * Everything here is verifiable public information about El Calafate or
- * configuration supplied by the operator. Nothing is invented — no awards,
+ * configuration supplied by the operator. Nothing is invented - no awards,
  * certifications, ratings or customer counts. Operator-specific details that
  * vary (phone, address, social handles) come from the environment or the
  * SiteSetting table so they can be changed without a deploy.
@@ -65,7 +65,7 @@ export function whatsappUrl(message?: string): string | null {
   return `https://wa.me/${number}${text}`
 }
 
-/** Absolute URL builder — required for canonical tags, OG and sitemaps. */
+/** Absolute URL builder - required for canonical tags, OG and sitemaps. */
 export function absoluteUrl(path = '/'): string {
   const base = SITE.url.replace(/\/$/, '')
   if (!path || path === '/') return base || '/'

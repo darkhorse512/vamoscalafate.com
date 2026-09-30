@@ -81,7 +81,7 @@ export function breadcrumbSchema(items: { name: string; path: string }[]): JsonL
 /**
  * A tour is a purchasable Product with Offers.
  *
- * `aggregateRating` is attached only when approved reviews exist — see the
+ * `aggregateRating` is attached only when approved reviews exist - see the
  * note at the top of this file.
  */
 export function tourSchema(tour: TourDetail, path: string): JsonLd {
@@ -149,7 +149,7 @@ export function tourSchema(tour: TourDetail, path: string): JsonLd {
   }
 }
 
-/** Only emitted when the FAQ list is non-empty — an empty FAQPage is invalid. */
+/** Only emitted when the FAQ list is non-empty - an empty FAQPage is invalid. */
 export function faqSchema(faqs: { question: string; answer: string }[]): JsonLd | null {
   if (faqs.length === 0) return null
 
@@ -184,7 +184,7 @@ export function articleSchema(post: BlogPostDetail, path: string): JsonLd {
   }
 }
 
-/** A destination is a place, not a product — TouristDestination, not Product. */
+/** A destination is a place, not a product - TouristDestination, not Product. */
 export function destinationSchema(destination: DestinationDetail, path: string): JsonLd {
   return {
     '@context': 'https://schema.org',
@@ -221,7 +221,7 @@ export function destinationSchema(destination: DestinationDetail, path: string):
 
 /**
  * Hotels are directory listings, not inventory this platform sells, so no
- * Offer is emitted — only the factual LodgingBusiness description.
+ * Offer is emitted - only the factual LodgingBusiness description.
  */
 export function hotelSchema(hotel: HotelDetail, path: string): JsonLd {
   const approvedReviews = hotel.reviews.filter((r) => r.status === 'APPROVED')
@@ -277,7 +277,7 @@ export function hotelSchema(hotel: HotelDetail, path: string): JsonLd {
  * Renders JSON-LD into a script tag.
  *
  * `JSON.stringify` output is escaped so a `</script>` sequence inside any
- * content field cannot break out of the tag — a real XSS vector when the data
+ * content field cannot break out of the tag - a real XSS vector when the data
  * is admin- or user-authored.
  */
 export function jsonLdScript(schema: JsonLd | JsonLd[] | null): { __html: string } | null {

@@ -4,8 +4,8 @@ import { absoluteUrl } from '@vamos/shared'
 /**
  * robots.txt.
  *
- * Disallows the funnel and the search space — the pages that would otherwise
- * generate unbounded thin URLs — while leaving the whole content catalogue
+ * Disallows the funnel and the search space - the pages that would otherwise
+ * generate unbounded thin URLs - while leaving the whole content catalogue
  * open. The admin lives on a separate domain with its own robots rules, so it
  * is not referenced here at all.
  */

@@ -12,8 +12,8 @@ const API = 'https://api.stripe.com/v1'
  * Stripe Checkout.
  *
  * REQUIRED EXTERNAL CONFIGURATION
- *   · STRIPE_SECRET_KEY     — https://dashboard.stripe.com/apikeys
- *   · STRIPE_WEBHOOK_SECRET — the `whsec_...` shown when the endpoint is created
+ *   · STRIPE_SECRET_KEY     - https://dashboard.stripe.com/apikeys
+ *   · STRIPE_WEBHOOK_SECRET - the `whsec_...` shown when the endpoint is created
  *   · Webhook URL: https://vamoscalafate.com/api/webhooks/stripe
  *     Events: checkout.session.completed, checkout.session.expired,
  *             charge.refunded, payment_intent.payment_failed
@@ -97,7 +97,7 @@ export class StripeGateway implements PaymentGateway {
       {
         mode: 'payment',
         customer_email: input.customer.email,
-        // Echoed on the webhook — how a session is matched to a booking.
+        // Echoed on the webhook - how a session is matched to a booking.
         client_reference_id: input.bookingReference,
         metadata: { bookingReference: input.bookingReference, bookingId: input.bookingId },
         payment_intent_data: {
@@ -136,7 +136,7 @@ export class StripeGateway implements PaymentGateway {
   /**
    * Verifies the `Stripe-Signature` header against the RAW request body.
    *
-   * The body must be the exact bytes Stripe sent — parsing and re-serialising
+   * The body must be the exact bytes Stripe sent - parsing and re-serialising
    * it first would change the JSON and invalidate every signature.
    */
   async verifyAndParseWebhook(rawBody: string, headers: Headers): Promise<WebhookResult> {

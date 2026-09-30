@@ -42,7 +42,7 @@ export type CheckoutSession = {
 
 /** Normalised result of verifying and parsing an inbound webhook. */
 export type WebhookResult = {
-  /** Stable provider event id — the idempotency key. */
+  /** Stable provider event id - the idempotency key. */
   eventId: string
   eventType: string
   bookingReference: string | null
@@ -70,7 +70,7 @@ export type RefundResult = {
 export interface PaymentGateway {
   readonly key: ProviderKey
   readonly provider: PaymentProvider
-  /** False when credentials are missing — checkout then hides the option. */
+  /** False when credentials are missing - checkout then hides the option. */
   isConfigured(): boolean
   createCheckout(input: CreateCheckoutInput): Promise<CheckoutSession>
   /**

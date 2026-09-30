@@ -8,7 +8,7 @@ import { clientIp } from '@/server/request'
 /**
  * Site search as JSON, for the header's type-ahead.
  *
- * `X-Robots-Tag: noindex` stops search-result URLs entering the index — an
+ * `X-Robots-Tag: noindex` stops search-result URLs entering the index - an
  * unbounded set of thin pages is exactly what spec §38 warns against.
  */
 export const dynamic = 'force-dynamic'

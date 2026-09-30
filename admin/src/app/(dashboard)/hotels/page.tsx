@@ -63,13 +63,13 @@ export default async function HotelsPage() {
     {
       key: 'stars',
       header: 'Categoría',
-      cell: (row) => (row.starRating ? '★'.repeat(row.starRating) : '—'),
+      cell: (row) => (row.starRating ? '★'.repeat(row.starRating) : '-'),
     },
     {
       key: 'price',
       header: 'Desde',
       numeric: true,
-      cell: (row) => (row.fromPriceCents ? formatMoney(row.fromPriceCents, row.currency) : '—'),
+      cell: (row) => (row.fromPriceCents ? formatMoney(row.fromPriceCents, row.currency) : '-'),
     },
     {
       key: 'origin',

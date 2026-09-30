@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test'
  *
  * Runs against the real production builds of BOTH applications, started by
  * the webServer blocks below. Testing the dev server would miss exactly the
- * class of bug that only appears in a production build — static prerendering,
+ * class of bug that only appears in a production build - static prerendering,
  * caching, and the standalone output layout.
  *
  * Start the database and seed it before running:

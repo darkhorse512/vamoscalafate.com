@@ -11,7 +11,7 @@ import { CONSENT_STORAGE_KEY } from './analytics'
  * in an effect and calling `setState` would cause a cascading render on every
  * mount and risk a hydration mismatch.
  *
- * The server snapshot is `null` — the server cannot know a browser's stored
+ * The server snapshot is `null` - the server cannot know a browser's stored
  * choice, and claiming otherwise would make the first client render disagree
  * with the server HTML.
  */

@@ -9,7 +9,7 @@
 # inconsistent state and confusing errors.
 #
 # Rehearse this on a staging database. An untested restore procedure is not a
-# backup strategy — it is a hope.
+# backup strategy - it is a hope.
 
 set -Eeuo pipefail
 

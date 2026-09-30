@@ -17,7 +17,7 @@ const DIFFICULTY_LABEL: Record<string, string> = {
  * Product card.
  *
  * The whole card is one link via a stretched overlay, so the entire surface is
- * clickable while the accessible name stays a single anchor — a card wrapped
+ * clickable while the accessible name stays a single anchor - a card wrapped
  * in an anchor containing more anchors would announce a confusing nest.
  */
 export function TourCard({

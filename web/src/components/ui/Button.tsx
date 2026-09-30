@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
  * Button and ButtonLink share one visual definition.
  *
  * `ButtonLink` renders an anchor for navigation and `Button` a real <button>
- * for actions — never a div with a click handler, which would be invisible to
+ * for actions - never a div with a click handler, which would be invisible to
  * keyboard and assistive technology.
  */
 
@@ -32,7 +32,7 @@ const VARIANTS: Record<Variant, string> = {
 
 const SIZES: Record<Size, string> = {
   sm: 'h-9 px-3.5 text-[0.8125rem]',
-  // 44px — the minimum comfortable touch target on mobile.
+  // 44px - the minimum comfortable touch target on mobile.
   md: 'h-11 px-5 text-sm',
   lg: 'h-[3.25rem] px-7 text-[0.9375rem]',
 }

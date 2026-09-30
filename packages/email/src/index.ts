@@ -37,7 +37,7 @@ type Rendered = { subject: string; html: string; text: string }
  * Central send helper.
  *
  * Every send is wrapped so a mail failure can never abort the transaction that
- * triggered it — losing a confirmation email is recoverable, losing a paid
+ * triggered it - losing a confirmation email is recoverable, losing a paid
  * booking is not. Failures are logged and returned, never thrown.
  */
 async function deliver(to: string | string[], rendered: Rendered, tags?: Record<string, string>): Promise<SendResult> {
@@ -61,7 +61,7 @@ function adminRecipient(): string | null {
 async function deliverToAdmin(rendered: Rendered, tags?: Record<string, string>): Promise<SendResult> {
   const to = adminRecipient()
   if (!to) {
-    log.warn('EMAIL_ADMIN is not configured — internal notification skipped', {
+    log.warn('EMAIL_ADMIN is not configured - internal notification skipped', {
       subject: rendered.subject,
     })
     return { delivered: false, reason: 'not_configured' }

@@ -86,7 +86,7 @@ export default async function BookingsPage({
     createdAt: booking.createdAt,
     customerName: `${booking.customer.firstName} ${booking.customer.lastName}`,
     customerEmail: booking.customer.email,
-    tourName: booking.items[0]?.tourNameSnapshot ?? '—',
+    tourName: booking.items[0]?.tourNameSnapshot ?? '-',
     travelDate: booking.items[0]?.travelDate ?? null,
   }))
 
@@ -106,7 +106,7 @@ export default async function BookingsPage({
     {
       key: 'travelDate',
       header: 'Fecha de salida',
-      cell: (row) => (row.travelDate ? formatDate(row.travelDate) : '—'),
+      cell: (row) => (row.travelDate ? formatDate(row.travelDate) : '-'),
     },
     {
       key: 'total',

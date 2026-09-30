@@ -67,7 +67,7 @@ export function toDate(value: Date | string | number): Date {
   return value instanceof Date ? value : new Date(value)
 }
 
-/** ISO `yyyy-mm-dd` in UTC — the wire format for availability queries. */
+/** ISO `yyyy-mm-dd` in UTC - the wire format for availability queries. */
 export function toISODate(date: Date): string {
   return date.toISOString().slice(0, 10)
 }

@@ -53,7 +53,7 @@ export type TourDetail = Tour & {
   reviews: Review[]
 }
 
-/** The subset a listing card needs — deliberately narrow to keep lists cheap. */
+/** The subset a listing card needs - deliberately narrow to keep lists cheap. */
 export type TourCard = Pick<
   Tour,
   | 'id'

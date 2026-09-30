@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 /**
  * Dashboard.
  *
- * Every figure is a real aggregate over the database — nothing is estimated or
+ * Every figure is a real aggregate over the database - nothing is estimated or
  * mocked. Revenue counts only APPROVED payments, so a pending or rejected
  * charge never inflates it.
  *
@@ -218,7 +218,7 @@ export default async function DashboardPage() {
                         {booking.reference} · {booking.customer.firstName} {booking.customer.lastName}
                       </p>
                       <p className="truncate text-[0.75rem] text-slate-500">
-                        {booking.items[0]?.tourNameSnapshot ?? '—'} ·{' '}
+                        {booking.items[0]?.tourNameSnapshot ?? '-'} ·{' '}
                         {formatDateTime(booking.createdAt)}
                       </p>
                     </div>

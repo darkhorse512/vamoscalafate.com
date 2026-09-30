@@ -6,8 +6,8 @@
  *
  * The excursion types below are real categories of activity offered in El
  * Calafate, and the geographic facts (distances, park names, lake names) are
- * publicly verifiable. Everything commercially specific — PRICES, DEPARTURE
- * TIMES, CAPACITIES, INCLUSIONS — is PLACEHOLDER DATA to make the platform
+ * publicly verifiable. Everything commercially specific - PRICES, DEPARTURE
+ * TIMES, CAPACITIES, INCLUSIONS - is PLACEHOLDER DATA to make the platform
  * usable on day one. Replace it with real operator data before selling.
  *
  * Deliberately NOT seeded: customer reviews, ratings, awards, certifications
@@ -188,7 +188,7 @@ Se puede visitar en el día desde El Calafate, aunque quienes quieran hacer los 
 
 Recibe el aporte de varios glaciares del Campo de Hielo Patagónico Sur, entre ellos el Perito Moreno, el Upsala y el Spegazzini. Ese origen glaciario le da su característico color turquesa, producto de las partículas minerales en suspensión conocidas como harina glaciar.
 
-Sus brazos —el Brazo Norte, el Brazo Rico y el Canal de los Témpanos— son el escenario de las navegaciones que permiten acceder a los glaciares que no tienen acceso terrestre.
+Sus brazos -el Brazo Norte, el Brazo Rico y el Canal de los Témpanos- son el escenario de las navegaciones que permiten acceder a los glaciares que no tienen acceso terrestre.
 
 El río Santa Cruz nace en este lago y desemboca en el océano Atlántico.`,
     region: 'Santa Cruz',
@@ -303,7 +303,7 @@ export const BUSINESS_CATEGORIES = [
 export const TOURS: SeedTour[] = [
   {
     slug: 'glaciar-perito-moreno-pasarelas',
-    name: 'Glaciar Perito Moreno — Pasarelas',
+    name: 'Glaciar Perito Moreno - Pasarelas',
     summary:
       'Excursión clásica de día completo al Glaciar Perito Moreno con tiempo libre en el circuito de pasarelas.',
     description: `La excursión clásica al Glaciar Perito Moreno recorre los 80 kilómetros que separan El Calafate del área de pasarelas, dentro del Parque Nacional Los Glaciares.
@@ -557,7 +557,7 @@ Según las condiciones de navegación y la cantidad de témpanos, el capitán de
 
 La embarcación parte del Puerto Bajo de las Sombras, dentro del Parque Nacional, y se aproxima al frente del glaciar respetando la distancia de seguridad establecida.
 
-Desde el agua, la escala del frente —unos 60 metros sobre la superficie del lago— se percibe de forma distinta que desde las pasarelas. Es una actividad complementaria que suele combinarse con la visita al circuito peatonal.`,
+Desde el agua, la escala del frente -unos 60 metros sobre la superficie del lago- se percibe de forma distinta que desde las pasarelas. Es una actividad complementaria que suele combinarse con la visita al circuito peatonal.`,
     categorySlug: 'navegaciones',
     destinationSlug: 'glaciar-perito-moreno',
     durationMinutes: 60,
@@ -606,14 +606,14 @@ Desde el agua, la escala del frente —unos 60 metros sobre la superficie del la
   },
   {
     slug: 'el-chalten-dia-completo',
-    name: 'El Chaltén — Día completo',
+    name: 'El Chaltén - Día completo',
     summary:
       'Excursión de jornada completa a El Chaltén con tiempo libre para caminar los senderos del Fitz Roy.',
     description: `El Chaltén se encuentra a unos 215 kilómetros de El Calafate, en el sector norte del Parque Nacional Los Glaciares. La excursión de día completo permite conocerlo sin trasladar el alojamiento.
 
 El trayecto recorre la Ruta 40 y la Ruta 23, bordeando el Lago Viedma, con paradas en miradores desde los que se ven el Cerro Fitz Roy y el Cerro Torre cuando las condiciones lo permiten.
 
-En El Chaltén dispondrás de tiempo libre para hacer alguno de los senderos cortos que parten del pueblo —como el Mirador de los Cóndores o la Chorrillo del Salto— o para almorzar y recorrer la localidad.
+En El Chaltén dispondrás de tiempo libre para hacer alguno de los senderos cortos que parten del pueblo -como el Mirador de los Cóndores o la Chorrillo del Salto- o para almorzar y recorrer la localidad.
 
 Los senderos del Parque Nacional en este sector son de acceso libre y no requieren guía.`,
     categorySlug: 'excursiones-de-dia-completo',
@@ -685,7 +685,7 @@ Los senderos del Parque Nacional en este sector son de acceso libre y no requier
 
 Desde los miradores se domina el Lago Argentino, la Bahía Redonda, la ciudad y, en días despejados, la línea de la cordillera hacia el oeste.
 
-El recorrido incluye una introducción a la flora de la estepa patagónica —el calafate, la mata negra, el coirón— y a la geología de la región.
+El recorrido incluye una introducción a la flora de la estepa patagónica -el calafate, la mata negra, el coirón- y a la geología de la región.
 
 Es una salida de medio día, ideal para el primer o el último día de estadía.`,
     categorySlug: 'trekking-y-aventura',
@@ -746,7 +746,7 @@ Es una salida de medio día, ideal para el primer o el último día de estadía.
   },
   {
     slug: 'estancia-patagonica-dia-de-campo',
-    name: 'Estancia patagónica — Día de campo',
+    name: 'Estancia patagónica - Día de campo',
     summary:
       'Jornada en una estancia de la estepa con demostración de esquila, caminata y asado patagónico.',
     description: `El día de campo en una estancia patagónica permite conocer la actividad ganadera que estructuró la ocupación de Santa Cruz desde fines del siglo XIX.
@@ -882,7 +882,7 @@ Es una buena opción para el día de llegada, cuando conviene una actividad cort
   },
   {
     slug: 'glaciarium-museo-del-hielo',
-    name: 'Glaciarium — Museo del Hielo Patagónico',
+    name: 'Glaciarium - Museo del Hielo Patagónico',
     summary:
       'Visita al centro de interpretación glaciológica con traslado incluido desde El Calafate.',
     description: `El Glaciarium es un centro de interpretación dedicado a la glaciología, ubicado sobre la ruta que conecta El Calafate con el Parque Nacional.
@@ -1077,7 +1077,7 @@ El vehículo y la capacidad varían según la opción contratada.`,
     destinationSlug: 'el-calafate',
     durationMinutes: 40,
     difficulty: 'EASY',
-    location: 'Aeropuerto FTE — El Calafate',
+    location: 'Aeropuerto FTE - El Calafate',
     maxGroupSize: 19,
     highlights: [
       'Seguimiento del número de vuelo',
@@ -1160,7 +1160,7 @@ El servicio opera en ambos sentidos y se puede contratar solo de ida o ida y vue
     destinationSlug: 'el-chalten',
     durationMinutes: 180,
     difficulty: 'EASY',
-    location: 'Ruta 40 — Ruta 23',
+    location: 'Ruta 40 - Ruta 23',
     maxGroupSize: 45,
     highlights: [
       'Recorrido por la Ruta 40 y el Lago Viedma',

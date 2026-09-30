@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
  *
  * Renders a real <table> with scope'd headers and a caption, so screen readers
  * can navigate it by row and column. Row links are plain anchors, which keeps
- * middle-click and "open in new tab" working — a detail that matters a lot to
+ * middle-click and "open in new tab" working - a detail that matters a lot to
  * someone working through a queue of bookings.
  */
 

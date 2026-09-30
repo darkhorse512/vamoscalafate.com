@@ -15,7 +15,7 @@ type FieldErrors = Record<string, string[]>
  * Contact form.
  *
  * On success the form is replaced by a confirmation rather than cleared, so
- * there is no ambiguity about whether the message was sent — and no way to
+ * there is no ambiguity about whether the message was sent - and no way to
  * double-submit by pressing the button again.
  */
 export function ContactForm({ tourSlug }: { tourSlug?: string }) {

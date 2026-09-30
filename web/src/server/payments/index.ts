@@ -6,7 +6,7 @@ import { StripeGateway } from './stripe.ts'
 /**
  * PaymentService registry.
  *
- * Call sites ask for a gateway by key and get the `PaymentGateway` interface —
+ * Call sites ask for a gateway by key and get the `PaymentGateway` interface -
  * no component or server action ever imports a provider module directly. That
  * is what keeps provider logic out of the UI and makes a third provider a
  * matter of adding one file here.

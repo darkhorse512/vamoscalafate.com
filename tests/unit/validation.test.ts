@@ -7,7 +7,7 @@ import {
 const tomorrow = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10)
 
 /**
- * Server-side validation is the only validation that counts — the client can
+ * Server-side validation is the only validation that counts - the client can
  * send anything. These tests cover the cases an attacker or a buggy client
  * would actually produce.
  */
@@ -210,7 +210,7 @@ describe('validation', () => {
     })
 
     it('rejects a file whose bytes do not match the declared type', () => {
-      // "GIF89a" declared as PNG — the classic renamed-upload case.
+      // "GIF89a" declared as PNG - the classic renamed-upload case.
       const gif = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61])
       expect(matchesSignature(gif, 'image/png')).toBe(false)
     })

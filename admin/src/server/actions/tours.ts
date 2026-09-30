@@ -585,7 +585,7 @@ export async function generateAvailabilityAction(input: unknown): Promise<Action
       }
     }
 
-    // `skipDuplicates` leaves existing rows — and their seatsBooked counts —
+    // `skipDuplicates` leaves existing rows - and their seatsBooked counts -
     // untouched, so regenerating a range never wipes live inventory.
     const result = await prisma.tourAvailability.createMany({
       data: rows,

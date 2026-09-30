@@ -32,7 +32,7 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — Excursiones y traslados en El Calafate`,
+    default: `${SITE.name} - Excursiones y traslados en El Calafate`,
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — Excursiones y traslados en El Calafate`,
+    title: `${SITE.name} - Excursiones y traslados en El Calafate`,
     description: SITE.description,
   },
   twitter: { card: 'summary_large_image' },

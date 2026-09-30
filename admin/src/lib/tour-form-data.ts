@@ -3,7 +3,7 @@
  *
  * Deliberately NOT a client module. Next.js turns every export of a
  * `'use client'` file into a client reference, so a Server Component cannot
- * call a function defined there — the edit page needs `tourToFormData()` while
+ * call a function defined there - the edit page needs `tourToFormData()` while
  * rendering on the server.
  *
  * Keeping the mapping here also draws the right line: converting a database

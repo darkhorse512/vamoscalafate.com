@@ -14,9 +14,9 @@ const log = logger.scoped('webhook:mercadopago')
  *   Secret: MERCADOPAGO_WEBHOOK_SECRET
  *
  * Response contract:
- *   200 — processed, or a duplicate we have already handled
- *   400 — signature invalid; the provider must NOT retry
- *   500 — transient failure; the provider SHOULD retry
+ *   200 - processed, or a duplicate we have already handled
+ *   400 - signature invalid; the provider must NOT retry
+ *   500 - transient failure; the provider SHOULD retry
  *
  * The body is read as raw text: signature verification depends on the exact
  * bytes sent, and re-serialising parsed JSON would break it.
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   try {
     result = await gateway.verifyAndParseWebhook(rawBody, request.headers)
   } catch (error) {
-    // Verification failure is permanent — answer 400 so the provider stops.
+    // Verification failure is permanent - answer 400 so the provider stops.
     log.warn('Webhook verification failed', {
       reason: error instanceof Error ? error.message : String(error),
     })

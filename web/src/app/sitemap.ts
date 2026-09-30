@@ -12,9 +12,9 @@ import {
  * destination, hotel, business and blog post.
  *
  * EXCLUDED, deliberately (spec §75):
- *   · drafts and archived content — the queries filter on status PUBLISHED
- *   · /reservar, /checkout and /checkout/resultado — transient funnel states
- *   · /buscar — an unbounded space of query-string URLs
+ *   · drafts and archived content - the queries filter on status PUBLISHED
+ *   · /reservar, /checkout and /checkout/resultado - transient funnel states
+ *   · /buscar - an unbounded space of query-string URLs
  *   · anything under the admin domain, which is a separate application
  *
  * Regenerated on request and cached, so publishing a tour puts it in the

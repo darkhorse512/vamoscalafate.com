@@ -11,7 +11,7 @@ import { getStaticPage } from '@/server/queries/content'
  * Renderer for the editable legal pages.
  *
  * The content lives in the `static_pages` table, so legal copy is changed from
- * the admin rather than in a deploy (spec §65) — which matters, because these
+ * the admin rather than in a deploy (spec §65) - which matters, because these
  * are documents a lawyer revises, not developers.
  */
 export async function renderLegalMetadata(slug: string, fallbackTitle: string): Promise<Metadata> {

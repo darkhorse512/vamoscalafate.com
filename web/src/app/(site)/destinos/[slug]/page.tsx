@@ -55,7 +55,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
   if (faqLd) schemas.push(faqLd)
   const ld = jsonLdScript(schemas)
 
-  // Products and editorial for this place — the hub of the internal link graph.
+  // Products and editorial for this place - the hub of the internal link graph.
   const [tours, posts] = await Promise.all([
     listTours({ destinationSlug: destination.slug, pageSize: 6 }),
     listBlogPosts({ pageSize: 3 }),

@@ -20,10 +20,10 @@ function build(title: string, intro: string, sections: EmailSection[], preview: 
 
 const kindLabel = (kind: 'HOTEL' | 'BUSINESS') => (kind === 'HOTEL' ? 'Hotel / alojamiento' : 'Comercio / servicio')
 
-/** 1 — Acknowledgement to the applicant. */
+/** 1 - Acknowledgement to the applicant. */
 export function submissionReceivedEmail(data: SubmissionEmailData) {
   return build(
-    `Recibimos tu solicitud — ${data.reference}`,
+    `Recibimos tu solicitud - ${data.reference}`,
     `Hola ${data.contactName}, recibimos la solicitud de alta de ${data.businessName} en la guía de Vamos Calafate.`,
     [
       {
@@ -51,12 +51,12 @@ export function submissionReceivedEmail(data: SubmissionEmailData) {
   )
 }
 
-/** 2 — Internal notification to staff. */
+/** 2 - Internal notification to staff. */
 export function adminNewSubmissionEmail(
   data: SubmissionEmailData & { adminUrl: string; submissionId: string; description: string },
 ) {
   return build(
-    `Nueva solicitud de alta — ${data.businessName}`,
+    `Nueva solicitud de alta - ${data.businessName}`,
     `${data.contactName} envió una solicitud para publicar ${data.businessName}.`,
     [
       {
@@ -80,7 +80,7 @@ export function adminNewSubmissionEmail(
   )
 }
 
-/** 3 — Approved and published. */
+/** 3 - Approved and published. */
 export function submissionApprovedEmail(data: SubmissionEmailData & { publicUrl: string }) {
   return build(
     `${data.businessName} ya está publicado`,
@@ -104,7 +104,7 @@ export function submissionApprovedEmail(data: SubmissionEmailData & { publicUrl:
   )
 }
 
-/** 4 — Rejected, with the reason. */
+/** 4 - Rejected, with the reason. */
 export function submissionRejectedEmail(data: SubmissionEmailData & { reason: string }) {
   return build(
     `Sobre tu solicitud ${data.reference}`,
@@ -122,10 +122,10 @@ export function submissionRejectedEmail(data: SubmissionEmailData & { reason: st
   )
 }
 
-/** 5 — More information required before a decision. */
+/** 5 - More information required before a decision. */
 export function submissionNeedsInfoEmail(data: SubmissionEmailData & { request: string }) {
   return build(
-    `Necesitamos algunos datos más — ${data.reference}`,
+    `Necesitamos algunos datos más - ${data.reference}`,
     `Hola ${data.contactName}, para avanzar con la publicación de ${data.businessName} necesitamos información adicional.`,
     [
       { kind: 'heading', text: 'Qué necesitamos' },
@@ -136,6 +136,6 @@ export function submissionNeedsInfoEmail(data: SubmissionEmailData & { request: 
         text: `Respondé este correo incluyendo la referencia ${data.reference} y retomamos la revisión.`,
       },
     ],
-    `Información pendiente — ${data.reference}`,
+    `Información pendiente - ${data.reference}`,
   )
 }

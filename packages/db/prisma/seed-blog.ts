@@ -139,7 +139,7 @@ Caminata con crampones sobre la superficie del glaciar, de aproximadamente una h
 
 Incluye una navegación corta por el Brazo Rico hasta la costa del glaciar.
 
-Tiene **restricciones de edad** —en general de 10 a 65 años para el minitrekking clásico— y requiere calzado de trekking cerrado con caña alta. No se admite calzado deportivo liviano.
+Tiene **restricciones de edad** -en general de 10 a 65 años para el minitrekking clásico- y requiere calzado de trekking cerrado con caña alta. No se admite calzado deportivo liviano.
 
 La variante Big Ice es más extensa y exigente, con un rango de edad más acotado.
 
@@ -212,7 +212,7 @@ Deja un día de reserva ante mal clima y permite elegir entre varias actividades
 - **Día 4:** navegación o estancia.
 - **Día 5:** salida.
 
-El día a El Chaltén es largo —salida temprano, regreso de noche— pero alcanza para los senderos cortos del pueblo.
+El día a El Chaltén es largo -salida temprano, regreso de noche- pero alcanza para los senderos cortos del pueblo.
 
 ## Cinco noches o más: dormir en El Chaltén
 
@@ -255,7 +255,7 @@ Ver también: [Mejor época para visitar El Calafate](/blog/mejor-epoca-para-vis
 
 ## Verano: diciembre a febrero
 
-Es la temporada alta. Los días son largos —en diciembre hay luz hasta cerca de las 22— y las temperaturas máximas rondan valores templados, aunque el viento puede ser intenso.
+Es la temporada alta. Los días son largos -en diciembre hay luz hasta cerca de las 22- y las temperaturas máximas rondan valores templados, aunque el viento puede ser intenso.
 
 **A favor:** todas las actividades operan con frecuencia máxima; los desprendimientos de hielo son más frecuentes por el calor; los senderos de El Chaltén están en mejores condiciones.
 
@@ -320,7 +320,7 @@ Ver también: [Qué ropa llevar a El Calafate](/blog/que-ropa-llevar-a-el-calafa
 
 El **Aeropuerto Internacional Comandante Armando Tola (FTE)** está a unos 23 kilómetros del centro.
 
-Opera vuelos regulares desde Buenos Aires —tanto Aeroparque como Ezeiza, según la aerolínea y la temporada— y conexiones estacionales con Bariloche, Ushuaia, Córdoba y Trelew.
+Opera vuelos regulares desde Buenos Aires -tanto Aeroparque como Ezeiza, según la aerolínea y la temporada- y conexiones estacionales con Bariloche, Ushuaia, Córdoba y Trelew.
 
 La frecuencia aumenta en temporada alta y se reduce en invierno.
 
@@ -408,7 +408,7 @@ El protector solar no es opcional ni siquiera en invierno: la reflexión sobre e
 
 **Pasarelas del Perito Moreno.** Calzado cómodo, las tres capas y guantes. Hay escaleras y sectores expuestos al viento.
 
-**Minitrekking o Big Ice.** **Calzado de trekking cerrado, con caña alta y buen agarre** — es obligatorio y no se admite calzado deportivo liviano, porque los crampones se ajustan sobre él. Sumá guantes impermeables.
+**Minitrekking o Big Ice.** **Calzado de trekking cerrado, con caña alta y buen agarre** - es obligatorio y no se admite calzado deportivo liviano, porque los crampones se ajustan sobre él. Sumá guantes impermeables.
 
 **Navegaciones.** La cubierta exterior es el mejor punto de observación y también el más expuesto. Campera cortaviento imprescindible.
 
@@ -447,21 +447,21 @@ Ver también: [Mejor época para visitar El Calafate](/blog/mejor-epoca-para-vis
 
 Este itinerario asume que llegás el día anterior o muy temprano el primer día.
 
-## Día 1 — Aclimatación y ciudad
+## Día 1 - Aclimatación y ciudad
 
 Si llegás por la mañana, el día da para una actividad corta. Si llegás por la tarde, alcanza para recorrer el centro.
 
-**Opción A — Glaciarium.** El centro de interpretación explica cómo se forman los glaciares y cómo funciona el Campo de Hielo Patagónico Sur. Verlo *antes* del Perito Moreno hace que al día siguiente entiendas lo que estás mirando.
+**Opción A - Glaciarium.** El centro de interpretación explica cómo se forman los glaciares y cómo funciona el Campo de Hielo Patagónico Sur. Verlo *antes* del Perito Moreno hace que al día siguiente entiendas lo que estás mirando.
 
-**Opción B — Reserva Laguna Nimez.** A pocas cuadras del centro, con senderos para observación de aves. Una o dos horas.
+**Opción B - Reserva Laguna Nimez.** A pocas cuadras del centro, con senderos para observación de aves. Una o dos horas.
 
 Por la tarde, la avenida Libertador concentra comercios y restaurantes.
 
-## Día 2 — Glaciar Perito Moreno
+## Día 2 - Glaciar Perito Moreno
 
 El día central. Conviene dedicarle la jornada completa.
 
-Salida temprano hacia el Parque Nacional, a 80 kilómetros por la Ruta 11. Ingreso al parque —recordá que la entrada se abona ahí y no está incluida en las excursiones— y llegada al área de pasarelas.
+Salida temprano hacia el Parque Nacional, a 80 kilómetros por la Ruta 11. Ingreso al parque -recordá que la entrada se abona ahí y no está incluida en las excursiones- y llegada al área de pasarelas.
 
 Dedicá **tres o cuatro horas** a los circuitos peatonales. Hay senderos a distintas alturas y cada uno ofrece un ángulo diferente del frente.
 
@@ -469,7 +469,7 @@ Si podés, sumá el **Safari Náutico**: una hora de navegación por el Canal de
 
 Regreso a media tarde.
 
-## Día 3 — La segunda gran actividad
+## Día 3 - La segunda gran actividad
 
 Acá se elige según el tipo de viaje:
 

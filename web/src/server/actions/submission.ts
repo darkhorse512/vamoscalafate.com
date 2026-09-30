@@ -24,7 +24,7 @@ function generateReference(): string {
  * Public hotel / business listing request.
  *
  * Nothing here publishes anything. The row is created with status PENDING and
- * an administrator must approve it before a public listing exists — that is
+ * an administrator must approve it before a public listing exists - that is
  * the whole point of the workflow in spec §23.
  *
  * Supplied image and video URLs are stored as plain strings and never fetched

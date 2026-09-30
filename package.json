@@ -2,7 +2,7 @@
   "name": "vamoscalafate",
   "version": "1.0.0",
   "private": true,
-  "description": "Vamos Calafate — tourism commerce and content platform for El Calafate, Patagonia",
+  "description": "Vamos Calafate - tourism commerce and content platform for El Calafate, Patagonia",
   "engines": {
     "node": ">=20.9.0",
     "pnpm": ">=9"

@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache'
 /**
  * Cached data-access wrapper.
  *
- * Public content — tours, destinations, hotels, blog posts — changes rarely
+ * Public content - tours, destinations, hotels, blog posts - changes rarely
  * and is read constantly, so every public query goes through here. Reads are
  * tagged, and the admin purges those tags on publish (see the revalidation
  * route), which is what lets an editor change a tour without a rebuild or a
@@ -28,7 +28,7 @@ export const REVALIDATE = {
 /**
  * Matches exactly the ISO-8601 form `JSON.stringify` produces for a Date.
  *
- * Deliberately strict — anchored, millisecond-precision, UTC `Z` suffix — so
+ * Deliberately strict - anchored, millisecond-precision, UTC `Z` suffix - so
  * ordinary content strings cannot be mistaken for timestamps.
  */
 const SERIALISED_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
@@ -39,7 +39,7 @@ const SERIALISED_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
  * Next's data cache persists entries as JSON, so a `Date` written by Prisma
  * comes back as a string on any cache HIT while being a real `Date` on a MISS.
  * The types claim `Date` either way, so TypeScript cannot catch the difference
- * and the failure only appears once something is actually cached — a nasty,
+ * and the failure only appears once something is actually cached - a nasty,
  * intermittent class of bug.
  *
  * Reviving here restores the contract for every consumer at once, rather than
@@ -59,7 +59,7 @@ function reviveDates<T>(value: T, depth = 0): T {
   }
 
   if (typeof value === 'object') {
-    // Already a Date on a cache miss — leave it alone.
+    // Already a Date on a cache miss - leave it alone.
     if (value instanceof Date) return value
 
     const out: Record<string, unknown> = {}

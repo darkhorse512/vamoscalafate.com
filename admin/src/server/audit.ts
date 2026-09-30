@@ -8,7 +8,7 @@ const log = logger.scoped('audit')
 /**
  * Audit trail.
  *
- * Records who did what, when, to which entity, and the before/after state —
+ * Records who did what, when, to which entity, and the before/after state -
  * the five facts spec §47 requires.
  *
  * Writing an audit entry must NEVER fail the operation it describes: a
@@ -95,7 +95,7 @@ export async function recordAudit(input: AuditInput): Promise<void> {
       },
     })
   } catch (error) {
-    log.error('Failed to write audit entry — action itself was NOT rolled back', error, {
+    log.error('Failed to write audit entry - action itself was NOT rolled back', error, {
       action: input.action,
       entityType: input.entityType,
       entityId: input.entityId,

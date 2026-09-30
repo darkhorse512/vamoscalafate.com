@@ -1,8 +1,8 @@
 import { prisma } from './client.ts'
 
 /**
- * Recomputes `Tour.fromPriceCents` — the denormalised "desde" price shown on
- * listing cards — from the tour's active options.
+ * Recomputes `Tour.fromPriceCents` - the denormalised "desde" price shown on
+ * listing cards - from the tour's active options.
  *
  * Listing pages filter and sort by price across the whole catalogue. Doing
  * that through a join on tour_options would mean an aggregate per row, so the

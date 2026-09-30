@@ -5,7 +5,7 @@ import nextTypescript from 'eslint-config-next/typescript'
  * ESLint flat config.
  *
  * `eslint-config-next` v16 ships native flat configs, so they are imported
- * directly rather than bridged through FlatCompat — the compatibility layer
+ * directly rather than bridged through FlatCompat - the compatibility layer
  * cannot serialise the plugin graph these configs produce.
  */
 const config = [

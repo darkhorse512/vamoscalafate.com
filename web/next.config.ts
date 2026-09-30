@@ -3,7 +3,7 @@ import type { NextConfig } from 'next'
 /**
  * Public site configuration.
  *
- * Tuned for self-hosting on an Ubuntu VPS behind Nginx — no Vercel-specific
+ * Tuned for self-hosting on an Ubuntu VPS behind Nginx - no Vercel-specific
  * features are used. `output: 'standalone'` produces a self-contained bundle
  * that PM2 can run without the full node_modules tree.
  */

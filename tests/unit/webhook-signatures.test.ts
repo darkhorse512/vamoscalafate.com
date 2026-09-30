@@ -81,7 +81,7 @@ describe('Stripe webhook verification', () => {
     const { StripeGateway } = await import('../../web/src/server/payments/stripe')
     const gateway = new StripeGateway()
 
-    // 10 minutes old — beyond Stripe's recommended 5-minute tolerance.
+    // 10 minutes old - beyond Stripe's recommended 5-minute tolerance.
     const timestamp = Math.floor(Date.now() / 1000) - 600
     const headers = new Headers({ 'stripe-signature': `t=${timestamp},v1=${sign(body, timestamp)}` })
 

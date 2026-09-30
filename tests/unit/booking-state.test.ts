@@ -3,7 +3,7 @@ import { BOOKING_TRANSITIONS, canTransitionBooking } from '@vamos/types'
 
 /**
  * The booking state machine is the guard against a booking being moved into a
- * state that makes no commercial sense — a refunded booking becoming paid
+ * state that makes no commercial sense - a refunded booking becoming paid
  * again, say. Every path that changes status routes through it.
  */
 describe('booking state machine', () => {

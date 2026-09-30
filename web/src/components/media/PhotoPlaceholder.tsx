@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
  * instead of a broken image or an empty grey box.
  *
  * The composition is derived from a hash of the seed string, so a given tour
- * always gets the same placeholder — stable across renders and deploys.
+ * always gets the same placeholder - stable across renders and deploys.
  */
 
 const PALETTES = [

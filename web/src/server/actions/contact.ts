@@ -60,7 +60,7 @@ export async function submitContactAction(input: unknown): Promise<ActionResult<
     }
 
     // Mail failures are logged inside emailService and never surface as a
-    // submission error — the enquiry is already safely stored.
+    // submission error - the enquiry is already safely stored.
     void emailService.contactAcknowledgement(emailData)
     void emailService.adminContact({ ...emailData, adminUrl: publicEnv.NEXT_PUBLIC_ADMIN_URL })
 

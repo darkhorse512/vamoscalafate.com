@@ -78,7 +78,7 @@ const ACTION_LABELS: Record<string, string> = {
  *
  * Kept in sync by hand with packages/shared/src/rbac.ts rather than imported,
  * because the seed runs through Node's type stripping and must not pull in the
- * app's module graph. The tables are for display only — authorization decisions
+ * app's module graph. The tables are for display only - authorization decisions
  * always come from the code matrix.
  */
 const ROLE_GRANTS: Record<string, string[]> = {
@@ -157,11 +157,11 @@ async function seedAdminUser() {
   if (!password) {
     const existing = await prisma.adminUser.findUnique({ where: { email } })
     if (existing) {
-      console.log(`  · Admin user ${email} already exists — left unchanged`)
+      console.log(`  · Admin user ${email} already exists - left unchanged`)
       return
     }
     console.log('')
-    console.log('  ⚠  SEED_ADMIN_PASSWORD is not set — no admin user was created.')
+    console.log('  ⚠  SEED_ADMIN_PASSWORD is not set - no admin user was created.')
     console.log('     Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD in .env and re-run')
     console.log('     `pnpm db:seed` to create the first SUPER_ADMIN account.')
     console.log('')
@@ -172,7 +172,7 @@ async function seedAdminUser() {
     throw new Error('SEED_ADMIN_PASSWORD must be at least 12 characters.')
   }
 
-  // Cost 12: ~250 ms per hash on typical VPS hardware — slow enough to make
+  // Cost 12: ~250 ms per hash on typical VPS hardware - slow enough to make
   // offline cracking expensive, fast enough for an interactive login.
   const passwordHash = await bcrypt.hash(password, 12)
 
@@ -598,7 +598,7 @@ async function seedDirectory(destinationIds: Map<string, string>, businessCatego
 async function main() {
   console.log('')
   console.log('╔══════════════════════════════════════════════════════════════╗')
-  console.log('║  VAMOS CALAFATE — database seed                              ║')
+  console.log('║  VAMOS CALAFATE - database seed                              ║')
   console.log('║  Demo content is marked isDemo=true and must be replaced     ║')
   console.log('║  with real commercial data before going live.                ║')
   console.log('╚══════════════════════════════════════════════════════════════╝')

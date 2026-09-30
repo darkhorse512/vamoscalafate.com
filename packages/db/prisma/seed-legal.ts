@@ -80,7 +80,7 @@ El incumplimiento puede impedir la participación sin derecho a reintegro.
 
 ## 10. Propiedad intelectual
 
-Los contenidos de este sitio —textos, imágenes, diseño y código— pertenecen a «RAZÓN SOCIAL» o se usan con autorización, y están protegidos por la normativa de propiedad intelectual.
+Los contenidos de este sitio -textos, imágenes, diseño y código- pertenecen a «RAZÓN SOCIAL» o se usan con autorización, y están protegidos por la normativa de propiedad intelectual.
 
 ## 11. Modificaciones
 
@@ -203,7 +203,7 @@ Salvo que la ficha del producto indique lo contrario:
 | Menos de 12 horas | Sin reintegro |
 | No presentarse | Sin reintegro |
 
-Algunas actividades —minitrekking, navegaciones, salidas privadas— tienen plazos más amplios, de 48 horas, por las condiciones de los prestadores habilitados. El plazo aplicable figura en la ficha de cada excursión.
+Algunas actividades -minitrekking, navegaciones, salidas privadas- tienen plazos más amplios, de 48 horas, por las condiciones de los prestadores habilitados. El plazo aplicable figura en la ficha de cada excursión.
 
 ## Cancelación por causas meteorológicas o de seguridad
 
@@ -214,7 +214,7 @@ Si el servicio se suspende por condiciones meteorológicas, por razones de segur
 
 La elección es del viajero.
 
-Cuando una actividad combinada se ejecuta parcialmente —por ejemplo, se realizan las pasarelas pero se suspende la navegación por viento— se reintegra la porción correspondiente al servicio no prestado.
+Cuando una actividad combinada se ejecuta parcialmente -por ejemplo, se realizan las pasarelas pero se suspende la navegación por viento- se reintegra la porción correspondiente al servicio no prestado.
 
 ## Cómo solicitar una cancelación
 

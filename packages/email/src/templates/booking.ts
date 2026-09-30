@@ -50,7 +50,7 @@ function build(
   }
 }
 
-/** 1 — Booking received, before payment. */
+/** 1 - Booking received, before payment. */
 export function bookingReceivedEmail(data: BookingEmailData) {
   return build(
     `Recibimos tu solicitud de reserva ${data.reference}`,
@@ -75,10 +75,10 @@ export function bookingReceivedEmail(data: BookingEmailData) {
   )
 }
 
-/** 2 — Payment received, awaiting operational confirmation. */
+/** 2 - Payment received, awaiting operational confirmation. */
 export function paymentReceivedEmail(data: BookingEmailData & { paidAmountCents: number }) {
   return build(
-    `Recibimos tu pago — reserva ${data.reference}`,
+    `Recibimos tu pago - reserva ${data.reference}`,
     `Hola ${data.customerName}, acreditamos tu pago de ${formatMoney(data.paidAmountCents, data.currency)}.`,
     [
       { kind: 'details', rows: bookingDetailRows(data) },
@@ -88,14 +88,14 @@ export function paymentReceivedEmail(data: BookingEmailData & { paidAmountCents:
         text: 'Estamos confirmando la disponibilidad con el operador. Te escribimos apenas esté confirmada.',
       },
     ],
-    `Pago acreditado — ${data.reference}`,
+    `Pago acreditado - ${data.reference}`,
   )
 }
 
-/** 3 — Booking confirmed: the operationally meaningful message. */
+/** 3 - Booking confirmed: the operationally meaningful message. */
 export function bookingConfirmedEmail(data: BookingEmailData) {
   return build(
-    `Reserva confirmada — ${data.reference}`,
+    `Reserva confirmada - ${data.reference}`,
     `Hola ${data.customerName}, tu reserva está confirmada. Te esperamos en El Calafate.`,
     [
       { kind: 'details', rows: bookingDetailRows(data) },
@@ -120,10 +120,10 @@ export function bookingConfirmedEmail(data: BookingEmailData) {
   )
 }
 
-/** 4 — Cancellation. */
+/** 4 - Cancellation. */
 export function bookingCancelledEmail(data: BookingEmailData & { reason?: string | null }) {
   return build(
-    `Reserva cancelada — ${data.reference}`,
+    `Reserva cancelada - ${data.reference}`,
     `Hola ${data.customerName}, tu reserva fue cancelada.`,
     [
       { kind: 'details', rows: bookingDetailRows(data) },
@@ -143,12 +143,12 @@ export function bookingCancelledEmail(data: BookingEmailData & { reason?: string
   )
 }
 
-/** 5 — Refund processed. */
+/** 5 - Refund processed. */
 export function refundProcessedEmail(
   data: BookingEmailData & { refundedCents: number; providerLabel: string },
 ) {
   return build(
-    `Reembolso procesado — ${data.reference}`,
+    `Reembolso procesado - ${data.reference}`,
     `Hola ${data.customerName}, procesamos el reembolso de tu reserva.`,
     [
       {
@@ -166,16 +166,16 @@ export function refundProcessedEmail(
         text: 'Según tu banco o emisor, el importe puede tardar entre 5 y 15 días hábiles en verse reflejado.',
       },
     ],
-    `Reembolso enviado — ${data.reference}`,
+    `Reembolso enviado - ${data.reference}`,
   )
 }
 
-/** 6 — Internal: new booking notification for staff. */
+/** 6 - Internal: new booking notification for staff. */
 export function adminNewBookingEmail(
   data: BookingEmailData & { adminUrl: string; bookingId: string },
 ) {
   return build(
-    `Nueva reserva ${data.reference} — ${data.tourName}`,
+    `Nueva reserva ${data.reference} - ${data.tourName}`,
     `${data.customerName} (${data.customerEmail}) generó una reserva.`,
     [
       { kind: 'details', rows: bookingDetailRows(data) },
@@ -188,7 +188,7 @@ export function adminNewBookingEmail(
   )
 }
 
-/** 7 — Internal: payment problem needing manual attention. */
+/** 7 - Internal: payment problem needing manual attention. */
 export function adminPaymentProblemEmail(data: {
   reference: string
   bookingId: string
@@ -199,7 +199,7 @@ export function adminPaymentProblemEmail(data: {
   currency: string
 }) {
   return build(
-    `Problema de pago — reserva ${data.reference}`,
+    `Problema de pago - reserva ${data.reference}`,
     'Un pago no pudo completarse y requiere revisión manual.',
     [
       {
@@ -221,6 +221,6 @@ export function adminPaymentProblemEmail(data: {
         button: { label: 'Abrir reserva', url: `${data.adminUrl}/bookings/${data.bookingId}` },
       },
     ],
-    `Pago con problemas — ${data.reference}`,
+    `Pago con problemas - ${data.reference}`,
   )
 }

@@ -13,7 +13,7 @@ const log = logger.scoped('action:review')
  *
  * Always created with status PENDING: nothing a visitor writes appears on the
  * site until a moderator approves it. `isVerified` is set only when the
- * submitter's email matches a COMPLETED booking for that entity — it is
+ * submitter's email matches a COMPLETED booking for that entity - it is
  * derived from booking history, never accepted from the form.
  */
 export async function submitReviewAction(

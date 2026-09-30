@@ -10,7 +10,7 @@ import { useConsent } from '@/lib/use-consent'
  * GA4 loader.
  *
  * The tag is only injected once consent has been granted, so a visitor who
- * declines never downloads it — this is both a privacy requirement and a
+ * declines never downloads it - this is both a privacy requirement and a
  * measurable performance win on the first page view.
  *
  * `strategy="afterInteractive"` keeps the script off the critical path.
@@ -30,7 +30,7 @@ function PageViewTracker() {
 
 export function Analytics() {
   // Subscribed through useSyncExternalStore, so a choice made in the banner
-  // (or in another tab) loads the tag without a page reload — and without the
+  // (or in another tab) loads the tag without a page reload - and without the
   // cascading render an effect-plus-setState would cause.
   const consent = useConsent()
 

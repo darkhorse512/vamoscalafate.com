@@ -16,7 +16,7 @@ const WEEKDAY_LABELS: Record<string, string> = {
 /**
  * Shared detail view for restaurants and service businesses.
  *
- * Emits `LocalBusiness` structured data — the accurate type for a directory
+ * Emits `LocalBusiness` structured data - the accurate type for a directory
  * listing. No Offer and no aggregateRating: this platform does not sell these
  * businesses' services and has no verified ratings for them.
  */

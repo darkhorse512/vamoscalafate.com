@@ -9,7 +9,7 @@ import { pricingService } from './pricing.ts'
 const log = logger.scoped('booking')
 
 /**
- * BookingService — orchestrates reservation creation and state changes.
+ * BookingService - orchestrates reservation creation and state changes.
  *
  * Contract:
  *   · Prices come from PricingService, never from the request.
@@ -234,8 +234,8 @@ export const bookingService = {
   },
 
   /**
-   * Central status transition. Every path that changes a booking's state —
-   * webhooks, admin actions, scheduled jobs — goes through here so the state
+   * Central status transition. Every path that changes a booking's state -
+   * webhooks, admin actions, scheduled jobs - goes through here so the state
    * machine cannot be bypassed.
    */
   async transition(args: {

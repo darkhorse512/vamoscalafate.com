@@ -4,8 +4,8 @@ import { prisma } from '@vamos/db'
  * Integration test fixtures.
  *
  * These tests run against a REAL PostgreSQL database. Mocking Prisma would
- * defeat the purpose: the behaviour under test — transactional seat
- * reservation, unique-constraint idempotency, cascade deletes — lives in the
+ * defeat the purpose: the behaviour under test - transactional seat
+ * reservation, unique-constraint idempotency, cascade deletes - lives in the
  * database, not in application code.
  *
  * Every fixture is namespaced with an `itest-` prefix and torn down

@@ -10,7 +10,7 @@ const log = logger.scoped('storage')
 /**
  * Media storage abstraction.
  *
- * `local` writes under STORAGE_LOCAL_DIR, which Nginx serves directly — far
+ * `local` writes under STORAGE_LOCAL_DIR, which Nginx serves directly - far
  * more efficient than proxying every image through Node.
  *
  * The interface is deliberately narrow (put / remove / urlFor) so swapping in
@@ -18,7 +18,7 @@ const log = logger.scoped('storage')
  * implementation, with no call-site changes (spec §25).
  *
  * NOTE: the S3 driver is NOT implemented. Selecting STORAGE_DRIVER="s3"
- * raises a clear error rather than silently falling back to local disk — a
+ * raises a clear error rather than silently falling back to local disk - a
  * silent fallback would mean uploads landing on a VPS the operator believes
  * is stateless.
  */

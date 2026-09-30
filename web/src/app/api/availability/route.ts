@@ -9,7 +9,7 @@ import { clientIp } from '@/server/request'
  * Availability lookup for the booking widget.
  *
  * A Route Handler rather than a Server Action because the widget polls it as
- * the visitor changes date or option — that is an HTTP read, not a mutation.
+ * the visitor changes date or option - that is an HTTP read, not a mutation.
  *
  * Never cached: a stale seat count is a double-sold seat.
  */

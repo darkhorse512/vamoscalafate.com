@@ -19,7 +19,7 @@ function escapeHtml(input: string): string {
     .replace(/'/g, '&#39;')
 }
 
-/** Only http(s) and site-relative links survive — blocks javascript: URLs. */
+/** Only http(s) and site-relative links survive - blocks javascript: URLs. */
 function safeHref(href: string): string | null {
   const trimmed = href.trim()
   if (trimmed.startsWith('/') || trimmed.startsWith('#')) return trimmed
@@ -68,7 +68,7 @@ function renderTable(rows: string[]): string {
   return `<div class="overflow-x-auto"><table>${head}${tbody}</table></div>`
 }
 
-/** Exported for direct testing — see tests/unit/markdown.test.ts. */
+/** Exported for direct testing - see tests/unit/markdown.test.ts. */
 export function markdownToHtml(markdown: string): string {
   const lines = markdown.replace(/\r\n/g, '\n').split('\n')
   const html: string[] = []

@@ -7,7 +7,7 @@ const SESSION_COOKIE = 'vc_admin_session'
  *
  * This is a FIRST line of defence, not the only one. It runs on the Edge
  * runtime with no database access, so it can only check that a session cookie
- * is *present* — it cannot verify the session is valid or that the user holds
+ * is *present* - it cannot verify the session is valid or that the user holds
  * the right role.
  *
  * Real authentication and authorization happen in every page and every server

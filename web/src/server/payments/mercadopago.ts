@@ -12,8 +12,8 @@ const API = 'https://api.mercadopago.com'
  * Mercado Pago Checkout Pro.
  *
  * REQUIRED EXTERNAL CONFIGURATION
- *   · MERCADOPAGO_ACCESS_TOKEN   — Credenciales de producción in the developer panel
- *   · MERCADOPAGO_WEBHOOK_SECRET — the signing secret shown when the webhook is created
+ *   · MERCADOPAGO_ACCESS_TOKEN   - Credenciales de producción in the developer panel
+ *   · MERCADOPAGO_WEBHOOK_SECRET - the signing secret shown when the webhook is created
  *   · Webhook URL: https://vamoscalafate.com/api/webhooks/mercadopago  (topic: payment)
  *
  * Talks to the REST API over fetch rather than pulling in the SDK: two
@@ -51,7 +51,7 @@ export class MercadoPagoGateway implements PaymentGateway {
         surname: input.customer.lastName,
         email: input.customer.email,
       },
-      // Echoed back on the webhook — how a notification is matched to a booking.
+      // Echoed back on the webhook - how a notification is matched to a booking.
       external_reference: input.bookingReference,
       back_urls: {
         success: input.successUrl,
@@ -109,7 +109,7 @@ export class MercadoPagoGateway implements PaymentGateway {
    * Verifies the `x-signature` header.
    *
    * Mercado Pago signs a manifest built from the resource id, the request id
-   * and the timestamp — NOT the raw body. The manifest template is fixed by
+   * and the timestamp - NOT the raw body. The manifest template is fixed by
    * the provider: `id:<data.id>;request-id:<x-request-id>;ts:<ts>;`
    */
   async verifyAndParseWebhook(rawBody: string, headers: Headers): Promise<WebhookResult> {

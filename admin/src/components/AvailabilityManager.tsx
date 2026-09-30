@@ -32,7 +32,7 @@ export function AvailabilityManager({
   const [message, setMessage] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null)
 
   /**
-   * Computed once. Reading the clock during render is impure — the default
+   * Computed once. Reading the clock during render is impure - the default
    * range could shift between renders and silently change what an operator is
    * about to generate.
    */
@@ -223,7 +223,7 @@ export function AvailabilityManager({
               id="av-times"
               value={departureTimes}
               onChange={(event) => setDepartureTimes(event.target.value)}
-              placeholder="08:00, 14:00 — vacío usa los horarios de la opción"
+              placeholder="08:00, 14:00 - vacío usa los horarios de la opción"
               className="admin-input"
             />
           </div>

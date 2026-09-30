@@ -6,7 +6,7 @@ import { PrismaClient } from '../generated/client/client.ts'
  *
  * Prisma 7 connects through a driver adapter, so the node-postgres pool is
  * ours to size. On a VPS running two Next.js processes under PM2, each
- * process keeps its own pool — keep `connection_limit` in DATABASE_URL and
+ * process keeps its own pool - keep `connection_limit` in DATABASE_URL and
  * PostgreSQL's `max_connections` consistent with that.
  *
  * In development Next.js hot-reloads modules on every edit; stashing the

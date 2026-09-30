@@ -104,7 +104,7 @@ let cachedServerEnv: ServerEnv | null = null
  * Server-only environment accessor.
  *
  * Lazy rather than module-level so that importing this file from a client
- * bundle (where secrets are absent) cannot throw at import time — the throw
+ * bundle (where secrets are absent) cannot throw at import time - the throw
  * only happens if server code actually asks for a server value.
  */
 export function serverEnv(): ServerEnv {

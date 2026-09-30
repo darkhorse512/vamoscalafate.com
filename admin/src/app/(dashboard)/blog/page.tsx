@@ -59,7 +59,7 @@ export default async function BlogPage({
     title: post.title,
     slug: post.slug,
     status: post.status,
-    categoryName: post.category?.name ?? '—',
+    categoryName: post.category?.name ?? '-',
     readingTime: post.readingTime,
     publishedAt: post.publishedAt,
     isDemo: post.isDemo,
@@ -106,7 +106,7 @@ export default async function BlogPage({
     {
       key: 'publishedAt',
       header: 'Publicación',
-      cell: (row) => (row.publishedAt ? formatDate(row.publishedAt) : '—'),
+      cell: (row) => (row.publishedAt ? formatDate(row.publishedAt) : '-'),
     },
   ]
 

@@ -3,7 +3,7 @@ import { AppError, toISODate } from '@vamos/shared'
 import type { AvailabilitySlot } from '@vamos/types'
 
 /**
- * AvailabilityService — the single source of truth for what can be sold.
+ * AvailabilityService - the single source of truth for what can be sold.
  *
  * Deliberately free of any external booking-engine detail. To plug in a
  * supplier API later, add an implementation behind this same interface and
@@ -153,7 +153,7 @@ export const availabilityService = {
    *
    * PostgreSQL evaluates that predicate against the row it is about to lock,
    * so two concurrent requests that both read "4 seats left" cannot both
-   * succeed — the second one finds the predicate false and updates zero rows.
+   * succeed - the second one finds the predicate false and updates zero rows.
    *
    * A read-then-write in application code could not provide this guarantee
    * without an explicit lock: between the SELECT and the UPDATE, another

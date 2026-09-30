@@ -75,7 +75,7 @@ export function isAppError(error: unknown): error is AppError {
 /**
  * Normalises any thrown value into a response-safe shape. Unknown errors are
  * deliberately flattened to INTERNAL_ERROR so their message never reaches the
- * browser — log the original separately.
+ * browser - log the original separately.
  */
 export function toPublicError(error: unknown): {
   code: AppErrorCode

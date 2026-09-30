@@ -14,7 +14,7 @@ import { reviewSubmissionAction } from '@/server/actions/submissions'
  * and the outcome shows the resulting public URL.
  *
  * Rejection and "needs information" require a note, because that note is what
- * the applicant receives — sending "rejected" with no explanation would be a
+ * the applicant receives - sending "rejected" with no explanation would be a
  * poor experience for a local business.
  */
 export function SubmissionReview({

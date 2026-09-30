@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic'
 /**
  * SEO health overview.
  *
- * Surfaces the problems that actually cost traffic — a published page set to
- * noindex, a missing meta description, a summary too short to serve as one —
+ * Surfaces the problems that actually cost traffic - a published page set to
+ * noindex, a missing meta description, a summary too short to serve as one -
  * rather than a vanity score. Each item links to where it is fixed.
  */
 export default async function SeoPage() {
@@ -196,7 +196,7 @@ export default async function SeoPage() {
                     {tour.name}
                   </Link>
                   <p className="mt-0.5 text-[0.75rem] text-slate-500">
-                    {tour.summary.length} caracteres — apuntá a 120–160
+                    {tour.summary.length} caracteres - apuntá a 120–160
                   </p>
                 </li>
               ))}

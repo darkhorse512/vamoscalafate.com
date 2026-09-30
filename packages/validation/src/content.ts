@@ -176,7 +176,7 @@ export const submissionReviewSchema = z
       !['REJECTED', 'NEEDS_INFORMATION'].includes(v.status) ||
       (v.reviewNotes?.trim().length ?? 0) >= 10,
     {
-      message: 'Explicá el motivo — se incluye en el email al solicitante',
+      message: 'Explicá el motivo - se incluye en el email al solicitante',
       path: ['reviewNotes'],
     },
   )

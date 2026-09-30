@@ -11,7 +11,7 @@ import { publicEnv } from '@vamos/shared'
  * single-file change.
  *
  * Nothing is sent when NEXT_PUBLIC_GA_ID is unset or consent has not been
- * granted — the script is not even loaded in that case.
+ * granted - the script is not even loaded in that case.
  */
 
 type GtagParams = Record<string, string | number | boolean | undefined | object>
@@ -47,7 +47,7 @@ export type AnalyticsItem = {
   item_id: string
   item_name: string
   item_category?: string
-  /** Major units — GA4 expects a decimal, not minor units. */
+  /** Major units - GA4 expects a decimal, not minor units. */
   price?: number
   quantity?: number
 }

@@ -3,7 +3,7 @@ import { AppError } from '@vamos/shared'
 import type { BookingSelection, PriceBreakdown } from '@vamos/types'
 
 /**
- * PricingService — the only place a booking total is computed.
+ * PricingService - the only place a booking total is computed.
  *
  * The client never sends a price. It sends a selection; the server prices it
  * from current database values. Anything else would let a visitor edit the
@@ -54,7 +54,7 @@ export const pricingService = {
     const adultUnitCents = availability?.priceCentsOverride ?? option.priceCents
 
     // When no child price is configured, children pay the adult rate rather
-    // than travelling free — silently discounting would misprice the booking.
+    // than travelling free - silently discounting would misprice the booking.
     const childUnitCents =
       option.childPriceCents ??
       (availability?.priceCentsOverride ? adultUnitCents : option.priceCents)

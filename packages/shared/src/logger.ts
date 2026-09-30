@@ -5,7 +5,7 @@
  * one JSON object per line is the most useful format. In development the
  * output is a readable single line instead.
  *
- * Never pass passwords, API keys, session tokens or full card data as context —
+ * Never pass passwords, API keys, session tokens or full card data as context -
  * `redact()` below scrubs well-known key names as a backstop, but the real
  * defence is not logging them in the first place.
  */

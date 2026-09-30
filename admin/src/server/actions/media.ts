@@ -19,7 +19,7 @@ const ALLOWED = new Set<string>([...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_DOCUMEN
  * Media upload.
  *
  * Layered validation, because any single check can be bypassed:
- *   1. MIME type must be on the allow-list (SVG is excluded — it can carry
+ *   1. MIME type must be on the allow-list (SVG is excluded - it can carry
  *      script and would be stored XSS served from our own origin).
  *   2. Size limit, enforced on the real byte length, not a declared header.
  *   3. Magic-byte check against the declared type.

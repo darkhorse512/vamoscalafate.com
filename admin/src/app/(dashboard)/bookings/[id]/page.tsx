@@ -171,7 +171,7 @@ export default async function BookingDetailPage({
             </section>
           ) : null}
 
-          {/* Attribution — how this booking was acquired. */}
+          {/* Attribution - how this booking was acquired. */}
           {booking.utmSource || booking.utmCampaign || booking.referrer ? (
             <section className="admin-panel p-4">
               <h2 className="text-[0.8125rem] font-semibold text-slate-900">Atribución</h2>

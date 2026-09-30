@@ -4,7 +4,7 @@ import { cuidSchema, emailSchema, safeTextSchema } from './common.ts'
 export const loginSchema = z.object({
   email: emailSchema,
   /**
-   * No max-length complexity rules on login — the password either matches the
+   * No max-length complexity rules on login - the password either matches the
    * stored hash or it does not. Policy is enforced when a password is *set*.
    */
   password: z.string().min(1, 'Ingresá tu contraseña').max(200),
@@ -46,7 +46,7 @@ export const adminUserUpdateSchema = z.object({
   email: emailSchema,
   role: adminRoleSchema,
   isActive: z.boolean(),
-  /** Optional — only rotates the password when non-empty. */
+  /** Optional - only rotates the password when non-empty. */
   password: z.union([passwordSchema, z.literal('')]).optional(),
 })
 

@@ -1,7 +1,7 @@
 # Vamos Calafate
 
 Tourism commerce and content platform for **El Calafate, Santa Cruz, Patagonia
-Argentina** — excursions, transfers, a local directory, a travel guide, online
+Argentina** - excursions, transfers, a local directory, a travel guide, online
 booking and online payment.
 
 Two independently deployed Next.js applications sharing one PostgreSQL database
@@ -59,12 +59,12 @@ Tailwind CSS 4, TypeScript 5.9.
 
 ```
 vamoscalafate/
-├── web/                  Public site — Next.js App Router, port 3000
-├── admin/                Administration — Next.js App Router, port 3001
+├── web/                  Public site - Next.js App Router, port 3000
+├── admin/                Administration - Next.js App Router, port 3001
 ├── packages/
 │   ├── db/               Prisma schema, client, cache tags   ← single source of truth
 │   ├── types/            Shared domain types and service contracts
-│   ├── validation/       Zod schemas — every server-side input contract
+│   ├── validation/       Zod schemas - every server-side input contract
 │   ├── email/            Transactional email (Resend SMTP) and templates
 │   └── shared/           Env validation, RBAC, money, logging, site config
 ├── deploy/
@@ -102,11 +102,11 @@ over the raw body and is idempotent on `(provider, eventId)`.
 
 **Content publishes without a rebuild.** Public reads are tagged; the admin
 purges those tags over HTTP after a mutation. An editor publishes a tour and
-the live site reflects it immediately — no build, no restart.
+the live site reflects it immediately - no build, no restart.
 
 **Nothing is faked.** No stock photography presented as El Calafate, no seeded
 reviews or ratings, no "connected" integration without credentials. Where an
-integration needs external configuration, the app says so plainly — in the
+integration needs external configuration, the app says so plainly - in the
 dashboard, in the settings screen, and in `.env.example`.
 
 ---
@@ -121,7 +121,7 @@ corepack enable pnpm
 pnpm install
 
 cp .env.example .env
-# edit .env — see the next section
+# edit .env - see the next section
 ```
 
 ---
@@ -172,8 +172,8 @@ connections; keep PostgreSQL's `max_connections` comfortably above that.
 ## 6. Database migrations
 
 ```bash
-pnpm db:migrate          # development — creates and applies a migration
-pnpm db:migrate:deploy   # production  — applies committed migrations only
+pnpm db:migrate          # development - creates and applies a migration
+pnpm db:migrate:deploy   # production  - applies committed migrations only
 pnpm db:generate         # regenerate the Prisma client
 pnpm db:studio           # browse the data
 ```
@@ -196,7 +196,7 @@ a small demo directory.
 Set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` before running, or no admin
 account is created. **Change the password after the first login.**
 
-The seed is idempotent — every write is an upsert keyed on a natural unique
+The seed is idempotent - every write is an upsert keyed on a natural unique
 column, so it is safe to re-run.
 
 ### About the demo content
@@ -204,7 +204,7 @@ column, so it is safe to re-run.
 Every seeded row is marked `isDemo: true` and shows a **DEMO** badge in the
 admin. The excursion *types* are real categories of activity offered in El
 Calafate, and the geographic facts are publicly verifiable. Everything
-commercially specific — **prices, departure times, capacities, inclusions** — is
+commercially specific - **prices, departure times, capacities, inclusions** - is
 placeholder data. Replace it before selling.
 
 **Deliberately not seeded:** reviews, ratings, awards, certifications,
@@ -234,7 +234,7 @@ pnpm start        # runs both standalone servers
 ```
 
 Both apps use `output: 'standalone'`. `next start` does **not** work with that
-setting — the build emits a self-contained server, and `pnpm start` runs it.
+setting - the build emits a self-contained server, and `pnpm start` runs it.
 A post-build step copies `.next/static` and `public/` next to that server,
 since Next deliberately leaves them out of the bundle.
 
@@ -261,10 +261,18 @@ reachable from the Internet.
 ## 11. Nginx
 
 ```bash
+sudo mkdir -p /etc/nginx/snippets
+sudo cp deploy/nginx/snippets/*.conf /etc/nginx/snippets/
 sudo cp deploy/nginx/vamoscalafate.conf /etc/nginx/sites-available/vamoscalafate
 sudo ln -s /etc/nginx/sites-available/vamoscalafate /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+The `snippets/` files are required: they carry the proxy headers and the
+Cloudflare client-IP restoration, and the site config will not load without
+them. This domain is behind Cloudflare — see
+[DEPLOYMENT.md §13b](./DEPLOYMENT.md#13b-cloudflare), particularly the
+**SSL/TLS mode**, which must be *Full (strict)*.
 
 Handles TLS, HTTP→HTTPS, www→apex, compression, rate limiting, upload limits,
 and serves uploaded media straight from disk without touching Node.
@@ -344,7 +352,7 @@ marked paid from a client-side redirect.
 
 Set `NEXT_PUBLIC_GA_ID` to a GA4 Measurement ID (`G-XXXXXXXXXX`).
 
-The tag is **only loaded after the visitor grants consent** — a visitor who
+The tag is **only loaded after the visitor grants consent** - a visitor who
 declines never downloads it. Events are defined in one place
 (`web/src/lib/analytics.ts`): `page_view`, `view_item`, `search`,
 `select_item`, `booking_started`, `begin_checkout`, `add_payment_info`,
@@ -395,8 +403,8 @@ The restore script takes a safety dump of the current state first, stops the
 apps, restores, re-applies migrations and restarts.
 
 > **The backup script writes to local disk only.** Local-only backups do not
-> survive the loss of the server. Add an offsite copy — the script marks the
-> exact place — and rehearse a restore on staging. An untested restore
+> survive the loss of the server. Add an offsite copy - the script marks the
+> exact place - and rehearse a restore on staging. An untested restore
 > procedure is not a backup strategy.
 
 Also back up `STORAGE_LOCAL_DIR` (uploaded media). It is not in the database
@@ -436,12 +444,12 @@ pnpm test:e2e    # end-to-end (playwright, both apps)
 | Layer       | Covers |
 |-------------|--------|
 | Unit        | money arithmetic, booking state machine, every validation schema, Markdown XSS safety, **webhook signature verification** (forgery, tampering, replay) |
-| Integration | real PostgreSQL — pricing, **oversell under concurrency**, seat release on cancellation, webhook idempotency, amount verification, password and session storage, the RBAC matrix |
-| End-to-end  | real production builds of both apps — homepage, catalogue, filters, tour page, booking selection, reservation, admin login, session cookie flags, tour editor, submissions, audit trail, SEO artefacts, security headers, and a mobile-viewport booking pass |
+| Integration | real PostgreSQL - pricing, **oversell under concurrency**, seat release on cancellation, webhook idempotency, amount verification, password and session storage, the RBAC matrix |
+| End-to-end  | real production builds of both apps - homepage, catalogue, filters, tour page, booking selection, reservation, admin login, session cookie flags, tour editor, submissions, audit trail, SEO artefacts, security headers, and a mobile-viewport booking pass |
 
 Integration tests run against a real database rather than a mock, because the
-behaviour that matters — transactional seat reservation, unique-constraint
-idempotency — lives in the database, not in application code.
+behaviour that matters - transactional seat reservation, unique-constraint
+idempotency - lives in the database, not in application code.
 
 ---
 
@@ -464,7 +472,7 @@ nothing is sent by design. With `smtp`, confirm the domain is verified in
 Resend and the DNS records are published.
 
 **A webhook returns 400**
-Signature verification failed — usually a mismatched secret, or a proxy that
+Signature verification failed - usually a mismatched secret, or a proxy that
 altered the request body. The raw body must reach the handler byte-for-byte;
 the supplied Nginx config sets `proxy_request_buffering off` for that reason.
 
@@ -487,13 +495,13 @@ one that tells you what is left:
 |------|--------|
 | Payment providers | Architecture complete, **credentials required** |
 | Transactional email | Architecture complete, **Resend key + DNS required** |
-| Photography | **None shipped.** Designed placeholders render until real images are uploaded — no stock imagery is presented as El Calafate |
+| Photography | **None shipped.** Designed placeholders render until real images are uploaded - no stock imagery is presented as El Calafate |
 | Legal pages | **Structural templates only.** Every operator-specific field is marked `«…»`. Have a lawyer review them |
 | Offsite backups | **Not configured.** Local dumps only |
-| S3 media storage | Interface defined; **only the local driver is implemented** — selecting `s3` raises a clear error rather than silently writing to disk |
+| S3 media storage | Interface defined; **only the local driver is implemented** - selecting `s3` raises a clear error rather than silently writing to disk |
 | Reviews | Moderation workflow complete; **no reviews exist** and none are fabricated |
 | GA4 / Search Console | Wiring complete, **IDs required** |
-| Real commercial data | 15 demo products marked `isDemo` — **prices and schedules are placeholders** |
+| Real commercial data | 15 demo products marked `isDemo` - **prices and schedules are placeholders** |
 
 Everything above is architecture-complete: supplying the credential or the
 content is all that is needed. Nothing is stubbed with fake success.

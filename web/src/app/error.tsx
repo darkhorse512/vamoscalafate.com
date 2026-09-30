@@ -20,7 +20,7 @@ export default function GlobalError({
   reset: () => void
 }) {
   useEffect(() => {
-    // `digest` is the server-side correlation id — safe to show, and it lets
+    // `digest` is the server-side correlation id - safe to show, and it lets
     // support find the matching log line.
     console.error('Unhandled application error', { digest: error.digest })
   }, [error])

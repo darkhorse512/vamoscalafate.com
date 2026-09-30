@@ -8,7 +8,7 @@ import { bookingService } from './booking.ts'
 const log = logger.scoped('payment')
 
 /**
- * PaymentService — owns the money side of a booking.
+ * PaymentService - owns the money side of a booking.
  *
  * Two rules govern everything here:
  *
@@ -181,7 +181,7 @@ export const paymentService = {
       result.amountCents !== null &&
       result.amountCents !== booking.totalCents
     ) {
-      log.error('Webhook amount mismatch — not confirming', undefined, {
+      log.error('Webhook amount mismatch - not confirming', undefined, {
         reference: booking.reference,
         expected: booking.totalCents,
         received: result.amountCents,

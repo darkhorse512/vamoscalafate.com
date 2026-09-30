@@ -6,10 +6,10 @@ import { logger, serverEnv } from '@vamos/shared'
  *
  * Resend is the production provider, reached over SMTP. The interface below is
  * provider-agnostic, so swapping in the Resend HTTP API or another vendor
- * means adding one implementation — no call site changes.
+ * means adding one implementation - no call site changes.
  *
  * REQUIRED EXTERNAL CONFIGURATION before mail will actually deliver:
- *   1. RESEND_SMTP_PASSWORD  — a Resend API key (re_...)
+ *   1. RESEND_SMTP_PASSWORD  - a Resend API key (re_...)
  *   2. EMAIL_TRANSPORT=smtp
  *   3. The sending domain verified at https://resend.com/domains, with the
  *      SPF / DKIM / DMARC records Resend generates published in DNS.
@@ -42,7 +42,7 @@ export interface EmailTransport {
 
 /**
  * Development transport. Logs a summary so flows can be exercised without
- * credentials, and reports `delivered: false` — never pretends mail was sent.
+ * credentials, and reports `delivered: false` - never pretends mail was sent.
  */
 class ConsoleTransport implements EmailTransport {
   readonly name = 'console'
@@ -95,7 +95,7 @@ class ResendSmtpTransport implements EmailTransport {
 
   async send(message: EmailMessage): Promise<SendResult> {
     if (!this.isConfigured()) {
-      log.warn('RESEND_SMTP_PASSWORD is not set — email not sent', { subject: message.subject })
+      log.warn('RESEND_SMTP_PASSWORD is not set - email not sent', { subject: message.subject })
       return { delivered: false, reason: 'not_configured' }
     }
 

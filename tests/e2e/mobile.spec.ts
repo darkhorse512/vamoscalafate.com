@@ -52,7 +52,7 @@ test.describe('mobile layout', () => {
   test('keeps the booking action reachable on a tour page', async ({ page }) => {
     await page.goto('/excursiones/glaciar-perito-moreno-pasarelas')
 
-    // Scroll to the bottom — the widget itself is far above by now.
+    // Scroll to the bottom - the widget itself is far above by now.
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
 
     // A sticky bar keeps the primary action in reach; a widget that scrolls

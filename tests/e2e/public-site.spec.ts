@@ -132,7 +132,7 @@ test.describe('tour detail', () => {
     await dateInput.fill(target)
 
     // This tour offers several departures, so a time must be picked before a
-    // total can be computed — the widget deliberately does not guess.
+    // total can be computed - the widget deliberately does not guess.
     const timeButton = page.getByRole('button', { name: /lug\./ }).first()
     await expect(timeButton).toBeVisible({ timeout: 15_000 })
     await timeButton.click()
@@ -212,7 +212,7 @@ test.describe('SEO artefacts', () => {
   test('checkout is marked noindex', async ({ page }) => {
     await page.goto('/checkout?ref=VC-NONEXISTENT')
     const robots = page.locator('meta[name="robots"]')
-    // Either the page 404s or it carries noindex — never an indexable checkout.
+    // Either the page 404s or it carries noindex - never an indexable checkout.
     const count = await robots.count()
     if (count > 0) {
       await expect(robots.first()).toHaveAttribute('content', /noindex/)

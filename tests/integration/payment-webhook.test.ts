@@ -9,7 +9,7 @@ import { cleanupFixtures, createTourFixture, testCustomer, TEST_PREFIX } from '.
  * Payment webhook processing.
  *
  * Providers retry on any non-2xx and occasionally deliver a successful event
- * twice, so idempotency is not a nicety — without it a retried notification
+ * twice, so idempotency is not a nicety - without it a retried notification
  * would confirm a booking repeatedly and could trigger duplicate emails or a
  * double refund.
  *
@@ -142,7 +142,7 @@ describe('payment webhook amount verification', () => {
       select: { status: true },
     })
 
-    // Still awaiting payment — the mismatch must not confirm it.
+    // Still awaiting payment - the mismatch must not confirm it.
     expect(updated?.status).toBe('AWAITING_PAYMENT')
   })
 

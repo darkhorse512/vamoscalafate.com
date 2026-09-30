@@ -6,7 +6,7 @@
  *   pm2 startup              # print the systemd unit command to run once
  *
  * Both apps run the standalone server produced by `pnpm build`, NOT
- * `next start` — Next.js does not support `next start` with
+ * `next start` - Next.js does not support `next start` with
  * `output: 'standalone'`.
  *
  * `.cjs` because the repo's package.json does not set "type": "module" but
@@ -22,7 +22,7 @@ const common = {
   exec_mode: 'fork',
   instances: 1,
   autorestart: true,
-  // A process that restarts more than 10 times is broken, not flaky —
+  // A process that restarts more than 10 times is broken, not flaky -
   // stop flapping and leave it down so the failure is visible.
   max_restarts: 10,
   min_uptime: '20s',

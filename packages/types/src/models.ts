@@ -2,12 +2,12 @@
  * Model and enum re-exports.
  *
  * Model shapes come from `@vamos/db` as TYPE-ONLY imports, which TypeScript
- * erases — they add no runtime dependency.
+ * erases - they add no runtime dependency.
  *
  * The enums are runtime VALUES, so they are imported from the generated enums
  * module directly rather than through the `@vamos/db` barrel. That barrel
- * constructs the Prisma client, which would make every consumer of a type —
- * including a pure unit test — require a live DATABASE_URL.
+ * constructs the Prisma client, which would make every consumer of a type -
+ * including a pure unit test - require a live DATABASE_URL.
  */
 export type {
   AdminUser,

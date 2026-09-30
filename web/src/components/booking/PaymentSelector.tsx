@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
  * Payment provider selection.
  *
  * The action redirects to the provider on success, so a successful call never
- * returns here. A returned value therefore always means failure — that is why
+ * returns here. A returned value therefore always means failure - that is why
  * the result is only inspected for its error.
  */
 export function PaymentSelector({

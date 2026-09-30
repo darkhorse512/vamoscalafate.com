@@ -19,12 +19,12 @@ check() {
   if [ "$status" = "ok" ]; then
     say "  ✓ $label"
   else
-    say "  ✗ $label — $status"
+    say "  ✗ $label - $status"
     FAILURES=$((FAILURES + 1))
   fi
 }
 
-say "Vamos Calafate health check — $(date -u +%FT%TZ)"
+say "Vamos Calafate health check - $(date -u +%FT%TZ)"
 say ""
 
 # ── Application processes ──────────────────────────────────────────────────
@@ -66,7 +66,7 @@ USED="$(df -P /var/www | awk 'NR==2 {gsub(/%/,"",$5); print $5}')"
 if [ "$USED" -lt 90 ]; then
   check "disk space (${USED}% used)" ok
 else
-  check "disk space" "${USED}% used — running low"
+  check "disk space" "${USED}% used - running low"
 fi
 
 # ── Backups ────────────────────────────────────────────────────────────────

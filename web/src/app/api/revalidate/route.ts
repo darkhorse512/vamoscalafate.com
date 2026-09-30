@@ -10,7 +10,7 @@ const log = logger.scoped('revalidate')
  * Cache purge endpoint.
  *
  * The admin application calls this after publishing content so the public site
- * reflects the change immediately — without a rebuild, a redeploy or a process
+ * reflects the change immediately - without a rebuild, a redeploy or a process
  * restart. That is the mechanism behind spec §45 and §76.
  *
  * Authenticated with REVALIDATE_SECRET, which both applications share. The

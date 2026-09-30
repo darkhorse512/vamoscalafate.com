@@ -8,7 +8,7 @@ import { logger } from './logger.ts'
  * reset on every deploy, so buckets live in PostgreSQL where both apps and all
  * workers share them. Fixed windows (not sliding) keep it to a single upsert.
  *
- * For very high-volume endpoints, swap this implementation for Redis — the
+ * For very high-volume endpoints, swap this implementation for Redis - the
  * call sites only depend on the `checkRateLimit` signature.
  */
 
@@ -60,7 +60,7 @@ export async function checkRateLimit(
   } catch (error) {
     // A limiter outage must not take down the endpoint it protects. Fail open,
     // but log loudly so the condition is visible.
-    logger.error('Rate limiter unavailable — failing open', error, { rule: rule.name })
+    logger.error('Rate limiter unavailable - failing open', error, { rule: rule.name })
     return { allowed: true, remaining: rule.limit, retryAfterSeconds: 0 }
   }
 }

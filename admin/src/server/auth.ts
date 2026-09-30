@@ -26,7 +26,7 @@ export const SESSION_COOKIE = 'vc_admin_session'
  *    so a database dump cannot be replayed as a live session.
  *
  *  · The cookie is httpOnly (no JavaScript access, so XSS cannot steal it),
- *    secure in production, and SameSite=Lax — which blocks cross-site POSTs
+ *    secure in production, and SameSite=Lax - which blocks cross-site POSTs
  *    and is the primary CSRF defence for Server Actions here.
  *
  *  · Failed logins are counted per account AND rate-limited per IP, so neither
@@ -158,7 +158,7 @@ export async function login(input: unknown): Promise<LoginOutcome> {
   })
 
   /**
-   * A single generic message for every failure path — unknown account, wrong
+   * A single generic message for every failure path - unknown account, wrong
    * password, locked, deactivated. Distinguishing them would let an attacker
    * enumerate valid administrator addresses.
    */
@@ -301,7 +301,7 @@ export async function logout(): Promise<void> {
   cookieStore.delete(SESSION_COOKIE)
 }
 
-/** Revokes every session for a user — used when deactivating an account. */
+/** Revokes every session for a user - used when deactivating an account. */
 export async function revokeAllSessions(userId: string): Promise<void> {
   await prisma.adminSession.updateMany({
     where: { userId, revokedAt: null },

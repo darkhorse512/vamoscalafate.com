@@ -1,4 +1,4 @@
-# Deployment — Ubuntu VPS
+# Deployment - Ubuntu VPS
 
 Exact, ordered steps to take a fresh Ubuntu server to a running
 **vamoscalafate.com** and **admin.vamoscalafate.com**.
@@ -17,7 +17,7 @@ You need:
 - DNS control for `vamoscalafate.com`
 - The repository URL and deploy access
 
-Point DNS at the server **before** requesting certificates — Certbot validates
+Point DNS at the server **before** requesting certificates - Certbot validates
 over HTTP and will fail otherwise:
 
 | Type | Host    | Value              |
@@ -54,7 +54,7 @@ sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 ## 2. Firewall
 
-Only SSH and HTTP(S) are exposed. **Ports 3000 and 3001 are never opened** —
+Only SSH and HTTP(S) are exposed. **Ports 3000 and 3001 are never opened** -
 the Node processes bind to `127.0.0.1` and are reachable only through Nginx.
 
 ```bash
@@ -89,7 +89,7 @@ sudo chown -R vamos:vamos /home/vamos/.ssh
 sudo chmod 700 /home/vamos/.ssh && sudo chmod 600 /home/vamos/.ssh/authorized_keys
 ```
 
-Harden SSH — in `/etc/ssh/sshd_config`:
+Harden SSH - in `/etc/ssh/sshd_config`:
 
 ```
 PermitRootLogin no
@@ -138,7 +138,7 @@ Verify:
 psql "postgresql://vamos:REPLACE_WITH_A_STRONG_PASSWORD@localhost:5432/vamoscalafate" -c '\conninfo'
 ```
 
-PostgreSQL listens on localhost only by default — leave it that way.
+PostgreSQL listens on localhost only by default - leave it that way.
 
 ---
 
@@ -239,7 +239,7 @@ cp web/.env admin/.env
 ```
 
 The admin needs the same values. **`AUTH_SECRET` and `REVALIDATE_SECRET` must
-be identical in both files** — the shared revalidation secret is what lets the
+be identical in both files** - the shared revalidation secret is what lets the
 admin purge the public site's cache.
 
 ```bash
@@ -314,6 +314,11 @@ Both must return `200`.
 ## 13. Nginx
 
 ```bash
+# The snippets are REQUIRED — the site config includes them and will not load
+# without them.
+sudo mkdir -p /etc/nginx/snippets
+sudo cp /var/www/vamoscalafate/deploy/nginx/snippets/*.conf /etc/nginx/snippets/
+
 sudo cp /var/www/vamoscalafate/deploy/nginx/vamoscalafate.conf \
         /etc/nginx/sites-available/vamoscalafate
 sudo ln -s /etc/nginx/sites-available/vamoscalafate /etc/nginx/sites-enabled/
@@ -327,6 +332,124 @@ for now, then:
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+---
+
+## 13b. Cloudflare
+
+This domain sits behind Cloudflare, which changes three things. Get these
+wrong and the site either loops infinitely or silently loses every visitor's
+IP address.
+
+### SSL/TLS mode — set this FIRST
+
+**SSL/TLS → Overview → Full (strict).**
+
+Any other mode breaks the site:
+
+| Mode | Result |
+|---|---|
+| **Off** | No HTTPS at all |
+| **Flexible** | Cloudflare talks to the origin over HTTP while serving HTTPS. Nginx redirects HTTP→HTTPS, Cloudflare follows it back to itself → **infinite redirect loop (ERR_TOO_MANY_REDIRECTS)** |
+| **Full** | Encrypted to the origin but the certificate is not validated |
+| **Full (strict)** | ✅ Encrypted and validated against the Let's Encrypt certificate |
+
+If the site loops after going live, this setting is almost always why.
+
+### Issuing the certificate
+
+Certbot's HTTP-01 challenge must reach the origin. Either:
+
+- **Grey-cloud the records while issuing** (simplest): set `vamoscalafate.com`,
+  `www` and `admin` to *DNS only*, run Certbot, then re-enable the orange
+  cloud; or
+- Leave the proxy on and make sure **SSL/TLS → Edge Certificates → Always Use
+  HTTPS is OFF** during issuance, so the challenge over port 80 is not
+  redirected.
+
+The supplied Nginx config already serves `/.well-known/acme-challenge/` over
+plain HTTP for renewals.
+
+### Real visitor IP addresses — required
+
+With the orange cloud on, every request reaches the origin from a Cloudflare
+address. Without restoration, nginx logs Cloudflare rather than visitors and
+**the application rate-limits all traffic into a single bucket**.
+
+The Nginx config includes `snippets/cloudflare-real-ip.conf`, which trusts
+`CF-Connecting-IP` from Cloudflare's published ranges and from nowhere else.
+Install the snippets alongside the site config:
+
+```bash
+sudo mkdir -p /etc/nginx/snippets
+sudo cp /var/www/vamoscalafate/deploy/nginx/snippets/*.conf /etc/nginx/snippets/
+```
+
+Keep the ranges current — Cloudflare adds networks occasionally:
+
+```bash
+sudo /var/www/vamoscalafate/deploy/scripts/update-cloudflare-ips.sh
+
+# monthly, via root's crontab
+0 4 1 * * /var/www/vamoscalafate/deploy/scripts/update-cloudflare-ips.sh --quiet
+```
+
+Verify after going live — this must show a real visitor address, not
+`172.x` or `104.x`:
+
+```bash
+sudo tail -20 /var/log/nginx/vamoscalafate.access.log
+```
+
+### Lock the origin to Cloudflare
+
+Once the orange cloud is on, nothing should reach the origin directly.
+Restricting ports 80 and 443 to Cloudflare's ranges stops an attacker who
+discovers the origin IP from bypassing Cloudflare entirely — and from forging
+`CF-Connecting-IP` to evade rate limits.
+
+```bash
+sudo ufw delete allow 'Nginx Full'
+
+for ip in $(curl -s https://www.cloudflare.com/ips-v4)           $(curl -s https://www.cloudflare.com/ips-v6); do
+  sudo ufw allow from "$ip" to any port 80,443 proto tcp comment 'cloudflare'
+done
+
+sudo ufw status numbered
+```
+
+Re-run this after `update-cloudflare-ips.sh` reports new ranges.
+
+> Do this only **after** certificates are issued and the site is confirmed
+> working through Cloudflare. Applying it too early blocks Certbot's challenge.
+
+### Caching
+
+Leave Cloudflare's default cache rules alone. The application already sets
+correct `Cache-Control` headers, and Next.js serves content-hashed assets that
+are safe to cache forever.
+
+Do **not** enable "Cache Everything" without an exclusion for `/api/*`,
+`/reservar`, `/checkout` and the admin hostname — caching a checkout page
+would serve one customer's booking to another.
+
+If content looks stale after publishing, purge with
+**Caching → Configuration → Purge Everything**, then confirm the origin is
+correct with:
+
+```bash
+curl -H "Host: vamoscalafate.com" http://127.0.0.1:3000/excursiones/SLUG | grep '<h1'
+```
+
+If the origin is right and Cloudflare is wrong, it is a Cloudflare cache
+issue, not an application one.
+
+### Mail must bypass the proxy
+
+Cloudflare's proxy handles HTTP and HTTPS only. **Any hostname used for mail
+must be grey-clouded (DNS only)** — a proxied `mail` or `mx` record resolves
+to Cloudflare's web addresses, which do not accept SMTP, and delivery fails.
+
 
 ---
 
@@ -373,9 +496,9 @@ curl --max-time 5 http://YOUR_SERVER_IP:3000    # expect connection refused
 
 Then in a browser:
 
-1. Load the homepage — hero, featured excursions, real prices
-2. Open an excursion — gallery, itinerary, booking widget
-3. Pick a date and a departure — a total appears
+1. Load the homepage - hero, featured excursions, real prices
+2. Open an excursion - gallery, itinerary, booking widget
+3. Pick a date and a departure - a total appears
 4. Sign in at `admin.vamoscalafate.com`
 5. Edit a tour, publish, and confirm the public page updates **without a
    rebuild**
@@ -407,7 +530,7 @@ ls -lh /var/backups/vamoscalafate/
 > **Add an offsite copy.** The script marks the exact place. A backup that
 > lives only on the machine it is protecting is not a backup.
 >
-> Also back up `/var/www/vamoscalafate/storage/media` — uploaded images are not
+> Also back up `/var/www/vamoscalafate/storage/media` - uploaded images are not
 > in the database.
 
 **Rehearse a restore on a staging database before you need it.**
@@ -441,7 +564,7 @@ pm2 logs vamoscalafate-web --lines 50 | grep webhook
 
 ### Analytics
 
-Set `NEXT_PUBLIC_GA_ID` and `NEXT_PUBLIC_GSC_VERIFICATION`, then **rebuild** —
+Set `NEXT_PUBLIC_GA_ID` and `NEXT_PUBLIC_GSC_VERIFICATION`, then **rebuild** -
 `NEXT_PUBLIC_*` values are inlined at build time, so a reload alone is not
 enough:
 
@@ -500,7 +623,7 @@ Checks processes, HTTP, the database, disk, backup freshness and TLS expiry.
 
 **Content**
 - [ ] Replace the 15 demo products with real commercial data
-- [ ] Upload real photography (until then, designed placeholders render — no
+- [ ] Upload real photography (until then, designed placeholders render - no
       stock imagery is passed off as El Calafate)
 - [ ] Have a lawyer review the legal pages; replace every `«…»` placeholder
 - [ ] Set the WhatsApp number and contact details
@@ -526,7 +649,7 @@ Checks processes, HTTP, the database, disk, backup freshness and TLS expiry.
 | Symptom | Cause and fix |
 |---|---|
 | `502 Bad Gateway` | Node is not running. `pm2 status`, `pm2 logs` |
-| Build killed | Out of memory — add swap (§11) |
+| Build killed | Out of memory - add swap (§11) |
 | `next start` warning | Expected with standalone output; use `pnpm start` |
 | Assets 404 | Post-build copy did not run; re-run `pnpm build` |
 | Admin edits not live | `REVALIDATE_SECRET` mismatch between the two `.env` files |

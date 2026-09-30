@@ -105,7 +105,7 @@ export default async function ToursPage({
       header: 'Desde',
       numeric: true,
       cell: (row) =>
-        row.fromPriceCents !== null ? formatMoney(row.fromPriceCents, row.currency) : '—',
+        row.fromPriceCents !== null ? formatMoney(row.fromPriceCents, row.currency) : '-',
     },
     { key: 'duration', header: 'Duración', cell: (row) => formatDuration(row.durationMinutes) },
     { key: 'options', header: 'Opciones', numeric: true, cell: (row) => String(row.optionCount) },

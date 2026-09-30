@@ -1,5 +1,5 @@
 // ════════════════════════════════════════════════════════════════════════════
-// VAMOS CALAFATE — canonical database schema
+// VAMOS CALAFATE - canonical database schema
 //
 // This is the ONLY schema in the monorepo. Both `web` and `admin` consume the
 // generated client through @vamos/db. Never duplicate models in an app.
@@ -377,7 +377,7 @@ model Attraction {
 
   latitude  Float?
   longitude Float?
-  /// Practical visitor facts. Kept factual — never invented.
+  /// Practical visitor facts. Kept factual - never invented.
   openingInfo String?
   entryFeeInfo String?
 
@@ -426,7 +426,7 @@ model TourCategory {
 }
 
 /// A sellable tourism product: excursion, transfer or service.
-/// Pricing never lives on the Tour itself — it lives on TourOption, so a
+/// Pricing never lives on the Tour itself - it lives on TourOption, so a
 /// product can offer regular / premium / private variants.
 model Tour {
   id          String        @id @default(cuid())
@@ -443,7 +443,7 @@ model Tour {
   destinationId String?
   destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
 
-  /// Denormalised "from" price in minor units — the cheapest active option.
+  /// Denormalised "from" price in minor units - the cheapest active option.
   /// Recomputed whenever options change (see packages/db/src/pricing-sync.ts)
   /// so listing pages can sort and filter without joining every option.
   fromPriceCents Int?
@@ -654,7 +654,7 @@ model Customer {
   lastName  String
   phone     String?
   country   String?
-  /// Where the traveller is staying — drives pickup logistics.
+  /// Where the traveller is staying - drives pickup logistics.
   hotelName String?
   notes     String? @db.Text
 
@@ -690,7 +690,7 @@ model Booking {
   /// Internal-only notes. Never rendered on the public site.
   internalNotes   String? @db.Text
 
-  // Marketing attribution — captured at checkout, preserved through payment.
+  // Marketing attribution - captured at checkout, preserved through payment.
   utmSource   String?
   utmMedium   String?
   utmCampaign String?
@@ -844,7 +844,7 @@ model Hotel {
   email   String?
   website String?
 
-  /// Indicative nightly rate in minor units. Informational only — this
+  /// Indicative nightly rate in minor units. Informational only - this
   /// platform does not sell hotel inventory.
   fromPriceCents Int?
   currency       String @default("ARS")
@@ -930,7 +930,7 @@ model BusinessCategory {
   id        String @id @default(cuid())
   slug      String @unique
   name      String
-  /// "restaurantes" | "servicios" — drives the public route the listing lives on.
+  /// "restaurantes" | "servicios" - drives the public route the listing lives on.
   channel   String @default("servicios")
   icon      String?
   sortOrder Int    @default(0)
@@ -1008,7 +1008,7 @@ model HotelSubmission {
   id        String           @id @default(cuid())
   reference String           @unique
   status    SubmissionStatus @default(PENDING)
-  /// "HOTEL" | "BUSINESS" — decides which entity approval creates.
+  /// "HOTEL" | "BUSINESS" - decides which entity approval creates.
   kind      String           @default("HOTEL")
 
   businessName  String
@@ -1126,7 +1126,7 @@ model BlogPost {
 
 // ────────────────────── REVIEWS / FAQ / PAGES ───────────────────────────────
 
-/// Customer reviews. Rows are only ever created from real submissions —
+/// Customer reviews. Rows are only ever created from real submissions -
 /// the seed script never fabricates them.
 model Review {
   id     String       @id @default(cuid())

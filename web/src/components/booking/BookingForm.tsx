@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
  *
  * Client-side validation here exists purely to give fast feedback. The server
  * action re-parses everything with the same Zod schema and re-prices from the
- * database — the totals rendered below are a preview, not the basis of a charge.
+ * database - the totals rendered below are a preview, not the basis of a charge.
  *
  * Errors are announced via role="alert" and each field is wired to its message
  * with aria-describedby, so a screen-reader user learns what went wrong
