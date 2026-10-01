@@ -140,7 +140,9 @@ step "Reloading processes"
 # now points somewhere else (as when serving moved to current/), re-register
 # that app so the change actually takes effect, then reload as normal.
 for app in web admin; do
-  expected="$APP_DIR/current/$app/$app/server.js"
+  # Resolve APP_DIR itself (it may be a symlink) but not current/, which is
+  # meant to stay a symlink in the registered path.
+  expected="$(cd "$APP_DIR" && pwd -P)/current/$app/$app/server.js"
   registered="$(pm2_do jlist 2>/dev/null | node -e "
     let raw = ''; process.stdin.on('data', (c) => (raw += c)).on('end', () => {
       const proc = JSON.parse(raw || '[]').find((p) => p.name === 'vamoscalafate-$app')
