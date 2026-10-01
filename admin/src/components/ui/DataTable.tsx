@@ -77,7 +77,7 @@ export function DataTable<T extends { id: string }>({
                       {index === 0 && rowHref ? (
                         <Link
                           href={rowHref(row)}
-                          className="font-medium text-violet-700 hover:text-violet-900 hover:underline"
+                          className="font-medium text-primary hover:text-primary-hover hover:underline"
                         >
                           {content}
                         </Link>

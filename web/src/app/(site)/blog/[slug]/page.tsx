@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.category ? (
               <Link
                 href={`${ROUTES.blog}?categoria=${post.category.slug}`}
-                className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-violet-700 hover:text-violet-900"
+                className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary hover:text-primary-hover"
               >
                 {post.category.name}
               </Link>
@@ -97,7 +97,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{post.excerpt}</p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-5 text-[0.8125rem] text-plum-500">
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-5 text-[0.8125rem] text-muted-foreground">
               {post.author ? <span>Por {post.author.name}</span> : null}
               {post.publishedAt ? (
                 <>
@@ -134,7 +134,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {post.tags.length > 0 ? (
             <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
-              <span className="text-xs font-semibold uppercase tracking-wide text-plum-500">
+              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Temas
               </span>
               {post.tags.map(({ tag }) => (
@@ -167,7 +167,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </p>
               <Link
                 href={ROUTES.destination(post.destination.slug)}
-                className="mt-3 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+                className="mt-3 inline-block text-sm font-semibold text-primary underline underline-offset-2"
               >
                 Ver la guía de {post.destination.name}
               </Link>

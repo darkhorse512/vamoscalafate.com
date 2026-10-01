@@ -27,7 +27,7 @@ export function LoginForm({ next }: { next?: string }) {
       {state?.error ? (
         <div
           role="alert"
-          className="flex gap-2.5 rounded-control border-l-[3px] border-[#9b3232] bg-status-dangerBg p-3"
+          className="flex gap-2.5 rounded-control border-l-[3px] border-status-danger bg-status-dangerBg p-3"
         >
           <AlertCircle className="mt-0.5 size-4 shrink-0 text-status-danger" aria-hidden="true" />
           <p className="text-[0.8125rem] text-status-danger">{state.error}</p>

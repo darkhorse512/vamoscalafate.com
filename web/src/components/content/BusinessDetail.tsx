@@ -86,7 +86,7 @@ export function BusinessDetail({
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-12">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone="glacier">{business.category.name}</Badge>
+              <Badge tone="primary">{business.category.name}</Badge>
               {business.priceRange ? <Badge tone="neutral">{business.priceRange}</Badge> : null}
               {business.isDemo ? <Badge tone="warning">Ficha de ejemplo</Badge> : null}
             </div>
@@ -133,15 +133,15 @@ export function BusinessDetail({
               <ul className="mt-4 space-y-3 text-sm">
                 {business.address ? (
                   <li className="flex items-start gap-2.5">
-                    <MapPin className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                     <span className="text-foreground">{business.address}</span>
                   </li>
                 ) : null}
 
                 {business.phone ? (
                   <li className="flex items-start gap-2.5">
-                    <Phone className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
-                    <a href={`tel:${business.phone}`} className="text-violet-700 hover:underline">
+                    <Phone className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                    <a href={`tel:${business.phone}`} className="text-primary hover:underline">
                       {business.phone}
                     </a>
                   </li>
@@ -149,10 +149,10 @@ export function BusinessDetail({
 
                 {business.email ? (
                   <li className="flex items-start gap-2.5">
-                    <Mail className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <Mail className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                     <a
                       href={`mailto:${business.email}`}
-                      className="break-all text-violet-700 hover:underline"
+                      className="break-all text-primary hover:underline"
                     >
                       {business.email}
                     </a>
@@ -161,12 +161,12 @@ export function BusinessDetail({
 
                 {business.website ? (
                   <li className="flex items-start gap-2.5">
-                    <Globe className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <Globe className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                     <a
                       href={business.website}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      className="break-all text-violet-700 hover:underline"
+                      className="break-all text-primary hover:underline"
                     >
                       Sitio web
                     </a>
@@ -177,13 +177,13 @@ export function BusinessDetail({
               {hours ? (
                 <div className="mt-5 border-t border-border pt-4">
                   <h3 className="flex items-center gap-2 font-sans text-sm font-bold text-heading">
-                    <Clock className="size-4 text-violet-600" aria-hidden="true" />
+                    <Clock className="size-4 text-primary" aria-hidden="true" />
                     Horarios
                   </h3>
                   <dl className="mt-2.5 space-y-1 text-xs">
                     {Object.entries(hours).map(([day, value]) => (
                       <div key={day} className="flex justify-between gap-3">
-                        <dt className="text-plum-500">{WEEKDAY_LABELS[day] ?? day}</dt>
+                        <dt className="text-muted-foreground">{WEEKDAY_LABELS[day] ?? day}</dt>
                         <dd className="font-medium text-foreground">{value}</dd>
                       </div>
                     ))}
@@ -191,7 +191,7 @@ export function BusinessDetail({
                 </div>
               ) : null}
 
-              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-plum-500">
+              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
                 Ficha informativa de la guía de El Calafate. Contactá directamente al comercio para
                 reservas o consultas.
               </p>
@@ -204,7 +204,7 @@ export function BusinessDetail({
               </p>
               <Link
                 href={ROUTES.tours}
-                className="mt-3 inline-block text-[0.8125rem] font-semibold text-violet-700 underline underline-offset-2"
+                className="mt-3 inline-block text-[0.8125rem] font-semibold text-primary underline underline-offset-2"
               >
                 Ver excursiones
               </Link>

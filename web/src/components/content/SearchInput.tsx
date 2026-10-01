@@ -26,7 +26,7 @@ export function SearchInput({ defaultValue = '' }: { defaultValue?: string }) {
           Buscar en el sitio
         </label>
         <Search
-          className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-plum-400"
+          className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground"
           aria-hidden="true"
         />
         <input
@@ -36,7 +36,7 @@ export function SearchInput({ defaultValue = '' }: { defaultValue?: string }) {
           onChange={(event) => setValue(event.target.value)}
           placeholder="Perito Moreno, traslado al aeropuerto, qué llevar…"
           autoComplete="off"
-          className="h-12 w-full rounded-control border border-border-strong bg-surface pl-10 pr-3 text-sm text-heading placeholder:text-plum-400 focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+          className="h-12 w-full rounded-control border border-border-strong bg-surface pl-10 pr-3 text-sm text-heading placeholder:text-subtle-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
       <Button type="submit" size="lg">

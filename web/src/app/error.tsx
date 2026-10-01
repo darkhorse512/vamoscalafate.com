@@ -27,7 +27,7 @@ export default function GlobalError({
 
   return (
     <div className="container-page py-24 text-center">
-      <AlertTriangle className="mx-auto size-12 text-[#8a6014]" aria-hidden="true" />
+      <AlertTriangle className="mx-auto size-12 text-warning" aria-hidden="true" />
 
       <h1 className="mt-6 font-display text-2xl font-bold text-heading">
         Algo salió mal
@@ -55,7 +55,7 @@ export default function GlobalError({
       </div>
 
       {error.digest ? (
-        <p className="mt-8 font-mono text-xs text-plum-400">Referencia: {error.digest}</p>
+        <p className="mt-8 font-mono text-xs text-subtle-foreground">Referencia: {error.digest}</p>
       ) : null}
     </div>
   )

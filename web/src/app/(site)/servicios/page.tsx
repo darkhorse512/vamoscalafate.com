@@ -49,7 +49,7 @@ export default async function ServiciosPage({
             <li>
               <Link
                 href={ROUTES.services}
-                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-plum-400'}`}
+                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
               >
                 Todos
               </Link>
@@ -58,7 +58,7 @@ export default async function ServiciosPage({
               <li key={category.id}>
                 <Link
                   href={`${ROUTES.services}?categoria=${category.slug}`}
-                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-plum-400'}`}
+                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
                 >
                   {category.name}
                   <span className="ml-1.5 opacity-60">{category._count.businesses}</span>
@@ -75,7 +75,7 @@ export default async function ServiciosPage({
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
               ¿Ofrecés un servicio turístico en El Calafate?{' '}
-              <Link href={ROUTES.hotelRegister} className="font-semibold text-violet-700 underline">
+              <Link href={ROUTES.hotelRegister} className="font-semibold text-primary underline">
                 Registralo en la guía
               </Link>
               .
@@ -98,7 +98,7 @@ export default async function ServiciosPage({
                     />
                   </div>
                   <div className="p-4 sm:p-5">
-                    <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-primary">
                       {business.category.name}
                     </p>
                     <h2 className="mt-1.5 font-display text-[1.0625rem] font-semibold text-heading">

@@ -102,7 +102,7 @@ export function SingleImageField({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex aspect-[4/3] w-40 flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted text-subtle-foreground transition-colors hover:border-violet-400 hover:text-violet-700"
+          className="flex aspect-[4/3] w-40 flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted text-subtle-foreground transition-colors hover:border-primary/60 hover:text-primary"
         >
           <ImagePlus className="size-5" aria-hidden="true" />
           <span className="text-[0.75rem] font-medium">Elegir imagen</span>
@@ -214,7 +214,7 @@ export function GalleryField({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex w-full flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted py-8 text-subtle-foreground transition-colors hover:border-violet-400 hover:text-violet-700"
+          className="flex w-full flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted py-8 text-subtle-foreground transition-colors hover:border-primary/60 hover:text-primary"
         >
           <ImagePlus className="size-6" aria-hidden="true" />
           <span className="text-[0.8125rem] font-medium">Agregar imágenes a la galería</span>
@@ -232,7 +232,7 @@ export function GalleryField({
                 <div
                   className={cn(
                     'relative aspect-[4/3] overflow-hidden rounded-control bg-surface-strong ring-2 transition-all',
-                    isCover ? 'ring-violet-600' : 'ring-border',
+                    isCover ? 'ring-primary' : 'ring-border',
                   )}
                 >
                   <Image
@@ -289,7 +289,7 @@ export function GalleryField({
                         onClick={() => onCoverChange(item.id)}
                         aria-label={`Usar ${item.filename} como portada`}
                         title="Usar como portada"
-                        className="grid size-6 place-items-center rounded text-subtle-foreground hover:bg-surface-strong hover:text-violet-700"
+                        className="grid size-6 place-items-center rounded text-subtle-foreground hover:bg-surface-strong hover:text-primary"
                       >
                         <Star className="size-3.5" aria-hidden="true" />
                       </button>

@@ -76,11 +76,11 @@ export default async function RestaurantesPage({
 
                   <div className="flex flex-1 flex-col p-4 sm:p-5">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
+                      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-primary">
                         {business.category.name}
                       </p>
                       {business.priceRange ? (
-                        <span className="text-xs font-semibold text-plum-500">
+                        <span className="text-xs font-semibold text-muted-foreground">
                           {business.priceRange}
                         </span>
                       ) : null}
@@ -95,7 +95,7 @@ export default async function RestaurantesPage({
                     </p>
 
                     {business.address ? (
-                      <p className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs text-plum-500">
+                      <p className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs text-muted-foreground">
                         <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
                         {business.address}
                       </p>

@@ -170,7 +170,7 @@ export function TourFilters({
           min={today}
           value={current.fecha}
           onChange={(event) => update('fecha', event.target.value || null)}
-          className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+          className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -203,7 +203,7 @@ export function TourFilters({
             id="orden"
             value={current.orden}
             onChange={(event) => update('orden', event.target.value)}
-            className="h-10 rounded-control border border-border-strong bg-surface px-3 text-[0.8125rem] font-medium text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+            className="h-10 rounded-control border border-border-strong bg-surface px-3 text-[0.8125rem] font-medium text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="destacados">Destacados</option>
             <option value="precio-asc">Menor precio</option>
@@ -297,12 +297,12 @@ function FilterChip({
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.8125rem] font-medium transition-colors',
         active
           ? 'border-violet-700 bg-violet-700 text-white'
-          : 'border-border-strong bg-surface text-foreground hover:border-plum-400 hover:bg-surface-muted',
+          : 'border-border-strong bg-surface text-foreground hover:border-primary hover:bg-surface-muted',
       )}
     >
       {label}
       {count !== undefined ? (
-        <span className={cn('text-xs', active ? 'text-white/70' : 'text-plum-400')}>{count}</span>
+        <span className={cn('text-xs', active ? 'text-white/70' : 'text-subtle-foreground')}>{count}</span>
       ) : null}
     </button>
   )

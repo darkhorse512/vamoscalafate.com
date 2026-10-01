@@ -65,8 +65,8 @@ export default function RegistrarPage() {
                 ))}
               </ol>
 
-              <p className="mt-5 flex gap-2 border-t border-border pt-4 text-xs leading-relaxed text-plum-500">
-                <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
+              <p className="mt-5 flex gap-2 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+                <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-success" aria-hidden="true" />
                 Las solicitudes no se publican automáticamente. Un responsable revisa cada una.
               </p>
             </div>

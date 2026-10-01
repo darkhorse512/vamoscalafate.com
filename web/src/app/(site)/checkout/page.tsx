@@ -72,7 +72,7 @@ export default async function CheckoutPage({
               </p>
               <Link
                 href={ROUTES.tours}
-                className="mt-5 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+                className="mt-5 inline-block text-sm font-semibold text-primary underline underline-offset-2"
               >
                 Ver otras excursiones
               </Link>
@@ -80,13 +80,13 @@ export default async function CheckoutPage({
           ) : providers.length === 0 ? (
             /* No configured provider. Say so plainly rather than showing a
                payment button that cannot work. */
-            <div className="flex gap-3 rounded-card border-l-[3px] border-[#c9942a] bg-[#fdf9f0] p-5">
-              <AlertCircle className="mt-0.5 size-5 shrink-0 text-[#8a6014]" aria-hidden="true" />
+            <div className="flex gap-3 rounded-card border-l-[3px] border-warning bg-warning-soft p-5">
+              <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" aria-hidden="true" />
               <div>
-                <h2 className="font-sans text-[0.9375rem] font-bold text-[#8a6014]">
+                <h2 className="font-sans text-[0.9375rem] font-bold text-warning">
                   El pago online no está disponible en este momento
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-[#8a6014]">
+                <p className="mt-2 text-sm leading-relaxed text-warning">
                   Tu reserva <strong>{booking.reference}</strong> quedó registrada y los lugares
                   están tomados. Nos comunicamos con vos por correo para coordinar el pago.
                 </p>
@@ -108,7 +108,7 @@ export default async function CheckoutPage({
             />
           )}
 
-          <div className="mt-6 flex items-start gap-2.5 text-xs leading-relaxed text-plum-500">
+          <div className="mt-6 flex items-start gap-2.5 text-xs leading-relaxed text-muted-foreground">
             <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
             <p>
               El pago se procesa íntegramente en la plataforma del proveedor. Vamos Calafate no
@@ -149,7 +149,7 @@ export default async function CheckoutPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
       <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )

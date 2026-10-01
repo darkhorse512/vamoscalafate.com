@@ -197,7 +197,7 @@ function FilterLink({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
         active
-          ? 'border-violet-600 bg-violet-50'
+          ? 'border-primary bg-primary-soft'
           : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >

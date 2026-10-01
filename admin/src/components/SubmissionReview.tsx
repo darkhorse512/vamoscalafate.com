@@ -98,7 +98,7 @@ export function SubmissionReview({
           type="checkbox"
           checked={notify}
           onChange={(event) => setNotify(event.target.checked)}
-          className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+          className="size-4 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
         />
         <span className="text-[0.8125rem] text-foreground">Notificar por correo al solicitante</span>
       </label>

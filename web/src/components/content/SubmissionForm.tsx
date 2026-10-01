@@ -81,7 +81,7 @@ export function SubmissionForm() {
         role="status"
         className="rounded-card border border-border bg-surface-muted p-8 text-center"
       >
-        <CheckCircle2 className="mx-auto size-11 text-[#2f6f4f]" aria-hidden="true" />
+        <CheckCircle2 className="mx-auto size-11 text-success" aria-hidden="true" />
         <h2 className="mt-4 font-display text-xl font-semibold text-heading">
           Solicitud enviada
         </h2>
@@ -91,13 +91,13 @@ export function SubmissionForm() {
         <p className="mt-4 inline-block rounded-control bg-surface px-4 py-2 font-mono text-base font-bold text-heading ring-1 ring-border-strong">
           {reference}
         </p>
-        <p className="mx-auto mt-4 max-w-md text-xs leading-relaxed text-plum-500">
+        <p className="mx-auto mt-4 max-w-md text-xs leading-relaxed text-muted-foreground">
           Revisamos cada solicitud antes de publicarla. Si necesitamos información adicional, te
           escribimos a la dirección que indicaste.
         </p>
         <Link
           href={ROUTES.hotels}
-          className="mt-6 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+          className="mt-6 inline-block text-sm font-semibold text-primary underline underline-offset-2"
         >
           Ver la guía de alojamientos
         </Link>
@@ -112,10 +112,10 @@ export function SubmissionForm() {
           id="submission-error"
           role="alert"
           tabIndex={-1}
-          className="mb-6 flex gap-3 rounded-card border-l-[3px] border-[#9b3232] bg-[#fbeeee] p-4"
+          className="mb-6 flex gap-3 rounded-card border-l-[3px] border-danger bg-danger-soft p-4"
         >
-          <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#9b3232]" aria-hidden="true" />
-          <p className="text-sm text-[#9b3232]">{formError}</p>
+          <AlertCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden="true" />
+          <p className="text-sm text-danger">{formError}</p>
         </div>
       ) : null}
 
@@ -136,8 +136,8 @@ export function SubmissionForm() {
               className={cn(
                 'flex cursor-pointer items-start gap-3 rounded-control border p-4 transition-colors',
                 kind === option.value
-                  ? 'border-violet-700 bg-violet-50'
-                  : 'border-border-strong hover:border-plum-400',
+                  ? 'border-violet-700 bg-primary-soft'
+                  : 'border-border-strong hover:border-primary',
               )}
             >
               <input
@@ -145,11 +145,11 @@ export function SubmissionForm() {
                 name="kind"
                 checked={kind === option.value}
                 onChange={() => setKind(option.value)}
-                className="mt-0.5 size-4 border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+                className="mt-0.5 size-4 border-border-strong text-primary focus:ring-2 focus:ring-primary"
               />
               <span>
                 <span className="block text-sm font-semibold text-heading">{option.label}</span>
-                <span className="mt-0.5 block text-xs text-plum-500">{option.detail}</span>
+                <span className="mt-0.5 block text-xs text-muted-foreground">{option.detail}</span>
               </span>
             </label>
           ))}
@@ -172,7 +172,7 @@ export function SubmissionForm() {
 
         <div className="mt-5">
           <label htmlFor="description" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
-            Descripción<span className="ml-0.5 text-[#9b3232]">*</span>
+            Descripción<span className="ml-0.5 text-danger">*</span>
           </label>
           <textarea
             id="description"
@@ -186,12 +186,12 @@ export function SubmissionForm() {
             className={cn(
               'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
               fieldErrors.description
-                ? 'border-[#9b3232] focus:ring-[#9b3232]'
-                : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
+                ? 'border-danger focus:ring-danger'
+                : 'border-border-strong focus:border-primary focus:ring-primary',
             )}
           />
           {fieldErrors.description ? (
-            <p role="alert" className="mt-1 text-[0.6875rem] text-[#9b3232]">
+            <p role="alert" className="mt-1 text-[0.6875rem] text-danger">
               {fieldErrors.description[0]}
             </p>
           ) : null}
@@ -218,7 +218,7 @@ export function SubmissionForm() {
           Imágenes y video
         </legend>
 
-        <p className="mt-2 text-xs leading-relaxed text-plum-500">
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
           Indicá enlaces a imágenes alojadas en tu sitio o en un servicio de almacenamiento. No
           subimos archivos desde este formulario.
         </p>
@@ -239,7 +239,7 @@ export function SubmissionForm() {
                   setImageUrls(next)
                 }}
                 placeholder="https://…"
-                className="h-11 flex-1 rounded-control border border-border-strong bg-surface px-3 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+                className="h-11 flex-1 rounded-control border border-border-strong bg-surface px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
               {imageUrls.length > 1 ? (
                 <button
@@ -258,7 +258,7 @@ export function SubmissionForm() {
             <button
               type="button"
               onClick={() => setImageUrls([...imageUrls, ''])}
-              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-violet-700 hover:text-violet-900"
+              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-primary hover:text-primary-hover"
             >
               <Plus className="size-3.5" aria-hidden="true" />
               Agregar otra imagen
@@ -275,7 +275,7 @@ export function SubmissionForm() {
             name="videoUrls"
             rows={2}
             placeholder="Enlaces de YouTube o Vimeo, uno por línea"
-            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
@@ -289,7 +289,7 @@ export function SubmissionForm() {
             rows={3}
             maxLength={2000}
             placeholder="Cualquier otro dato que quieras que tengamos en cuenta."
-            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
       </fieldset>
@@ -305,15 +305,15 @@ export function SubmissionForm() {
           type="checkbox"
           name="acceptedTerms"
           required
-          className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+          className="mt-0.5 size-4 shrink-0 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
         />
         <span className="text-[0.8125rem] leading-relaxed text-foreground">
           Declaro que la información es veraz, que tengo autorización para representar al
           establecimiento y acepto la{' '}
-          <Link href={ROUTES.privacy} className="font-medium text-violet-700 underline" target="_blank">
+          <Link href={ROUTES.privacy} className="font-medium text-primary underline" target="_blank">
             política de privacidad
           </Link>
-          .<span className="ml-0.5 text-[#9b3232]">*</span>
+          .<span className="ml-0.5 text-danger">*</span>
         </span>
       </label>
 
@@ -352,7 +352,7 @@ function Field({
     <div>
       <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
-        {required ? <span className="ml-0.5 text-[#9b3232]">*</span> : null}
+        {required ? <span className="ml-0.5 text-danger">*</span> : null}
       </label>
       <input
         id={name}
@@ -363,13 +363,13 @@ function Field({
         className={cn(
           'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
           fieldErrors
-            ? 'border-[#9b3232] focus:ring-[#9b3232]'
-            : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
+            ? 'border-danger focus:ring-danger'
+            : 'border-border-strong focus:border-primary focus:ring-primary',
         )}
       />
-      {hint && !fieldErrors ? <p className="mt-1 text-[0.6875rem] text-plum-500">{hint}</p> : null}
+      {hint && !fieldErrors ? <p className="mt-1 text-[0.6875rem] text-muted-foreground">{hint}</p> : null}
       {fieldErrors ? (
-        <p role="alert" className="mt-1 text-[0.6875rem] text-[#9b3232]">
+        <p role="alert" className="mt-1 text-[0.6875rem] text-danger">
           {fieldErrors[0]}
         </p>
       ) : null}

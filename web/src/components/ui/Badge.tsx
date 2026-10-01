@@ -1,16 +1,21 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-type Tone = 'neutral' | 'glacier' | 'lenga' | 'ochre' | 'success' | 'warning' | 'danger'
+type Tone = 'neutral' | 'primary' | 'accent' | 'success' | 'warning' | 'danger'
 
+/**
+ * Every tone resolves through semantic tokens, so badges stay legible when
+ * the theme inverts. The previous palette was hardcoded hex — a pale tint
+ * with dark text, which on a dark background becomes a near-white pill with
+ * light text on it, i.e. unreadable.
+ */
 const TONES: Record<Tone, string> = {
   neutral: 'bg-surface-strong text-foreground ring-border',
-  glacier: 'bg-violet-50 text-violet-800 ring-violet-200',
-  lenga: 'bg-plum-50 text-foreground ring-plum-200',
-  ochre: 'bg-[#fdf6e8] text-magenta-600 ring-[#f0e0bd]',
-  success: 'bg-[#edf5f0] text-[#2f6f4f] ring-[#c9e2d4]',
-  warning: 'bg-[#fbf4e6] text-[#8a6014] ring-[#eddfc0]',
-  danger: 'bg-[#fbeeee] text-[#9b3232] ring-[#f0d2d2]',
+  primary: 'bg-primary-soft text-primary ring-primary/30',
+  accent: 'bg-accent-soft text-accent ring-accent/30',
+  success: 'bg-success-soft text-success ring-success/30',
+  warning: 'bg-warning-soft text-warning ring-warning/30',
+  danger: 'bg-danger-soft text-danger ring-danger/30',
 }
 
 export function Badge({

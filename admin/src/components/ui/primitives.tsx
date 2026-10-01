@@ -18,11 +18,11 @@ const BASE =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-violet-700 text-white hover:bg-violet-800 focus-visible:ring-violet-600',
+  primary: 'bg-violet-700 text-white hover:bg-violet-800 focus-visible:ring-primary',
   secondary: 'bg-slate-800 text-white hover:bg-slate-900 focus-visible:ring-slate-600',
-  outline: 'border border-border-strong bg-surface text-foreground hover:bg-surface-muted focus-visible:ring-violet-600',
-  ghost: 'text-muted-foreground hover:bg-surface-strong hover:text-heading focus-visible:ring-violet-600',
-  danger: 'bg-[#9b3232] text-white hover:bg-[#832a2a] focus-visible:ring-[#9b3232]',
+  outline: 'border border-border-strong bg-surface text-foreground hover:bg-surface-muted focus-visible:ring-primary',
+  ghost: 'text-muted-foreground hover:bg-surface-strong hover:text-heading focus-visible:ring-primary',
+  danger: 'bg-status-danger text-white hover:bg-status-danger focus-visible:ring-status-danger',
 }
 
 const SIZES: Record<Size, string> = {
@@ -73,27 +73,27 @@ export function ButtonLink({
 const STATUS_TONES: Record<string, string> = {
   // Content
   DRAFT: 'bg-status-neutralBg text-status-neutral ring-border',
-  IN_REVIEW: 'bg-status-warningBg text-status-warning ring-[#eddfc0]',
-  PUBLISHED: 'bg-status-successBg text-status-success ring-[#c9e2d4]',
+  IN_REVIEW: 'bg-status-warningBg text-status-warning ring-status-warning/30',
+  PUBLISHED: 'bg-status-successBg text-status-success ring-status-success/30',
   ARCHIVED: 'bg-surface-strong text-subtle-foreground ring-border',
   // Bookings
-  PENDING: 'bg-status-warningBg text-status-warning ring-[#eddfc0]',
-  AWAITING_PAYMENT: 'bg-status-warningBg text-status-warning ring-[#eddfc0]',
-  PAID: 'bg-status-infoBg text-status-info ring-violet-200',
-  CONFIRMED: 'bg-status-successBg text-status-success ring-[#c9e2d4]',
-  CANCELLED: 'bg-status-dangerBg text-status-danger ring-[#f0d2d2]',
-  COMPLETED: 'bg-status-successBg text-status-success ring-[#c9e2d4]',
+  PENDING: 'bg-status-warningBg text-status-warning ring-status-warning/30',
+  AWAITING_PAYMENT: 'bg-status-warningBg text-status-warning ring-status-warning/30',
+  PAID: 'bg-status-infoBg text-status-info ring-primary/30',
+  CONFIRMED: 'bg-status-successBg text-status-success ring-status-success/30',
+  CANCELLED: 'bg-status-dangerBg text-status-danger ring-status-danger/30',
+  COMPLETED: 'bg-status-successBg text-status-success ring-status-success/30',
   REFUNDED: 'bg-surface-strong text-muted-foreground ring-border',
   // Payments
-  APPROVED: 'bg-status-successBg text-status-success ring-[#c9e2d4]',
-  REJECTED: 'bg-status-dangerBg text-status-danger ring-[#f0d2d2]',
+  APPROVED: 'bg-status-successBg text-status-success ring-status-success/30',
+  REJECTED: 'bg-status-dangerBg text-status-danger ring-status-danger/30',
   // Submissions
-  UNDER_REVIEW: 'bg-status-infoBg text-status-info ring-violet-200',
-  NEEDS_INFORMATION: 'bg-status-warningBg text-status-warning ring-[#eddfc0]',
+  UNDER_REVIEW: 'bg-status-infoBg text-status-info ring-primary/30',
+  NEEDS_INFORMATION: 'bg-status-warningBg text-status-warning ring-status-warning/30',
   // Contact
-  NEW: 'bg-status-infoBg text-status-info ring-violet-200',
-  IN_PROGRESS: 'bg-status-warningBg text-status-warning ring-[#eddfc0]',
-  RESOLVED: 'bg-status-successBg text-status-success ring-[#c9e2d4]',
+  NEW: 'bg-status-infoBg text-status-info ring-primary/30',
+  IN_PROGRESS: 'bg-status-warningBg text-status-warning ring-status-warning/30',
+  RESOLVED: 'bg-status-successBg text-status-success ring-status-success/30',
   SPAM: 'bg-surface-strong text-subtle-foreground ring-border',
 }
 
@@ -184,10 +184,10 @@ export function Alert({
   children: ReactNode
 }) {
   const tones = {
-    info: 'border-violet-600 bg-status-infoBg text-status-info',
-    success: 'border-[#2f6f4f] bg-status-successBg text-status-success',
-    warning: 'border-[#c9942a] bg-status-warningBg text-status-warning',
-    danger: 'border-[#9b3232] bg-status-dangerBg text-status-danger',
+    info: 'border-primary bg-status-infoBg text-status-info',
+    success: 'border-status-success bg-status-successBg text-status-success',
+    warning: 'border-status-warning bg-status-warningBg text-status-warning',
+    danger: 'border-status-danger bg-status-dangerBg text-status-danger',
   }
 
   return (

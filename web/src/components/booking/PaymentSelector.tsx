@@ -62,8 +62,8 @@ export function PaymentSelector({
               className={cn(
                 'flex cursor-pointer items-center gap-3 rounded-control border p-4 transition-colors',
                 selected === provider.key
-                  ? 'border-violet-700 bg-violet-50'
-                  : 'border-border-strong hover:border-plum-400 hover:bg-surface-muted',
+                  ? 'border-violet-700 bg-primary-soft'
+                  : 'border-border-strong hover:border-primary hover:bg-surface-muted',
               )}
             >
               <input
@@ -72,7 +72,7 @@ export function PaymentSelector({
                 value={provider.key}
                 checked={selected === provider.key}
                 onChange={() => setSelected(provider.key)}
-                className="size-4 border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+                className="size-4 border-border-strong text-primary focus:ring-2 focus:ring-primary"
               />
               <CreditCard className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
               <span className="text-[0.9375rem] font-medium text-heading">{provider.label}</span>
@@ -84,7 +84,7 @@ export function PaymentSelector({
       {error ? (
         <p
           role="alert"
-          className="mt-4 rounded-control bg-[#fbeeee] px-3.5 py-2.5 text-sm text-[#9b3232]"
+          className="mt-4 rounded-control bg-danger-soft px-3.5 py-2.5 text-sm text-danger"
         >
           {error}
         </p>
@@ -101,7 +101,7 @@ export function PaymentSelector({
         )}
       </Button>
 
-      <p className="mt-3 text-center text-[0.6875rem] text-plum-500">
+      <p className="mt-3 text-center text-[0.6875rem] text-muted-foreground">
         Reserva {reference} · Te redirigimos a la plataforma de pago seguro
       </p>
     </div>

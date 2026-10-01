@@ -1,7 +1,7 @@
 import { cacheTags, prisma, type Prisma } from '@vamos/db'
 import type {
   BlogPostCard, BlogPostDetail, BusinessCard, BusinessDetail,
-  DestinationCard, DestinationDetail, HotelCard, HotelDetail, Paginated,
+  DestinationCard, DestinationDetail, HotelCard, HotelDetail, MediaRef, Paginated,
 } from '@vamos/types'
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 
@@ -342,4 +342,48 @@ export const getSiteSettings = cachedQuery(
   },
   ['site-settings'],
   { tags: [cacheTags.siteSettings], revalidate: REVALIDATE.content },
+)
+
+/**
+ * The photograph behind the homepage hero.
+ *
+ * Resolution order:
+ *   1. `site.heroImageId`, so an operator can choose the image from the admin.
+ *   2. The Perito Moreno destination's hero, so a fresh install shows a real
+ *      photograph rather than the drawn fallback. The glacier rather than the
+ *      town: it is the reason people come, and a street-level shot of El
+ *      Calafate undersells the destination at the one moment a visitor
+ *      decides whether to keep reading.
+ *
+ * Returns null only when neither exists, which the Hero handles by drawing a
+ * Patagonian scene — a generic stock landscape presented as El Calafate would
+ * misrepresent the destination, so there is deliberately no stock fallback.
+ */
+export const getHeroImage = cachedQuery(
+  async (): Promise<MediaRef | null> => {
+    const setting = await prisma.siteSetting.findUnique({
+      where: { key: 'site.heroImageId' },
+      select: { value: true },
+    })
+
+    const chosenId = typeof setting?.value === 'string' ? setting.value : null
+    if (chosenId) {
+      const chosen = await prisma.media.findUnique({
+        where: { id: chosenId },
+        select: mediaSelect,
+      })
+      if (chosen) return chosen
+    }
+
+    for (const slug of ['glaciar-perito-moreno', 'el-calafate']) {
+      const destination = await prisma.destination.findUnique({
+        where: { slug },
+        select: { heroImage: { select: mediaSelect } },
+      })
+      if (destination?.heroImage) return destination.heroImage
+    }
+    return null
+  },
+  ['hero-image'],
+  { tags: [cacheTags.siteSettings, cacheTags.destinations], revalidate: REVALIDATE.content },
 )

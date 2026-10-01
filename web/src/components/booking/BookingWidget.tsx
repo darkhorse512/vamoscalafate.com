@@ -244,15 +244,15 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
         <div className="border-b border-border p-5">
           <div className="flex items-baseline justify-between gap-3">
             <div>
-              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-plum-500">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">
                 Desde
               </p>
               <p className="mt-0.5 font-display text-[1.75rem] font-bold leading-none text-heading">
                 {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
               </p>
-              <p className="mt-1 text-xs text-plum-500">por persona</p>
+              <p className="mt-1 text-xs text-muted-foreground">por persona</p>
             </div>
-            <p className="text-right text-xs text-plum-500">
+            <p className="text-right text-xs text-muted-foreground">
               {formatDuration(tour.durationMinutes)}
             </p>
           </div>
@@ -272,7 +272,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   setOptionId(event.target.value)
                   setDepartureTime(null)
                 }}
-                className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+                className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 {tour.options.map((o) => (
                   <option key={o.id} value={o.id}>
@@ -281,12 +281,12 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                 ))}
               </select>
               <ChevronDown
-                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-plum-500"
+                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 aria-hidden="true"
               />
             </div>
             {option?.description ? (
-              <p className="mt-1.5 text-xs leading-relaxed text-plum-500">{option.description}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{option.description}</p>
             ) : null}
           </div>
 
@@ -303,7 +303,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               max={maxDate}
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
@@ -323,7 +323,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                       'rounded-control border px-3 py-2 text-[0.8125rem] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
                       departureTime === slot.departureTime
                         ? 'border-violet-700 bg-violet-700 text-white'
-                        : 'border-border-strong bg-surface text-foreground hover:border-plum-400',
+                        : 'border-border-strong bg-surface text-foreground hover:border-primary',
                     )}
                   >
                     {slot.departureTime ?? 'A coordinar'}
@@ -337,7 +337,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           ) : null}
 
           {loadingSlots ? (
-            <p className="flex items-center gap-2 text-xs text-plum-500">
+            <p className="flex items-center gap-2 text-xs text-muted-foreground">
               <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
               Consultando disponibilidad…
             </p>
@@ -379,7 +379,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   id="bw-pickup"
                   value={pickupId}
                   onChange={(event) => setPickupId(event.target.value)}
-                  className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+                  className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 >
                   <option value="">Elegir más adelante</option>
                   {tour.pickupLocations.map((location) => (
@@ -392,7 +392,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   ))}
                 </select>
                 <ChevronDown
-                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-plum-500"
+                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                   aria-hidden="true"
                 />
               </div>
@@ -401,13 +401,13 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
           {/* Messages */}
           {slotError ? (
-            <p role="alert" className="rounded-control bg-[#fbf4e6] px-3 py-2.5 text-xs text-[#8a6014]">
+            <p role="alert" className="rounded-control bg-warning-soft px-3 py-2.5 text-xs text-warning">
               {slotError}
             </p>
           ) : null}
 
           {overCapacity ? (
-            <p role="alert" className="rounded-control bg-[#fbeeee] px-3 py-2.5 text-xs text-[#9b3232]">
+            <p role="alert" className="rounded-control bg-danger-soft px-3 py-2.5 text-xs text-danger">
               Esta opción admite hasta {maxParticipants} pasajeros. Para grupos mayores,{' '}
               <a href={ROUTES.contact} className="underline">
                 consultanos
@@ -417,7 +417,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           ) : null}
 
           {overSeats && !overCapacity ? (
-            <p role="alert" className="rounded-control bg-[#fbf4e6] px-3 py-2.5 text-xs text-[#8a6014]">
+            <p role="alert" className="rounded-control bg-warning-soft px-3 py-2.5 text-xs text-warning">
               Solo quedan {seatsAvailable} lugares para esa salida.
             </p>
           ) : null}
@@ -466,15 +466,15 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
             )}
           </Button>
 
-          <ul className="space-y-1.5 text-[0.6875rem] text-plum-500">
+          <ul className="space-y-1.5 text-[0.6875rem] text-muted-foreground">
             {option && option.freeCancellationHours > 0 ? (
               <li className="flex items-start gap-1.5">
-                <Check className="mt-px size-3.5 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
+                <Check className="mt-px size-3.5 shrink-0 text-success" aria-hidden="true" />
                 Cancelación sin cargo hasta {option.freeCancellationHours} h antes
               </li>
             ) : null}
             <li className="flex items-start gap-1.5">
-              <ShieldCheck className="mt-px size-3.5 shrink-0 text-violet-600" aria-hidden="true" />
+              <ShieldCheck className="mt-px size-3.5 shrink-0 text-primary" aria-hidden="true" />
               Pago procesado por plataformas seguras
             </li>
           </ul>
@@ -482,10 +482,10 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
       </div>
 
       {/* Sticky mobile bar - the widget above scrolls away on a phone. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/97 px-4 py-3 backdrop-blur lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/97 px-4 py-3 backdrop-blur lg:hidden">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[0.6875rem] text-plum-500">Desde</p>
+            <p className="text-[0.6875rem] text-muted-foreground">Desde</p>
             <p className="truncate font-display text-lg font-bold leading-none text-heading">
               {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
             </p>
@@ -529,7 +529,7 @@ function Counter({
         <label htmlFor={id} className="text-sm font-medium text-heading">
           {label}
         </label>
-        {hint ? <p className="text-[0.6875rem] text-plum-500">{hint}</p> : null}
+        {hint ? <p className="text-[0.6875rem] text-muted-foreground">{hint}</p> : null}
       </div>
 
       <div className="flex items-center gap-1">
@@ -538,7 +538,7 @@ function Counter({
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           aria-label={`Quitar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-plum-400 disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-primary disabled:opacity-35"
         >
           <Minus className="size-4" aria-hidden="true" />
         </button>
@@ -562,7 +562,7 @@ function Counter({
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           aria-label={`Agregar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-plum-400 disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-primary disabled:opacity-35"
         >
           <Plus className="size-4" aria-hidden="true" />
         </button>

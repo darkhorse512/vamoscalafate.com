@@ -148,7 +148,7 @@ function FilterLink({ href, active, label }: { href: string; active: boolean; la
       aria-current={active ? 'page' : undefined}
       className={cn(
         'rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
-        active ? 'border-violet-600 bg-violet-50' : 'border-border-strong bg-surface hover:bg-surface-muted',
+        active ? 'border-primary bg-primary-soft' : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >
       {label}

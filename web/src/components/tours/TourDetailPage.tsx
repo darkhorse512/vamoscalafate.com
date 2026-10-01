@@ -69,8 +69,8 @@ export function TourDetailPage({
           <div className="min-w-0">
             <header>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="glacier">{tour.category.name}</Badge>
-                {tour.featured ? <Badge tone="ochre">Destacada</Badge> : null}
+                <Badge tone="primary">{tour.category.name}</Badge>
+                {tour.featured ? <Badge tone="accent">Destacada</Badge> : null}
                 {tour.isDemo ? <Badge tone="warning">Contenido de ejemplo</Badge> : null}
               </div>
 
@@ -107,7 +107,7 @@ export function TourDetailPage({
                 <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                   {tour.highlights.map((highlight) => (
                     <li key={highlight} className="flex items-start gap-2.5 text-[0.9375rem] text-foreground">
-                      <Check className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                      <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                       {highlight}
                     </li>
                   ))}
@@ -132,7 +132,7 @@ export function TourDetailPage({
                       {/* Connector line, hidden on the last step */}
                       {index < tour.itinerary.length - 1 ? (
                         <span
-                          className="absolute left-[0.9375rem] top-8 h-[calc(100%-1.5rem)] w-px bg-stone-200"
+                          className="absolute left-[0.9375rem] top-8 h-[calc(100%-1.5rem)] w-px bg-surface-strong"
                           aria-hidden="true"
                         />
                       ) : null}
@@ -150,7 +150,7 @@ export function TourDetailPage({
                             {step.title}
                           </h3>
                           {step.timeLabel ? (
-                            <span className="text-xs font-medium text-violet-700">
+                            <span className="text-xs font-medium text-primary">
                               {step.timeLabel}
                             </span>
                           ) : null}
@@ -174,7 +174,7 @@ export function TourDetailPage({
                     <ul className="mt-4 space-y-2.5">
                       {tour.included.map((item) => (
                         <li key={item} className="flex items-start gap-2.5 text-[0.9375rem] text-foreground">
-                          <Check className="mt-0.5 size-4 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
+                          <Check className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
                           {item}
                         </li>
                       ))}
@@ -210,11 +210,11 @@ export function TourDetailPage({
                       <div className="min-w-0">
                         <p className="text-[0.9375rem] font-medium text-heading">{location.name}</p>
                         {location.address ? (
-                          <p className="mt-0.5 text-xs text-plum-500">{location.address}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{location.address}</p>
                         ) : null}
                       </div>
                       {location.offsetMinutes !== 0 ? (
-                        <span className="shrink-0 text-xs text-plum-500">
+                        <span className="shrink-0 text-xs text-muted-foreground">
                           {location.offsetMinutes < 0
                             ? `${Math.abs(location.offsetMinutes)} min antes`
                             : `${location.offsetMinutes} min después`}
@@ -232,8 +232,8 @@ export function TourDetailPage({
                 <h2 className="font-display text-xl font-semibold text-heading">
                   Información importante
                 </h2>
-                <div className="mt-4 rounded-card border-l-[3px] border-[#c9942a] bg-[#fdf9f0] p-5">
-                  <AlertCircle className="mb-2.5 size-5 text-[#8a6014]" aria-hidden="true" />
+                <div className="mt-4 rounded-card border-l-[3px] border-warning bg-warning-soft p-5">
+                  <AlertCircle className="mb-2.5 size-5 text-warning" aria-hidden="true" />
                   <Markdown content={tour.importantInfo} className="prose-vamos text-[0.9375rem]" />
                 </div>
               </section>
@@ -252,7 +252,7 @@ export function TourDetailPage({
                 <p className="mt-4 text-sm">
                   <Link
                     href={ROUTES.cancellation}
-                    className="font-medium text-violet-700 underline underline-offset-2 hover:text-violet-900"
+                    className="font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
                   >
                     Ver la política completa
                   </Link>
@@ -301,7 +301,7 @@ export function TourDetailPage({
                         <p className="font-sans text-sm font-bold text-heading">
                           {review.authorName}
                           {review.authorCountry ? (
-                            <span className="ml-1.5 font-normal text-plum-500">
+                            <span className="ml-1.5 font-normal text-muted-foreground">
                               · {review.authorCountry}
                             </span>
                           ) : null}
@@ -366,7 +366,7 @@ export function TourDetailPage({
             </p>
             <Link
               href={ROUTES.destination(tour.destination.slug)}
-              className="mt-4 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
+              className="mt-4 inline-block text-sm font-semibold text-primary underline underline-offset-2 hover:text-primary-hover"
             >
               Ver la guía de {tour.destination.name}
             </Link>
@@ -380,7 +380,7 @@ export function TourDetailPage({
 function Fact({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <li className="inline-flex items-center gap-2">
-      <span className="text-violet-600" aria-hidden="true">
+      <span className="text-primary" aria-hidden="true">
         {icon}
       </span>
       {label}

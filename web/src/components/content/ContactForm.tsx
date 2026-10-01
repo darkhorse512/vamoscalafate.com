@@ -64,7 +64,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
         role="status"
         className="rounded-card border border-border bg-surface-muted p-8 text-center"
       >
-        <CheckCircle2 className="mx-auto size-11 text-[#2f6f4f]" aria-hidden="true" />
+        <CheckCircle2 className="mx-auto size-11 text-success" aria-hidden="true" />
         <h2 className="mt-4 font-display text-xl font-semibold text-heading">
           Recibimos tu consulta
         </h2>
@@ -74,7 +74,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
         </p>
         <Link
           href={ROUTES.tours}
-          className="mt-6 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+          className="mt-6 inline-block text-sm font-semibold text-primary underline underline-offset-2"
         >
           Mientras tanto, mirá las excursiones
         </Link>
@@ -89,10 +89,10 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
           id="contact-error"
           role="alert"
           tabIndex={-1}
-          className="mb-6 flex gap-3 rounded-card border-l-[3px] border-[#9b3232] bg-[#fbeeee] p-4"
+          className="mb-6 flex gap-3 rounded-card border-l-[3px] border-danger bg-danger-soft p-4"
         >
-          <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#9b3232]" aria-hidden="true" />
-          <p className="text-sm text-[#9b3232]">{formError}</p>
+          <AlertCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden="true" />
+          <p className="text-sm text-danger">{formError}</p>
         </div>
       ) : null}
 
@@ -105,7 +105,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
 
       <div className="mt-5">
         <label htmlFor="message" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
-          Mensaje<span className="ml-0.5 text-[#9b3232]">*</span>
+          Mensaje<span className="ml-0.5 text-danger">*</span>
         </label>
         <textarea
           id="message"
@@ -119,12 +119,12 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
           className={cn(
             'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
             fieldErrors.message
-              ? 'border-[#9b3232] focus:border-[#9b3232] focus:ring-[#9b3232]'
-              : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
+              ? 'border-danger focus:border-danger focus:ring-danger'
+              : 'border-border-strong focus:border-primary focus:ring-primary',
           )}
         />
         {fieldErrors.message ? (
-          <p id="message-error" role="alert" className="mt-1 text-[0.6875rem] text-[#9b3232]">
+          <p id="message-error" role="alert" className="mt-1 text-[0.6875rem] text-danger">
             {fieldErrors.message[0]}
           </p>
         ) : null}
@@ -141,15 +141,15 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
           type="checkbox"
           name="acceptedPrivacy"
           required
-          className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+          className="mt-0.5 size-4 shrink-0 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
         />
         <span className="text-[0.8125rem] leading-relaxed text-foreground">
           Acepto la{' '}
-          <Link href={ROUTES.privacy} className="font-medium text-violet-700 underline" target="_blank">
+          <Link href={ROUTES.privacy} className="font-medium text-primary underline" target="_blank">
             política de privacidad
           </Link>{' '}
           y el tratamiento de mis datos para responder esta consulta.
-          <span className="ml-0.5 text-[#9b3232]">*</span>
+          <span className="ml-0.5 text-danger">*</span>
         </span>
       </label>
 
@@ -190,7 +190,7 @@ function Field({
     <div>
       <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
-        {required ? <span className="ml-0.5 text-[#9b3232]">*</span> : null}
+        {required ? <span className="ml-0.5 text-danger">*</span> : null}
       </label>
       <input
         id={name}
@@ -203,17 +203,17 @@ function Field({
         className={cn(
           'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
           fieldErrors
-            ? 'border-[#9b3232] focus:border-[#9b3232] focus:ring-[#9b3232]'
-            : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
+            ? 'border-danger focus:border-danger focus:ring-danger'
+            : 'border-border-strong focus:border-primary focus:ring-primary',
         )}
       />
       {hint && !fieldErrors ? (
-        <p id={`${name}-hint`} className="mt-1 text-[0.6875rem] text-plum-500">
+        <p id={`${name}-hint`} className="mt-1 text-[0.6875rem] text-muted-foreground">
           {hint}
         </p>
       ) : null}
       {fieldErrors ? (
-        <p id={`${name}-error`} role="alert" className="mt-1 text-[0.6875rem] text-[#9b3232]">
+        <p id={`${name}-error`} role="alert" className="mt-1 text-[0.6875rem] text-danger">
           {fieldErrors[0]}
         </p>
       ) : null}

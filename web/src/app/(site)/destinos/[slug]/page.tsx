@@ -126,7 +126,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     {attraction.summary}
                   </p>
                   {attraction.openingInfo || attraction.entryFeeInfo ? (
-                    <dl className="mt-3 space-y-1 border-t border-border pt-3 text-xs text-plum-500">
+                    <dl className="mt-3 space-y-1 border-t border-border pt-3 text-xs text-muted-foreground">
                       {attraction.openingInfo ? (
                         <div>
                           <dt className="inline font-semibold">Horarios: </dt>
@@ -181,7 +181,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
               <li key={post.id}>
                 <Link
                   href={ROUTES.blogPost(post.slug)}
-                  className="block rounded-card border border-border p-4 transition-colors hover:border-violet-300 hover:bg-surface-muted"
+                  className="block rounded-card border border-border p-4 transition-colors hover:border-primary/40 hover:bg-surface-muted"
                 >
                   <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading">
                     {post.title}

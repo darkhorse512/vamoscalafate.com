@@ -65,7 +65,7 @@ export default async function BlogPage({
                   'inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors',
                   !categorySlug
                     ? 'border-violet-700 bg-violet-700 text-white'
-                    : 'border-border-strong bg-surface text-foreground hover:border-plum-400',
+                    : 'border-border-strong bg-surface text-foreground hover:border-primary',
                 )}
               >
                 Todos
@@ -81,7 +81,7 @@ export default async function BlogPage({
                       'inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors',
                       categorySlug === category.slug
                         ? 'border-violet-700 bg-violet-700 text-white'
-                        : 'border-border-strong bg-surface text-foreground hover:border-plum-400',
+                        : 'border-border-strong bg-surface text-foreground hover:border-primary',
                     )}
                   >
                     {category.name}
@@ -115,12 +115,12 @@ export default async function BlogPage({
 
                     <div className="mt-4">
                       {post.category ? (
-                        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
+                        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-primary">
                           {post.category.name}
                         </p>
                       ) : null}
 
-                      <h2 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading group-hover:text-violet-800">
+                      <h2 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading group-hover:text-primary">
                         {post.title}
                       </h2>
 
@@ -128,7 +128,7 @@ export default async function BlogPage({
                         {post.excerpt}
                       </p>
 
-                      <p className="mt-3 text-xs text-plum-500">
+                      <p className="mt-3 text-xs text-muted-foreground">
                         {post.publishedAt ? (
                           <time dateTime={toDate(post.publishedAt).toISOString()}>
                             {formatDate(post.publishedAt)}

@@ -194,7 +194,7 @@ export default async function DashboardPage() {
             </h2>
             <Link
               href="/bookings"
-              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-violet-700 hover:text-violet-900"
+              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:text-primary-hover"
             >
               Ver todas
               <ArrowRight className="size-3" aria-hidden="true" />
@@ -310,7 +310,7 @@ function StatCard({
   return (
     <Link
       href={href}
-      className="admin-panel group block p-4 transition-colors hover:border-violet-300"
+      className="admin-panel group block p-4 transition-colors hover:border-primary/40"
     >
       <div className="flex items-center gap-2">
         <span className={cn('shrink-0', tones[tone])} aria-hidden="true">
@@ -338,7 +338,7 @@ function ActionItem({ href, count, label }: { href: string; count: number; label
     <li>
       <Link
         href={href}
-        className="flex items-center gap-3 rounded-panel border border-[#eddfc0] bg-status-warningBg p-3.5 transition-colors hover:border-[#c9942a]"
+        className="flex items-center gap-3 rounded-panel border border-status-warning/30 bg-status-warningBg p-3.5 transition-colors hover:border-status-warning"
       >
         <span className="tabular text-xl font-bold text-status-warning">{count}</span>
         <span className="text-[0.8125rem] leading-snug text-status-warning">{label}</span>

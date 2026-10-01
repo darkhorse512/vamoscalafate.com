@@ -205,7 +205,7 @@ export default async function BookingDetailPage({
 
             <Link
               href={`/customers/${booking.customerId}`}
-              className="mt-3 inline-block text-[0.75rem] font-medium text-violet-700 hover:underline"
+              className="mt-3 inline-block text-[0.75rem] font-medium text-primary hover:underline"
             >
               Ver ficha del cliente
             </Link>

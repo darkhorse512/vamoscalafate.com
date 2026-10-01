@@ -46,7 +46,7 @@ export async function LegalPage({ slug }: { slug: string }) {
           <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
             {page.title}
           </h1>
-          <p className="mt-3 text-sm text-plum-500">
+          <p className="mt-3 text-sm text-muted-foreground">
             Última actualización: {formatDate(page.updatedAt)}
           </p>
         </div>

@@ -132,13 +132,13 @@ function EmptyState({ basePath }: { basePath: string }) {
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link
           href={basePath}
-          className="text-sm font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
+          className="text-sm font-semibold text-primary underline underline-offset-2 hover:text-primary-hover"
         >
           Ver todo el catálogo
         </Link>
         <Link
           href="/contacto"
-          className="text-sm font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
+          className="text-sm font-semibold text-primary underline underline-offset-2 hover:text-primary-hover"
         >
           Hacer una consulta
         </Link>
@@ -183,7 +183,7 @@ function Pagination({
         <Link
           href={href(page - 1)}
           rel="prev"
-          className="rounded-control border border-border-strong px-3.5 py-2 text-sm font-medium text-foreground hover:border-plum-400 hover:bg-surface-muted"
+          className="rounded-control border border-border-strong px-3.5 py-2 text-sm font-medium text-foreground hover:border-primary hover:bg-surface-muted"
         >
           Anterior
         </Link>
@@ -192,7 +192,7 @@ function Pagination({
       {pages.map((p, index) => (
         <span key={p} className="flex items-center gap-1.5">
           {index > 0 && p - pages[index - 1]! > 1 ? (
-            <span className="px-1 text-plum-400" aria-hidden="true">
+            <span className="px-1 text-subtle-foreground" aria-hidden="true">
               …
             </span>
           ) : null}
@@ -204,7 +204,7 @@ function Pagination({
               'grid size-10 place-items-center rounded-control text-sm font-medium transition-colors',
               p === page
                 ? 'bg-violet-700 text-white'
-                : 'border border-border-strong text-foreground hover:border-plum-400 hover:bg-surface-muted',
+                : 'border border-border-strong text-foreground hover:border-primary hover:bg-surface-muted',
             )}
           >
             {p}
@@ -216,7 +216,7 @@ function Pagination({
         <Link
           href={href(page + 1)}
           rel="next"
-          className="rounded-control border border-border-strong px-3.5 py-2 text-sm font-medium text-foreground hover:border-plum-400 hover:bg-surface-muted"
+          className="rounded-control border border-border-strong px-3.5 py-2 text-sm font-medium text-foreground hover:border-primary hover:bg-surface-muted"
         >
           Siguiente
         </Link>

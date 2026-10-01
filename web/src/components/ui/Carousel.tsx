@@ -156,8 +156,8 @@ export function Carousel({
         disabled={atStart}
         aria-label="Anterior"
         className={cn(
-          'absolute -left-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-white/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
-          'hover:border-violet-300 hover:text-violet-800',
+          'absolute -left-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
+          'hover:border-primary/40 hover:text-primary-hover',
           atStart && 'pointer-events-none opacity-0',
         )}
       >
@@ -170,8 +170,8 @@ export function Carousel({
         disabled={atEnd}
         aria-label="Siguiente"
         className={cn(
-          'absolute -right-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-white/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
-          'hover:border-violet-300 hover:text-violet-800',
+          'absolute -right-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
+          'hover:border-primary/40 hover:text-primary-hover',
           atEnd && 'pointer-events-none opacity-0',
         )}
       >
@@ -192,7 +192,7 @@ export function Carousel({
                 'h-1.5 rounded-full transition-all duration-300',
                 index === activeIndex
                   ? 'w-7 bg-violet-700'
-                  : 'w-1.5 bg-stone-300 hover:bg-stone-400',
+                  : 'w-1.5 bg-surface-strong hover:bg-stone-400',
               )}
             />
           ))}

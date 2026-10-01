@@ -43,7 +43,7 @@ export function TourCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-200 hover:border-border-strong hover:shadow-raised focus-within:ring-2 focus-within:ring-violet-600 focus-within:ring-offset-2',
+        'group relative flex flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-200 hover:border-border-strong hover:shadow-raised focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2',
         className,
       )}
     >
@@ -59,13 +59,13 @@ export function TourCard({
 
         {tour.featured ? (
           <div className="absolute left-3 top-3">
-            <Badge tone="ochre">Destacada</Badge>
+            <Badge tone="accent">Destacada</Badge>
           </div>
         ) : null}
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-primary">
           {tour.category.name}
         </p>
 
@@ -79,7 +79,7 @@ export function TourCard({
           {tour.summary}
         </p>
 
-        <ul className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-1.5 text-xs text-plum-500">
+        <ul className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-1.5 text-xs text-muted-foreground">
           <li className="inline-flex items-center gap-1.5">
             <Clock className="size-3.5 shrink-0" aria-hidden="true" />
             {formatDurationLabel(tour.durationMinutes)}
@@ -102,7 +102,7 @@ export function TourCard({
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-4">
           <Price cents={tour.fromPriceCents} currency={tour.currency} from size="md" />
-          <span className="text-[0.8125rem] font-semibold text-violet-700 transition-colors group-hover:text-violet-900">
+          <span className="text-[0.8125rem] font-semibold text-primary transition-colors group-hover:text-primary">
             Ver detalle
           </span>
         </div>

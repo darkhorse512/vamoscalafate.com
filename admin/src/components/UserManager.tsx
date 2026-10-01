@@ -141,7 +141,7 @@ export function UserManager({
                   <button
                     type="button"
                     onClick={() => { setEditing(user); setCreating(false) }}
-                    className="text-[0.8125rem] font-medium text-violet-700 hover:underline"
+                    className="text-[0.8125rem] font-medium text-primary hover:underline"
                   >
                     Editar
                   </button>
@@ -249,7 +249,7 @@ export function UserManager({
                       type="checkbox"
                       name="isActive"
                       defaultChecked={editing ? editing.isActive : true}
-                      className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+                      className="size-4 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
                     />
                     <span className="text-[0.8125rem] text-foreground">Cuenta activa</span>
                   </label>

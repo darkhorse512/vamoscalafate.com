@@ -119,7 +119,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
             <nav aria-label="Navegación móvil" className="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
               <Link
                 href={ROUTES.search}
-                className="mb-3 flex items-center gap-2.5 rounded-control border border-border bg-surface-muted px-3.5 py-3 text-sm text-plum-500"
+                className="mb-3 flex items-center gap-2.5 rounded-control border border-border bg-surface-muted px-3.5 py-3 text-sm text-muted-foreground"
               >
                 <SearchIcon className="size-4" aria-hidden="true" />
                 Buscar excursiones, hoteles, artículos…
@@ -143,7 +143,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                             onClick={() => setExpanded(isExpanded ? null : item.label)}
                             aria-expanded={isExpanded}
                             aria-label={`${isExpanded ? 'Contraer' : 'Expandir'} ${item.label}`}
-                            className="grid w-11 shrink-0 place-items-center rounded-control text-plum-500 hover:bg-surface-muted"
+                            className="grid w-11 shrink-0 place-items-center rounded-control text-muted-foreground hover:bg-surface-muted"
                           >
                             <ChevronDown
                               className={cn('size-4 transition-transform', isExpanded && 'rotate-180')}
@@ -187,7 +187,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                 </ButtonLink>
               )}
               {CONTACT.email ? (
-                <p className="pt-1 text-center text-xs text-plum-500">{CONTACT.email}</p>
+                <p className="pt-1 text-center text-xs text-muted-foreground">{CONTACT.email}</p>
               ) : null}
             </div>
           </div>

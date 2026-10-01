@@ -21,9 +21,9 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
       >
         <svg viewBox="0 0 24 24" className="size-5" fill="none">
           {/* Stylised glacier front over water */}
-          <path d="M2 16.5 L7 8 L11 13 L15.5 5.5 L22 16.5 Z" fill={tone === 'light' ? '#ffffff' : '#8dc3d8'} />
-          <path d="M2 17.5 h20 v1.6 H2 Z" fill={tone === 'light' ? '#ffffff' : '#3585a7'} opacity="0.85" />
-          <path d="M4 20.2 h16 v1.1 H4 Z" fill={tone === 'light' ? '#ffffff' : '#3585a7'} opacity="0.5" />
+          <path d="M2 16.5 L7 8 L11 13 L15.5 5.5 L22 16.5 Z" fill={tone === 'light' ? '#ffffff' : '#bfb1ff'} />
+          <path d="M2 17.5 h20 v1.6 H2 Z" fill={tone === 'light' ? '#ffffff' : '#6c58fe'} opacity="0.85" />
+          <path d="M4 20.2 h16 v1.1 H4 Z" fill={tone === 'light' ? '#ffffff' : '#6c58fe'} opacity="0.5" />
         </svg>
       </span>
 
@@ -39,7 +39,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
         <span
           className={cn(
             'mt-0.5 text-[0.5625rem] font-semibold uppercase tracking-[0.16em]',
-            tone === 'light' ? 'text-white/65' : 'text-plum-500',
+            tone === 'light' ? 'text-white/65' : 'text-muted-foreground',
           )}
         >
           Patagonia Argentina

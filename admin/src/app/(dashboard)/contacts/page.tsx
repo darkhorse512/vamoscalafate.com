@@ -60,7 +60,7 @@ export default async function ContactsPage({
                       {contact.name} ·{' '}
                       <a
                         href={`mailto:${contact.email}?subject=Re: ${encodeURIComponent(contact.subject)}`}
-                        className="text-violet-700 hover:underline"
+                        className="text-primary hover:underline"
                       >
                         {contact.email}
                       </a>

@@ -73,7 +73,7 @@ export default async function PaymentsPage({
       key: 'reference',
       header: 'Reserva',
       cell: (row) => (
-        <Link href={`/bookings/${row.bookingId}`} className="text-violet-700 hover:underline">
+        <Link href={`/bookings/${row.bookingId}`} className="text-primary hover:underline">
           {row.reference}
         </Link>
       ),

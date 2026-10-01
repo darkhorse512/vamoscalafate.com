@@ -27,7 +27,7 @@ export function Breadcrumbs({
       <ol
         className={cn(
           'flex flex-wrap items-center gap-x-1 gap-y-1 text-[0.8125rem]',
-          tone === 'light' ? 'text-white/70' : 'text-plum-500',
+          tone === 'light' ? 'text-white/70' : 'text-muted-foreground',
         )}
       >
         {items.map((item, index) => {
@@ -50,7 +50,7 @@ export function Breadcrumbs({
                   href={item.path}
                   className={cn(
                     'transition-colors',
-                    tone === 'light' ? 'hover:text-white' : 'hover:text-violet-700',
+                    tone === 'light' ? 'hover:text-white' : 'hover:text-primary',
                   )}
                 >
                   {item.name}

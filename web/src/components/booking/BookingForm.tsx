@@ -152,10 +152,10 @@ export function BookingForm({
             id="booking-error"
             role="alert"
             tabIndex={-1}
-            className="mb-6 flex gap-3 rounded-card border-l-[3px] border-[#9b3232] bg-[#fbeeee] p-4"
+            className="mb-6 flex gap-3 rounded-card border-l-[3px] border-danger bg-danger-soft p-4"
           >
-            <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#9b3232]" aria-hidden="true" />
-            <p className="text-sm text-[#9b3232]">{formError}</p>
+            <AlertCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden="true" />
+            <p className="text-sm text-danger">{formError}</p>
           </div>
         ) : null}
 
@@ -182,7 +182,7 @@ export function BookingForm({
                 id="pickup"
                 value={pickupId}
                 onChange={(event) => setPickupId(event.target.value)}
-                className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+                className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value="">Coordinar por email</option>
                 {pickupLocations.map((location) => (
@@ -207,7 +207,7 @@ export function BookingForm({
               rows={3}
               maxLength={1000}
               placeholder="Restricciones alimentarias, movilidad reducida, viajás con niños pequeños…"
-              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
         </fieldset>
@@ -224,18 +224,18 @@ export function BookingForm({
               type="checkbox"
               name="acceptedTerms"
               required
-              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+              className="mt-0.5 size-4 shrink-0 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
             />
             <span className="text-[0.8125rem] leading-relaxed text-foreground">
               Acepto los{' '}
-              <Link href={ROUTES.terms} className="font-medium text-violet-700 underline" target="_blank">
+              <Link href={ROUTES.terms} className="font-medium text-primary underline" target="_blank">
                 términos y condiciones
               </Link>{' '}
               y la{' '}
-              <Link href={ROUTES.cancellation} className="font-medium text-violet-700 underline" target="_blank">
+              <Link href={ROUTES.cancellation} className="font-medium text-primary underline" target="_blank">
                 política de cancelación
               </Link>
-              . <span className="text-[#9b3232]">*</span>
+              . <span className="text-danger">*</span>
             </span>
           </label>
 
@@ -243,7 +243,7 @@ export function BookingForm({
             <input
               type="checkbox"
               name="marketingOptIn"
-              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+              className="mt-0.5 size-4 shrink-0 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
             />
             <span className="text-[0.8125rem] leading-relaxed text-foreground">
               Quiero recibir novedades y ofertas de Vamos Calafate.
@@ -300,7 +300,7 @@ export function BookingForm({
           </dl>
 
           {seatsAvailable !== null && seatsAvailable <= 6 ? (
-            <p className="mt-3 rounded-control bg-[#fbf4e6] px-3 py-2 text-xs text-[#8a6014]">
+            <p className="mt-3 rounded-control bg-warning-soft px-3 py-2 text-xs text-warning">
               Quedan {seatsAvailable} lugares para esta salida.
             </p>
           ) : null}
@@ -316,19 +316,19 @@ export function BookingForm({
             )}
           </Button>
 
-          <p className="mt-3 text-center text-[0.6875rem] leading-relaxed text-plum-500">
+          <p className="mt-3 text-center text-[0.6875rem] leading-relaxed text-muted-foreground">
             Todavía no se realiza ningún cargo. En el siguiente paso elegís el medio de pago.
           </p>
 
           {option.freeCancellationHours > 0 ? (
-            <p className="mt-2 text-center text-[0.6875rem] text-[#2f6f4f]">
+            <p className="mt-2 text-center text-[0.6875rem] text-success">
               Cancelación sin cargo hasta {option.freeCancellationHours} h antes
             </p>
           ) : null}
         </div>
 
         <p className="mt-4 text-center text-xs">
-          <Link href={tour.detailPath} className="text-plum-500 underline underline-offset-2 hover:text-foreground">
+          <Link href={tour.detailPath} className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
             Modificar la selección
           </Link>
         </p>
@@ -340,7 +340,7 @@ export function BookingForm({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
       <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )
@@ -371,7 +371,7 @@ function Field({
     <div>
       <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
-        {required ? <span className="ml-0.5 text-[#9b3232]">*</span> : null}
+        {required ? <span className="ml-0.5 text-danger">*</span> : null}
       </label>
 
       <input
@@ -385,19 +385,19 @@ function Field({
         className={cn(
           'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
           fieldErrors
-            ? 'border-[#9b3232] focus:border-[#9b3232] focus:ring-[#9b3232]'
-            : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
+            ? 'border-danger focus:border-danger focus:ring-danger'
+            : 'border-border-strong focus:border-primary focus:ring-primary',
         )}
       />
 
       {hint && !fieldErrors ? (
-        <p id={hintId} className="mt-1 text-[0.6875rem] text-plum-500">
+        <p id={hintId} className="mt-1 text-[0.6875rem] text-muted-foreground">
           {hint}
         </p>
       ) : null}
 
       {fieldErrors ? (
-        <p id={errorId} role="alert" className="mt-1 text-[0.6875rem] text-[#9b3232]">
+        <p id={errorId} role="alert" className="mt-1 text-[0.6875rem] text-danger">
           {fieldErrors[0]}
         </p>
       ) : null}

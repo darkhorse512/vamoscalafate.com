@@ -50,7 +50,7 @@ export default async function BuscarPage({
         </p>
       ) : results.total === 0 ? (
         <div className="mt-10 rounded-card border border-dashed border-border-strong bg-surface-muted px-6 py-14 text-center">
-          <SearchIcon className="mx-auto size-8 text-plum-400" aria-hidden="true" />
+          <SearchIcon className="mx-auto size-8 text-subtle-foreground" aria-hidden="true" />
           <h2 className="mt-4 font-display text-lg font-semibold text-heading">
             No encontramos resultados para «{query}»
           </h2>
@@ -59,7 +59,7 @@ export default async function BuscarPage({
           </p>
           <Link
             href={ROUTES.tours}
-            className="mt-5 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+            className="mt-5 inline-block text-sm font-semibold text-primary underline underline-offset-2"
           >
             Ver todas las excursiones
           </Link>

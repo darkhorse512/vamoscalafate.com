@@ -238,7 +238,7 @@ function MediaPickerDialog({
             }}
             className={cn(
               'rounded-control border-2 border-dashed p-4 text-center transition-colors',
-              dragging ? 'border-violet-500 bg-violet-50' : 'border-border-strong bg-surface-muted',
+              dragging ? 'border-primary bg-primary-soft' : 'border-border-strong bg-surface-muted',
             )}
           >
             {uploadProgress ? (
@@ -254,7 +254,7 @@ function MediaPickerDialog({
                   <button
                     type="button"
                     onClick={() => fileInput.current?.click()}
-                    className="font-medium text-violet-700 underline hover:text-violet-900"
+                    className="font-medium text-primary underline hover:text-primary-hover"
                   >
                     elegí archivos
                   </button>
@@ -328,7 +328,7 @@ function MediaPickerDialog({
                       className={cn(
                         'relative block w-full overflow-hidden rounded-control ring-2 transition-all',
                         isSelected
-                          ? 'ring-violet-600'
+                          ? 'ring-primary'
                           : 'ring-transparent hover:ring-border-strong',
                       )}
                     >
@@ -368,7 +368,7 @@ function MediaPickerDialog({
                         onBlur={(event) => saveAlt(item.id, event.target.value)}
                         placeholder="Texto alternativo…"
                         aria-label={`Texto alternativo de ${item.filename}`}
-                        className="mt-1 w-full rounded border border-border-strong px-1.5 py-1 text-[0.6875rem] focus:border-violet-600 focus:outline-none"
+                        className="mt-1 w-full rounded border border-border-strong px-1.5 py-1 text-[0.6875rem] focus:border-primary focus:outline-none"
                       />
                     ) : null}
                   </li>

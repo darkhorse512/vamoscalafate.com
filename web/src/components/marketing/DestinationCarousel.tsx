@@ -26,7 +26,7 @@ export function DestinationCarousel({
         <Link
           key={destination.id}
           href={ROUTES.destination(destination.slug)}
-          className="group relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-card focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
+          className="group relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-card focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <SmartImage
             media={destination.heroImage}

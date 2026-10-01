@@ -94,7 +94,7 @@ export default async function ReservarPage({
           </p>
           <a
             href={ROUTES.tour(tour.slug)}
-            className="mt-6 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
+            className="mt-6 inline-block text-sm font-semibold text-primary underline underline-offset-2"
           >
             Volver a {tour.name}
           </a>

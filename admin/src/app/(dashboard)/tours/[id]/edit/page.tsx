@@ -70,7 +70,7 @@ export default async function EditTourPage({ params }: { params: Promise<{ id: s
                 href={publicUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-violet-700 hover:text-violet-900"
+                className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:text-primary-hover"
               >
                 Ver publicada
                 <ExternalLink className="size-3.5" aria-hidden="true" />

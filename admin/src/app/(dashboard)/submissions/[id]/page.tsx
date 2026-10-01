@@ -79,7 +79,7 @@ export default async function SubmissionDetailPage({
                   href={submission.website}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                  className="break-all text-violet-700 hover:underline"
+                  className="break-all text-primary hover:underline"
                 >
                   {submission.website}
                 </a>
@@ -127,7 +127,7 @@ export default async function SubmissionDetailPage({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      className="inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-violet-700 hover:underline"
+                      className="inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-primary hover:underline"
                     >
                       {url}
                       <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
@@ -158,7 +158,7 @@ export default async function SubmissionDetailPage({
                 href={publishedUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-violet-700 hover:underline"
+                className="mt-2 inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-primary hover:underline"
               >
                 Ver en el sitio público
                 <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />

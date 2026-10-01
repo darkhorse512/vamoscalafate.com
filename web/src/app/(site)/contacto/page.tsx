@@ -49,16 +49,16 @@ export default async function ContactoPage({
 
               <ul className="mt-4 space-y-3.5 text-sm">
                 <li className="flex items-start gap-2.5">
-                  <Mail className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
-                  <a href={`mailto:${CONTACT.email}`} className="break-all text-violet-700 hover:underline">
+                  <Mail className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                  <a href={`mailto:${CONTACT.email}`} className="break-all text-primary hover:underline">
                     {CONTACT.email}
                   </a>
                 </li>
 
                 {CONTACT.phone ? (
                   <li className="flex items-start gap-2.5">
-                    <Phone className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
-                    <a href={`tel:${CONTACT.phone}`} className="text-violet-700 hover:underline">
+                    <Phone className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                    <a href={`tel:${CONTACT.phone}`} className="text-primary hover:underline">
                       {CONTACT.phone}
                     </a>
                   </li>
@@ -66,12 +66,12 @@ export default async function ContactoPage({
 
                 {whatsapp ? (
                   <li className="flex items-start gap-2.5">
-                    <MessageCircle className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <MessageCircle className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                     <a
                       href={whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-violet-700 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       Consultar por WhatsApp
                     </a>
@@ -79,14 +79,14 @@ export default async function ContactoPage({
                 ) : null}
 
                 <li className="flex items-start gap-2.5">
-                  <MapPin className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                   <span className="text-foreground">
                     {LOCATION.city}, {LOCATION.province}, {LOCATION.country}
                   </span>
                 </li>
               </ul>
 
-              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-plum-500">
+              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
                 Si tu consulta es sobre una reserva existente, incluí la referencia (por ejemplo
                 VC-XXXXXX) para que podamos ayudarte más rápido.
               </p>
@@ -101,7 +101,7 @@ export default async function ContactoPage({
               </p>
               <a
                 href={ROUTES.faq}
-                className="mt-3 inline-block text-[0.8125rem] font-semibold text-violet-700 underline underline-offset-2"
+                className="mt-3 inline-block text-[0.8125rem] font-semibold text-primary underline underline-offset-2"
               >
                 Ver preguntas frecuentes
               </a>

@@ -212,7 +212,7 @@ export function Gallery({
               type="button"
               onClick={(event) => open(index, event)}
               aria-label={`Ver imagen ${index + 1}`}
-              className="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-control bg-surface-strong ring-1 ring-border transition-all hover:ring-2 hover:ring-violet-500"
+              className="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-control bg-surface-strong ring-1 ring-border transition-all hover:ring-2 hover:ring-primary"
             >
               <SmartImage
                 media={media}

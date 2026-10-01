@@ -39,14 +39,14 @@ export function FaqList({
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-violet-800"
+                className="flex w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-primary-hover"
               >
                 <span className="font-sans text-[0.9375rem] font-semibold text-heading">
                   {faq.question}
                 </span>
                 <ChevronDown
                   className={cn(
-                    'mt-0.5 size-4 shrink-0 text-plum-500 transition-transform duration-200',
+                    'mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200',
                     isOpen && 'rotate-180',
                   )}
                   aria-hidden="true"

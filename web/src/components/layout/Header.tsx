@@ -60,7 +60,7 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
       className={cn(
         'fixed inset-x-0 top-0 z-50 h-(--header-height) transition-colors duration-300',
         solid
-          ? 'border-b border-border bg-white/95 backdrop-blur-sm'
+          ? 'border-b border-border bg-surface/95 backdrop-blur-sm'
           : 'bg-gradient-to-b from-plum-950/55 to-transparent',
       )}
     >
@@ -99,7 +99,7 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
                       'inline-flex items-center gap-1 rounded-control px-3 py-2 text-[0.8125rem] font-semibold transition-colors',
                       solid
                         ? isActive
-                          ? 'text-violet-800'
+                          ? 'text-primary'
                           : 'text-foreground hover:bg-surface-strong hover:text-heading'
                         : 'text-white/90 hover:bg-white/10 hover:text-white',
                     )}
@@ -134,7 +134,7 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
                                 {child.label}
                               </span>
                               {child.description ? (
-                                <span className="mt-0.5 block text-xs leading-snug text-plum-500">
+                                <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
                                   {child.description}
                                 </span>
                               ) : null}

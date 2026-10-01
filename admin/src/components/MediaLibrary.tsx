@@ -157,7 +157,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
               <button
                 type="button"
                 onClick={() => setSelected(item)}
-                className="admin-panel group block w-full overflow-hidden text-left transition-colors hover:border-violet-300"
+                className="admin-panel group block w-full overflow-hidden text-left transition-colors hover:border-primary/40"
               >
                 <div className="relative aspect-square bg-surface-strong">
                   {item.type === 'IMAGE' ? (

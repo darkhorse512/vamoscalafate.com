@@ -50,7 +50,7 @@ export default async function DestinationsPage() {
         <span>
           {row.name}
           {row.featured ? (
-            <span className="ml-2 rounded bg-violet-50 px-1.5 py-0.5 text-[0.625rem] font-semibold text-violet-800">
+            <span className="ml-2 rounded bg-primary-soft px-1.5 py-0.5 text-[0.625rem] font-semibold text-primary">
               DESTACADO
             </span>
           ) : null}

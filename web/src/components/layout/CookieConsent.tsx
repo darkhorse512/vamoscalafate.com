@@ -37,7 +37,7 @@ export function CookieConsent() {
           analíticas para entender cómo se usa.{' '}
           <Link
             href={ROUTES.cookies}
-            className="font-medium text-violet-700 underline underline-offset-2 hover:text-violet-900"
+            className="font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
           >
             Más información
           </Link>

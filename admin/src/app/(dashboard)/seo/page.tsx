@@ -95,7 +95,7 @@ export default async function SeoPage() {
                 href={`${siteUrl}/sitemap.xml`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-violet-700 hover:underline"
+                className="text-primary hover:underline"
               >
                 {siteUrl}/sitemap.xml
               </a>
@@ -109,7 +109,7 @@ export default async function SeoPage() {
                 href={`${siteUrl}/robots.txt`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-violet-700 hover:underline"
+                className="text-primary hover:underline"
               >
                 {siteUrl}/robots.txt
               </a>
@@ -165,7 +165,7 @@ export default async function SeoPage() {
                   <li key={tour.id} className="px-4 py-2.5">
                     <Link
                       href={`/tours/${tour.id}/edit`}
-                      className="text-[0.8125rem] text-violet-700 hover:underline"
+                      className="text-[0.8125rem] text-primary hover:underline"
                     >
                       {tour.name}
                     </Link>
@@ -191,7 +191,7 @@ export default async function SeoPage() {
                 <li key={tour.id} className="px-4 py-2.5">
                   <Link
                     href={`/tours/${tour.id}/edit`}
-                    className="text-[0.8125rem] text-violet-700 hover:underline"
+                    className="text-[0.8125rem] text-primary hover:underline"
                   >
                     {tour.name}
                   </Link>

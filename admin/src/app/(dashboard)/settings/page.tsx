@@ -187,7 +187,7 @@ export default async function SettingsPage() {
                   <td>
                     <Link
                       href={`/settings/pages/${page.id}`}
-                      className="font-medium text-violet-700 hover:underline"
+                      className="font-medium text-primary hover:underline"
                     >
                       {page.title}
                     </Link>

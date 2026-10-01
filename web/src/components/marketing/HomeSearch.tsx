@@ -50,7 +50,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
           </label>
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-plum-400"
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground"
               aria-hidden="true"
             />
             <input
@@ -59,7 +59,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Perito Moreno, navegación, traslado…"
-              className="h-11 w-full rounded-control border border-border-strong bg-surface pl-9 pr-3 text-sm text-heading placeholder:text-plum-400 focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+              className="h-11 w-full rounded-control border border-border-strong bg-surface pl-9 pr-3 text-sm text-heading placeholder:text-subtle-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
         </div>
@@ -72,7 +72,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
             id="home-cat"
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="">Todas las categorías</option>
             {categories.map((c) => (
@@ -93,7 +93,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
             min={today}
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
+            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 

@@ -49,7 +49,7 @@ export default async function CheckoutResultPage({
       <div className="mx-auto max-w-xl text-center">
         {isPaid ? (
           <>
-            <CheckCircle2 className="mx-auto size-14 text-[#2f6f4f]" aria-hidden="true" />
+            <CheckCircle2 className="mx-auto size-14 text-success" aria-hidden="true" />
             <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               Reserva confirmada
             </h1>
@@ -80,7 +80,7 @@ export default async function CheckoutResultPage({
           </>
         ) : isFailed ? (
           <>
-            <XCircle className="mx-auto size-14 text-[#9b3232]" aria-hidden="true" />
+            <XCircle className="mx-auto size-14 text-danger" aria-hidden="true" />
             <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               El pago no se completó
             </h1>
@@ -91,7 +91,7 @@ export default async function CheckoutResultPage({
           </>
         ) : (
           <>
-            <Clock className="mx-auto size-14 text-[#8a6014]" aria-hidden="true" />
+            <Clock className="mx-auto size-14 text-warning" aria-hidden="true" />
             <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               Estamos verificando tu pago
             </h1>
@@ -100,7 +100,7 @@ export default async function CheckoutResultPage({
               enviamos un correo a{' '}
               <strong className="font-semibold text-heading">{booking.customer.email}</strong>.
             </p>
-            <p className="mt-2 text-sm text-plum-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               No hace falta que vuelvas a pagar. Si el pago no se acredita, la reserva se cancela
               automáticamente y los lugares se liberan.
             </p>
@@ -142,7 +142,7 @@ export default async function CheckoutResultPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
       <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )

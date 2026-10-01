@@ -34,7 +34,7 @@ export function SectionHeading({
     >
       <div className={cn('max-w-2xl', align === 'center' && 'mx-auto text-center')}>
         {eyebrow ? (
-          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-violet-700">
+          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-primary">
             {eyebrow}
           </p>
         ) : null}
@@ -47,7 +47,7 @@ export function SectionHeading({
       {link ? (
         <Link
           href={link.href}
-          className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-violet-700 transition-colors hover:text-violet-900"
+          className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary-hover"
         >
           {link.label}
           <ArrowRight

@@ -95,7 +95,7 @@ export default async function HotelesPage({
                     </p>
 
                     {hotel.address ? (
-                      <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-plum-500">
+                      <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                         <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
                         {hotel.address}
                       </p>
@@ -103,11 +103,11 @@ export default async function HotelesPage({
 
                     {hotel.fromPriceCents ? (
                       <p className="mt-auto pt-4 text-sm">
-                        <span className="text-xs text-plum-500">Desde </span>
+                        <span className="text-xs text-muted-foreground">Desde </span>
                         <span className="font-display font-bold text-heading">
                           {formatMoney(hotel.fromPriceCents, hotel.currency)}
                         </span>
-                        <span className="text-xs text-plum-500"> por noche</span>
+                        <span className="text-xs text-muted-foreground"> por noche</span>
                       </p>
                     ) : null}
                   </div>

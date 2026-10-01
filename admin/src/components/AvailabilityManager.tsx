@@ -100,7 +100,7 @@ export function AvailabilityManager({
           className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-surface-muted"
         >
           <span className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-heading">
-            <CalendarPlus className="size-4 text-violet-600" aria-hidden="true" />
+            <CalendarPlus className="size-4 text-primary" aria-hidden="true" />
             Generar disponibilidad
           </span>
           <span className="text-[0.75rem] text-subtle-foreground">{open ? 'Ocultar' : 'Abrir'}</span>
@@ -193,7 +193,7 @@ export function AvailabilityManager({
                   key={day.value}
                   className={`cursor-pointer rounded-control border px-3 py-1.5 text-[0.8125rem] transition-colors ${
                     weekdays.includes(day.value)
-                      ? 'border-violet-600 bg-violet-50 text-violet-800'
+                      ? 'border-primary bg-primary-soft text-primary'
                       : 'border-border-strong bg-surface text-foreground hover:bg-surface-muted'
                   }`}
                 >

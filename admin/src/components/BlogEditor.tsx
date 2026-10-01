@@ -160,7 +160,7 @@ export function BlogEditor({
                 aria-pressed={preview}
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-control px-2.5 py-1 text-[0.75rem] font-medium transition-colors',
-                  preview ? 'bg-violet-50 text-violet-800' : 'text-muted-foreground hover:bg-surface-strong',
+                  preview ? 'bg-primary-soft text-primary' : 'text-muted-foreground hover:bg-surface-strong',
                 )}
               >
                 <Eye className="size-3.5" aria-hidden="true" />
@@ -248,7 +248,7 @@ export function BlogEditor({
                 type="checkbox"
                 checked={form.seo.noindex}
                 onChange={(event) => update('seo', { ...form.seo, noindex: event.target.checked })}
-                className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+                className="size-4 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
               />
               <span className="text-[0.8125rem] text-foreground">noindex</span>
             </label>
@@ -338,7 +338,7 @@ export function BlogEditor({
                 type="checkbox"
                 checked={form.featured}
                 onChange={(event) => update('featured', event.target.checked)}
-                className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
+                className="size-4 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
               />
               <span className="text-[0.8125rem] text-foreground">Destacado</span>
             </label>
@@ -356,7 +356,7 @@ export function BlogEditor({
                       className={cn(
                         'cursor-pointer rounded-full border px-2.5 py-1 text-[0.75rem] transition-colors',
                         selected
-                          ? 'border-violet-600 bg-violet-50 text-violet-800'
+                          ? 'border-primary bg-primary-soft text-primary'
                           : 'border-border-strong bg-surface text-foreground hover:bg-surface-muted',
                       )}
                     >

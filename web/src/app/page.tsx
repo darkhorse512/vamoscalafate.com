@@ -17,7 +17,13 @@ import {
   getTourCategories,
   listTours,
 } from '@/server/queries/tours'
-import { listBlogPosts, listDestinations, listHotels, getSiteSettings } from '@/server/queries/content'
+import {
+  getHeroImage,
+  getSiteSettings,
+  listBlogPosts,
+  listDestinations,
+  listHotels,
+} from '@/server/queries/content'
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl('/') },
@@ -34,7 +40,7 @@ export const metadata: Metadata = {
  * add a full round-trip per section to TTFB.
  */
 export default async function HomePage() {
-  const [featured, categories, transfers, destinations, posts, hotels, settings] =
+  const [featured, categories, transfers, destinations, posts, hotels, settings, heroImage] =
     await Promise.all([
       getFeaturedTours(6),
       getTourCategories('excursiones'),
@@ -43,6 +49,7 @@ export default async function HomePage() {
       listBlogPosts({ pageSize: 3 }),
       listHotels({ pageSize: 3 }),
       getSiteSettings(),
+      getHeroImage(),
     ])
 
   const heroTitle =
@@ -61,7 +68,7 @@ export default async function HomePage() {
       <Header overHero />
 
       <main id="contenido">
-        <Hero title={heroTitle} subtitle={heroSubtitle} />
+        <Hero media={heroImage} title={heroTitle} subtitle={heroSubtitle} />
 
         {/* ── 2. Search / discovery ─────────────────────────────────────── */}
         <section className="relative z-10 -mt-8 pb-4" aria-label="Buscar experiencias">
@@ -133,7 +140,7 @@ export default async function HomePage() {
               <li key={category.id}>
                 <Link
                   href={`${ROUTES.tours}?categoria=${category.slug}`}
-                  className="group flex h-full flex-col justify-between rounded-card border border-border bg-surface p-5 transition-all hover:border-violet-300 hover:shadow-raised"
+                  className="group flex h-full flex-col justify-between rounded-card border border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-raised"
                 >
                   <div>
                     <h3 className="font-display text-[1.0625rem] font-semibold text-heading">
@@ -146,7 +153,7 @@ export default async function HomePage() {
                     ) : null}
                   </div>
 
-                  <p className="mt-5 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-violet-700">
+                  <p className="mt-5 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-primary">
                     {category._count.tours}{' '}
                     {category._count.tours === 1 ? 'experiencia' : 'experiencias'}
                     <ArrowRight
@@ -226,7 +233,7 @@ export default async function HomePage() {
                           {hotel.summary}
                         </p>
                         {hotel.address ? (
-                          <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-plum-500">
+                          <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-muted-foreground">
                             <MapPin className="size-3" aria-hidden="true" />
                             {hotel.address}
                           </p>
@@ -241,7 +248,7 @@ export default async function HomePage() {
                 ¿Tenés un hotel o comercio en El Calafate?{' '}
                 <Link
                   href={ROUTES.hotelRegister}
-                  className="font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
+                  className="font-semibold text-primary underline underline-offset-2 hover:text-primary-hover"
                 >
                   Registralo en la guía
                 </Link>
@@ -278,12 +285,12 @@ export default async function HomePage() {
 
                       <div className="mt-4">
                         {post.category ? (
-                          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
+                          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-primary">
                             {post.category.name}
                           </p>
                         ) : null}
 
-                        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading group-hover:text-violet-800">
+                        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading group-hover:text-primary">
                           {post.title}
                         </h3>
 
@@ -291,7 +298,7 @@ export default async function HomePage() {
                           {post.excerpt}
                         </p>
 
-                        <p className="mt-3 text-xs text-plum-500">
+                        <p className="mt-3 text-xs text-muted-foreground">
                           {post.publishedAt ? formatDate(post.publishedAt) : null}
                           {' · '}
                           {post.readingTime} min de lectura
@@ -333,7 +340,7 @@ function ValueProp({
   return (
     <li>
       <span
-        className="grid size-10 place-items-center rounded-control bg-violet-50 text-violet-700"
+        className="grid size-10 place-items-center rounded-control bg-primary-soft text-primary"
         aria-hidden="true"
       >
         {icon}
