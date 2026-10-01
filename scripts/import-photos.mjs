@@ -75,12 +75,37 @@ function stripHtml(value) {
  * in the file title, which is the only reliable signal Commons gives about
  * subject matter.
  */
+/**
+ * Works out who to credit.
+ *
+ * Many older Commons files predate the structured `Artist` field, so it comes
+ * back empty even though the work is plainly someone's. Falling straight to
+ * "unknown author" would under-credit them, which is the one thing CC BY-SA
+ * asks us not to do. Commons' own attribution tooling falls back to the
+ * uploader, who for own-work uploads IS the photographer, so we do the same.
+ */
+function creditFor(meta, info) {
+  const candidates = [
+    stripHtml(meta.Artist?.value),
+    stripHtml(meta.Attribution?.value),
+    stripHtml(meta.Credit?.value),
+    // A renamed account keeps a "~commonswiki" suffix that is an artefact of
+    // the rename, not part of the person's name.
+    info.user?.replace(/~\w+$/, ''),
+  ]
+  for (const candidate of candidates) {
+    const value = candidate?.trim()
+    if (value) return value
+  }
+  return 'Autor desconocido'
+}
+
 async function search(term, requireAny = [], limit = 12) {
   const url =
     'https://commons.wikimedia.org/w/api.php?action=query&format=json' +
     '&generator=search&gsrnamespace=6&gsrlimit=' + limit +
     '&gsrsearch=' + encodeURIComponent(term) +
-    '&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=2000'
+    '&prop=imageinfo&iiprop=url|size|mime|user|extmetadata&iiurlwidth=2000'
 
   const response = await fetch(url, { headers: { 'User-Agent': UA } })
   if (!response.ok) return []
@@ -95,12 +120,12 @@ async function search(term, requireAny = [], limit = 12) {
       const meta = info.extmetadata ?? {}
 
       const licence = stripHtml(meta.LicenseShortName?.value)
-      const artist = stripHtml(meta.Artist?.value)
+      const artist = creditFor(meta, info)
 
       return {
         title: page.title,
         licence,
-        artist: artist || 'Autor desconocido',
+        artist,
         descriptionUrl: info.descriptionurl,
         url: info.thumburl || info.url,
         width: info.thumbwidth || info.width,
