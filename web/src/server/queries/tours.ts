@@ -10,7 +10,7 @@ import { cachedQuery, REVALIDATE } from '../cache.ts'
  * more data than it renders.
  */
 
-const cardSelect = {
+export const cardSelect = {
   id: true,
   slug: true,
   name: true,
@@ -169,7 +169,12 @@ async function getTourBySlugUncached(slug: string): Promise<TourDetail | null> {
       seo: true,
       images: { orderBy: { sortOrder: 'asc' }, include: { media: { select: mediaSelect } } },
       videos: { orderBy: { sortOrder: 'asc' }, include: { media: { select: mediaSelect } } },
-      options: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
+      options: {
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+        include: { priceTiers: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } } },
+      },
+      extras: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
       itinerary: { orderBy: { sortOrder: 'asc' } },
       pickupLocations: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
       faqs: { where: { isPublished: true }, orderBy: { sortOrder: 'asc' } },

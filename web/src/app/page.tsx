@@ -15,22 +15,26 @@ import { SeasonTabs } from '@/components/home/SeasonTabs'
 import { PhotoMarquee } from '@/components/home/PhotoMarquee'
 import { StoryCarousel } from '@/components/home/StoryCarousel'
 import { ReviewsCarousel } from '@/components/home/ReviewsCarousel'
+import { MustSeeBanner } from '@/components/home/MustSeeBanner'
 import { SEASONS } from '@/lib/seasons'
 import {
+  getCatalogue,
   getCategoryTiles,
   getHeroSlides,
+  getMustSeeTours,
   getHomeReviews,
   getSeasonImages,
   getShowcasePhotos,
   getSpotlightTour,
 } from '@/server/queries/home'
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import { ButtonLink } from '@/components/ui/Button'
 import { TourCarousel } from '@/components/tours/TourCarousel'
 import { TourCard } from '@/components/tours/TourCard'
 import { DestinationCarousel } from '@/components/marketing/DestinationCarousel'
 import { SmartImage } from '@/components/media/SmartImage'
 import { HomeSearch } from '@/components/marketing/HomeSearch'
-import { getFeaturedTours, getTourCategories, listTours } from '@/server/queries/tours'
+import { getTourCategories, listTours } from '@/server/queries/tours'
 import {
   getHeroImage,
   getSiteSettings,
@@ -61,7 +65,6 @@ export const metadata: Metadata = {
  */
 export default async function HomePage() {
   const [
-    featured,
     categories,
     transfers,
     destinations,
@@ -75,8 +78,9 @@ export default async function HomePage() {
     showcase,
     reviews,
     seasonImages,
+    catalogue,
+    mustSee,
   ] = await Promise.all([
-    getFeaturedTours(8),
     getTourCategories('excursiones'),
     listTours({ channel: 'traslados', pageSize: 6 }),
     listDestinations(),
@@ -90,6 +94,8 @@ export default async function HomePage() {
     getShowcasePhotos(16),
     getHomeReviews(9),
     getSeasonImages(),
+    getCatalogue(),
+    getMustSeeTours(),
   ])
 
   const heroTitle =
@@ -136,17 +142,63 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── 3. Featured excursions ────────────────────────────────────── */}
+        {/* ── 3. Every excursion, in the business's order, with the
+                "3 imperdibles" banner after the first row ──────────────── */}
         <section className="container-page py-16 sm:py-24">
           <SectionHeading
-            eyebrow="Experiencias destacadas"
-            title="Las excursiones que definen un viaje a El Calafate"
-            description="Del frente del Perito Moreno a los glaciares que solo se alcanzan navegando."
-            link={{ href: ROUTES.tours, label: 'Ver todas las excursiones' }}
+            eyebrow="Nuestras excursiones"
+            title="Excursiones desde El Calafate"
+            description="Glaciares, navegaciones, trekking y aventura: todo lo que podés reservar online."
+            link={{ href: ROUTES.tours, label: 'Ver el catálogo con filtros' }}
           />
-          <div className="reveal mt-10">
-            <TourCarousel tours={featured} ariaLabel="Excursiones destacadas" priorityCount={0} />
+
+          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {catalogue.slice(0, 3).map((tour, index) => (
+              <li key={tour.id} className="reveal flex min-w-0">
+                <TourCard tour={tour} priority={index < 3} className="w-full" />
+              </li>
+            ))}
+          </ul>
+
+          <div className="my-12">
+            <MustSeeBanner tours={mustSee} />
           </div>
+
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {catalogue.slice(3).map((tour) => (
+              <li key={tour.id} className="reveal flex min-w-0">
+                <TourCard tour={tour} className="w-full" />
+              </li>
+            ))}
+            {/* Completes a short last row, so the grid never ends ragged. */}
+            {(catalogue.length - 3) % 3 !== 0 ? (
+              <li
+                className={`reveal flex min-w-0 ${(catalogue.length - 3) % 3 === 1 ? 'lg:col-span-2' : ''} ${(catalogue.length - 3) % 2 === 0 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+              >
+                <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-[1.25rem] bg-aurora p-7 text-white shadow-raised sm:p-9">
+                  <div>
+                    <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">¿Armamos tu viaje?</p>
+                    <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-white sm:text-[1.75rem]">
+                      Combinamos excursiones según tus días en El Calafate
+                    </h3>
+                    <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/75">
+                      Contanos cuántos días tenés y qué te gustaría hacer: te armamos el itinerario y te pasamos
+                      las bonificaciones disponibles.
+                    </p>
+                  </div>
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <ButtonLink href={ROUTES.contact} variant="accent">
+                      Escribinos
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </ButtonLink>
+                    <ButtonLink href={ROUTES.mustSee} variant="glass">
+                      Ver los 3 imperdibles
+                    </ButtonLink>
+                  </div>
+                </div>
+              </li>
+            ) : null}
+          </ul>
         </section>
 
         {/* ── 4. Experience types, as a photo bento ─────────────────────── */}

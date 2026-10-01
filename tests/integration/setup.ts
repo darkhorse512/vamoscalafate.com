@@ -20,6 +20,8 @@ export async function createTourFixture(options?: {
   seats?: number
   priceCents?: number
   childPriceCents?: number | null
+  minAge?: number | null
+  maxAge?: number | null
 }) {
   const seats = options?.seats ?? 10
   const priceCents = options?.priceCents ?? 100_000
@@ -47,6 +49,8 @@ export async function createTourFixture(options?: {
       categoryId: category.id,
       durationMinutes: 240,
       fromPriceCents: priceCents,
+      minAge: options?.minAge ?? null,
+      maxAge: options?.maxAge ?? null,
       options: {
         create: {
           name: 'Regular',
@@ -58,7 +62,23 @@ export async function createTourFixture(options?: {
           minParticipants: 1,
           maxParticipants: seats,
           isActive: true,
+          // Bands: adults, an optional child band, and a free infant band.
+          priceTiers: {
+            create: [
+              { label: 'Adultos', priceCents, sortOrder: 0 },
+              ...(options?.childPriceCents != null
+                ? [{ label: 'Menores', ageMin: 6, ageMax: 15, priceCents: options.childPriceCents, sortOrder: 1 }]
+                : []),
+              { label: 'Bebés (0 a 2 años)', ageMin: 0, ageMax: 2, priceCents: 0, sortOrder: 2 },
+            ],
+          },
         },
+      },
+      extras: {
+        create: [
+          { name: 'Traslado', priceCents: 7_500, perPerson: true, sortOrder: 0 },
+          { name: 'Salón privado', priceCents: 30_000, perPerson: false, sortOrder: 1 },
+        ],
       },
       pickupLocations: {
         create: {
@@ -69,7 +89,11 @@ export async function createTourFixture(options?: {
         },
       },
     },
-    include: { options: true, pickupLocations: true },
+    include: {
+      options: { include: { priceTiers: { orderBy: { sortOrder: 'asc' } } } },
+      pickupLocations: true,
+      extras: { orderBy: { sortOrder: 'asc' } },
+    },
   })
 
   const option = tour.options[0]!
@@ -90,13 +114,49 @@ export async function createTourFixture(options?: {
     },
   })
 
+  const tiers = option.priceTiers
+  const isoDate = date.toISOString().slice(0, 10)
+
   return {
     tour,
     option,
     pickup: tour.pickupLocations[0]!,
     availability,
-    isoDate: date.toISOString().slice(0, 10),
+    isoDate,
+    adultTier: tiers[0]!,
+    childTier: tiers.find((t) => t.label === 'Menores') ?? null,
+    infantTier: tiers.find((t) => t.label.startsWith('Bebés'))!,
+    perPersonExtra: tour.extras[0]!,
+    perBookingExtra: tour.extras[1]!,
+    /** A selection for this fixture: n adults, plus optional children/infants. */
+    selection(party: { adults: number; children?: number; infants?: number; extras?: { extraId: string; quantity: number }[]; pickupLocationId?: string }) {
+      const childTier = tiers.find((t) => t.label === 'Menores')
+      return {
+        tourId: tour.id,
+        optionId: option.id,
+        date: isoDate,
+        tiers: [
+          { tierId: tiers[0]!.id, quantity: party.adults },
+          ...(party.children && childTier ? [{ tierId: childTier.id, quantity: party.children }] : []),
+          ...(party.infants ? [{ tierId: tiers.find((t) => t.label.startsWith('Bebés'))!.id, quantity: party.infants }] : []),
+        ],
+        extras: party.extras ?? [],
+        pickupLocationId: party.pickupLocationId ?? null,
+      }
+    },
   }
+}
+
+/** One set of traveller details per seat, as the booking form submits them. */
+export function testPassengers(count: number, birthDate = '1990-05-20') {
+  return Array.from({ length: count }, (_, index) => ({
+    firstName: `Pasajero${index + 1}`,
+    lastName: 'Test',
+    type: 'ADULT' as const,
+    nationality: 'Argentina',
+    documentNumber: `30${String(index).padStart(6, '0')}`,
+    birthDate,
+  }))
 }
 
 /** Removes every row this test suite created. Order respects foreign keys. */
@@ -118,5 +178,6 @@ export function testCustomer(suffix = Math.random().toString(36).slice(2, 8)) {
     email: `${TEST_PREFIX}${suffix}@example.com`,
     phone: '+5492902000000',
     country: 'Argentina',
+    hotelName: 'Hotel de prueba',
   }
 }

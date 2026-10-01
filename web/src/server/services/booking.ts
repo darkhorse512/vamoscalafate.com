@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { prisma, type BookingStatus } from '@vamos/db'
 import { emailService } from '@vamos/email'
-import { AppError, logger, publicEnv } from '@vamos/shared'
+import { AppError, describeExtras, describeParty, logger, partySize, publicEnv } from '@vamos/shared'
 import { canTransitionBooking, type CreateBookingInput, type CreatedBooking } from '@vamos/types'
 import { availabilityService } from './availability.ts'
 import { pricingService } from './pricing.ts'
@@ -41,13 +41,20 @@ async function uniqueReference(): Promise<string> {
   throw new AppError('INTERNAL_ERROR', 'Could not allocate a unique booking reference')
 }
 
+/** Whole years between a birth date and a later date, both ISO YYYY-MM-DD. */
+function ageOn(birthDate: string, onDate: string): number {
+  const [by, bm, bd] = birthDate.split('-').map(Number) as [number, number, number]
+  const [ty, tm, td] = onDate.split('-').map(Number) as [number, number, number]
+  return ty - by - (tm < bm || (tm === bm && td < bd) ? 1 : 0)
+}
+
 export const bookingService = {
   async create(input: CreateBookingInput): Promise<CreatedBooking> {
     const { selection, customer, passengers, attribution } = input
 
     const tour = await prisma.tour.findFirst({
       where: { id: selection.tourId, status: 'PUBLISHED' },
-      select: { id: true, name: true, slug: true },
+      select: { id: true, name: true, slug: true, minAge: true, maxAge: true },
     })
     if (!tour) {
       throw new AppError('NOT_FOUND', 'Tour not available', {
@@ -65,19 +72,48 @@ export const bookingService = {
       })
     }
 
-    const seatsNeeded = selection.adults + selection.children
-
     // Priced and validated before the transaction opens, so the transaction
     // stays short and holds row locks for as little time as possible.
-    const [breakdown, slot] = await Promise.all([
-      pricingService.quote(selection),
-      availabilityService.resolveSlot({
-        optionId: selection.optionId,
-        date: selection.date,
-        departureTime: selection.departureTime,
-        seatsNeeded,
-      }),
-    ])
+    const breakdown = await pricingService.quote(selection)
+    // Every passenger takes a seat, including those travelling free.
+    const seatsNeeded = breakdown.passengers
+
+    // One set of details per traveller: operators file them with the park
+    // and, for Torres del Paine, with border control.
+    if (!passengers || passengers.length !== seatsNeeded) {
+      throw new AppError('VALIDATION_ERROR', 'Passenger list does not match selection', {
+        publicMessage: `Completá los datos de los ${seatsNeeded} pasajeros.`,
+      })
+    }
+
+    // Operator age limits (e.g. Minitrekking: 8 to 65), checked against each
+    // traveller's age ON THE TRAVEL DATE, not today.
+    if (tour.minAge != null || tour.maxAge != null) {
+      for (const passenger of passengers) {
+        if (!passenger.birthDate) continue
+        const age = ageOn(passenger.birthDate, selection.date)
+        const tooYoung = tour.minAge != null && age < tour.minAge
+        const tooOld = tour.maxAge != null && age > tour.maxAge
+        if (tooYoung || tooOld) {
+          const range =
+            tour.minAge != null && tour.maxAge != null
+              ? `de ${tour.minAge} a ${tour.maxAge} años`
+              : tour.minAge != null
+                ? `desde ${tour.minAge} años`
+                : `hasta ${tour.maxAge} años`
+          throw new AppError('VALIDATION_ERROR', 'Passenger outside tour age range', {
+            publicMessage: `${passenger.firstName} ${passenger.lastName} tendrá ${age} años en la fecha elegida. Esta excursión es solo para personas ${range}.`,
+          })
+        }
+      }
+    }
+
+    const slot = await availabilityService.resolveSlot({
+      optionId: selection.optionId,
+      date: selection.date,
+      departureTime: selection.departureTime,
+      seatsNeeded,
+    })
 
     const reference = await uniqueReference()
     const travelDate = new Date(`${selection.date}T00:00:00.000Z`)
@@ -136,12 +172,31 @@ export const bookingService = {
               optionNameSnapshot: option.name,
               travelDate,
               departureTime: selection.departureTime ?? null,
-              adults: selection.adults,
-              children: selection.children,
-              unitPriceCents: breakdown.adultUnitCents,
-              childUnitPriceCents: breakdown.childUnitCents,
+              // Summary columns: first band vs everyone else. The tier lines
+              // below are the authoritative breakdown.
+              adults: breakdown.tiers[0]?.quantity ?? 0,
+              children: breakdown.passengers - (breakdown.tiers[0]?.quantity ?? 0),
+              unitPriceCents: breakdown.tiers[0]?.unitCents ?? 0,
+              childUnitPriceCents: breakdown.tiers[1]?.unitCents ?? 0,
               pickupCostCents: breakdown.pickupCostCents,
+              extrasCostCents: breakdown.extrasCostCents,
               subtotalCents: breakdown.subtotalCents,
+              tiers: {
+                create: breakdown.tiers.map((line) => ({
+                  tierId: line.id,
+                  labelSnapshot: line.label,
+                  quantity: line.quantity,
+                  unitPriceCents: line.unitCents,
+                })),
+              },
+              extras: {
+                create: breakdown.extras.map((line) => ({
+                  extraId: line.id,
+                  nameSnapshot: line.label,
+                  quantity: line.quantity,
+                  unitPriceCents: line.unitCents,
+                })),
+              },
             },
           },
           ...(passengers?.length
@@ -152,6 +207,9 @@ export const bookingService = {
                     lastName: p.lastName,
                     type: p.type,
                     nationality: p.nationality ?? null,
+                    documentNumber: p.documentNumber ?? null,
+                    birthDate: p.birthDate ? new Date(`${p.birthDate}T00:00:00.000Z`) : null,
+                    tierLabel: p.tierLabel ?? null,
                   })),
                 },
               }
@@ -193,8 +251,10 @@ export const bookingService = {
       optionName: option.name,
       travelDate,
       departureTime: selection.departureTime ?? null,
-      adults: selection.adults,
-      children: selection.children,
+      adults: breakdown.tiers[0]?.quantity ?? 0,
+      children: breakdown.passengers - (breakdown.tiers[0]?.quantity ?? 0),
+      party: describeParty(breakdown.tiers.map((t) => ({ labelSnapshot: t.label, quantity: t.quantity }))),
+      extras: describeExtras(breakdown.extras.map((e) => ({ nameSnapshot: e.label, quantity: e.quantity }))),
       pickupLocation: pickupName,
       totalCents: booking.totalCents,
       currency: booking.currency,
@@ -226,6 +286,8 @@ export const bookingService = {
           include: {
             tour: { select: { slug: true, name: true } },
             pickupLocation: { select: { name: true } },
+            tiers: true,
+            extras: true,
           },
         },
         payments: { orderBy: { createdAt: 'desc' } },
@@ -248,7 +310,9 @@ export const bookingService = {
       where: { id: args.bookingId },
       select: {
         id: true, status: true, reference: true,
-        items: { select: { availabilityId: true, adults: true, children: true } },
+        items: {
+          select: { availabilityId: true, adults: true, children: true, tiers: { select: { quantity: true } } },
+        },
       },
     })
 
@@ -284,7 +348,7 @@ export const bookingService = {
           await availabilityService.releaseSeats(
             tx as typeof prisma,
             item.availabilityId,
-            item.adults + item.children,
+            partySize(item.tiers, item),
           )
         }
       }

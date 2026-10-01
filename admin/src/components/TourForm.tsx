@@ -60,6 +60,8 @@ export function TourForm({
       difficulty: form.difficulty,
       location: form.location,
       minAge: form.minAge ? Number(form.minAge) : null,
+      maxAge: form.maxAge ? Number(form.maxAge) : null,
+      mapEmbedUrl: form.mapEmbedUrl.trim(),
       maxGroupSize: form.maxGroupSize ? Number(form.maxGroupSize) : null,
       languages: form.languages.split(',').map((s) => s.trim()).filter(Boolean),
       highlights: linesToArray(form.highlights),
@@ -74,8 +76,16 @@ export function TourForm({
         ...(option.id ? { id: option.id } : {}),
         name: option.name,
         description: option.description,
-        price: Number(option.price),
-        ...(option.childPrice !== '' ? { childPrice: Number(option.childPrice) } : {}),
+        // The headline price is the first band's; kept for listings.
+        price: Number(option.tiers[0]?.price ?? 0),
+        ...(option.tiers[1] ? { childPrice: Number(option.tiers[1].price) } : {}),
+        tiers: option.tiers.map((tier) => ({
+          ...(tier.id ? { id: tier.id } : {}),
+          label: tier.label,
+          ageMin: tier.ageMin !== '' ? Number(tier.ageMin) : null,
+          ageMax: tier.ageMax !== '' ? Number(tier.ageMax) : null,
+          price: Number(tier.price),
+        })),
         currency: option.currency,
         durationMinutes: Number(option.durationMinutes),
         capacity: Number(option.capacity),
@@ -104,6 +114,15 @@ export function TourForm({
         extraCost: Number(location.extraCost),
         isActive: location.isActive,
         sortOrder: index,
+      })),
+
+      extras: form.extras.map((extra) => ({
+        ...(extra.id ? { id: extra.id } : {}),
+        name: extra.name,
+        description: extra.description,
+        price: Number(extra.price),
+        perPerson: extra.perPerson,
+        isActive: extra.isActive,
       })),
 
       faqs: form.faqs.map((faq, index) => ({
@@ -267,6 +286,17 @@ export function TourForm({
             </select>
           </Field>
 
+          <Field label="Edad máxima" hint="Vacío = sin límite">
+            <input
+              type="number"
+              min={0}
+              max={120}
+              value={form.maxAge}
+              onChange={(event) => update('maxAge', event.target.value)}
+              className="admin-input"
+            />
+          </Field>
+
           <Field label="Edad mínima">
             <input
               type="number"
@@ -293,6 +323,18 @@ export function TourForm({
             <input
               value={form.location}
               onChange={(event) => update('location', event.target.value)}
+              className="admin-input"
+            />
+          </Field>
+
+          <Field
+            label="Mapa del recorrido"
+            hint="En Google My Maps: Compartir → Insertar en mi sitio, y pegá solo la dirección del src."
+          >
+            <input
+              value={form.mapEmbedUrl}
+              onChange={(event) => update('mapEmbedUrl', event.target.value)}
+              placeholder="https://www.google.com/maps/d/embed?mid=…"
               className="admin-input"
             />
           </Field>
@@ -388,37 +430,6 @@ export function TourForm({
               </div>
 
               <div className="mt-3 grid gap-3 sm:grid-cols-4">
-                <Field label="Precio adulto" required hint="En pesos, no en centavos">
-                  <input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={option.price}
-                    onChange={(event) => {
-                      const next = [...form.options]
-                      next[index] = { ...option, price: Number(event.target.value) }
-                      update('options', next)
-                    }}
-                    required
-                    className="admin-input"
-                  />
-                </Field>
-
-                <Field label="Precio menor" hint="Vacío = misma tarifa">
-                  <input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={option.childPrice}
-                    onChange={(event) => {
-                      const next = [...form.options]
-                      next[index] = { ...option, childPrice: event.target.value }
-                      update('options', next)
-                    }}
-                    className="admin-input"
-                  />
-                </Field>
-
                 <Field label="Duración (min)">
                   <input
                     type="number"
@@ -524,6 +535,15 @@ export function TourForm({
                     update('options', next)
                   }}
                 />
+
+                <TierEditor
+                  tiers={option.tiers}
+                  onChange={(tiers) => {
+                    const next = [...form.options]
+                    next[index] = { ...option, tiers }
+                    update('options', next)
+                  }}
+                />
               </div>
             </div>
           ))}
@@ -542,6 +562,7 @@ export function TourForm({
                 durationMinutes: form.durationMinutes, capacity: 20, minParticipants: 1,
                 maxParticipants: 20, pickupIncluded: false, departureTimes: '',
                 freeCancellationHours: 24, isActive: true,
+                tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0 }],
               },
             ])
           }
@@ -660,6 +681,89 @@ export function TourForm({
         >
           <Plus className="size-3.5" aria-hidden="true" />
           Agregar paso
+        </Button>
+      </Section>
+
+      <Section title={`Opcionales (${form.extras.length})`}>
+        <p className="mb-3 text-[0.8125rem] text-muted-foreground">
+          Adicionales que el cliente suma a la reserva: traslado desde el hotel, vianda, salón VIP…
+          «Por persona» deja elegir la cantidad (hasta el número de pasajeros).
+        </p>
+        <div className="space-y-3">
+          {form.extras.map((extra, index) => (
+            <div key={extra.id ?? `new-${index}`} className="grid gap-3 rounded-panel border border-border p-3 sm:grid-cols-[minmax(0,1.3fr)_minmax(0,2fr)_9rem_auto_auto]">
+              <Field label="Nombre" required>
+                <input
+                  value={extra.name}
+                  onChange={(event) => {
+                    const next = [...form.extras]
+                    next[index] = { ...extra, name: event.target.value }
+                    update('extras', next)
+                  }}
+                  className="admin-input"
+                />
+              </Field>
+              <Field label="Detalle">
+                <input
+                  value={extra.description}
+                  onChange={(event) => {
+                    const next = [...form.extras]
+                    next[index] = { ...extra, description: event.target.value }
+                    update('extras', next)
+                  }}
+                  className="admin-input"
+                />
+              </Field>
+              <Field label="Precio (ARS)" required>
+                <input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={extra.price}
+                  onChange={(event) => {
+                    const next = [...form.extras]
+                    next[index] = { ...extra, price: Number(event.target.value) }
+                    update('extras', next)
+                  }}
+                  className="admin-input"
+                />
+              </Field>
+              <label className="flex items-center gap-2 self-end pb-2 text-[0.8125rem] text-foreground">
+                <input
+                  type="checkbox"
+                  checked={extra.perPerson}
+                  onChange={(event) => {
+                    const next = [...form.extras]
+                    next[index] = { ...extra, perPerson: event.target.checked }
+                    update('extras', next)
+                  }}
+                />
+                Por persona
+              </label>
+              <button
+                type="button"
+                onClick={() => update('extras', form.extras.filter((_, i) => i !== index))}
+                className="self-end pb-2 text-[0.8125rem] font-medium text-status-danger hover:underline"
+              >
+                Quitar
+              </button>
+            </div>
+          ))}
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="mt-3"
+          onClick={() =>
+            update('extras', [
+              ...form.extras,
+              { name: '', description: '', price: 0, perPerson: true, isActive: true },
+            ])
+          }
+        >
+          <Plus className="size-3.5" aria-hidden="true" />
+          Agregar opcional
         </Button>
       </Section>
 
@@ -992,5 +1096,89 @@ function Checkbox({
       />
       <span className="text-[0.8125rem] text-foreground">{label}</span>
     </label>
+  )
+}
+
+type TierRow = { id?: string; label: string; ageMin: string; ageMax: string; price: number }
+
+/**
+ * Price bands for one option. The first band is the headline "Desde" price
+ * and every booking needs at least one passenger in it, so it cannot be
+ * removed — only edited. A price of 0 is shown to customers as "Gratis".
+ */
+function TierEditor({ tiers, onChange }: { tiers: TierRow[]; onChange: (tiers: TierRow[]) => void }) {
+  const set = (index: number, patch: Partial<TierRow>) =>
+    onChange(tiers.map((tier, i) => (i === index ? { ...tier, ...patch } : tier)))
+
+  return (
+    <div className="mt-4 rounded-panel border border-border bg-surface-muted p-3">
+      <p className="mb-2 text-[0.8125rem] font-semibold text-heading">Tarifas por edad</p>
+      <div className="space-y-2">
+        <div className="hidden grid-cols-[minmax(0,2fr)_5rem_5rem_9rem_4.5rem] gap-2 px-1 text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle-foreground sm:grid">
+          <span>Etiqueta que ve el cliente</span>
+          <span>Edad desde</span>
+          <span>Edad hasta</span>
+          <span>Precio (0 = gratis)</span>
+          <span />
+        </div>
+        {tiers.map((tier, index) => (
+          <div key={tier.id ?? `new-${index}`} className="grid grid-cols-2 gap-2 sm:grid-cols-[minmax(0,2fr)_5rem_5rem_9rem_4.5rem]">
+            <input
+              aria-label="Etiqueta de la tarifa"
+              value={tier.label}
+              onChange={(event) => set(index, { label: event.target.value })}
+              placeholder="Adultos (16 o más años)"
+              className="admin-input col-span-2 sm:col-span-1"
+            />
+            <input
+              aria-label="Edad desde"
+              type="number"
+              min={0}
+              max={120}
+              value={tier.ageMin}
+              onChange={(event) => set(index, { ageMin: event.target.value })}
+              className="admin-input"
+            />
+            <input
+              aria-label="Edad hasta"
+              type="number"
+              min={0}
+              max={120}
+              value={tier.ageMax}
+              onChange={(event) => set(index, { ageMax: event.target.value })}
+              className="admin-input"
+            />
+            <input
+              aria-label="Precio"
+              type="number"
+              min={0}
+              step="0.01"
+              value={tier.price}
+              onChange={(event) => set(index, { price: Number(event.target.value) })}
+              className="admin-input"
+            />
+            {index === 0 ? (
+              <span className="self-center text-[0.6875rem] text-subtle-foreground">Principal</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onChange(tiers.filter((_, i) => i !== index))}
+                className="self-center text-left text-[0.8125rem] font-medium text-status-danger hover:underline"
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => onChange([...tiers, { label: '', ageMin: '', ageMax: '', price: 0 }])}
+        className="mt-2 inline-flex items-center gap-1 text-[0.8125rem] font-semibold text-primary hover:underline"
+      >
+        <Plus className="size-3.5" aria-hidden="true" />
+        Agregar tarifa
+      </button>
+    </div>
   )
 }

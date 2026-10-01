@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@vamos/db'
 import { emailService } from '@vamos/email'
-import { actionError, actionOk, logger, toPublicError, type ActionResult } from '@vamos/shared'
+import { actionError, actionOk, describeExtras, describeParty, logger, partySize, toPublicError, type ActionResult } from '@vamos/shared'
 import { canTransitionBooking } from '@vamos/types'
 import { bookingStatusUpdateSchema, refundRequestSchema } from '@vamos/validation'
 import { requirePermission } from '../auth'
@@ -45,7 +45,7 @@ export async function updateBookingStatusAction(input: unknown): Promise<ActionR
       include: {
         customer: true,
         items: {
-          include: { pickupLocation: { select: { name: true } } },
+          include: { pickupLocation: { select: { name: true } }, tiers: true, extras: true },
         },
       },
     })
@@ -79,7 +79,7 @@ export async function updateBookingStatusAction(input: unknown): Promise<ActionR
       if (releasesSeats) {
         for (const item of booking.items) {
           if (!item.availabilityId) continue
-          const seats = item.adults + item.children
+          const seats = partySize(item.tiers, item)
           await tx.tourAvailability.updateMany({
             where: { id: item.availabilityId },
             data: { seatsBooked: { decrement: seats } },
@@ -115,6 +115,8 @@ export async function updateBookingStatusAction(input: unknown): Promise<ActionR
         departureTime: item?.departureTime ?? null,
         adults: item?.adults ?? 1,
         children: item?.children ?? 0,
+        party: item ? describeParty(item.tiers, item) : undefined,
+        extras: item ? describeExtras(item.extras) : undefined,
         pickupLocation: item?.pickupLocation?.name ?? null,
         totalCents: booking.totalCents,
         currency: booking.currency,

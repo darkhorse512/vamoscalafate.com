@@ -465,6 +465,10 @@ model Tour {
   /// Where the activity happens, e.g. "Parque Nacional Los Glaciares".
   location        String?
   minAge          Int?
+  /// Upper age limit, where the operator sets one (Minitrekking: 65).
+  maxAge          Int?
+  /// Google My Maps embed URL for the route ("…/maps/d/embed?mid=…").
+  mapEmbedUrl     String?
   maxGroupSize    Int?
   languages       String[]   @default(["Español", "Inglés"])
 
@@ -494,6 +498,7 @@ model Tour {
   options         TourOption[]
   itinerary       TourItineraryStep[]
   pickupLocations TourPickupLocation[]
+  extras          TourExtra[]
   availability    TourAvailability[]
   faqs            Faq[]
   reviews         Review[]
@@ -600,9 +605,58 @@ model TourOption {
 
   availability TourAvailability[]
   bookingItems BookingItem[]
+  priceTiers   TourPriceTier[]
 
   @@index([tourId, isActive])
   @@map("tour_options")
+}
+
+/// An age band with its own price, e.g. "Adultos (16 o más años)" or
+/// "Menores (0 a 5 años)" at 0 — free, but still counted as a passenger.
+///
+/// Operators price by bands that differ per excursion, so a fixed
+/// adult/child pair cannot represent them. A price of 0 is shown as "Gratis".
+model TourPriceTier {
+  id       String     @id @default(cuid())
+  optionId String
+  option   TourOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  label      String
+  ageMin     Int?
+  ageMax     Int?
+  priceCents Int
+
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  bookingItemTiers BookingItemTier[]
+
+  @@index([optionId, isActive])
+  @@map("tour_price_tiers")
+}
+
+/// An add-on bought with an excursion ("Opcionales"): hotel transfer,
+/// gourmet box lunch, VIP lounge, a combined extra excursion.
+///
+/// `perPerson` extras are bought in a quantity the customer chooses (up to
+/// the number of passengers), so "Almuerzo × 2" is priced as two lunches.
+model TourExtra {
+  id     String @id @default(cuid())
+  tourId String
+  tour   Tour   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String? @db.Text
+  priceCents  Int
+  perPerson   Boolean @default(true)
+
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  bookingItemExtras BookingItemExtra[]
+
+  @@index([tourId, isActive])
+  @@map("tour_extras")
 }
 
 /// Inventory for one option on one date (and optional departure time).
@@ -757,6 +811,13 @@ model BookingItem {
   childUnitPriceCents Int @default(0)
   pickupCostCents     Int @default(0)
   subtotalCents       Int
+  /// Sum of the add-ons in `extras`, included in `subtotalCents`.
+  extrasCostCents     Int @default(0)
+
+  /// The authoritative breakdown. `adults`/`children` above are kept as a
+  /// summary for lists and reports.
+  tiers  BookingItemTier[]
+  extras BookingItemExtra[]
 
   createdAt DateTime @default(now())
 
@@ -776,9 +837,49 @@ model BookingPassenger {
   type      PassengerType @default(ADULT)
   /// Optional: some national-park operators require it. Never mandatory.
   nationality String?
+  /// DNI, passport or cédula. Required by operators for park and border
+  /// manifests (Torres del Paine crosses into Chile).
+  documentNumber String?
+  birthDate      DateTime? @db.Date
+  /// The price band this passenger was booked under, as shown at the time.
+  tierLabel      String?
 
   @@index([bookingId])
   @@map("booking_passengers")
+}
+
+/// One line per price band in a booking item, with the price as charged.
+model BookingItemTier {
+  id            String      @id @default(cuid())
+  bookingItemId String
+  bookingItem   BookingItem @relation(fields: [bookingItemId], references: [id], onDelete: Cascade)
+
+  tierId String?
+  tier   TourPriceTier? @relation(fields: [tierId], references: [id], onDelete: SetNull)
+
+  labelSnapshot  String
+  quantity       Int
+  unitPriceCents Int
+
+  @@index([bookingItemId])
+  @@map("booking_item_tiers")
+}
+
+/// One line per add-on in a booking item, with the price as charged.
+model BookingItemExtra {
+  id            String      @id @default(cuid())
+  bookingItemId String
+  bookingItem   BookingItem @relation(fields: [bookingItemId], references: [id], onDelete: Cascade)
+
+  extraId String?
+  extra   TourExtra? @relation(fields: [extraId], references: [id], onDelete: SetNull)
+
+  nameSnapshot   String
+  quantity       Int
+  unitPriceCents Int
+
+  @@index([bookingItemId])
+  @@map("booking_item_extras")
 }
 
 // ───────────────────────────── PAYMENTS ─────────────────────────────────────

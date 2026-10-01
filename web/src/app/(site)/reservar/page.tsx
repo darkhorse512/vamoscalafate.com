@@ -8,6 +8,7 @@ import { noindexMetadata } from '@/lib/seo'
 import { pricingService } from '@/server/services/pricing'
 import { availabilityService } from '@/server/services/availability'
 import { extractAttribution } from '@/lib/utils'
+import { decodeExtras, decodeTiers } from '@/lib/booking-params'
 
 /**
  * Reservation step: customer details and review.
@@ -37,8 +38,8 @@ export default async function ReservarPage({
   const tourSlug = str('tour')
   const optionId = str('opcion')
   const date = str('fecha')
-  const adults = Math.max(1, Number(str('adultos') ?? 1) || 1)
-  const children = Math.max(0, Number(str('menores') ?? 0) || 0)
+  const tiers = decodeTiers(str('pax'))
+  const extras = decodeExtras(str('extras'))
   const departureTime = str('horario') ?? null
   const pickupId = str('pickup') ?? null
 
@@ -47,9 +48,10 @@ export default async function ReservarPage({
   const tour = await prisma.tour.findFirst({
     where: { slug: tourSlug, status: 'PUBLISHED' },
     select: {
-      id: true, slug: true, name: true, currency: true,
+      id: true, slug: true, name: true, currency: true, minAge: true, maxAge: true,
       category: { select: { name: true, slug: true, channel: true } },
       options: { where: { id: optionId, isActive: true }, take: 1 },
+      extras: { where: { isActive: true }, orderBy: { sortOrder: 'asc' }, select: { id: true, name: true } },
       pickupLocations: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
       cancellationPolicy: true,
     },
@@ -69,8 +71,8 @@ export default async function ReservarPage({
       optionId: option.id,
       date,
       departureTime,
-      adults,
-      children,
+      tiers,
+      extras,
       pickupLocationId: pickupId,
     })
 
@@ -78,7 +80,7 @@ export default async function ReservarPage({
       optionId: option.id,
       date,
       departureTime,
-      seatsNeeded: adults + children,
+      seatsNeeded: breakdown.passengers,
     })
     seatsAvailable = slot.seatsTotal - slot.seatsBooked
   } catch {
@@ -131,7 +133,8 @@ export default async function ReservarPage({
           detailPath,
         }}
         option={{ id: option.id, name: option.name, freeCancellationHours: option.freeCancellationHours }}
-        selection={{ date, departureTime, adults, children, pickupLocationId: pickupId }}
+        selection={{ date, departureTime, tiers, extras, pickupLocationId: pickupId }}
+        ageLimits={{ min: tour.minAge, max: tour.maxAge }}
         pickupLocations={tour.pickupLocations.map((p) => ({
           id: p.id,
           name: p.name,

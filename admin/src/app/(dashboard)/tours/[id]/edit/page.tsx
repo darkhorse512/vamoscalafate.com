@@ -22,7 +22,11 @@ export default async function EditTourPage({ params }: { params: Promise<{ id: s
       where: { id },
       include: {
         images: { orderBy: { sortOrder: 'asc' } },
-        options: { orderBy: { sortOrder: 'asc' } },
+        options: {
+          orderBy: { sortOrder: 'asc' },
+          include: { priceTiers: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } } },
+        },
+        extras: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
         itinerary: { orderBy: { sortOrder: 'asc' } },
         pickupLocations: { orderBy: { sortOrder: 'asc' } },
         faqs: { orderBy: { sortOrder: 'asc' } },

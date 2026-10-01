@@ -2,13 +2,14 @@
 
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { CalendarCheck, Check, Clock, Loader2, MapPin, Minus, Plus, ShieldCheck, Users } from 'lucide-react'
+import { CalendarCheck, Check, Clock, Loader2, MapPin, Minus, Plus, ShieldCheck, Sparkles, Users } from 'lucide-react'
 import { ROUTES, formatDuration, formatMoney, todayUTC } from '@vamos/shared'
 import type { TourDetail } from '@vamos/types'
 import { Button } from '@/components/ui/Button'
 import { DatePicker, type DayInfo } from '@/components/ui/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { analytics } from '@/lib/analytics'
+import { encodeExtras, encodeTiers } from '@/lib/booking-params'
 import { cn } from '@/lib/utils'
 
 /**
@@ -43,8 +44,16 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
   const [optionId, setOptionId] = useState(tour.options[0]?.id ?? '')
   const [date, setDate] = useState('')
   const [departureTime, setDepartureTime] = useState<string | null>(null)
-  const [adults, setAdults] = useState(1)
-  const [children, setChildren] = useState(0)
+  /**
+   * Passengers per price band, keyed by tier id. Bands belong to an option,
+   * so changing option resets this to one passenger in the new first band.
+   */
+  const [tierQty, setTierQty] = useState<Record<string, number>>(() => {
+    const first = tour.options[0]?.priceTiers[0]
+    return first ? { [first.id]: 1 } : {}
+  })
+  /** Add-on quantities, keyed by extra id. */
+  const [extraQty, setExtraQty] = useState<Record<string, number>>({})
   const [pickupId, setPickupId] = useState('')
   /**
    * Availability is keyed state, not a bare list.
@@ -200,13 +209,43 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
     [slots, departureTime],
   )
 
-  const unitCents = activeSlot?.priceCents ?? option?.priceCents ?? 0
-  const childUnitCents = option?.childPriceCents ?? unitCents
+  const tiers = option?.priceTiers ?? []
   const pickup = tour.pickupLocations.find((p) => p.id === pickupId)
-  const passengers = adults + children
+  const passengers = tiers.reduce((sum, tier) => sum + (tierQty[tier.id] ?? 0), 0)
+
+  /**
+   * A date-specific price override replaces the first band's price, exactly
+   * as the server prices it. This is a preview; the server recomputes.
+   */
+  const unitFor = (tierIndex: number, base: number) =>
+    tierIndex === 0 && activeSlot && option && activeSlot.priceCents !== option.priceCents
+      ? activeSlot.priceCents
+      : base
+
+  const tierLines = tiers
+    .map((tier, index) => {
+      const quantity = tierQty[tier.id] ?? 0
+      const unit = unitFor(index, tier.priceCents)
+      return { id: tier.id, label: tier.label, quantity, unit, subtotal: unit * quantity }
+    })
+    .filter((line) => line.quantity > 0)
+
+  // Per-person extras can never exceed the party, so clamp on read: lowering
+  // the passenger count lowers them too, with no effect to keep in sync.
+  const extraLines = tour.extras
+    .map((extra) => {
+      const ceiling = extra.perPerson ? passengers : 1
+      const quantity = Math.min(extraQty[extra.id] ?? 0, ceiling)
+      return { id: extra.id, label: extra.name, quantity, unit: extra.priceCents, subtotal: extra.priceCents * quantity }
+    })
+    .filter((line) => line.quantity > 0)
 
   const estimatedTotal =
-    unitCents * adults + childUnitCents * children + (pickup?.extraCostCents ?? 0) * passengers
+    tierLines.reduce((sum, line) => sum + line.subtotal, 0) +
+    extraLines.reduce((sum, line) => sum + line.subtotal, 0) +
+    (pickup?.extraCostCents ?? 0) * passengers
+
+  const firstTierCount = tiers[0] ? (tierQty[tiers[0].id] ?? 0) : 0
 
   const maxParticipants = option?.maxParticipants ?? 20
   const seatsAvailable = activeSlot?.seatsAvailable ?? null
@@ -219,7 +258,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
     Boolean(activeSlot) &&
     !overCapacity &&
     !overSeats &&
-    adults >= 1 &&
+    firstTierCount >= 1 &&
     !submitting
 
   function submit() {
@@ -243,9 +282,10 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
       tour: tour.slug,
       opcion: optionId,
       fecha: date,
-      adultos: String(adults),
-      menores: String(children),
+      pax: encodeTiers(tierLines.map((line) => ({ tierId: line.id, quantity: line.quantity }))),
     })
+    const extrasParam = encodeExtras(extraLines.map((line) => ({ extraId: line.id, quantity: line.quantity })))
+    if (extrasParam) params.set('extras', extrasParam)
     if (departureTime) params.set('horario', departureTime)
     if (pickupId) params.set('pickup', pickupId)
 
@@ -288,6 +328,8 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               onChange={(next) => {
                 setOptionId(next)
                 setDepartureTime(null)
+                const first = tour.options.find((o) => o.id === next)?.priceTiers[0]
+                setTierQty(first ? { [first.id]: 1 } : {})
               }}
               options={tour.options.map((o) => ({
                 value: o.id,
@@ -315,6 +357,10 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               loading={loadingCalendar}
               legend
             />
+            <p className="mt-2 text-[0.6875rem] leading-relaxed text-muted-foreground">
+              El horario depende de la disponibilidad al momento de la reserva y se confirma el día anterior.
+              Si contratás traslado, el horario de búsqueda también se confirma el día anterior.
+            </p>
           </div>
 
           {/* Departure time */}
@@ -360,26 +406,88 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               Pasajeros
             </legend>
 
-            <Counter
-              label="Adultos"
-              hint={option?.minParticipants && option.minParticipants > 1 ? `Mínimo ${option.minParticipants}` : undefined}
-              value={adults}
-              min={1}
-              max={maxParticipants}
-              onChange={setAdults}
-            />
-
-            {option?.childPriceCents ? (
-              <Counter
-                label="Menores"
-                hint={tour.minAge ? `Desde ${tour.minAge} años` : 'Tarifa reducida'}
-                value={children}
-                min={0}
-                max={Math.max(0, maxParticipants - adults)}
-                onChange={setChildren}
-              />
+            {tiers.map((tier, index) => {
+              const value = tierQty[tier.id] ?? 0
+              const others = passengers - value
+              return (
+                <Counter
+                  key={tier.id}
+                  id={`bw-tier-${tier.id}`}
+                  label={tier.label}
+                  hint={
+                    tier.priceCents === 0
+                      ? 'Gratis'
+                      : formatMoney(unitFor(index, tier.priceCents), tour.currency) + ' c/u'
+                  }
+                  value={value}
+                  // The first band is the adult rate: a booking needs one.
+                  min={index === 0 ? 1 : 0}
+                  max={Math.max(0, maxParticipants - others)}
+                  onChange={(next) => setTierQty((current) => ({ ...current, [tier.id]: next }))}
+                />
+              )
+            })}
+            {tour.minAge != null || tour.maxAge != null ? (
+              <p className="text-[0.6875rem] text-muted-foreground">
+                {tour.minAge != null && tour.maxAge != null
+                  ? `Solo para personas de ${tour.minAge} a ${tour.maxAge} años.`
+                  : tour.minAge != null
+                    ? `Edad mínima: ${tour.minAge} años.`
+                    : `Edad máxima: ${tour.maxAge} años.`}
+              </p>
             ) : null}
           </fieldset>
+
+          {/* Add-ons ("Opcionales") */}
+          {tour.extras.length > 0 ? (
+            <fieldset className="space-y-2.5">
+              <legend className="mb-2 flex items-center gap-1.5 text-[0.8125rem] font-bold text-heading">
+                <Sparkles className="size-4 text-primary" aria-hidden="true" />
+                Opcionales
+              </legend>
+              {tour.extras.map((extra) => {
+                const value = Math.min(extraQty[extra.id] ?? 0, extra.perPerson ? passengers : 1)
+                const set = (next: number) => setExtraQty((current) => ({ ...current, [extra.id]: next }))
+                return extra.perPerson ? (
+                  <Counter
+                    key={extra.id}
+                    id={`bw-extra-${extra.id}`}
+                    label={extra.name}
+                    hint={`${formatMoney(extra.priceCents, tour.currency)} por persona`}
+                    description={extra.description ?? undefined}
+                    value={value}
+                    min={0}
+                    max={passengers}
+                    onChange={set}
+                  />
+                ) : (
+                  <label
+                    key={extra.id}
+                    className={cn(
+                      'flex cursor-pointer items-start gap-3 rounded-xl border px-3.5 py-3 transition-colors',
+                      value ? 'border-primary bg-primary-soft' : 'border-border hover:border-primary/50',
+                    )}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={value > 0}
+                      onChange={(event) => set(event.target.checked ? 1 : 0)}
+                      className="mt-0.5 size-4 shrink-0 rounded border-border-strong text-primary focus:ring-2 focus:ring-primary"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-heading">{extra.name}</span>
+                      {extra.description ? (
+                        <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">{extra.description}</span>
+                      ) : null}
+                    </span>
+                    <span className="shrink-0 text-xs font-semibold text-primary">
+                      {formatMoney(extra.priceCents, tour.currency)}
+                    </span>
+                  </label>
+                )
+              })}
+            </fieldset>
+          ) : null}
 
           {/* Pickup */}
           {tour.pickupLocations.length > 0 ? (
@@ -433,21 +541,23 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           {/* Total */}
           {date && activeSlot ? (
             <div className="space-y-1.5 rounded-xl border border-border bg-surface-muted p-4">
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>
-                  {adults} × {formatMoney(unitCents, tour.currency)}
-                </span>
-                <span>{formatMoney(unitCents * adults, tour.currency)}</span>
-              </div>
-
-              {children > 0 ? (
-                <div className="flex justify-between text-xs text-muted-foreground">
+              {tierLines.map((line) => (
+                <div key={line.id} className="flex justify-between gap-3 text-xs text-muted-foreground">
                   <span>
-                    {children} menores × {formatMoney(childUnitCents, tour.currency)}
+                    {line.quantity} × {line.label}
                   </span>
-                  <span>{formatMoney(childUnitCents * children, tour.currency)}</span>
+                  <span className="shrink-0">{line.unit === 0 ? 'Gratis' : formatMoney(line.subtotal, tour.currency)}</span>
                 </div>
-              ) : null}
+              ))}
+              {extraLines.map((line) => (
+                <div key={line.id} className="flex justify-between gap-3 text-xs text-muted-foreground">
+                  <span>
+                    {line.label}
+                    {line.quantity > 1 ? ` × ${line.quantity}` : ''}
+                  </span>
+                  <span className="shrink-0">{formatMoney(line.subtotal, tour.currency)}</span>
+                </div>
+              ))}
 
               {pickup && pickup.extraCostCents > 0 ? (
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -518,21 +628,24 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 }
 
 function Counter({
+  id,
   label,
   hint,
+  description,
   value,
   min,
   max,
   onChange,
 }: {
+  id: string
   label: string
   hint?: string
+  description?: string
   value: number
   min: number
   max: number
   onChange: (value: number) => void
 }) {
-  const id = `counter-${label.toLowerCase()}`
 
   return (
     <div className="flex items-center justify-between gap-4 rounded-xl border border-border px-3.5 py-2.5">
@@ -540,7 +653,8 @@ function Counter({
         <label htmlFor={id} className="text-sm font-semibold text-heading">
           {label}
         </label>
-        {hint ? <p className="text-[0.6875rem] text-muted-foreground">{hint}</p> : null}
+        {hint ? <p className="text-[0.6875rem] font-medium text-primary">{hint}</p> : null}
+        {description ? <p className="mt-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">{description}</p> : null}
       </div>
 
       <div className="flex items-center gap-1">
@@ -548,7 +662,7 @@ function Counter({
           type="button"
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
-          aria-label={`Quitar un ${label.toLowerCase().replace(/e?s$/, '')}`}
+          aria-label={`Quitar uno: ${label}`}
           className="grid size-9 place-items-center rounded-full border border-border-strong text-foreground transition-all hover:border-primary hover:bg-primary-soft hover:text-primary disabled:pointer-events-none disabled:opacity-35"
         >
           <Minus className="size-4" aria-hidden="true" />
@@ -572,7 +686,7 @@ function Counter({
           type="button"
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
-          aria-label={`Agregar un ${label.toLowerCase().replace(/e?s$/, '')}`}
+          aria-label={`Agregar uno: ${label}`}
           className="grid size-9 place-items-center rounded-full border border-border-strong text-foreground transition-all hover:border-primary hover:bg-primary-soft hover:text-primary disabled:pointer-events-none disabled:opacity-35"
         >
           <Plus className="size-4" aria-hidden="true" />

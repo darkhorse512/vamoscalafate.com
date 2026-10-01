@@ -697,3 +697,30 @@
 [role='dialog'] ::-webkit-scrollbar-thumb {
   border-width: 2px;
 }
+
+/* "3 imperdibles" headline: flips between its two messages. Pure CSS, so it
+   needs no JavaScript and stops on its first face under reduced motion. */
+@keyframes headline-flip {
+  0%, 42%   { transform: rotateX(0deg); }
+  50%, 92%  { transform: rotateX(180deg); }
+  100%      { transform: rotateX(360deg); }
+}
+@layer components {
+  .flip-headline {
+    display: grid;
+    perspective: 900px;
+  }
+  .flip-headline__inner {
+    grid-area: 1 / 1;
+    display: grid;
+    transform-style: preserve-3d;
+    animation: headline-flip 7s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+  .flip-headline__face {
+    grid-area: 1 / 1;
+    backface-visibility: hidden;
+  }
+  .flip-headline__face--back {
+    transform: rotateX(180deg);
+  }
+}

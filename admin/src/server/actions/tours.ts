@@ -76,6 +76,8 @@ export async function createTourAction(input: unknown): Promise<ActionResult<{ i
           difficulty: data.difficulty,
           location: data.location || null,
           minAge: data.minAge ?? null,
+          maxAge: data.maxAge ?? null,
+          mapEmbedUrl: data.mapEmbedUrl || null,
           maxGroupSize: data.maxGroupSize ?? null,
           languages: data.languages,
           highlights: data.highlights,
@@ -104,6 +106,26 @@ export async function createTourAction(input: unknown): Promise<ActionResult<{ i
               cancellationNote: option.cancellationNote || null,
               isActive: option.isActive,
               sortOrder: option.sortOrder || index,
+              priceTiers: {
+                create: option.tiers.map((tier, tierIndex) => ({
+                  label: tier.label,
+                  ageMin: tier.ageMin ?? null,
+                  ageMax: tier.ageMax ?? null,
+                  priceCents: toCents(tier.price),
+                  sortOrder: tierIndex,
+                })),
+              },
+            })),
+          },
+
+          extras: {
+            create: data.extras.map((extra, index) => ({
+              name: extra.name,
+              description: extra.description || null,
+              priceCents: toCents(extra.price),
+              perPerson: extra.perPerson,
+              isActive: extra.isActive,
+              sortOrder: index,
             })),
           },
 
@@ -276,6 +298,8 @@ export async function updateTourAction(
           difficulty: data.difficulty,
           location: data.location || null,
           minAge: data.minAge ?? null,
+          maxAge: data.maxAge ?? null,
+          mapEmbedUrl: data.mapEmbedUrl || null,
           maxGroupSize: data.maxGroupSize ?? null,
           languages: data.languages,
           highlights: data.highlights,
@@ -320,10 +344,63 @@ export async function updateTourAction(
           sortOrder: option.sortOrder || index,
         }
 
-        if (option.id) {
-          await tx.tourOption.update({ where: { id: option.id }, data: optionData })
+        const optionId = option.id
+          ? (await tx.tourOption.update({ where: { id: option.id }, data: optionData, select: { id: true } })).id
+          : (await tx.tourOption.create({ data: { ...optionData, tourId }, select: { id: true } })).id
+
+        /*
+         * Tiers are reconciled, never deleted: booking lines reference them,
+         * and deleting one would orphan a past booking's price history.
+         */
+        const keptTierIds = option.tiers.map((tier) => tier.id).filter(Boolean) as string[]
+        await tx.tourPriceTier.updateMany({
+          where: { optionId, id: { notIn: keptTierIds.length ? keptTierIds : ['__none__'] } },
+          data: { isActive: false },
+        })
+        for (const [tierIndex, tier] of option.tiers.entries()) {
+          const tierData = {
+            label: tier.label,
+            ageMin: tier.ageMin ?? null,
+            ageMax: tier.ageMax ?? null,
+            priceCents: toCents(tier.price),
+            isActive: true,
+            sortOrder: tierIndex,
+          }
+          // Only update a tier that really belongs to this option: an id from
+          // the request is untrusted until checked.
+          const owned = tier.id
+            ? await tx.tourPriceTier.findFirst({ where: { id: tier.id, optionId }, select: { id: true } })
+            : null
+          if (owned) {
+            await tx.tourPriceTier.update({ where: { id: owned.id }, data: tierData })
+          } else {
+            await tx.tourPriceTier.create({ data: { ...tierData, optionId } })
+          }
+        }
+      }
+
+      // Extras: same reconciliation, for the same reason.
+      const keptExtraIds = data.extras.map((extra) => extra.id).filter(Boolean) as string[]
+      await tx.tourExtra.updateMany({
+        where: { tourId, id: { notIn: keptExtraIds.length ? keptExtraIds : ['__none__'] } },
+        data: { isActive: false },
+      })
+      for (const [extraIndex, extra] of data.extras.entries()) {
+        const extraData = {
+          name: extra.name,
+          description: extra.description || null,
+          priceCents: toCents(extra.price),
+          perPerson: extra.perPerson,
+          isActive: extra.isActive,
+          sortOrder: extraIndex,
+        }
+        const owned = extra.id
+          ? await tx.tourExtra.findFirst({ where: { id: extra.id, tourId }, select: { id: true } })
+          : null
+        if (owned) {
+          await tx.tourExtra.update({ where: { id: owned.id }, data: extraData })
         } else {
-          await tx.tourOption.create({ data: { ...optionData, tourId } })
+          await tx.tourExtra.create({ data: { ...extraData, tourId } })
         }
       }
 

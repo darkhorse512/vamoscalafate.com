@@ -25,7 +25,8 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com",
-  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com",
+  // Google My Maps embeds for each excursion's route.
+  "frame-src 'self' https://www.google.com https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com",
   "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",
@@ -121,6 +122,17 @@ const nextConfig: NextConfig = {
       { source: '/hotels', destination: '/hoteles', permanent: true },
       { source: '/contact', destination: '/contacto', permanent: true },
       { source: '/faq', destination: '/preguntas-frecuentes', permanent: true },
+      // Tours renamed when the real catalogue replaced the launch placeholders.
+      { source: '/excursiones/el-chalten-dia-completo', destination: '/excursiones/el-chalten-trekking-libre', permanent: true },
+      { source: '/excursiones/trekking-cerro-frias', destination: '/excursiones/aventuras-cerro-frias', permanent: true },
+      // Placeholder tours that are not part of the catalogue: send visitors to
+      // the closest real excursion rather than a 404.
+      { source: '/excursiones/perito-moreno-con-navegacion', destination: '/excursiones/safari-nautico-perito-moreno', permanent: true },
+      { source: '/excursiones/cabalgata-patagonica', destination: '/excursiones/aventuras-cerro-frias', permanent: true },
+      { source: '/excursiones/balcones-de-calafate-4x4', destination: '/excursiones/aventuras-cerro-frias', permanent: true },
+      { source: '/excursiones/:slug(estancia-patagonica-dia-de-campo|city-tour-el-calafate|glaciarium-museo-del-hielo|kayak-lago-argentino)', destination: '/excursiones', permanent: true },
+      { source: '/traslados/:slug*', destination: '/excursiones', permanent: false },
+      { source: '/traslados', destination: '/excursiones', permanent: false },
     ]
   },
 }

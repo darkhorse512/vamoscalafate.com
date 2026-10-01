@@ -205,6 +205,10 @@ for app in web admin; do
   fi
 done
 
+# Warm the image cache in the background so the first visitors after the
+# deploy are not the ones waiting for image encoding.
+nohup "$APP_DIR/deploy/scripts/warm-images.sh" >> /var/log/vamoscalafate/warm-images.log 2>&1 &
+
 echo
 echo "Deploy complete: $(git rev-parse --short HEAD)"
 pm2 status

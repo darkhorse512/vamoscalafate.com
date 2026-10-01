@@ -31,24 +31,34 @@ export type AvailabilityQuery = {
 }
 
 /** What the customer configured, before pricing is applied. */
+/** How many passengers in each price band, and which add-ons, in what quantity. */
 export type BookingSelection = {
   tourId: string
   optionId: string
   date: string
   departureTime?: string | null
-  adults: number
-  children: number
+  tiers: { tierId: string; quantity: number }[]
+  extras?: { extraId: string; quantity: number }[]
   pickupLocationId?: string | null
+}
+
+/** One priced line: a price band or an add-on. */
+export type PriceLine = {
+  id: string
+  label: string
+  quantity: number
+  unitCents: number
+  subtotalCents: number
 }
 
 /** Transparent, line-by-line price breakdown. Never a single opaque total. */
 export type PriceBreakdown = {
-  adults: number
-  children: number
-  adultUnitCents: number
-  childUnitCents: number
-  adultsSubtotalCents: number
-  childrenSubtotalCents: number
+  tiers: PriceLine[]
+  extras: PriceLine[]
+  /** Every passenger, including those in free bands: each takes a seat. */
+  passengers: number
+  tiersSubtotalCents: number
+  extrasCostCents: number
   pickupCostCents: number
   subtotalCents: number
   discountCents: number
@@ -72,6 +82,10 @@ export type PassengerDetails = {
   lastName: string
   type: 'ADULT' | 'CHILD' | 'INFANT' | 'SENIOR'
   nationality?: string
+  documentNumber?: string
+  /** ISO date, YYYY-MM-DD. */
+  birthDate?: string
+  tierLabel?: string
 }
 
 /** Campaign attribution captured at checkout and preserved through payment. */

@@ -1,8 +1,9 @@
 import { cacheTags, prisma } from '@vamos/db'
 import { ROUTES } from '@vamos/shared'
-import type { MediaRef } from '@vamos/types'
+import type { MediaRef, TourCard } from '@vamos/types'
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 import { mediaSelect } from './content.ts'
+import { cardSelect } from './tours.ts'
 
 /**
  * Homepage-only data.
@@ -424,4 +425,41 @@ export const getLicensedPhotos = cachedQuery(
     }),
   ['photo-credits'],
   { tags: [cacheTags.tours, cacheTags.destinations, cacheTags.blogPosts], revalidate: REVALIDATE.content },
+)
+
+// ── Catalogue and the "3 imperdibles" ──────────────────────────────────────
+
+/**
+ * Every published excursion in the order the business set (sortOrder), for
+ * the homepage grid. The brief asks for all tours on the homepage, not a
+ * featured subset.
+ */
+export const getCatalogue = cachedQuery(
+  async (): Promise<TourCard[]> =>
+    (await prisma.tour.findMany({
+      where: { ...published, category: { channel: 'excursiones' } },
+      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      select: cardSelect,
+    })) as TourCard[],
+  ['home', 'catalogue'],
+  { tags: [cacheTags.tours], revalidate: REVALIDATE.listing },
+)
+
+/** The three excursions the "3 imperdibles" banner and page feature. */
+export const MUST_SEE_SLUGS = [
+  'glaciar-perito-moreno-pasarelas',
+  'navegacion-todo-glaciares',
+  'el-chalten-trekking-libre',
+] as const
+
+export const getMustSeeTours = cachedQuery(
+  async (): Promise<TourCard[]> => {
+    const tours = (await prisma.tour.findMany({
+      where: { ...published, slug: { in: [...MUST_SEE_SLUGS] } },
+      select: cardSelect,
+    })) as TourCard[]
+    return MUST_SEE_SLUGS.flatMap((slug) => tours.filter((tour) => tour.slug === slug))
+  },
+  ['home', 'must-see'],
+  { tags: [cacheTags.tours], revalidate: REVALIDATE.content },
 )

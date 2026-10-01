@@ -1,6 +1,6 @@
 import { prisma, type PaymentProvider } from '@vamos/db'
 import { emailService } from '@vamos/email'
-import { AppError, absoluteUrl, logger, publicEnv } from '@vamos/shared'
+import { absoluteUrl, AppError, describeExtras, describeParty, logger, publicEnv } from '@vamos/shared'
 import type { ProviderKey, WebhookResult } from '@vamos/types'
 import { getGateway } from '../payments/index.ts'
 import { bookingService } from './booking.ts'
@@ -160,7 +160,7 @@ export const paymentService = {
       include: {
         customer: true,
         items: {
-          include: { pickupLocation: { select: { name: true } } },
+          include: { pickupLocation: { select: { name: true } }, tiers: true, extras: true },
         },
         payments: { where: { provider }, orderBy: { createdAt: 'desc' }, take: 1 },
       },
@@ -237,6 +237,8 @@ export const paymentService = {
       departureTime: item?.departureTime ?? null,
       adults: item?.adults ?? 1,
       children: item?.children ?? 0,
+      party: item ? describeParty(item.tiers, item) : undefined,
+      extras: item ? describeExtras(item.extras) : undefined,
       pickupLocation: item?.pickupLocation?.name ?? null,
       totalCents: booking.totalCents,
       currency: booking.currency,

@@ -172,7 +172,7 @@ export function SubmissionForm() {
 
         <div className="mt-5">
           <label htmlFor="description" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
-            Descripción<span className="ml-0.5 text-danger">*</span>
+            Descripción<span className="ml-0.5 text-danger" aria-hidden="true">*</span>
           </label>
           <textarea
             id="description"
@@ -308,7 +308,7 @@ export function SubmissionForm() {
           <Link href={ROUTES.privacy} className="font-medium text-primary underline" target="_blank">
             política de privacidad
           </Link>
-          .<span className="ml-0.5 text-danger">*</span>
+          .<span className="ml-0.5 text-danger" aria-hidden="true">*</span>
         </span>
       </label>
 
@@ -347,7 +347,7 @@ function Field({
     <div>
       <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
-        {required ? <span className="ml-0.5 text-danger">*</span> : null}
+        {required ? <span className="ml-0.5 text-danger" aria-hidden="true">*</span> : null}
       </label>
       <input
         id={name}

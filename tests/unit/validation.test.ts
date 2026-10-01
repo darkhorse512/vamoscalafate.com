@@ -51,12 +51,16 @@ describe('validation', () => {
     const valid = {
       selection: {
         tourId: 'tour_1', optionId: 'opt_1', date: tomorrow,
-        adults: 2, children: 0,
+        tiers: [{ tierId: 'tier_a_opt_1', quantity: 2 }],
       },
       customer: {
         firstName: 'Ana', lastName: 'García', email: 'ana@example.com',
-        phone: '+5492902123456', country: 'Argentina',
+        phone: '+5492902123456', country: 'Argentina', hotelName: 'Hotel Kau Yatun',
       },
+      passengers: [
+        { firstName: 'Ana', lastName: 'García', nationality: 'Argentina', documentNumber: '30123456', birthDate: '1990-05-20' },
+        { firstName: 'Juan', lastName: 'Pérez', nationality: 'Uruguay', documentNumber: 'AB 123456', birthDate: '1988-11-02' },
+      ],
       acceptedTerms: true,
     }
 
@@ -64,12 +68,36 @@ describe('validation', () => {
       expect(bookingSchema.safeParse(valid).success).toBe(true)
     })
 
-    it('requires at least one adult', () => {
+    it('requires at least one passenger', () => {
       const result = bookingSchema.safeParse({
         ...valid,
-        selection: { ...valid.selection, adults: 0, children: 2 },
+        selection: { ...valid.selection, tiers: [{ tierId: 'tier_a_opt_1', quantity: 0 }] },
       })
       expect(result.success).toBe(false)
+    })
+
+    it('requires the hotel', () => {
+      const result = bookingSchema.safeParse({ ...valid, customer: { ...valid.customer, hotelName: '' } })
+      expect(result.success).toBe(false)
+    })
+
+    it('requires each passenger\'s document and a past birth date', () => {
+      const [first, second] = valid.passengers
+      expect(
+        bookingSchema.safeParse({ ...valid, passengers: [{ ...first, documentNumber: '' }, second] }).success,
+      ).toBe(false)
+      expect(
+        bookingSchema.safeParse({ ...valid, passengers: [{ ...first, birthDate: '2999-01-01' }, second] }).success,
+      ).toBe(false)
+    })
+
+    it('reports the exact passenger field that failed', () => {
+      const [first, second] = valid.passengers
+      const result = bookingSchema.safeParse({ ...valid, passengers: [first, { ...second, nationality: '' }] })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error.issues.map((issue) => issue.path.join('.'))).toContain('passengers.1.nationality')
+      }
     })
 
     it('rejects a departure date in the past', () => {
@@ -95,7 +123,13 @@ describe('validation', () => {
     it('rejects an implausibly large group', () => {
       const result = bookingSchema.safeParse({
         ...valid,
-        selection: { ...valid.selection, adults: 40, children: 40 },
+        selection: {
+          ...valid.selection,
+          tiers: [
+            { tierId: 'tier_a_opt_1', quantity: 40 },
+            { tierId: 'tier_c_opt_1', quantity: 40 },
+          ],
+        },
       })
       expect(result.success).toBe(false)
     })
@@ -112,6 +146,7 @@ describe('validation', () => {
       options: [
         {
           name: 'Regular', price: 85_000, durationMinutes: 540, capacity: 45,
+          tiers: [{ label: 'Adultos', price: 85_000 }],
           maxParticipants: 45, pickupIncluded: true,
         },
       ],

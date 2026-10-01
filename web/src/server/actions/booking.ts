@@ -39,12 +39,15 @@ export async function createBookingAction(
 
     const parsed = bookingSchema.safeParse(input)
     if (!parsed.success) {
-      return actionError(
-        'VALIDATION_ERROR',
-        'Revisá los datos del formulario.',
-        // Zod v4 exposes a flattened field-error map.
-        parsed.error.flatten().fieldErrors as Record<string, string[]>,
-      )
+      // Full dotted paths ("passengers.2.documentNumber"), not flatten():
+      // flatten() keeps only the top-level key, which would report every
+      // passenger's mistake as a single vague "passengers" error.
+      const fieldErrors: Record<string, string[]> = {}
+      for (const issue of parsed.error.issues) {
+        const key = issue.path.join('.')
+        ;(fieldErrors[key] ??= []).push(issue.message)
+      }
+      return actionError('VALIDATION_ERROR', 'Revisá los datos marcados en el formulario.', fieldErrors)
     }
 
     // Honeypot: a filled hidden field means a bot. Report success so the bot

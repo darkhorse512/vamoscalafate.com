@@ -12,7 +12,11 @@
 
 import { fromCents } from '@vamos/shared'
 
+type TierDraft = { id?: string; label: string; ageMin: string; ageMax: string; price: number }
+type ExtraDraft = { id?: string; name: string; description: string; price: number; perPerson: boolean; isActive: boolean }
+
 type OptionDraft = {
+  tiers: TierDraft[]
   id?: string
   name: string
   description: string
@@ -46,6 +50,8 @@ export type TourFormData = {
   difficulty: string
   location: string
   minAge: string
+  maxAge: string
+  mapEmbedUrl: string
   maxGroupSize: string
   languages: string
   highlights: string
@@ -60,6 +66,7 @@ export type TourFormData = {
   options: OptionDraft[]
   itinerary: StepDraft[]
   pickupLocations: PickupDraft[]
+  extras: ExtraDraft[]
   faqs: FaqDraft[]
   seo: {
     title: string
@@ -76,7 +83,7 @@ export type TourFormData = {
 export const EMPTY_TOUR: TourFormData = {
   name: '', slug: '', summary: '', description: '', status: 'DRAFT',
   categoryId: '', destinationId: '', durationMinutes: 240, difficulty: 'EASY',
-  location: '', minAge: '', maxGroupSize: '', languages: 'Español, Inglés',
+  location: '', minAge: '', maxAge: '', mapEmbedUrl: '', maxGroupSize: '', languages: 'Español, Inglés',
   highlights: '', included: '', excluded: '', importantInfo: '', cancellationPolicy: '',
   featured: false, sortOrder: 0,
   imageIds: [], coverImageId: '',
@@ -85,10 +92,12 @@ export const EMPTY_TOUR: TourFormData = {
       name: 'Regular', description: '', price: 0, childPrice: '', currency: 'ARS',
       durationMinutes: 240, capacity: 20, minParticipants: 1, maxParticipants: 20,
       pickupIncluded: true, departureTimes: '', freeCancellationHours: 24, isActive: true,
+      tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0 }],
     },
   ],
   itinerary: [],
   pickupLocations: [],
+  extras: [],
   faqs: [],
   seo: {
     title: '', description: '', canonicalUrl: '', ogTitle: '',
@@ -110,6 +119,8 @@ export function tourToFormData(tour: {
   difficulty: string
   location: string | null
   minAge: number | null
+  maxAge: number | null
+  mapEmbedUrl: string | null
   maxGroupSize: number | null
   languages: string[]
   highlights: string[]
@@ -126,7 +137,9 @@ export function tourToFormData(tour: {
     capacity: number; minParticipants: number; maxParticipants: number
     pickupIncluded: boolean; departureTimes: string[]; freeCancellationHours: number
     isActive: boolean
+    priceTiers: { id: string; label: string; ageMin: number | null; ageMax: number | null; priceCents: number }[]
   }[]
+  extras: { id: string; name: string; description: string | null; priceCents: number; perPerson: boolean; isActive: boolean }[]
   itinerary: { id: string; title: string; description: string; timeLabel: string | null }[]
   pickupLocations: {
     id: string; name: string; address: string | null; offsetMinutes: number
@@ -152,6 +165,8 @@ export function tourToFormData(tour: {
     difficulty: tour.difficulty,
     location: tour.location ?? '',
     minAge: tour.minAge !== null ? String(tour.minAge) : '',
+    maxAge: tour.maxAge !== null ? String(tour.maxAge) : '',
+    mapEmbedUrl: tour.mapEmbedUrl ?? '',
     maxGroupSize: tour.maxGroupSize !== null ? String(tour.maxGroupSize) : '',
     languages: tour.languages.join(', '),
     highlights: tour.highlights.join('\n'),
@@ -180,6 +195,21 @@ export function tourToFormData(tour: {
       departureTimes: option.departureTimes.join(', '),
       freeCancellationHours: option.freeCancellationHours,
       isActive: option.isActive,
+      tiers: option.priceTiers.map((tier) => ({
+        id: tier.id,
+        label: tier.label,
+        ageMin: tier.ageMin !== null ? String(tier.ageMin) : '',
+        ageMax: tier.ageMax !== null ? String(tier.ageMax) : '',
+        price: fromCents(tier.priceCents),
+      })),
+    })),
+    extras: tour.extras.map((extra) => ({
+      id: extra.id,
+      name: extra.name,
+      description: extra.description ?? '',
+      price: fromCents(extra.priceCents),
+      perPerson: extra.perPerson,
+      isActive: extra.isActive,
     })),
     itinerary: tour.itinerary.map((step) => ({
       id: step.id,

@@ -12,6 +12,10 @@ export type BookingEmailData = {
   departureTime?: string | null
   adults: number
   children: number
+  /** Per-band description ("2 × Adultos · 1 × Menores (6 a 15 años)"); wins over adults/children. */
+  party?: string
+  /** Add-ons bought ("Traslado desde tu hotel × 2 · Vianda gourmet"). */
+  extras?: string
   pickupLocation?: string | null
   totalCents: number
   currency: string
@@ -19,10 +23,12 @@ export type BookingEmailData = {
 }
 
 function bookingDetailRows(data: BookingEmailData) {
-  const passengers = [
-    `${data.adults} ${data.adults === 1 ? 'adulto' : 'adultos'}`,
-    ...(data.children > 0 ? [`${data.children} ${data.children === 1 ? 'menor' : 'menores'}`] : []),
-  ].join(' · ')
+  const passengers =
+    data.party ||
+    [
+      `${data.adults} ${data.adults === 1 ? 'adulto' : 'adultos'}`,
+      ...(data.children > 0 ? [`${data.children} ${data.children === 1 ? 'menor' : 'menores'}`] : []),
+    ].join(' · ')
 
   return [
     { label: 'Referencia', value: data.reference },
@@ -31,6 +37,7 @@ function bookingDetailRows(data: BookingEmailData) {
     { label: 'Fecha', value: formatDate(data.travelDate) },
     ...(data.departureTime ? [{ label: 'Horario', value: data.departureTime }] : []),
     { label: 'Pasajeros', value: passengers },
+    ...(data.extras ? [{ label: 'Adicionales', value: data.extras }] : []),
     ...(data.pickupLocation ? [{ label: 'Punto de encuentro', value: data.pickupLocation }] : []),
     { label: 'Total', value: formatMoney(data.totalCents, data.currency) },
   ]

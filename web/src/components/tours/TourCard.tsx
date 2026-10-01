@@ -102,7 +102,7 @@ export function TourCard({
           ) : null}
         </ul>
 
-        <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-4">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-3 gap-y-2 border-t border-border pt-4">
           <Price cents={tour.fromPriceCents} currency={tour.currency} from size="md" />
           <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-primary-soft px-3.5 py-1.5 text-[0.8125rem] font-semibold text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
             Ver detalle

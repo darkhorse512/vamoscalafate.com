@@ -18,7 +18,9 @@ import type {
   TourCategory,
   TourImage,
   TourItineraryStep,
+  TourExtra,
   TourOption,
+  TourPriceTier,
   TourPickupLocation,
   TourVideo,
 } from './models.ts'
@@ -64,7 +66,8 @@ export type TourDetail = Tour & {
   seo: SeoMetadata | null
   images: TourImageWithMedia[]
   videos: TourVideoWithMedia[]
-  options: TourOption[]
+  options: (TourOption & { priceTiers: TourPriceTier[] })[]
+  extras: TourExtra[]
   itinerary: TourItineraryStep[]
   pickupLocations: TourPickupLocation[]
   faqs: Faq[]

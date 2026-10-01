@@ -75,7 +75,7 @@ test.describe('mobile layout', () => {
 
 test.describe('mobile booking flow', () => {
   test('completes the selection step on a phone', async ({ page }) => {
-    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
+    await page.goto('/excursiones/safari-nautico-perito-moreno', { waitUntil: 'networkidle' })
 
     const target = new Date(Date.now() + 15 * 86_400_000).toISOString().slice(0, 10)
     await pickDate(page, '#bw-date', target)

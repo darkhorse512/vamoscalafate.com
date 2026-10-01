@@ -17,7 +17,16 @@ type FieldErrors = Record<string, string[]>
  * there is no ambiguity about whether the message was sent - and no way to
  * double-submit by pressing the button again.
  */
-export function ContactForm({ tourSlug }: { tourSlug?: string }) {
+export function ContactForm({
+  tourSlug,
+  defaultSubject,
+  defaultMessage,
+}: {
+  tourSlug?: string
+  /** Prefills the subject, e.g. for a promotion's enquiry form. */
+  defaultSubject?: string
+  defaultMessage?: string
+}) {
   const [state, setState] = useState<'idle' | 'submitting' | 'sent'>('idle')
   const [formError, setFormError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
@@ -99,12 +108,12 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
         <Field name="name" label="Nombre y apellido" required errors={fieldErrors} autoComplete="name" />
         <Field name="email" label="Email" type="email" required errors={fieldErrors} autoComplete="email" />
         <Field name="phone" label="Teléfono" type="tel" errors={fieldErrors} autoComplete="tel" hint="Opcional" />
-        <Field name="subject" label="Asunto" required errors={fieldErrors} />
+        <Field name="subject" label="Asunto" required errors={fieldErrors} defaultValue={defaultSubject} />
       </div>
 
       <div className="mt-5">
         <label htmlFor="message" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
-          Mensaje<span className="ml-0.5 text-danger">*</span>
+          Mensaje<span className="ml-0.5 text-danger" aria-hidden="true">*</span>
         </label>
         <textarea
           id="message"
@@ -112,6 +121,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
           rows={6}
           required
           maxLength={3000}
+          defaultValue={defaultMessage}
           aria-invalid={fieldErrors.message ? true : undefined}
           aria-describedby={fieldErrors.message ? 'message-error' : undefined}
           placeholder="Contanos qué necesitás: fechas, cantidad de personas, excursiones que te interesan…"
@@ -143,7 +153,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
             política de privacidad
           </Link>{' '}
           y el tratamiento de mis datos para responder esta consulta.
-          <span className="ml-0.5 text-danger">*</span>
+          <span className="ml-0.5 text-danger" aria-hidden="true">*</span>
         </span>
       </label>
 
@@ -169,6 +179,7 @@ function Field({
   errors,
   hint,
   autoComplete,
+  defaultValue,
 }: {
   name: string
   label: string
@@ -177,6 +188,7 @@ function Field({
   errors: FieldErrors
   hint?: string
   autoComplete?: string
+  defaultValue?: string
 }) {
   const fieldErrors = errors[name]
 
@@ -184,7 +196,7 @@ function Field({
     <div>
       <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
-        {required ? <span className="ml-0.5 text-danger">*</span> : null}
+        {required ? <span className="ml-0.5 text-danger" aria-hidden="true">*</span> : null}
       </label>
       <input
         id={name}
@@ -192,6 +204,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
+        defaultValue={defaultValue}
         aria-invalid={fieldErrors ? true : undefined}
         aria-describedby={fieldErrors ? `${name}-error` : hint ? `${name}-hint` : undefined}
         className="form-control"

@@ -3,7 +3,7 @@ import { prisma } from '@vamos/db'
 import type { WebhookResult } from '@vamos/types'
 import { bookingService } from '../../web/src/server/services/booking'
 import { paymentService } from '../../web/src/server/services/payment'
-import { cleanupFixtures, createTourFixture, testCustomer, TEST_PREFIX } from './setup'
+import { cleanupFixtures, createTourFixture, testCustomer, testPassengers, TEST_PREFIX } from './setup'
 
 /**
  * Payment webhook processing.
@@ -21,14 +21,9 @@ async function createPendingBooking(seats = 10) {
   const fixture = await createTourFixture({ seats, priceCents: 100_000 })
 
   const booking = await bookingService.create({
-    selection: {
-      tourId: fixture.tour.id,
-      optionId: fixture.option.id,
-      date: fixture.isoDate,
-      adults: 2,
-      children: 0,
-    },
+    selection: fixture.selection({ adults: 2 }),
     customer: testCustomer(),
+    passengers: testPassengers(2),
   })
 
   return { fixture, booking }

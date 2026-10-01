@@ -15,6 +15,7 @@ import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
 import { Gallery } from '@/components/media/Gallery'
 import { TourCarousel } from './TourCarousel'
+import { TourMap } from './TourMap'
 import { breadcrumbSchema, faqSchema, jsonLdScript, tourSchema } from '@/lib/jsonld'
 import { toEmbedUrl } from '@/lib/utils'
 
@@ -212,6 +213,16 @@ export function TourDetailPage({
                     </li>
                   ))}
                 </ol>
+              </section>
+            ) : null}
+
+            {/* Route map */}
+            {tour.mapEmbedUrl ? (
+              <section>
+                <SectionTitle>Mapa del recorrido</SectionTitle>
+                <div className="mt-6">
+                  <TourMap src={tour.mapEmbedUrl} title={`Mapa del recorrido: ${tour.name}`} />
+                </div>
               </section>
             ) : null}
 

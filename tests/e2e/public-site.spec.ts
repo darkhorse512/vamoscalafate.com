@@ -121,7 +121,7 @@ test.describe('tour detail', () => {
   })
 
   test('booking widget loads availability and prices the selection', async ({ page }) => {
-    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas')
+    await page.goto('/excursiones/safari-nautico-perito-moreno')
 
     const continueButton = page.getByRole('button', { name: /Continuar con la reserva/i })
     // Nothing is bookable before a date is chosen.
@@ -145,7 +145,7 @@ test.describe('tour detail', () => {
   test('booking widget carries the selection through to the reservation page', async ({ page }) => {
     // networkidle so the widget has hydrated: driving a React-controlled
     // input before that races the first client render.
-    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
+    await page.goto('/excursiones/safari-nautico-perito-moreno', { waitUntil: 'networkidle' })
 
     const target = new Date(Date.now() + 12 * 86_400_000).toISOString().slice(0, 10)
     await pickDate(page, '#bw-date', target)
@@ -322,6 +322,62 @@ test.describe('form controls', () => {
     await expect(page.getByRole('listbox')).toBeHidden()
     await expect(page).toHaveURL(/orden=precio-asc/)
     await expect(select).toContainText('Menor precio')
+  })
+})
+
+test.describe('price bands and add-ons', () => {
+  test('an add-on is added to the total, priced by quantity', async ({ page }) => {
+    await page.goto('/excursiones/safari-nautico-perito-moreno', { waitUntil: 'networkidle' })
+
+    const target = new Date(Date.now() + 11 * 86_400_000).toISOString().slice(0, 10)
+    await pickDate(page, '#bw-date', target)
+    await page.getByRole('button', { name: /lug\./ }).first().click()
+
+    // Two adults, then the hotel transfer for both.
+    await page.getByRole('button', { name: /Agregar uno: Adultos/ }).click()
+    await page.getByRole('button', { name: /Agregar uno: Traslado desde tu hotel/ }).click()
+    await page.getByRole('button', { name: /Agregar uno: Traslado desde tu hotel/ }).click()
+
+    await expect(page.getByText(/2 × Adultos/)).toBeVisible()
+    await expect(page.getByText(/Traslado desde tu hotel \+ visita a las pasarelas × 2/)).toBeVisible()
+  })
+
+  test('the reservation step asks for every traveller, labelled by band', async ({ page }) => {
+    await page.goto('/excursiones/safari-nautico-perito-moreno', { waitUntil: 'networkidle' })
+
+    const target = new Date(Date.now() + 13 * 86_400_000).toISOString().slice(0, 10)
+    await pickDate(page, '#bw-date', target)
+    await page.getByRole('button', { name: /lug\./ }).first().click()
+    await page.getByRole('button', { name: /Agregar uno: Menores \(4 a 15 años\)/ }).click()
+    await page.getByRole('button', { name: /Continuar con la reserva/i }).click()
+
+    await expect(page).toHaveURL(/\/reservar\?.*pax=/)
+    await expect(page.getByText('Pasajero 1', { exact: false })).toBeVisible()
+    await expect(page.getByText('Pasajero 2', { exact: false })).toBeVisible()
+    await expect(page.getByText('Menores (4 a 15 años)').first()).toBeVisible()
+    await expect(page.getByLabel('DNI o pasaporte').first()).toBeVisible()
+    await expect(page.getByLabel(/Fecha de nacimiento/).first()).toBeVisible()
+    await expect(page.getByRole('textbox', { name: 'WhatsApp', exact: true })).toBeVisible()
+  })
+
+  test('a route map does not capture the page scroll until clicked', async ({ page }) => {
+    await page.goto('/excursiones/minitrekking-perito-moreno')
+    const activate = page.getByRole('button', { name: /Activar el mapa/ })
+    await activate.scrollIntoViewIfNeeded()
+    await expect(activate).toBeVisible()
+    await activate.click()
+    await expect(page.getByText('Usá + y − para el zoom')).toBeVisible()
+  })
+})
+
+test.describe('3 imperdibles', () => {
+  test('the homepage banner leads to the promotion page and its form', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('link', { name: 'Ver los 3 imperdibles' }).first().click()
+    await expect(page).toHaveURL(/tres-excursiones-imperdibles-en-el-calafate/)
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/Tres excursiones imperdibles/)
+    await expect(page.getByRole('heading', { name: /Importantes bonificaciones/ })).toBeVisible()
+    await expect(page.getByLabel('Asunto')).toHaveValue('Promoción 3 excursiones imperdibles')
   })
 })
 

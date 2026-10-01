@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@vamos/db'
-import { formatDate, formatDateTime, formatMoney } from '@vamos/shared'
+import { describeExtras, describeParty, formatDate, formatDateTime, formatMoney } from '@vamos/shared'
 import { can } from '@vamos/shared'
 import { BookingActions } from '@/components/BookingActions'
 import { PageHeader, StatusBadge } from '@/components/ui/primitives'
@@ -29,9 +29,11 @@ export default async function BookingDetailPage({
           tour: { select: { slug: true, name: true } },
           option: { select: { name: true, freeCancellationHours: true } },
           pickupLocation: { select: { name: true, address: true } },
+          tiers: true,
+          extras: true,
         },
       },
-      passengers: true,
+      passengers: { orderBy: { id: 'asc' } },
       payments: { orderBy: { createdAt: 'desc' } },
     },
   })
@@ -84,14 +86,10 @@ export default async function BookingDetailPage({
                   <dl className="mt-3 grid gap-x-6 gap-y-2 text-[0.8125rem] sm:grid-cols-2">
                     <Row label="Fecha de salida" value={formatDate(item.travelDate)} />
                     {item.departureTime ? <Row label="Horario" value={item.departureTime} /> : null}
-                    <Row
-                      label="Pasajeros"
-                      value={`${item.adults} adultos${item.children ? ` · ${item.children} menores` : ''}`}
-                    />
-                    <Row
-                      label="Precio unitario"
-                      value={formatMoney(item.unitPriceCents, booking.currency)}
-                    />
+                    <Row label="Pasajeros" value={describeParty(item.tiers, item)} />
+                    {item.extras.length > 0 ? (
+                      <Row label="Adicionales" value={describeExtras(item.extras)} />
+                    ) : null}
                     {item.pickupLocation ? (
                       <Row label="Punto de encuentro" value={item.pickupLocation.name} />
                     ) : null}
@@ -102,6 +100,35 @@ export default async function BookingDetailPage({
                       />
                     ) : null}
                   </dl>
+
+                  {/* Line-by-line, as charged */}
+                  {item.tiers.length + item.extras.length > 0 ? (
+                    <table className="admin-table mt-4">
+                      <thead>
+                        <tr>
+                          <th>Concepto</th>
+                          <th className="text-right">Cant.</th>
+                          <th className="text-right">Unitario</th>
+                          <th className="text-right">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          ...item.tiers.map((t) => ({ id: t.id, label: t.labelSnapshot, qty: t.quantity, unit: t.unitPriceCents })),
+                          ...item.extras.map((e) => ({ id: e.id, label: `Opcional: ${e.nameSnapshot}`, qty: e.quantity, unit: e.unitPriceCents })),
+                        ].map((line) => (
+                          <tr key={line.id}>
+                            <td>{line.label}</td>
+                            <td className="tabular text-right">{line.qty}</td>
+                            <td className="tabular text-right">
+                              {line.unit === 0 ? 'Gratis' : formatMoney(line.unit, booking.currency)}
+                            </td>
+                            <td className="tabular text-right">{formatMoney(line.unit * line.qty, booking.currency)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -112,6 +139,49 @@ export default async function BookingDetailPage({
                 {formatMoney(booking.totalCents, booking.currency)}
               </span>
             </div>
+          </section>
+
+          {/* Passenger manifest: what operators file with the park and, for
+              Torres del Paine, with border control. */}
+          <section className="admin-panel overflow-hidden">
+            <h2 className="flex items-center justify-between border-b border-border px-4 py-3 text-[0.8125rem] font-semibold text-heading">
+              Pasajeros
+              <span className="font-normal text-subtle-foreground">{booking.passengers.length}</span>
+            </h2>
+            {booking.passengers.length === 0 ? (
+              <p className="px-4 py-8 text-center text-[0.8125rem] text-subtle-foreground">
+                Esta reserva no tiene pasajeros cargados.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Nombre y apellido</th>
+                      <th>Documento</th>
+                      <th>Nacimiento</th>
+                      <th>Nacionalidad</th>
+                      <th>Tarifa</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {booking.passengers.map((passenger, index) => (
+                      <tr key={passenger.id}>
+                        <td className="tabular">{index + 1}</td>
+                        <td className="font-medium text-heading">
+                          {passenger.firstName} {passenger.lastName}
+                        </td>
+                        <td className="tabular">{passenger.documentNumber ?? '—'}</td>
+                        <td className="tabular">{passenger.birthDate ? formatDate(passenger.birthDate) : '—'}</td>
+                        <td>{passenger.nationality ?? '—'}</td>
+                        <td>{passenger.tierLabel ?? '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
 
           {/* Payments */}

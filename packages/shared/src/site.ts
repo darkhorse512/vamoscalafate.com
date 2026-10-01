@@ -99,5 +99,6 @@ export const ROUTES = {
   privacy: '/privacidad',
   cancellation: '/politica-de-cancelacion',
   photoCredits: '/creditos-fotograficos',
+  mustSee: '/tres-excursiones-imperdibles-en-el-calafate',
   cookies: '/politica-de-cookies',
 } as const

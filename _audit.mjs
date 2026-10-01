@@ -1,8 +1,8 @@
 import { chromium, devices } from '@playwright/test'
 const BASE = 'http://localhost:3000'
-const PAGES = ['/', '/excursiones', '/excursiones/minitrekking-perito-moreno', '/traslados', '/destinos',
+const PAGES = ['/', '/excursiones', '/excursiones/minitrekking-perito-moreno', '/destinos',
   '/destinos/el-chalten', '/blog', '/blog/que-hacer-en-el-calafate', '/hoteles', '/restaurantes', '/servicios',
-  '/contacto', '/preguntas-frecuentes', '/creditos-fotograficos', '/terminos', '/buscar?q=glaciar']
+  '/contacto', '/preguntas-frecuentes', '/creditos-fotograficos', '/terminos', '/buscar?q=glaciar', '/tres-excursiones-imperdibles-en-el-calafate', '/excursiones/aventuras-cerro-frias', '/excursiones/torres-del-paine']
 const b = await chromium.launch()
 const linkStatus = new Map()
 const problems = []

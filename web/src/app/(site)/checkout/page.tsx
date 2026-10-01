@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { AlertCircle, Lock } from 'lucide-react'
-import { ROUTES, formatDate, formatMoney } from '@vamos/shared'
+import { describeExtras, describeParty, ROUTES, formatDate, formatMoney } from '@vamos/shared'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { PaymentSelector } from '@/components/booking/PaymentSelector'
 import { noindexMetadata } from '@/lib/seo'
@@ -130,8 +130,11 @@ export default async function CheckoutPage({
               {item ? (
                 <Row
                   label="Pasajeros"
-                  value={`${item.adults} adultos${item.children ? ` · ${item.children} menores` : ''}`}
+                  value={describeParty(item.tiers, item)}
                 />
+              ) : null}
+              {item && item.extras.length > 0 ? (
+                <Row label="Adicionales" value={describeExtras(item.extras)} />
               ) : null}
             </dl>
 

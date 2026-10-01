@@ -13,6 +13,32 @@ import {
 
 export const difficultySchema = z.enum(['EASY', 'MODERATE', 'CHALLENGING'])
 
+/** Accepts app cuids and the readable ids the data migration created. */
+const rowIdSchema = z.string().min(1).max(80).regex(/^[\w-]+$/)
+
+/** An age band with its own price; 0 is shown to customers as "Gratis". */
+export const priceTierSchema = z.object({
+  id: rowIdSchema.optional(),
+  label: safeTextSchema(2, 120, 'El nombre de la tarifa'),
+  ageMin: z.number().int().min(0).max(120).optional().nullable(),
+  ageMax: z.number().int().min(0).max(120).optional().nullable(),
+  price: priceAmountSchema,
+})
+  .refine((t) => t.ageMin == null || t.ageMax == null || t.ageMax >= t.ageMin, {
+    message: 'La edad máxima debe ser mayor o igual a la mínima',
+    path: ['ageMax'],
+  })
+
+/** An add-on ("Opcional") sold with the tour. */
+export const tourExtraSchema = z.object({
+  id: rowIdSchema.optional(),
+  name: safeTextSchema(2, 120, 'El nombre del adicional'),
+  description: z.string().max(500).optional(),
+  price: priceAmountSchema,
+  perPerson: z.boolean().default(true),
+  isActive: z.boolean().default(true),
+})
+
 export const tourOptionSchema = z.object({
   id: cuidSchema.optional(),
   name: safeTextSchema(2, 120, 'El nombre de la opción'),
@@ -31,6 +57,8 @@ export const tourOptionSchema = z.object({
   cancellationNote: z.string().max(500).optional(),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().min(0).default(0),
+  /** The first band is the headline ("Desde") price and the one every booking needs. */
+  tiers: z.array(priceTierSchema).min(1, 'Agregá al menos una tarifa').max(10),
 })
   .refine((o) => o.maxParticipants >= o.minParticipants, {
     message: 'El máximo de participantes debe ser mayor o igual al mínimo',
@@ -81,6 +109,16 @@ export const tourSchema = z.object({
   difficulty: difficultySchema.default('EASY'),
   location: z.string().max(160).optional(),
   minAge: z.number().int().min(0).max(120).optional().nullable(),
+  maxAge: z.number().int().min(0).max(120).optional().nullable(),
+  /** Google My Maps embed ("https://www.google.com/maps/d/…/embed?mid=…"). */
+  mapEmbedUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((v) => v === '' || /^https:\/\/www\.google\.com\/maps\//.test(v), {
+      message: 'Pegá el enlace de inserción de Google Maps (https://www.google.com/maps/…)',
+    })
+    .optional(),
   maxGroupSize: z.number().int().min(1).max(500).optional().nullable(),
   languages: z.array(z.string().min(1).max(40)).max(10).default(['Español']),
 
@@ -96,6 +134,7 @@ export const tourSchema = z.object({
   options: z.array(tourOptionSchema).min(1, 'Agregá al menos una opción con precio'),
   itinerary: z.array(itineraryStepSchema).max(40).default([]),
   pickupLocations: z.array(pickupLocationSchema).max(60).default([]),
+  extras: z.array(tourExtraSchema).max(20).default([]),
   faqs: z.array(tourFaqSchema).max(30).default([]),
 
   imageIds: z.array(cuidSchema).max(30).default([]),
