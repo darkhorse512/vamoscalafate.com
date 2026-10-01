@@ -154,7 +154,7 @@ export function Carousel({
         type="button"
         onClick={() => scrollByPage(-1)}
         disabled={atStart}
-        aria-label="Anterior"
+        aria-label={`Anterior: ${ariaLabel}`}
         className={cn(
           'absolute -left-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
           'hover:border-primary/40 hover:text-primary-hover',
@@ -168,7 +168,7 @@ export function Carousel({
         type="button"
         onClick={() => scrollByPage(1)}
         disabled={atEnd}
-        aria-label="Siguiente"
+        aria-label={`Siguiente: ${ariaLabel}`}
         className={cn(
           'absolute -right-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
           'hover:border-primary/40 hover:text-primary-hover',
@@ -179,7 +179,7 @@ export function Carousel({
       </button>
 
       {showDots && slideCount > 1 ? (
-        <div className="mt-5 flex justify-center gap-1.5" role="tablist" aria-label="Ir a la diapositiva">
+        <div className="mt-5 flex justify-center gap-1.5" role="tablist" aria-label={`Ir a un elemento: ${ariaLabel}`}>
           {Array.from({ length: slideCount }, (_, index) => (
             <button
               key={index}
@@ -191,7 +191,7 @@ export function Carousel({
               className={cn(
                 'h-1.5 rounded-full transition-all duration-300',
                 index === activeIndex
-                  ? 'w-7 bg-violet-700'
+                  ? 'w-7 bg-gradient-to-r from-violet-600 to-magenta-500'
                   : 'w-1.5 bg-surface-strong hover:bg-stone-400',
               )}
             />

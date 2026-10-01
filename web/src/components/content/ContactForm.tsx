@@ -7,7 +7,6 @@ import { ROUTES } from '@vamos/shared'
 import { Button } from '@/components/ui/Button'
 import { analytics } from '@/lib/analytics'
 import { submitContactAction } from '@/server/actions/contact'
-import { cn } from '@/lib/utils'
 
 type FieldErrors = Record<string, string[]>
 
@@ -116,12 +115,7 @@ export function ContactForm({ tourSlug }: { tourSlug?: string }) {
           aria-invalid={fieldErrors.message ? true : undefined}
           aria-describedby={fieldErrors.message ? 'message-error' : undefined}
           placeholder="Contanos qué necesitás: fechas, cantidad de personas, excursiones que te interesan…"
-          className={cn(
-            'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
-            fieldErrors.message
-              ? 'border-danger focus:border-danger focus:ring-danger'
-              : 'border-border-strong focus:border-primary focus:ring-primary',
-          )}
+          className="form-control"
         />
         {fieldErrors.message ? (
           <p id="message-error" role="alert" className="mt-1 text-[0.6875rem] text-danger">
@@ -200,12 +194,7 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={fieldErrors ? true : undefined}
         aria-describedby={fieldErrors ? `${name}-error` : hint ? `${name}-hint` : undefined}
-        className={cn(
-          'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
-          fieldErrors
-            ? 'border-danger focus:border-danger focus:ring-danger'
-            : 'border-border-strong focus:border-primary focus:ring-primary',
-        )}
+        className="form-control"
       />
       {hint && !fieldErrors ? (
         <p id={`${name}-hint`} className="mt-1 text-[0.6875rem] text-muted-foreground">

@@ -94,8 +94,64 @@ if [ "$(id -un)" != "$PM2_USER" ]; then
   chown -R "$PM2_USER:$PM2_USER" web/.next admin/.next || fail "chown build output"
 fi
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Immutable releases
+#
+# `next build` deletes and rewrites .next while it runs. When PM2 served
+# straight out of .next/standalone, the live server spent the whole build
+# reading files that were vanishing under it — every deploy produced a minute
+# of "client reference manifest does not exist" errors for real visitors.
+#
+# Now each build is copied to releases/<app>-<sha>-<time>, and current/<app>
+# is a symlink swapped atomically (rename(2)) to point at it. PM2 runs from
+# current/, so the build never touches the files being served, and the switch
+# is a single filesystem operation followed by a graceful reload.
+#
+# Only the image-optimisation cache is shared across releases, so a deploy
+# does not throw away every resized photo and trigger a burst of re-encoding.
+# The data cache is deliberately NOT shared: a new release must never read
+# query results cached by the previous release's code, whose shapes may differ.
+# ─────────────────────────────────────────────────────────────────────────────
+step "Publishing release"
+RELEASE_TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
+mkdir -p releases current shared
+for app in web admin; do
+  dest="releases/$app-$RELEASE_TAG"
+  cp -a "$app/.next/standalone" "$dest" || fail "copy $app release"
+  mkdir -p "shared/$app-images" "$dest/$app/.next/cache"
+  rm -rf "$dest/$app/.next/cache/images"
+  ln -s "$APP_DIR/shared/$app-images" "$dest/$app/.next/cache/images"
+  ln -sfn "$APP_DIR/$dest" "current/.$app.next"
+  mv -T "current/.$app.next" "current/$app" || fail "switch $app release"
+  echo "  $app → $dest"
+done
+if [ "$(id -un)" != "$PM2_USER" ]; then
+  chown -R "$PM2_USER:$PM2_USER" releases current shared
+fi
+
+# Keep the three newest releases per app for a fast manual rollback:
+#   ln -sfn "$APP_DIR/releases/<older>" current/web && pm2 reload ...
+for app in web admin; do
+  ls -1dt releases/$app-* 2>/dev/null | tail -n +4 | xargs -r rm -rf
+done
+
 step "Reloading processes"
-pm2_do reload ecosystem.config.cjs --env production --update-env || fail "pm2 reload"
+# `pm2 reload` keeps a process's original script path. If the ecosystem file
+# now points somewhere else (as when serving moved to current/), re-register
+# that app so the change actually takes effect, then reload as normal.
+for app in web admin; do
+  expected="$APP_DIR/current/$app/$app/server.js"
+  registered="$(pm2_do jlist 2>/dev/null | node -e "
+    let raw = ''; process.stdin.on('data', (c) => (raw += c)).on('end', () => {
+      const proc = JSON.parse(raw || '[]').find((p) => p.name === 'vamoscalafate-$app')
+      process.stdout.write(proc ? proc.pm2_env.pm_exec_path : '')
+    })")"
+  if [ -n "$registered" ] && [ "$registered" != "$expected" ]; then
+    echo "  vamoscalafate-$app: script moved, re-registering"
+    pm2_do delete "vamoscalafate-$app" >/dev/null || fail "pm2 delete $app"
+  fi
+done
+pm2_do startOrReload ecosystem.config.cjs --env production --update-env || fail "pm2 reload"
 pm2_do save
 
 step "Health check"
@@ -134,7 +190,7 @@ for app in web admin; do
     continue
   fi
 
-  if [ -f "$app/.next${asset#/_next}" ]; then
+  if [ -f "current/$app/$app/.next${asset#/_next}" ]; then
     echo "  $app → serving ${asset##*/}, which is in this build"
   else
     echo

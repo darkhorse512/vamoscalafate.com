@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
  * Some Commons records give a profile URL as the author. Show the account
  * name it points at rather than the raw address.
  */
-function authorLabel(raw: string | null | undefined): string | null {
+export function authorLabel(raw: string | null | undefined): string | null {
   const value = raw?.trim()
   if (!value) return null
   if (!/^https?:\/\//i.test(value)) return value

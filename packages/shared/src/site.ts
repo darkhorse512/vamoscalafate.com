@@ -54,7 +54,7 @@ export const LOCATION = {
 export const CONTACT = {
   whatsappNumber: publicEnv.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '',
   phone: publicEnv.NEXT_PUBLIC_CONTACT_PHONE ?? '',
-  email: publicEnv.NEXT_PUBLIC_CONTACT_EMAIL ?? 'info@vamoscalafate.com',
+  email: publicEnv.NEXT_PUBLIC_CONTACT_EMAIL ?? 'ventas@vamoscalafate.com',
 } as const
 
 /** Builds a wa.me deep link. Returns null when no number is configured. */
@@ -98,5 +98,6 @@ export const ROUTES = {
   terms: '/terminos',
   privacy: '/privacidad',
   cancellation: '/politica-de-cancelacion',
+  photoCredits: '/creditos-fotograficos',
   cookies: '/politica-de-cookies',
 } as const

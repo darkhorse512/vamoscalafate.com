@@ -31,7 +31,7 @@ import { PrismaClient } from '../packages/db/generated/client/client.ts'
 config({ path: path.join(process.cwd(), 'web/.env') })
 
 const DRY = process.argv.includes('--dry')
-const UA = 'VamosCalafate/1.0 (https://vamoscalafate.com; contact: info@vamoscalafate.com)'
+const UA = 'VamosCalafate/1.0 (https://vamoscalafate.com; contact: ventas@vamoscalafate.com)'
 const STORAGE = process.env.STORAGE_LOCAL_DIR
 const PUBLIC_BASE = (process.env.STORAGE_PUBLIC_URL ?? '').replace(/\/$/, '')
 

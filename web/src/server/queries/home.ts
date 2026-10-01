@@ -399,3 +399,29 @@ export const getDestinationHeroes = cachedQuery(
   ['destination-heroes'],
   { tags: [cacheTags.destinations], revalidate: REVALIDATE.content },
 )
+
+// ── Photo credits ──────────────────────────────────────────────────────────
+
+/**
+ * Every Creative Commons or public-domain image in use on published content,
+ * for the photo-credits page. Images we own carry no licence and are omitted.
+ */
+export const getLicensedPhotos = cachedQuery(
+  async (): Promise<MediaRef[]> =>
+    prisma.media.findMany({
+      where: {
+        type: 'IMAGE',
+        license: { not: null },
+        NOT: { license: 'NONE' },
+        OR: [
+          { tourImages: { some: { tour: published } } },
+          { destinationHeroFor: { some: published } },
+          { blogHeroFor: { some: published } },
+        ],
+      },
+      orderBy: { createdAt: 'asc' },
+      select: mediaSelect,
+    }),
+  ['photo-credits'],
+  { tags: [cacheTags.tours, cacheTags.destinations, cacheTags.blogPosts], revalidate: REVALIDATE.content },
+)

@@ -44,12 +44,25 @@ const nextConfig: NextConfig = {
   // Next must run them through its own compiler.
   transpilePackages: ['@vamos/db', '@vamos/types', '@vamos/validation', '@vamos/email', '@vamos/shared'],
 
+  experimental: {
+    // One image encode at a time: the VPS has two cores, and parallel sharp
+    // work is what spiked memory. Requests queue for milliseconds instead.
+    imgOptConcurrency: 1,
+    // Stream large source JPEGs instead of decoding them whole into memory.
+    imgOptSequentialRead: true,
+  },
+
   serverExternalPackages: ['@prisma/client', '@prisma/adapter-pg', 'pg', 'nodemailer', 'bcryptjs'],
 
   images: {
-    // AVIF first, WebP as fallback: meaningfully smaller payloads for the
-    // large landscape photography this site is built around.
-    formats: ['image/avif', 'image/webp'],
+    /*
+     * WebP only. AVIF is ~20% smaller but costs several times the CPU and
+     * memory to encode, and on this 2-vCPU VPS the encoder was driving the
+     * web process past its memory ceiling under ordinary traffic, getting it
+     * restarted mid-request several times an hour. Every optimised image is
+     * then cached for 30 days, so WebP's extra bytes are paid once per size.
+     */
+    formats: ['image/webp'],
     deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920],
     imageSizes: [64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30,

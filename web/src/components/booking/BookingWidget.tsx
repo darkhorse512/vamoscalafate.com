@@ -1,11 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, ChevronDown, Loader2, Minus, Plus, ShieldCheck } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { CalendarCheck, Check, Clock, Loader2, MapPin, Minus, Plus, ShieldCheck, Users } from 'lucide-react'
 import { ROUTES, formatDuration, formatMoney, todayUTC } from '@vamos/shared'
 import type { TourDetail } from '@vamos/types'
 import { Button } from '@/components/ui/Button'
+import { DatePicker, type DayInfo } from '@/components/ui/DatePicker'
+import { Select } from '@/components/ui/Select'
 import { analytics } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
@@ -63,8 +65,15 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
   }>({ key: '', slots: [], error: null })
   const [submitting, setSubmitting] = useState(false)
 
-  // Lets the widget read a value the browser set without a React event.
-  const dateInputRef = useRef<HTMLInputElement>(null)
+  /**
+   * Month-level availability for the calendar, keyed like `slotState` so the
+   * loading flag is derived rather than tracked separately.
+   */
+  const [calendarMonth, setCalendarMonth] = useState('')
+  const [calendarState, setCalendarState] = useState<{ key: string; days: Record<string, DayInfo> }>({
+    key: '',
+    days: {},
+  })
 
   const option = useMemo(
     () => tour.options.find((o) => o.id === optionId) ?? tour.options[0],
@@ -85,29 +94,42 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
     }
   }, [])
 
+  const calendarKey = optionId && calendarMonth ? `${optionId}|${calendarMonth}` : ''
+  const loadingCalendar = calendarKey !== '' && calendarState.key !== calendarKey
+  const onMonthChange = useCallback((month: string) => setCalendarMonth(month), [])
+
   /**
-   * Recovers a date the browser already holds.
+   * Marks bookable days in the calendar for the month on screen.
    *
-   * Three cases set an input's value without React seeing a change event:
-   * a visitor typing before hydration finishes, browser autofill, and a
-   * back/forward (bfcache) restore. Without this the control silently resets
-   * and the visitor's selection is lost.
-   *
-   * The update runs after an await so the effect body never triggers a
-   * synchronous re-render.
+   * A hint only: a failed lookup leaves the calendar unmarked but usable, and
+   * whatever day is picked is still checked by the per-day request below.
    */
   useEffect(() => {
+    if (!calendarKey) return
+    const [selectedOptionId, month] = calendarKey.split('|') as [string, string]
     let cancelled = false
+
     void (async () => {
-      await Promise.resolve()
-      if (cancelled) return
-      const current = dateInputRef.current?.value
-      if (current) setDate((existing) => existing || current)
+      const days: Record<string, DayInfo> = {}
+      try {
+        const response = await fetch(
+          `/api/availability/calendar?optionId=${encodeURIComponent(selectedOptionId)}&month=${month}`,
+          { headers: { Accept: 'application/json' } },
+        )
+        if (response.ok) {
+          const data = (await response.json()) as { days: { date: string; soldOut: boolean }[] }
+          for (const day of data.days) days[day.date] = { status: day.soldOut ? 'soldout' : 'available' }
+        }
+      } catch {
+        // Unmarked calendar; see above.
+      }
+      if (!cancelled) setCalendarState({ key: calendarKey, days })
     })()
+
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [calendarKey])
 
   /** Identifies the availability request the current selection needs. */
   const requestKey = optionId && date ? `${optionId}|${date}` : ''
@@ -240,77 +262,65 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
   return (
     <>
-      <div className="rounded-card border border-border bg-surface shadow-raised">
-        <div className="border-b border-border p-5">
-          <div className="flex items-baseline justify-between gap-3">
-            <div>
-              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">
-                Desde
-              </p>
-              <p className="mt-0.5 font-display text-[1.75rem] font-bold leading-none text-heading">
-                {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">por persona</p>
-            </div>
-            <p className="text-right text-xs text-muted-foreground">
-              {formatDuration(tour.durationMinutes)}
-            </p>
-          </div>
+      <div className="relative overflow-hidden rounded-[1.25rem] border border-magenta-500/30 bg-surface shadow-float">
+        {/* Price header */}
+        <div className="relative border-b border-border bg-gradient-to-br from-primary-soft via-surface to-accent-soft/60 px-5 pb-5 pt-6">
+          <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-plum-950 px-3 py-1 text-[0.6875rem] font-bold text-white ring-1 ring-white/10 dark:bg-violet-700">
+            <Clock className="size-3" aria-hidden="true" />
+            {formatDuration(tour.durationMinutes)}
+          </span>
+          <p className="text-[0.75rem] font-semibold text-accent">Desde</p>
+          <p className="mt-0.5 font-display text-[2.25rem] font-bold leading-none text-heading">
+            {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
+          </p>
+          <p className="mt-1.5 text-[0.8125rem] text-accent">por persona</p>
         </div>
 
         <div className="space-y-5 p-5">
           {/* Option */}
           <div>
-            <label htmlFor="bw-option" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
+            <label htmlFor="bw-option" className="mb-2 block text-[0.8125rem] font-bold text-heading">
               Opción
             </label>
-            <div className="relative">
-              <select
-                id="bw-option"
-                value={optionId}
-                onChange={(event) => {
-                  setOptionId(event.target.value)
-                  setDepartureTime(null)
-                }}
-                className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                {tour.options.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.name} - {formatMoney(o.priceCents, o.currency)}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden="true"
-              />
-            </div>
-            {option?.description ? (
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{option.description}</p>
-            ) : null}
+            <Select
+              id="bw-option"
+              value={optionId}
+              onChange={(next) => {
+                setOptionId(next)
+                setDepartureTime(null)
+              }}
+              options={tour.options.map((o) => ({
+                value: o.id,
+                label: o.name,
+                description: o.description ?? undefined,
+                meta: formatMoney(o.priceCents, o.currency),
+              }))}
+            />
           </div>
 
           {/* Date */}
           <div>
-            <label htmlFor="bw-date" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
+            <label htmlFor="bw-date" className="mb-2 block text-[0.8125rem] font-bold text-heading">
               Fecha
             </label>
-            <input
+            <DatePicker
               id="bw-date"
-              ref={dateInputRef}
-              type="date"
+              value={date}
+              onChange={setDate}
               min={minDate}
               max={maxDate}
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
-              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              placeholder="Elegí el día de la excursión"
+              dayInfo={calendarState.key === calendarKey ? calendarState.days : undefined}
+              onMonthChange={onMonthChange}
+              loading={loadingCalendar}
+              legend
             />
           </div>
 
           {/* Departure time */}
           {date && slots.length > 1 ? (
             <fieldset>
-              <legend className="mb-1.5 text-[0.8125rem] font-bold text-heading">Horario</legend>
+              <legend className="mb-2 text-[0.8125rem] font-bold text-heading">Horario</legend>
               <div className="flex flex-wrap gap-2">
                 {slots.map((slot) => (
                   <button
@@ -320,10 +330,10 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                     onClick={() => setDepartureTime(slot.departureTime)}
                     aria-pressed={departureTime === slot.departureTime}
                     className={cn(
-                      'rounded-control border px-3 py-2 text-[0.8125rem] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
+                      'rounded-xl border px-3.5 py-2 text-[0.8125rem] font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-40',
                       departureTime === slot.departureTime
-                        ? 'border-violet-700 bg-violet-700 text-white'
-                        : 'border-border-strong bg-surface text-foreground hover:border-primary',
+                        ? 'border-transparent bg-gradient-to-r from-violet-600 to-magenta-500 text-white shadow-[0_6px_16px_rgb(108_88_254/0.3)]'
+                        : 'border-border-strong bg-surface text-foreground hover:border-primary hover:text-primary',
                     )}
                   >
                     {slot.departureTime ?? 'A coordinar'}
@@ -344,8 +354,11 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           ) : null}
 
           {/* Passengers */}
-          <fieldset className="space-y-3">
-            <legend className="text-[0.8125rem] font-bold text-heading">Pasajeros</legend>
+          <fieldset className="space-y-2.5">
+            <legend className="mb-2 flex items-center gap-1.5 text-[0.8125rem] font-bold text-heading">
+              <Users className="size-4 text-primary" aria-hidden="true" />
+              Pasajeros
+            </legend>
 
             <Counter
               label="Adultos"
@@ -371,31 +384,26 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           {/* Pickup */}
           {tour.pickupLocations.length > 0 ? (
             <div>
-              <label htmlFor="bw-pickup" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
+              <label htmlFor="bw-pickup" className="mb-2 block text-[0.8125rem] font-bold text-heading">
                 Punto de encuentro
               </label>
-              <div className="relative">
-                <select
-                  id="bw-pickup"
-                  value={pickupId}
-                  onChange={(event) => setPickupId(event.target.value)}
-                  className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                >
-                  <option value="">Elegir más adelante</option>
-                  {tour.pickupLocations.map((location) => (
-                    <option key={location.id} value={location.id}>
-                      {location.name}
-                      {location.extraCostCents > 0
-                        ? ` (+${formatMoney(location.extraCostCents, tour.currency)})`
-                        : ''}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden="true"
-                />
-              </div>
+              <Select
+                id="bw-pickup"
+                value={pickupId}
+                onChange={setPickupId}
+                leadingIcon={<MapPin className="size-4" aria-hidden="true" />}
+                options={[
+                  { value: '', label: 'Elegir más adelante', description: 'Te lo pedimos al confirmar la reserva.' },
+                  ...tour.pickupLocations.map((location) => ({
+                    value: location.id,
+                    label: location.name,
+                    meta:
+                      location.extraCostCents > 0
+                        ? `+${formatMoney(location.extraCostCents, tour.currency)}`
+                        : 'Sin cargo',
+                  })),
+                ]}
+              />
             </div>
           ) : null}
 
@@ -424,7 +432,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
           {/* Total */}
           {date && activeSlot ? (
-            <div className="space-y-1.5 rounded-control bg-surface-muted p-3.5">
+            <div className="space-y-1.5 rounded-xl border border-border bg-surface-muted p-4">
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>
                   {adults} × {formatMoney(unitCents, tour.currency)}
@@ -448,25 +456,28 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                 </div>
               ) : null}
 
-              <div className="flex justify-between border-t border-border pt-2 text-sm font-bold text-heading">
+              <div className="flex items-baseline justify-between border-t border-border pt-2.5 text-sm font-bold text-heading">
                 <span>Total estimado</span>
-                <span>{formatMoney(estimatedTotal, tour.currency)}</span>
+                <span className="font-display text-xl">{formatMoney(estimatedTotal, tour.currency)}</span>
               </div>
             </div>
           ) : null}
 
-          <Button fullWidth size="lg" disabled={!canSubmit} onClick={submit}>
+          <Button fullWidth size="lg" variant="accent" disabled={!canSubmit} onClick={submit}>
             {submitting ? (
               <>
                 <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                 Preparando…
               </>
             ) : (
-              'Continuar con la reserva'
+              <>
+                <CalendarCheck className="size-4" aria-hidden="true" />
+                Continuar con la reserva
+              </>
             )}
           </Button>
 
-          <ul className="space-y-1.5 text-[0.6875rem] text-muted-foreground">
+          <ul className="space-y-2 rounded-xl bg-surface-muted p-3.5 text-xs text-muted-foreground">
             {option && option.freeCancellationHours > 0 ? (
               <li className="flex items-start gap-1.5">
                 <Check className="mt-px size-3.5 shrink-0 text-success" aria-hidden="true" />
@@ -524,9 +535,9 @@ function Counter({
   const id = `counter-${label.toLowerCase()}`
 
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-border px-3.5 py-2.5">
       <div>
-        <label htmlFor={id} className="text-sm font-medium text-heading">
+        <label htmlFor={id} className="text-sm font-semibold text-heading">
           {label}
         </label>
         {hint ? <p className="text-[0.6875rem] text-muted-foreground">{hint}</p> : null}
@@ -538,7 +549,7 @@ function Counter({
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           aria-label={`Quitar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-primary disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-full border border-border-strong text-foreground transition-all hover:border-primary hover:bg-primary-soft hover:text-primary disabled:pointer-events-none disabled:opacity-35"
         >
           <Minus className="size-4" aria-hidden="true" />
         </button>
@@ -554,7 +565,7 @@ function Counter({
             const next = Number(event.target.value)
             if (Number.isFinite(next)) onChange(Math.min(max, Math.max(min, next)))
           }}
-          className="w-11 border-0 bg-transparent text-center text-sm font-semibold text-heading focus:outline-none focus:ring-0"
+          className="w-10 border-0 bg-transparent text-center text-base font-bold text-heading focus:outline-none focus:ring-0"
         />
 
         <button
@@ -562,7 +573,7 @@ function Counter({
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           aria-label={`Agregar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-primary disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-full border border-border-strong text-foreground transition-all hover:border-primary hover:bg-primary-soft hover:text-primary disabled:pointer-events-none disabled:opacity-35"
         >
           <Plus className="size-4" aria-hidden="true" />
         </button>

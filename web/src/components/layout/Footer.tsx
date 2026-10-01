@@ -111,6 +111,11 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
                 Cookies
               </Link>
             </li>
+            <li>
+              <Link href={ROUTES.photoCredits} className="transition-colors hover:text-stone-300">
+                Créditos fotográficos
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

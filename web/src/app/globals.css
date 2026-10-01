@@ -1,5 +1,22 @@
 @import 'tailwindcss';
 
+/*
+ * `dark:` must follow the same rule as the theme tokens: an explicit
+ * data-theme wins, otherwise the OS preference applies. Tailwind's default
+ * follows the OS alone, so a reader who chose "Claro" on a dark-mode machine
+ * would still get every dark: style.
+ */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme='light']), :root:not([data-theme='light']) *) {
+      @slot;
+    }
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    VAMOS CALAFATE - design system
 
@@ -342,6 +359,25 @@
            focus:font-semibold focus:text-inverse-foreground;
   }
 
+  /*
+   * Text inputs and textareas. One definition, so every form on the site has
+   * the same height, radius and focus treatment. Errors are styled from
+   * `aria-invalid`, the attribute assistive technology already reads, so the
+   * visual and the announced state cannot disagree.
+   */
+  .form-control {
+    @apply block min-h-12 w-full rounded-xl border border-border-strong bg-surface px-3.5 py-3 text-sm text-heading
+           transition-all duration-150 placeholder:text-subtle-foreground
+           hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/15
+           disabled:cursor-not-allowed disabled:opacity-55;
+  }
+  .form-control[aria-invalid='true'] {
+    @apply border-danger hover:border-danger focus:border-danger focus:ring-danger/15;
+  }
+  textarea.form-control {
+    @apply min-h-32 resize-y leading-relaxed;
+  }
+
   .container-page {
     @apply mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8;
   }
@@ -565,4 +601,14 @@
      reduced-motion rule does not neutralise it — content would sit at
      opacity 0 until scrolled into range. Remove it outright. */
   .reveal { animation: none !important; }
+}
+
+/* Popovers (select menus, date picker) open with a short scale-and-fade from
+   their anchor edge. */
+@keyframes pop-in {
+  from { opacity: 0; transform: translate3d(0, -4px, 0) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@layer utilities {
+  .animate-pop-in { animation: pop-in 0.16s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 }

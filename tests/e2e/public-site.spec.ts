@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { pickDate } from './helpers'
 
 /**
  * Public site end-to-end coverage.
@@ -83,9 +84,7 @@ test.describe('tour detail', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/Minitrekking/i)
     await expect(page.getByRole('heading', { name: 'Descripción' })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Itinerario' })).toBeVisible()
-    // `exact` matters here: without it, "Incluye" also matches "No incluye"
-    // and Playwright's strict mode rejects the ambiguous locator.
-    await expect(page.getByRole('heading', { name: 'Incluye', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Esta experiencia incluye' })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'No incluye', exact: true })).toBeVisible()
     await expect(page.getByRole('heading', { name: /Preguntas frecuentes/i })).toBeVisible()
   })
@@ -128,11 +127,10 @@ test.describe('tour detail', () => {
     // Nothing is bookable before a date is chosen.
     await expect(continueButton).toBeDisabled()
 
-    const dateInput = page.locator('#bw-date')
-    await expect(dateInput).toBeVisible()
+    await expect(page.locator('#bw-date')).toBeVisible()
 
     const target = new Date(Date.now() + 10 * 86_400_000).toISOString().slice(0, 10)
-    await dateInput.fill(target)
+    await pickDate(page, '#bw-date', target)
 
     // This tour offers several departures, so a time must be picked before a
     // total can be computed - the widget deliberately does not guess.
@@ -150,7 +148,7 @@ test.describe('tour detail', () => {
     await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
 
     const target = new Date(Date.now() + 12 * 86_400_000).toISOString().slice(0, 10)
-    await page.locator('#bw-date').fill(target)
+    await pickDate(page, '#bw-date', target)
 
     const timeButton = page.getByRole('button', { name: /lug\./ }).first()
     await expect(timeButton).toBeVisible({ timeout: 15_000 })
@@ -285,3 +283,45 @@ test.describe('admin host is never indexable', () => {
     expect(headers['cache-control']).toContain('no-store')
   })
 })
+
+test.describe('form controls', () => {
+  test('the date picker works from the keyboard and marks bookable days', async ({ page }) => {
+    await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
+
+    const trigger = page.locator('#bw-date')
+    await trigger.focus()
+    await page.keyboard.press('Enter')
+
+    const dialog = page.locator('#bw-date-dialog')
+    await expect(dialog).toBeVisible()
+    // The calendar fetched the month and marked days with seats.
+    await expect(dialog.getByRole('button', { name: /con lugares/ }).first()).toBeVisible({ timeout: 15_000 })
+
+    // Focus starts on a day; arrow keys move it; Escape closes and returns focus.
+    const focusedBefore = await page.evaluate(() => document.activeElement?.getAttribute('data-date'))
+    expect(focusedBefore).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    await page.keyboard.press('ArrowRight')
+    const focusedAfter = await page.evaluate(() => document.activeElement?.getAttribute('data-date'))
+    expect(focusedAfter).not.toBe(focusedBefore)
+
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(trigger).toBeFocused()
+  })
+
+  test('the select opens, navigates and chooses from the keyboard', async ({ page }) => {
+    await page.goto('/excursiones', { waitUntil: 'networkidle' })
+
+    const select = page.locator('#orden')
+    await select.focus()
+    await page.keyboard.press('ArrowDown')
+    await expect(page.getByRole('listbox')).toBeVisible()
+
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('Enter')
+    await expect(page.getByRole('listbox')).toBeHidden()
+    await expect(page).toHaveURL(/orden=precio-asc/)
+    await expect(select).toContainText('Menor precio')
+  })
+})
+

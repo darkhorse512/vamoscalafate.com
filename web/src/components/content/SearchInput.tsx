@@ -36,7 +36,7 @@ export function SearchInput({ defaultValue = '' }: { defaultValue?: string }) {
           onChange={(event) => setValue(event.target.value)}
           placeholder="Perito Moreno, traslado al aeropuerto, qué llevar…"
           autoComplete="off"
-          className="h-12 w-full rounded-control border border-border-strong bg-surface pl-10 pr-3 text-sm text-heading placeholder:text-subtle-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className="form-control pl-10"
         />
       </div>
       <Button type="submit" size="lg">

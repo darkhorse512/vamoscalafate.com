@@ -229,7 +229,7 @@ STORAGE_PUBLIC_URL="https://vamoscalafate.com/media"
 NEXT_PUBLIC_GA_ID=""
 NEXT_PUBLIC_GSC_VERIFICATION=""
 NEXT_PUBLIC_WHATSAPP_NUMBER=""
-NEXT_PUBLIC_CONTACT_EMAIL="info@vamoscalafate.com"
+NEXT_PUBLIC_CONTACT_EMAIL="ventas@vamoscalafate.com"
 ```
 
 ### `admin/.env`

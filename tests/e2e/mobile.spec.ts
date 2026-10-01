@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { pickDate } from './helpers'
 
 /**
  * Mobile coverage.
@@ -77,7 +78,7 @@ test.describe('mobile booking flow', () => {
     await page.goto('/excursiones/glaciar-perito-moreno-pasarelas', { waitUntil: 'networkidle' })
 
     const target = new Date(Date.now() + 15 * 86_400_000).toISOString().slice(0, 10)
-    await page.locator('#bw-date').fill(target)
+    await pickDate(page, '#bw-date', target)
 
     const timeButton = page.getByRole('button', { name: /lug\./ }).first()
     await expect(timeButton).toBeVisible({ timeout: 15_000 })

@@ -25,10 +25,13 @@ export function Gallery({
   images,
   seed,
   title,
+  tall = false,
 }: {
   images: MediaRef[]
   seed: string
   title: string
+  /** Taller desktop mosaic, for layouts with a summary column beside it. */
+  tall?: boolean
 }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [railIndex, setRailIndex] = useState(0)
@@ -165,7 +168,12 @@ export function Gallery({
       </div>
 
       {/* ── Desktop: editorial mosaic ────────────────────────────────── */}
-      <div className="hidden overflow-hidden rounded-card sm:grid sm:h-[30rem] sm:grid-cols-4 sm:grid-rows-2 sm:gap-2">
+      <div
+        className={cn(
+          'hidden overflow-hidden rounded-[1.25rem] sm:grid sm:h-[30rem] sm:grid-cols-4 sm:grid-rows-2 sm:gap-2',
+          tall && 'lg:h-[37.5rem]',
+        )}
+      >
         {slots.slice(0, 5).map((media, index) => (
           <button
             key={index}

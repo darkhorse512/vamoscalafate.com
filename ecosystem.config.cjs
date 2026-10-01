@@ -28,7 +28,9 @@ const common = {
   min_uptime: '20s',
   restart_delay: 4000,
   // Restart if RSS grows past this; catches a slow leak before the VPS OOMs.
-  max_memory_restart: '600M',
+  // A ceiling, not the expected size: the server has 8 GB, and at 600 MB the
+  // limit was killing a healthy process during image optimisation bursts.
+  max_memory_restart: '1G',
   // Give in-flight requests (a payment webhook, say) time to finish.
   kill_timeout: 10000,
   listen_timeout: 15000,
@@ -45,14 +47,20 @@ module.exports = {
     {
       ...common,
       name: 'vamoscalafate-web',
-      cwd: path.join(ROOT, 'web'),
-      script: path.join(ROOT, 'web', '.next', 'standalone', 'web', 'server.js'),
+      // The current release, not the build directory: see "Immutable
+      // releases" in deploy/scripts/deploy.sh.
+      cwd: path.join(ROOT, 'current', 'web', 'web'),
+      script: path.join(ROOT, 'current', 'web', 'web', 'server.js'),
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
         // Binding to loopback only: Nginx is the sole entry point, and the
         // Node port must never be reachable from the Internet.
         HOSTNAME: '127.0.0.1',
+        // glibc gives each sharp worker thread its own malloc arena, which
+        // fragments and inflates RSS without bound. Two arenas is sharp's own
+        // documented remedy on Linux.
+        MALLOC_ARENA_MAX: '2',
       },
       // Consumed by `pm2 start --env production`. Without it PM2 warns that
       // the environment is undefined and falls back to `env`.
@@ -60,6 +68,7 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 3000,
         HOSTNAME: '127.0.0.1',
+        MALLOC_ARENA_MAX: '2',
       },
       out_file: '/var/log/vamoscalafate/web.out.log',
       error_file: '/var/log/vamoscalafate/web.err.log',
@@ -67,8 +76,10 @@ module.exports = {
     {
       ...common,
       name: 'vamoscalafate-admin',
-      cwd: path.join(ROOT, 'admin'),
-      script: path.join(ROOT, 'admin', '.next', 'standalone', 'admin', 'server.js'),
+      // The current release, not the build directory: see "Immutable
+      // releases" in deploy/scripts/deploy.sh.
+      cwd: path.join(ROOT, 'current', 'admin', 'admin'),
+      script: path.join(ROOT, 'current', 'admin', 'admin', 'server.js'),
       env: {
         NODE_ENV: 'production',
         PORT: 3001,

@@ -183,12 +183,7 @@ export function SubmissionForm() {
             maxLength={5000}
             placeholder="Contanos qué ofrece tu establecimiento, su ubicación, capacidad y lo que lo distingue. Mínimo 50 caracteres."
             aria-invalid={fieldErrors.description ? true : undefined}
-            className={cn(
-              'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
-              fieldErrors.description
-                ? 'border-danger focus:ring-danger'
-                : 'border-border-strong focus:border-primary focus:ring-primary',
-            )}
+            className="form-control"
           />
           {fieldErrors.description ? (
             <p role="alert" className="mt-1 text-[0.6875rem] text-danger">
@@ -239,7 +234,7 @@ export function SubmissionForm() {
                   setImageUrls(next)
                 }}
                 placeholder="https://…"
-                className="h-11 flex-1 rounded-control border border-border-strong bg-surface px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="form-control flex-1"
               />
               {imageUrls.length > 1 ? (
                 <button
@@ -275,7 +270,7 @@ export function SubmissionForm() {
             name="videoUrls"
             rows={2}
             placeholder="Enlaces de YouTube o Vimeo, uno por línea"
-            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="form-control"
           />
         </div>
 
@@ -289,7 +284,7 @@ export function SubmissionForm() {
             rows={3}
             maxLength={2000}
             placeholder="Cualquier otro dato que quieras que tengamos en cuenta."
-            className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="form-control"
           />
         </div>
       </fieldset>
@@ -360,12 +355,7 @@ function Field({
         type={type}
         required={required}
         aria-invalid={fieldErrors ? true : undefined}
-        className={cn(
-          'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
-          fieldErrors
-            ? 'border-danger focus:ring-danger'
-            : 'border-border-strong focus:border-primary focus:ring-primary',
-        )}
+        className="form-control"
       />
       {hint && !fieldErrors ? <p className="mt-1 text-[0.6875rem] text-muted-foreground">{hint}</p> : null}
       {fieldErrors ? (

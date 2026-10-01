@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { analytics } from '@/lib/analytics'
 import { createBookingAction } from '@/server/actions/booking'
 import { cn } from '@/lib/utils'
+import { Select } from '@/components/ui/Select'
 
 /**
  * Customer details form.
@@ -178,22 +179,22 @@ export function BookingForm({
               <label htmlFor="pickup" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
                 Punto de encuentro
               </label>
-              <select
+              <Select
                 id="pickup"
                 value={pickupId}
-                onChange={(event) => setPickupId(event.target.value)}
-                className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                <option value="">Coordinar por email</option>
-                {pickupLocations.map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
-                    {location.extraCostCents > 0
-                      ? ` (+${formatMoney(location.extraCostCents, tour.currency)} p/persona)`
-                      : ''}
-                  </option>
-                ))}
-              </select>
+                onChange={setPickupId}
+                options={[
+                  { value: '', label: 'Coordinar por email', description: 'Te escribimos para acordar dónde buscarte.' },
+                  ...pickupLocations.map((location) => ({
+                    value: location.id,
+                    label: location.name,
+                    meta:
+                      location.extraCostCents > 0
+                        ? `+${formatMoney(location.extraCostCents, tour.currency)} p/persona`
+                        : 'Sin cargo',
+                  })),
+                ]}
+              />
             </div>
           ) : null}
 
@@ -207,7 +208,7 @@ export function BookingForm({
               rows={3}
               maxLength={1000}
               placeholder="Restricciones alimentarias, movilidad reducida, viajás con niños pequeños…"
-              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="form-control"
             />
           </div>
         </fieldset>
@@ -382,12 +383,7 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={fieldErrors ? true : undefined}
         aria-describedby={cn(hint && hintId, fieldErrors && errorId) || undefined}
-        className={cn(
-          'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
-          fieldErrors
-            ? 'border-danger focus:border-danger focus:ring-danger'
-            : 'border-border-strong focus:border-primary focus:ring-primary',
-        )}
+        className="form-control"
       />
 
       {hint && !fieldErrors ? (

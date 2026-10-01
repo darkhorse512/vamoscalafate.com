@@ -49,3 +49,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 tests/e2e/.auth/
+
+# deploy releases (see deploy/scripts/deploy.sh)
+releases/
+current/
+shared/

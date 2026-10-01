@@ -2,10 +2,12 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { SlidersHorizontal, X } from 'lucide-react'
+import { SlidersHorizontal, X, ArrowUpDown } from 'lucide-react'
 import { formatMoney } from '@vamos/shared'
 import { Button } from '@/components/ui/Button'
 import { buildQuery, cn } from '@/lib/utils'
+import { DatePicker } from '@/components/ui/DatePicker'
+import { Select } from '@/components/ui/Select'
 
 /**
  * Catalogue filters.
@@ -164,13 +166,14 @@ export function TourFilters({
         >
           Disponible el
         </label>
-        <input
+        <DatePicker
           id="filter-fecha"
-          type="date"
-          min={today}
           value={current.fecha}
-          onChange={(event) => update('fecha', event.target.value || null)}
-          className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          onChange={(next) => update('fecha', next || null)}
+          min={today}
+          size="sm"
+          placeholder="Cualquier fecha"
+          clearable
         />
       </div>
 
@@ -203,18 +206,21 @@ export function TourFilters({
           <label htmlFor="orden" className="sr-only">
             Ordenar resultados
           </label>
-          <select
+          <Select
             id="orden"
             value={current.orden}
-            onChange={(event) => update('orden', event.target.value)}
-            className="h-10 rounded-control border border-border-strong bg-surface px-3 text-[0.8125rem] font-medium text-heading focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          >
-            <option value="destacados">Destacados</option>
-            <option value="precio-asc">Menor precio</option>
-            <option value="precio-desc">Mayor precio</option>
-            <option value="duracion-asc">Menor duración</option>
-            <option value="nombre-asc">Nombre (A–Z)</option>
-          </select>
+            onChange={(next) => update('orden', next)}
+            size="sm"
+            className="w-52"
+            leadingIcon={<ArrowUpDown className="size-3.5" aria-hidden="true" />}
+            options={[
+              { value: 'destacados', label: 'Destacados' },
+              { value: 'precio-asc', label: 'Menor precio' },
+              { value: 'precio-desc', label: 'Mayor precio' },
+              { value: 'duracion-asc', label: 'Menor duración' },
+              { value: 'nombre-asc', label: 'Nombre (A–Z)' },
+            ]}
+          />
 
           <Button
             variant="outline"
