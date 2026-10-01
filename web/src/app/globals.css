@@ -612,3 +612,88 @@
 @layer utilities {
   .animate-pop-in { animation: pop-in 0.16s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBARS
+
+   Chromium, Edge and Safari take the ::-webkit-scrollbar rules, which allow a
+   gradient thumb. Chromium 121+ IGNORES those rules as soon as the standard
+   `scrollbar-color` is set, so the standard properties are given only to
+   browsers without the WebKit pseudo-elements (Firefox), which then get
+   plain brand colours instead of the gradient.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --scrollbar-track: #f4f2f8;
+  --scrollbar-thumb-from: #a56afd;
+  --scrollbar-thumb-to: #ff4f82;
+  --scrollbar-thumb-hover-from: #6c58fe;
+  --scrollbar-thumb-hover-to: #ff2e70;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --scrollbar-track: #1a002b;
+    --scrollbar-thumb-from: #6c58fe;
+    --scrollbar-thumb-to: #d3245c;
+    --scrollbar-thumb-hover-from: #a56afd;
+    --scrollbar-thumb-hover-to: #ff4f82;
+  }
+}
+:root[data-theme='dark'] {
+  --scrollbar-track: #1a002b;
+  --scrollbar-thumb-from: #6c58fe;
+  --scrollbar-thumb-to: #d3245c;
+  --scrollbar-thumb-hover-from: #a56afd;
+  --scrollbar-thumb-hover-to: #ff4f82;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-from) var(--scrollbar-track);
+  }
+}
+
+/* Page scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  /* The transparent border plus padding-box clip leaves an inset pill with
+     breathing room, instead of a slab touching the window edge. */
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--scrollbar-thumb-from), var(--scrollbar-thumb-to)) padding-box;
+  min-height: 48px;
+}
+::-webkit-scrollbar-thumb:hover {
+  border-width: 2px;
+  background: linear-gradient(180deg, var(--scrollbar-thumb-hover-from), var(--scrollbar-thumb-hover-to))
+    padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
+}
+
+/* Inner scroll areas (dropdown lists, drawers, tables): slimmer, and the
+   track blends into whatever surface they sit on. */
+.scroll-area::-webkit-scrollbar,
+[role='listbox']::-webkit-scrollbar,
+[role='dialog'] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-area::-webkit-scrollbar-track,
+[role='listbox']::-webkit-scrollbar-track,
+[role='dialog'] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-area::-webkit-scrollbar-thumb,
+[role='listbox']::-webkit-scrollbar-thumb,
+[role='dialog'] ::-webkit-scrollbar-thumb {
+  border-width: 2px;
+}

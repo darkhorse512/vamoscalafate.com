@@ -245,11 +245,12 @@ export function Carousel({
           <div
             ref={barRef}
             onPointerDown={onBarPointerDown}
-            className="group relative h-6 flex-1 cursor-pointer touch-none"
+            className="group relative h-7 flex-1 cursor-pointer touch-none"
             aria-hidden="true"
           >
-            {/* Track */}
-            <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-border transition-[height] duration-200 group-hover:h-1.5" />
+            {/* Track: a recessed groove */}
+            <div className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-surface-strong shadow-[inset_0_1px_2px_rgb(32_0_51/0.12)] ring-1 ring-inset ring-border" />
+
             {/* Thumb */}
             <div
               onPointerDown={onThumbPointerDown}
@@ -257,18 +258,36 @@ export function Carousel({
               onPointerUp={onThumbPointerUp}
               onPointerCancel={onThumbPointerUp}
               className={cn(
-                'absolute top-1/2 -translate-y-1/2 cursor-grab rounded-full bg-gradient-to-r from-violet-600 to-magenta-500 active:cursor-grabbing',
+                'absolute top-1/2 -translate-y-1/2 cursor-grab overflow-hidden rounded-full active:cursor-grabbing',
+                'bg-[linear-gradient(90deg,#6c58fe_0%,#a56afd_45%,#ff2e70_100%)]',
                 // Exclusive branches: `cn` does not merge conflicting heights.
-                dragging ? 'h-1.5 shadow-[0_0_0_4px_rgb(108_88_254/0.15)]' : 'h-1 group-hover:h-1.5',
+                dragging
+                  ? 'h-3.5 shadow-[0_0_0_5px_rgb(108_88_254/0.16),0_4px_14px_rgb(108_88_254/0.45)]'
+                  : 'h-2 shadow-[0_2px_10px_rgb(108_88_254/0.35)] group-hover:h-3.5 group-hover:shadow-[0_4px_14px_rgb(108_88_254/0.45)]',
               )}
               style={{
                 width: `${thumb.size * 100}%`,
                 left: `${thumb.offset * 100}%`,
-                // No easing while dragging, so the thumb tracks the pointer.
-                transitionProperty: dragging ? 'height, box-shadow' : 'left, height, box-shadow',
-                transitionDuration: dragging ? '0ms, 200ms, 200ms' : '150ms',
+                // No easing on position while dragging, so it tracks the pointer.
+                transition: dragging
+                  ? 'height 200ms, box-shadow 200ms'
+                  : 'left 180ms ease-out, height 200ms, box-shadow 200ms',
               }}
-            />
+            >
+              {/* Glossy highlight along the top edge */}
+              <span className="pointer-events-none absolute inset-x-2 top-px h-px rounded-full bg-white/55" />
+              {/* Grip, revealed when the thumb swells */}
+              <span
+                className={cn(
+                  'pointer-events-none absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-[3px] transition-opacity duration-200',
+                  dragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+                )}
+              >
+                <span className="size-[3px] rounded-full bg-white/90" />
+                <span className="size-[3px] rounded-full bg-white/90" />
+                <span className="size-[3px] rounded-full bg-white/90" />
+              </span>
+            </div>
           </div>
 
           <p className="shrink-0 font-display text-sm tabular-nums text-muted-foreground" aria-live="polite">

@@ -250,3 +250,18 @@
     @apply bg-surface-muted;
   }
 }
+
+/* Scrollbars, matching the public site's but in the console's quieter
+   palette. Chromium ignores ::-webkit-scrollbar once `scrollbar-color` is
+   set, so the standard property is reserved for Firefox. */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-width: thin; scrollbar-color: #a56afd transparent; }
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--sem-primary) 45%, transparent) padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--sem-primary) padding-box; }
