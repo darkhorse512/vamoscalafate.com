@@ -17,6 +17,32 @@ set -Eeuo pipefail
 APP_DIR="${APP_DIR:-/var/www/vamoscalafate}"
 BRANCH="${BRANCH:-main}"
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PM2 ownership
+#
+# The running applications belong to ONE pm2 daemon: the `vamos` user's, which
+# systemd resurrects at boot (pm2-vamos.service). A bare `pm2` command talks to
+# whichever daemon belongs to the invoking user, so running this script with
+# sudo silently addressed root's own empty daemon instead. That daemon then
+# started a second copy of both apps, which died on EADDRINUSE while the OLD
+# build kept serving traffic — and the health check below still saw 200,
+# because something was answering. Deploys reported success for hours while
+# shipping nothing.
+#
+# Addressing the daemon explicitly, by user and PM2_HOME, makes that
+# impossible regardless of who runs the script.
+# ─────────────────────────────────────────────────────────────────────────────
+PM2_USER="${PM2_USER:-vamos}"
+PM2_HOME_DIR="${PM2_HOME_DIR:-/home/$PM2_USER/.pm2}"
+
+pm2_do() {
+  if [ "$(id -un)" = "$PM2_USER" ]; then
+    PM2_HOME="$PM2_HOME_DIR" pm2 "$@"
+  else
+    runuser -u "$PM2_USER" -- env "PM2_HOME=$PM2_HOME_DIR" pm2 "$@"
+  fi
+}
+
 cd "$APP_DIR"
 
 step() { echo; echo "── $1 ────────────────────────────────────────────"; }
@@ -59,8 +85,8 @@ step "Building applications"
 pnpm build || fail "build"
 
 step "Reloading processes"
-pm2 reload ecosystem.config.cjs --env production --update-env || fail "pm2 reload"
-pm2 save
+pm2_do reload ecosystem.config.cjs --env production --update-env || fail "pm2 reload"
+pm2_do save
 
 step "Health check"
 sleep 5
@@ -77,6 +103,39 @@ if [ "$WEB_STATUS" != "200" ] || [ "$ADMIN_STATUS" != "200" ]; then
   echo "Roll back with: git reset --hard $PREVIOUS && ./deploy/scripts/deploy.sh" >&2
   exit 1
 fi
+
+# A 200 only proves SOMETHING is listening. If a stale process still holds the
+# port, the new build never binds and the old one answers happily — which is
+# exactly how a broken deploy reported success while shipping nothing.
+#
+# The App Router does not put the build id in the HTML, so instead we take an
+# asset hash the served page references and check that file exists in the
+# build we just produced. A fresh build renames its chunks, so a stale server
+# necessarily points at a filename that is no longer on disk.
+step "Verifying the running build is the one just built"
+for app in web admin; do
+  if [ "$app" = web ]; then port=3000; path=/; else port=3001; path=/login; fi
+
+  asset="$(curl -s --max-time 10 "http://127.0.0.1:$port$path" \
+    | grep -o '/_next/static/chunks/[A-Za-z0-9._-]*\.css' | head -1 || true)"
+
+  if [ -z "$asset" ]; then
+    echo "  $app → no stylesheet reference found; cannot verify" >&2
+    continue
+  fi
+
+  if [ -f "$app/.next${asset#/_next}" ]; then
+    echo "  $app → serving ${asset##*/}, which is in this build"
+  else
+    echo
+    echo "ERROR: $app is serving ${asset##*/}, which this build did not" >&2
+    echo "produce. A stale process is almost certainly still holding port" >&2
+    echo "$port outside this pm2 daemon. Find it with:" >&2
+    echo "  ss -ltnp | grep :$port" >&2
+    echo "Stop it, then re-run this script." >&2
+    exit 1
+  fi
+done
 
 echo
 echo "Deploy complete: $(git rev-parse --short HEAD)"
