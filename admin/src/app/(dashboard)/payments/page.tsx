@@ -73,7 +73,7 @@ export default async function PaymentsPage({
       key: 'reference',
       header: 'Reserva',
       cell: (row) => (
-        <Link href={`/bookings/${row.bookingId}`} className="text-glacier-700 hover:underline">
+        <Link href={`/bookings/${row.bookingId}`} className="text-violet-700 hover:underline">
           {row.reference}
         </Link>
       ),
@@ -83,7 +83,7 @@ export default async function PaymentsPage({
       key: 'providerId',
       header: 'ID del proveedor',
       cell: (row) => (
-        <span className="font-mono text-[0.75rem] text-slate-500">
+        <span className="font-mono text-[0.75rem] text-subtle-foreground">
           {row.providerPaymentId ?? '-'}
         </span>
       ),
@@ -118,20 +118,20 @@ export default async function PaymentsPage({
 
       <div className="mb-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="admin-panel p-4">
-          <p className="text-[0.75rem] font-medium text-slate-500">Acreditado</p>
-          <p className="tabular mt-1 text-xl font-semibold text-slate-900">
+          <p className="text-[0.75rem] font-medium text-subtle-foreground">Acreditado</p>
+          <p className="tabular mt-1 text-xl font-semibold text-heading">
             {formatMoney(approved._sum.amountCents ?? 0, 'ARS')}
           </p>
         </div>
         <div className="admin-panel p-4">
-          <p className="text-[0.75rem] font-medium text-slate-500">Reembolsado</p>
-          <p className="tabular mt-1 text-xl font-semibold text-slate-900">
+          <p className="text-[0.75rem] font-medium text-subtle-foreground">Reembolsado</p>
+          <p className="tabular mt-1 text-xl font-semibold text-heading">
             {formatMoney(refunded._sum.refundedCents ?? 0, 'ARS')}
           </p>
         </div>
         <div className="admin-panel p-4">
-          <p className="text-[0.75rem] font-medium text-slate-500">Operaciones</p>
-          <p className="tabular mt-1 text-xl font-semibold text-slate-900">{total}</p>
+          <p className="text-[0.75rem] font-medium text-subtle-foreground">Operaciones</p>
+          <p className="tabular mt-1 text-xl font-semibold text-heading">{total}</p>
         </div>
       </div>
 

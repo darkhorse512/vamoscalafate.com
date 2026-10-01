@@ -91,7 +91,7 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-description"
-        className="relative w-full max-w-md rounded-panel bg-white p-5 shadow-panel"
+        className="relative w-full max-w-md rounded-panel bg-surface p-5 shadow-panel"
       >
         <div className="flex gap-3">
           {destructive ? (
@@ -104,10 +104,10 @@ export function ConfirmDialog({
           ) : null}
 
           <div className="min-w-0">
-            <h2 id="confirm-title" className="text-[0.9375rem] font-semibold text-slate-900">
+            <h2 id="confirm-title" className="text-[0.9375rem] font-semibold text-heading">
               {title}
             </h2>
-            <p id="confirm-description" className="mt-1.5 text-[0.8125rem] leading-relaxed text-slate-600">
+            <p id="confirm-description" className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">
               {description}
             </p>
           </div>

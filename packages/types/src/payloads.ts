@@ -31,9 +31,27 @@ import type {
  * component contract from drifting apart.
  */
 
+/**
+ * The shape every image-rendering component receives.
+ *
+ * The licence fields are not optional extras: CC BY and CC BY-SA oblige us to
+ * name the author and the licence wherever the work is shown, so they travel
+ * with the image rather than being looked up separately and forgotten.
+ */
 export type MediaRef = Pick<
   Media,
-  'id' | 'url' | 'altText' | 'caption' | 'width' | 'height' | 'blurDataUrl' | 'externalUrl'
+  | 'id'
+  | 'url'
+  | 'altText'
+  | 'caption'
+  | 'width'
+  | 'height'
+  | 'blurDataUrl'
+  | 'externalUrl'
+  | 'license'
+  | 'attributionText'
+  | 'attributionUrl'
+  | 'sourceUrl'
 >
 
 export type TourImageWithMedia = TourImage & { media: MediaRef }

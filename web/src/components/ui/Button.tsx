@@ -20,14 +20,14 @@ const BASE =
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-glacier-700 text-white hover:bg-glacier-800 active:bg-glacier-900 focus-visible:ring-glacier-600',
+    'bg-violet-700 text-white hover:bg-violet-800 active:bg-violet-900 focus-visible:ring-violet-600',
   secondary:
-    'bg-lenga-900 text-white hover:bg-lenga-950 active:bg-black focus-visible:ring-lenga-700',
+    'bg-plum-900 text-white hover:bg-inverse active:bg-black focus-visible:ring-plum-700',
   outline:
-    'border border-stone-300 bg-white text-lenga-900 hover:border-lenga-400 hover:bg-stone-50 focus-visible:ring-glacier-600',
-  ghost: 'text-lenga-800 hover:bg-stone-100 focus-visible:ring-glacier-600',
+    'border border-border-strong bg-surface text-heading hover:border-plum-400 hover:bg-surface-muted focus-visible:ring-violet-600',
+  ghost: 'text-foreground hover:bg-surface-strong focus-visible:ring-violet-600',
   accent:
-    'bg-ochre-500 text-white hover:bg-ochre-600 active:bg-ochre-600 focus-visible:ring-ochre-500',
+    'bg-magenta-500 text-white hover:bg-magenta-600 active:bg-magenta-600 focus-visible:ring-magenta-500',
 }
 
 const SIZES: Record<Size, string> = {

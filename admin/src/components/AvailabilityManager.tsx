@@ -97,19 +97,19 @@ export function AvailabilityManager({
           type="button"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
-          className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-slate-50"
+          className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-surface-muted"
         >
-          <span className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-slate-900">
-            <CalendarPlus className="size-4 text-glacier-600" aria-hidden="true" />
+          <span className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-heading">
+            <CalendarPlus className="size-4 text-violet-600" aria-hidden="true" />
             Generar disponibilidad
           </span>
-          <span className="text-[0.75rem] text-slate-500">{open ? 'Ocultar' : 'Abrir'}</span>
+          <span className="text-[0.75rem] text-subtle-foreground">{open ? 'Ocultar' : 'Abrir'}</span>
         </button>
       </h2>
 
       {open ? (
-        <div className="space-y-4 border-t border-slate-200 p-4">
-          <p className="text-[0.8125rem] text-slate-500">
+        <div className="space-y-4 border-t border-border p-4">
+          <p className="text-[0.8125rem] text-subtle-foreground">
             Crea las salidas de una opción para un rango de fechas. Las salidas que ya existen se
             respetan: nunca se pierden los lugares ya reservados.
           </p>
@@ -184,7 +184,7 @@ export function AvailabilityManager({
 
           <fieldset>
             <legend className="admin-label">Días de la semana</legend>
-            <p className="mb-2 text-[0.75rem] text-slate-500">
+            <p className="mb-2 text-[0.75rem] text-subtle-foreground">
               Sin selección = todos los días.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -193,8 +193,8 @@ export function AvailabilityManager({
                   key={day.value}
                   className={`cursor-pointer rounded-control border px-3 py-1.5 text-[0.8125rem] transition-colors ${
                     weekdays.includes(day.value)
-                      ? 'border-glacier-600 bg-glacier-50 text-glacier-800'
-                      : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                      ? 'border-violet-600 bg-violet-50 text-violet-800'
+                      : 'border-border-strong bg-surface text-foreground hover:bg-surface-muted'
                   }`}
                 >
                   <input

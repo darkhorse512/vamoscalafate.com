@@ -26,7 +26,7 @@ export function Hero({
   subtitle: string
 }) {
   return (
-    <section className="relative isolate flex min-h-[min(88svh,46rem)] items-end overflow-hidden bg-lenga-950">
+    <section className="relative isolate flex min-h-[min(88svh,46rem)] items-end overflow-hidden bg-inverse">
       <div className="absolute inset-0 -z-10">
         {media?.url ? (
           <SmartImage

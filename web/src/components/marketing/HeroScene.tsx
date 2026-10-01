@@ -12,7 +12,7 @@
  */
 export function HeroScene() {
   return (
-    <div className="absolute inset-0 bg-lenga-950">
+    <div className="absolute inset-0 bg-inverse">
       <svg
         viewBox="0 0 1600 900"
         preserveAspectRatio="xMidYMid slice"

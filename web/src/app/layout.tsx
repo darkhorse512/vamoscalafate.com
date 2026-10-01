@@ -3,6 +3,7 @@ import { Fraunces, Inter } from 'next/font/google'
 import { SITE, absoluteUrl, publicEnv } from '@vamos/shared'
 import { Analytics } from '@/components/layout/Analytics'
 import { CookieConsent } from '@/components/layout/CookieConsent'
+import { ThemeScript } from '@/components/layout/ThemeScript'
 import { jsonLdScript, organizationSchema, websiteSchema } from '@/lib/jsonld'
 import './globals.css'
 
@@ -65,15 +66,31 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#10221f',
+  /*
+   * Per-theme browser chrome. A single value would leave the address bar
+   * light while the page is dark, which looks like a rendering fault on
+   * mobile Safari and Chrome.
+   */
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#150024' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const siteSchema = jsonLdScript([organizationSchema(), websiteSchema()])
 
   return (
-    <html lang="es-AR" className={`${inter.variable} ${fraunces.variable}`}>
+    <html
+      lang="es-AR"
+      className={`${inter.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
+      {/* `suppressHydrationWarning`: ThemeScript sets data-theme on <html>
+          before React hydrates, so the client markup legitimately differs
+          from the server's. The warning would be noise. */}
       <head>
+        <ThemeScript />
         {siteSchema ? (
           <script type="application/ld+json" dangerouslySetInnerHTML={siteSchema} />
         ) : null}

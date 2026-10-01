@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react'
 import type { MediaRef } from '@vamos/types'
+import { PhotoCredit, PhotoCredits } from './PhotoCredit'
 import { SmartImage } from './SmartImage'
 import { cn } from '@/lib/utils'
 
@@ -126,7 +127,7 @@ export function Gallery({
               disabled={!openable}
               onClick={(event) => open(index, event)}
               aria-label={openable ? `Ampliar imagen ${index + 1} de ${count}` : undefined}
-              className="relative aspect-[4/3] w-screen shrink-0 snap-center bg-stone-100"
+              className="relative aspect-[4/3] w-screen shrink-0 snap-center bg-surface-strong"
             >
               <SmartImage
                 media={media}
@@ -142,7 +143,7 @@ export function Gallery({
         {count > 1 ? (
           <>
             <div
-              className="pointer-events-none absolute bottom-3 right-6 rounded-full bg-lenga-950/70 px-2.5 py-1 text-[0.6875rem] font-medium text-white backdrop-blur-sm"
+              className="pointer-events-none absolute bottom-3 right-6 rounded-full bg-plum-950/70 px-2.5 py-1 text-[0.6875rem] font-medium text-white backdrop-blur-sm"
               aria-live="polite"
             >
               {railIndex + 1} / {count}
@@ -154,7 +155,7 @@ export function Gallery({
                   key={index}
                   className={cn(
                     'h-1.5 rounded-full transition-all duration-300',
-                    index === railIndex ? 'w-5 bg-white' : 'w-1.5 bg-white/50',
+                    index === railIndex ? 'w-5 bg-surface' : 'w-1.5 bg-white/50',
                   )}
                 />
               ))}
@@ -173,7 +174,7 @@ export function Gallery({
             onClick={(event) => open(index, event)}
             aria-label={openable ? `Ampliar imagen ${index + 1} de ${count}` : undefined}
             className={cn(
-              'group/tile relative overflow-hidden bg-stone-100',
+              'group/tile relative overflow-hidden bg-surface-strong',
               tileClass(index, Math.min(count, 5)),
             )}
           >
@@ -188,11 +189,11 @@ export function Gallery({
 
             {/* Subtle darkening on hover signals the tile is interactive. */}
             {openable ? (
-              <span className="absolute inset-0 bg-lenga-950/0 transition-colors duration-300 group-hover/tile:bg-lenga-950/10" />
+              <span className="absolute inset-0 bg-plum-950/0 transition-colors duration-300 group-hover/tile:bg-plum-950/10" />
             ) : null}
 
             {index === 4 && count > 5 ? (
-              <span className="absolute inset-0 grid place-items-center bg-lenga-950/55 text-sm font-semibold text-white backdrop-blur-[2px]">
+              <span className="absolute inset-0 grid place-items-center bg-plum-950/55 text-sm font-semibold text-white backdrop-blur-[2px]">
                 <span className="inline-flex items-center gap-1.5">
                   <Expand className="size-4" aria-hidden="true" />+{count - 5} fotos
                 </span>
@@ -211,7 +212,7 @@ export function Gallery({
               type="button"
               onClick={(event) => open(index, event)}
               aria-label={`Ver imagen ${index + 1}`}
-              className="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-control bg-stone-100 ring-1 ring-stone-200 transition-all hover:ring-2 hover:ring-glacier-500"
+              className="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-control bg-surface-strong ring-1 ring-border transition-all hover:ring-2 hover:ring-violet-500"
             >
               <SmartImage
                 media={media}
@@ -224,13 +225,18 @@ export function Gallery({
         </div>
       ) : null}
 
+      {/* Creative Commons requires the author and licence wherever the work
+          appears. Collapsed to a single line so the credits do not compete
+          with the photography itself. */}
+      <PhotoCredits images={images} className="mt-3" />
+
       {/* ── Lightbox ─────────────────────────────────────────────────── */}
       {lightboxIndex !== null && images[lightboxIndex] ? (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`${title} — imagen ${lightboxIndex + 1} de ${count}`}
-          className="fixed inset-0 z-[90] flex flex-col bg-lenga-950/97 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex flex-col bg-plum-950/97 backdrop-blur-sm"
         >
           <div className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6">
             <p className="text-sm font-medium text-white/80">
@@ -281,11 +287,18 @@ export function Gallery({
                 />
               </div>
 
-              {images[lightboxIndex]?.caption ? (
-                <figcaption className="mt-3 max-w-2xl text-center text-sm text-white/70">
-                  {images[lightboxIndex]?.caption}
-                </figcaption>
-              ) : null}
+              <figcaption className="mt-3 max-w-2xl text-center">
+                {images[lightboxIndex]?.caption ? (
+                  <span className="block text-sm text-white/70">
+                    {images[lightboxIndex]?.caption}
+                  </span>
+                ) : null}
+                <PhotoCredit
+                  media={images[lightboxIndex]}
+                  tone="light"
+                  className="mt-1"
+                />
+              </figcaption>
             </figure>
           </div>
 

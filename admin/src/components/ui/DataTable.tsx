@@ -38,7 +38,7 @@ export function DataTable<T extends { id: string }>({
   if (rows.length === 0) {
     return (
       <div className="admin-panel px-6 py-12 text-center">
-        <p className="text-[0.8125rem] text-slate-500">{emptyMessage}</p>
+        <p className="text-[0.8125rem] text-subtle-foreground">{emptyMessage}</p>
       </div>
     )
   }
@@ -77,7 +77,7 @@ export function DataTable<T extends { id: string }>({
                       {index === 0 && rowHref ? (
                         <Link
                           href={rowHref(row)}
-                          className="font-medium text-glacier-700 hover:text-glacier-900 hover:underline"
+                          className="font-medium text-violet-700 hover:text-violet-900 hover:underline"
                         >
                           {content}
                         </Link>
@@ -122,7 +122,7 @@ export function Pagination({
 
   return (
     <nav aria-label="Paginación" className="mt-4 flex items-center justify-between gap-3">
-      <p className="text-[0.75rem] text-slate-500">
+      <p className="text-[0.75rem] text-subtle-foreground">
         Página {page} de {totalPages}
       </p>
 
@@ -131,7 +131,7 @@ export function Pagination({
           <Link
             href={href(page - 1)}
             rel="prev"
-            className="rounded-control border border-slate-300 bg-white px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-control border border-border-strong bg-surface px-3 py-1.5 text-[0.8125rem] font-medium text-foreground hover:bg-surface-muted"
           >
             Anterior
           </Link>
@@ -141,7 +141,7 @@ export function Pagination({
           <Link
             href={href(page + 1)}
             rel="next"
-            className="rounded-control border border-slate-300 bg-white px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-control border border-border-strong bg-surface px-3 py-1.5 text-[0.8125rem] font-medium text-foreground hover:bg-surface-muted"
           >
             Siguiente
           </Link>

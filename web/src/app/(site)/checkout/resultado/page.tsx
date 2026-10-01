@@ -50,12 +50,12 @@ export default async function CheckoutResultPage({
         {isPaid ? (
           <>
             <CheckCircle2 className="mx-auto size-14 text-[#2f6f4f]" aria-hidden="true" />
-            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               Reserva confirmada
             </h1>
-            <p className="mt-3 text-[0.9375rem] leading-relaxed text-lenga-600">
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
               Te enviamos la confirmación a{' '}
-              <strong className="font-semibold text-lenga-900">{booking.customer.email}</strong>.
+              <strong className="font-semibold text-heading">{booking.customer.email}</strong>.
               Guardá la referencia: te identifica en cualquier consulta.
             </p>
 
@@ -81,10 +81,10 @@ export default async function CheckoutResultPage({
         ) : isFailed ? (
           <>
             <XCircle className="mx-auto size-14 text-[#9b3232]" aria-hidden="true" />
-            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               El pago no se completó
             </h1>
-            <p className="mt-3 text-[0.9375rem] leading-relaxed text-lenga-600">
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
               La reserva {booking.reference} fue cancelada y los lugares se liberaron. Podés volver
               a intentarlo con otro medio de pago.
             </p>
@@ -92,22 +92,22 @@ export default async function CheckoutResultPage({
         ) : (
           <>
             <Clock className="mx-auto size-14 text-[#8a6014]" aria-hidden="true" />
-            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+            <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
               Estamos verificando tu pago
             </h1>
-            <p className="mt-3 text-[0.9375rem] leading-relaxed text-lenga-600">
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
               Algunos medios de pago tardan unos minutos en acreditarse. Apenas se confirme, te
               enviamos un correo a{' '}
-              <strong className="font-semibold text-lenga-900">{booking.customer.email}</strong>.
+              <strong className="font-semibold text-heading">{booking.customer.email}</strong>.
             </p>
-            <p className="mt-2 text-sm text-lenga-500">
+            <p className="mt-2 text-sm text-plum-500">
               No hace falta que vuelvas a pagar. Si el pago no se acredita, la reserva se cancela
               automáticamente y los lugares se liberan.
             </p>
           </>
         )}
 
-        <div className="mt-8 rounded-card border border-stone-200 bg-stone-50 p-5 text-left">
+        <div className="mt-8 rounded-card border border-border bg-surface-muted p-5 text-left">
           <dl className="space-y-2.5 text-[0.8125rem]">
             <Row label="Referencia" value={booking.reference} />
             <Row label="Estado" value={booking.status} />
@@ -121,7 +121,7 @@ export default async function CheckoutResultPage({
           {isFailed || isPending ? (
             <Link
               href={`${ROUTES.checkout}?ref=${encodeURIComponent(booking.reference)}`}
-              className="inline-flex h-11 items-center justify-center rounded-control bg-glacier-700 px-5 text-sm font-semibold text-white hover:bg-glacier-800"
+              className="inline-flex h-11 items-center justify-center rounded-control bg-violet-700 px-5 text-sm font-semibold text-white hover:bg-violet-800"
             >
               Volver al pago
             </Link>
@@ -129,7 +129,7 @@ export default async function CheckoutResultPage({
 
           <Link
             href={ROUTES.tours}
-            className="inline-flex h-11 items-center justify-center rounded-control border border-stone-300 px-5 text-sm font-semibold text-lenga-900 hover:bg-stone-50"
+            className="inline-flex h-11 items-center justify-center rounded-control border border-border-strong px-5 text-sm font-semibold text-heading hover:bg-surface-muted"
           >
             Ver más experiencias
           </Link>
@@ -142,8 +142,8 @@ export default async function CheckoutResultPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-lenga-500">{label}</dt>
-      <dd className="text-right font-medium text-lenga-900">{value}</dd>
+      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )
 }

@@ -46,7 +46,7 @@ export default async function BookingDetailPage({
     <>
       <Link
         href="/bookings"
-        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-600 hover:text-slate-900"
+        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-muted-foreground hover:text-heading"
       >
         <ArrowLeft className="size-3.5" aria-hidden="true" />
         Volver a reservas
@@ -62,21 +62,21 @@ export default async function BookingDetailPage({
         <div className="space-y-6">
           {/* Items */}
           <section className="admin-panel overflow-hidden">
-            <h2 className="border-b border-slate-200 px-4 py-3 text-[0.8125rem] font-semibold text-slate-900">
+            <h2 className="border-b border-border px-4 py-3 text-[0.8125rem] font-semibold text-heading">
               Experiencias reservadas
             </h2>
 
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-border">
               {booking.items.map((item) => (
                 <li key={item.id} className="p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[0.875rem] font-semibold text-slate-900">
+                      <p className="text-[0.875rem] font-semibold text-heading">
                         {item.tourNameSnapshot}
                       </p>
-                      <p className="text-[0.8125rem] text-slate-500">{item.optionNameSnapshot}</p>
+                      <p className="text-[0.8125rem] text-subtle-foreground">{item.optionNameSnapshot}</p>
                     </div>
-                    <p className="tabular shrink-0 text-[0.875rem] font-semibold text-slate-900">
+                    <p className="tabular shrink-0 text-[0.875rem] font-semibold text-heading">
                       {formatMoney(item.subtotalCents, booking.currency)}
                     </p>
                   </div>
@@ -106,9 +106,9 @@ export default async function BookingDetailPage({
               ))}
             </ul>
 
-            <div className="flex justify-between border-t border-slate-200 bg-slate-50 px-4 py-3">
-              <span className="text-[0.875rem] font-semibold text-slate-900">Total</span>
-              <span className="tabular text-[0.875rem] font-semibold text-slate-900">
+            <div className="flex justify-between border-t border-border bg-surface-muted px-4 py-3">
+              <span className="text-[0.875rem] font-semibold text-heading">Total</span>
+              <span className="tabular text-[0.875rem] font-semibold text-heading">
                 {formatMoney(booking.totalCents, booking.currency)}
               </span>
             </div>
@@ -116,23 +116,23 @@ export default async function BookingDetailPage({
 
           {/* Payments */}
           <section className="admin-panel overflow-hidden">
-            <h2 className="border-b border-slate-200 px-4 py-3 text-[0.8125rem] font-semibold text-slate-900">
+            <h2 className="border-b border-border px-4 py-3 text-[0.8125rem] font-semibold text-heading">
               Pagos
             </h2>
 
             {booking.payments.length === 0 ? (
-              <p className="px-4 py-8 text-center text-[0.8125rem] text-slate-500">
+              <p className="px-4 py-8 text-center text-[0.8125rem] text-subtle-foreground">
                 No hay pagos registrados para esta reserva.
               </p>
             ) : (
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-border">
                 {booking.payments.map((payment) => (
                   <li key={payment.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                     <div className="min-w-0">
-                      <p className="text-[0.8125rem] font-medium text-slate-900">
+                      <p className="text-[0.8125rem] font-medium text-heading">
                         {payment.provider}
                       </p>
-                      <p className="text-[0.75rem] text-slate-500">
+                      <p className="text-[0.75rem] text-subtle-foreground">
                         {payment.providerPaymentId ?? 'Sin ID del proveedor'} ·{' '}
                         {formatDateTime(payment.createdAt)}
                       </p>
@@ -144,11 +144,11 @@ export default async function BookingDetailPage({
                     </div>
 
                     <div className="flex shrink-0 items-center gap-3">
-                      <span className="tabular text-[0.8125rem] font-medium text-slate-900">
+                      <span className="tabular text-[0.8125rem] font-medium text-heading">
                         {formatMoney(payment.amountCents, payment.currency)}
                       </span>
                       {payment.refundedCents > 0 ? (
-                        <span className="tabular text-[0.75rem] text-slate-500">
+                        <span className="tabular text-[0.75rem] text-subtle-foreground">
                           −{formatMoney(payment.refundedCents, payment.currency)}
                         </span>
                       ) : null}
@@ -162,10 +162,10 @@ export default async function BookingDetailPage({
 
           {booking.specialRequests ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">
                 Comentarios del cliente
               </h2>
-              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
                 {booking.specialRequests}
               </p>
             </section>
@@ -174,7 +174,7 @@ export default async function BookingDetailPage({
           {/* Attribution - how this booking was acquired. */}
           {booking.utmSource || booking.utmCampaign || booking.referrer ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Atribución</h2>
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Atribución</h2>
               <dl className="mt-2 grid gap-x-6 gap-y-2 text-[0.8125rem] sm:grid-cols-2">
                 {booking.utmSource ? <Row label="Fuente" value={booking.utmSource} /> : null}
                 {booking.utmMedium ? <Row label="Medio" value={booking.utmMedium} /> : null}
@@ -189,7 +189,7 @@ export default async function BookingDetailPage({
         {/* Sidebar */}
         <aside className="space-y-6">
           <section className="admin-panel p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Cliente</h2>
+            <h2 className="text-[0.8125rem] font-semibold text-heading">Cliente</h2>
             <dl className="mt-3 space-y-2 text-[0.8125rem]">
               <Row
                 label="Nombre"
@@ -205,7 +205,7 @@ export default async function BookingDetailPage({
 
             <Link
               href={`/customers/${booking.customerId}`}
-              className="mt-3 inline-block text-[0.75rem] font-medium text-glacier-700 hover:underline"
+              className="mt-3 inline-block text-[0.75rem] font-medium text-violet-700 hover:underline"
             >
               Ver ficha del cliente
             </Link>
@@ -238,8 +238,8 @@ export default async function BookingDetailPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-3">
-      <dt className="shrink-0 text-slate-500">{label}</dt>
-      <dd className="break-words text-right font-medium text-slate-900">{value}</dd>
+      <dt className="shrink-0 text-subtle-foreground">{label}</dt>
+      <dd className="break-words text-right font-medium text-heading">{value}</dd>
     </div>
   )
 }

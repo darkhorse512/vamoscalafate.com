@@ -3,69 +3,119 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    VAMOS CALAFATE - design system
 
-   A Patagonia palette: glacier blues drawn from meltwater, the deep greens of
-   lenga forest, and the warm stone neutrals of the steppe. Accents are
-   deliberately restrained - the photography carries the colour, the interface
-   stays out of its way.
+   A deep-violet palette: near-black plum for ink and immersive surfaces,
+   electric violet for navigation and primary action, and a hot magenta
+   reserved for the one thing on a page we want pressed — book now.
 
-   Deliberately avoided: heavy border radii, multi-stop gradients and the
-   card-on-card stacking that makes a travel site read as a SaaS dashboard.
+   TWO LAYERS, AND THE DISTINCTION MATTERS
+   1. Ramps (`plum-*`, `violet-*`, `magenta-*`, `stone-*`) are fixed colours.
+      Use them only where the colour must NOT change between themes: text over
+      photography, scrims, the brand mark.
+   2. Semantic tokens (`bg-surface`, `text-foreground`, `border-border`, …)
+      resolve through a CSS variable that is redefined for dark mode. Nearly
+      all interface chrome should use these — a component written against
+      `bg-white` is permanently light and silently breaks the dark theme.
+
+   Deliberately avoided: heavy border radii and the card-on-card stacking that
+   makes a travel site read as a SaaS dashboard.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Glacier: primary. Ice blue, cool and slightly desaturated ─────────── */
-  --color-glacier-50: #f0f7fa;
-  --color-glacier-100: #dcedf4;
-  --color-glacier-200: #bcdce9;
-  --color-glacier-300: #8dc3d8;
-  --color-glacier-400: #56a2c1;
-  --color-glacier-500: #3585a7;
-  --color-glacier-600: #2a6c8c;
-  --color-glacier-700: #255872;
-  --color-glacier-800: #244a5f;
-  --color-glacier-900: #223f51;
-  --color-glacier-950: #142836;
+  /* ── Plum: ink and immersive dark surfaces ─────────────────────────────── */
+  --color-plum-50: #f7f4fb;
+  --color-plum-100: #efe9f7;
+  --color-plum-200: #dcd0ed;
+  --color-plum-300: #c0abdd;
+  --color-plum-400: #9f80c7;
+  --color-plum-500: #8259ad;
+  --color-plum-600: #6b4291;
+  --color-plum-700: #4a2a6b;
+  --color-plum-800: #3a1f55;
+  --color-plum-900: #2e0049;
+  --color-plum-950: #200033;
 
-  /* ── Lenga: deep forest green, used for ink and dark surfaces ─────────── */
-  --color-lenga-50: #f1f7f4;
-  --color-lenga-100: #dcebe3;
-  --color-lenga-200: #bbd7c9;
-  --color-lenga-300: #90bba8;
-  --color-lenga-400: #639a84;
-  --color-lenga-500: #447e69;
-  --color-lenga-600: #336453;
-  --color-lenga-700: #2b5145;
-  --color-lenga-800: #254238;
-  --color-lenga-900: #21372f;
-  --color-lenga-950: #10221f;
+  /* ── Violet: primary. Navigation, links, selected state ───────────────── */
+  --color-violet-50: #f4f2ff;
+  --color-violet-100: #ebe7ff;
+  --color-violet-200: #d9d2ff;
+  --color-violet-300: #bfb1ff;
+  --color-violet-400: #a56afd;
+  --color-violet-500: #6c58fe;
+  --color-violet-600: #5a3ef0;
+  --color-violet-700: #4b2fd6;
+  --color-violet-800: #3e28ad;
+  --color-violet-900: #35258a;
+  --color-violet-950: #211552;
 
-  /* ── Stone: warm neutrals from the steppe. Never cool grey ────────────── */
-  --color-stone-50: #faf9f7;
-  --color-stone-100: #f5f2ed;
-  --color-stone-200: #e9e4da;
-  --color-stone-300: #d8d0c1;
-  --color-stone-400: #bdb09b;
-  --color-stone-500: #a5947c;
-  --color-stone-600: #8d7b64;
-  --color-stone-700: #756453;
-  --color-stone-800: #615347;
-  --color-stone-900: #50463d;
-  --color-stone-950: #2a241f;
+  /* ── Magenta: the booking colour. Used sparingly, or it stops meaning
+        anything — one primary action per view ────────────────────────────── */
+  --color-magenta-50: #fff1f5;
+  --color-magenta-100: #ffe3ea;
+  --color-magenta-200: #ffc9d8;
+  --color-magenta-300: #ffa0bb;
+  --color-magenta-400: #ff6694;
+  --color-magenta-500: #ff2e70;
+  --color-magenta-600: #d3245c;
+  --color-magenta-700: #b01d4d;
+  --color-magenta-800: #8f1a41;
+  --color-magenta-900: #771939;
+  --color-magenta-950: #42081b;
 
-  /* ── Calafate: the berry the town is named for. Used sparingly ────────── */
-  --color-calafate-400: #7b6398;
-  --color-calafate-500: #634d80;
-  --color-calafate-600: #503e69;
+  /* ── Stone: neutrals, carrying a trace of the plum hue so greys never go
+        cold against the violet ───────────────────────────────────────────── */
+  --color-stone-50: #faf9fc;
+  --color-stone-100: #f4f2f8;
+  --color-stone-200: #e8e4ef;
+  --color-stone-300: #d5cfe0;
+  --color-stone-400: #b2aac4;
+  --color-stone-500: #8d84a3;
+  --color-stone-600: #6f6684;
+  --color-stone-700: #5a526c;
+  --color-stone-800: #463f56;
+  --color-stone-900: #332d41;
+  --color-stone-950: #1d1828;
 
-  /* ── Ochre: single warm accent for prices and high-intent CTAs ────────── */
-  --color-ochre-400: #d19a3f;
-  --color-ochre-500: #b97f25;
-  --color-ochre-600: #98651c;
+  /* ── Semantic tokens ───────────────────────────────────────────────────── */
+  /*
+   * Each resolves to a variable redefined under dark mode below, so
+   * `bg-surface` is correct in both themes and `bg-white` is correct in
+   * neither. Opacity modifiers still work: Tailwind v4 wraps these in
+   * `color-mix`, which does not need the literal value at build time.
+   */
+  --color-background: var(--sem-background);
+  --color-surface: var(--sem-surface);
+  --color-surface-muted: var(--sem-surface-muted);
+  --color-surface-strong: var(--sem-surface-strong);
 
-  /* ── Semantic ─────────────────────────────────────────────────────────── */
-  --color-success: #2f6f4f;
-  --color-warning: #8a6014;
-  --color-danger: #9b3232;
+  --color-foreground: var(--sem-foreground);
+  --color-heading: var(--sem-heading);
+  --color-muted-foreground: var(--sem-muted-foreground);
+  --color-subtle-foreground: var(--sem-subtle-foreground);
+
+  --color-border: var(--sem-border);
+  --color-border-strong: var(--sem-border-strong);
+
+  --color-primary: var(--sem-primary);
+  --color-primary-hover: var(--sem-primary-hover);
+  --color-primary-foreground: var(--sem-primary-foreground);
+  --color-primary-soft: var(--sem-primary-soft);
+
+  --color-accent: var(--sem-accent);
+  --color-accent-hover: var(--sem-accent-hover);
+  --color-accent-foreground: var(--sem-accent-foreground);
+  --color-accent-soft: var(--sem-accent-soft);
+
+  /* Inverse is an intentional dark panel — a footer or feature band — and
+     stays dark in both themes. */
+  --color-inverse: var(--sem-inverse);
+  --color-inverse-foreground: var(--sem-inverse-foreground);
+
+  --color-success: var(--sem-success);
+  --color-success-soft: var(--sem-success-soft);
+  --color-warning: var(--sem-warning);
+  --color-warning-soft: var(--sem-warning-soft);
+  --color-danger: var(--sem-danger);
+  --color-danger-soft: var(--sem-danger-soft);
 
   /* ── Typography ───────────────────────────────────────────────────────── */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -76,27 +126,155 @@
   --text-display-md: clamp(2.125rem, 1.6rem + 2.4vw, 3.25rem);
   --text-display-lg: clamp(2.5rem, 1.7rem + 3.6vw, 4.5rem);
 
-  /* ── Elevation: soft and low-contrast. Patagonian light is diffuse ────── */
-  --shadow-subtle: 0 1px 2px rgb(16 34 31 / 0.05), 0 1px 3px rgb(16 34 31 / 0.06);
-  --shadow-raised: 0 2px 4px rgb(16 34 31 / 0.04), 0 8px 24px rgb(16 34 31 / 0.08);
-  --shadow-float: 0 4px 8px rgb(16 34 31 / 0.05), 0 16px 48px rgb(16 34 31 / 0.12);
+  /* ── Elevation ─────────────────────────────────────────────────────────── */
+  /* Tinted with the plum hue rather than neutral black: a grey shadow over a
+     violet-tinted surface reads as dirt. */
+  --shadow-subtle: 0 1px 2px rgb(32 0 51 / 0.05), 0 1px 3px rgb(32 0 51 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(32 0 51 / 0.05), 0 8px 24px rgb(32 0 51 / 0.09);
+  --shadow-float: 0 4px 8px rgb(32 0 51 / 0.06), 0 16px 48px rgb(32 0 51 / 0.14);
+  /* Glow for the magenta CTA — the one place a coloured shadow is warranted. */
+  --shadow-accent: 0 4px 14px rgb(255 46 112 / 0.3);
 
-  --radius-card: 0.5rem;
-  --radius-control: 0.375rem;
+  --radius-card: 0.875rem;
+  --radius-control: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEMES
+
+   Light is the default and is defined on bare `:root`, so no colour exists
+   only inside a media query. Dark is applied twice: once for the OS
+   preference (guarded so an explicit light choice still wins) and once for an
+   explicit `data-theme="dark"`, so the toggle overrides the OS in both
+   directions.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: light;
+
+  --sem-background: #ffffff;
+  --sem-surface: #ffffff;
+  --sem-surface-muted: #faf9fc;
+  --sem-surface-strong: #f4f2f8;
+
+  --sem-foreground: #413a55;
+  --sem-heading: #200033;
+  --sem-muted-foreground: #6f6684;
+  --sem-subtle-foreground: #8d84a3;
+
+  --sem-border: #e8e4ef;
+  --sem-border-strong: #d5cfe0;
+
+  --sem-primary: #5a3ef0;
+  --sem-primary-hover: #4b2fd6;
+  --sem-primary-foreground: #ffffff;
+  --sem-primary-soft: #ebe7ff;
+
+  --sem-accent: #ff2e70;
+  --sem-accent-hover: #d3245c;
+  --sem-accent-foreground: #ffffff;
+  --sem-accent-soft: #ffe3ea;
+
+  --sem-inverse: #200033;
+  --sem-inverse-foreground: #f4f2f8;
+
+  --sem-success: #1f7a52;
+  --sem-success-soft: #e4f6ed;
+  --sem-warning: #96601a;
+  --sem-warning-soft: #fdf2dd;
+  --sem-danger: #c42a3f;
+  --sem-danger-soft: #ffe9ec;
+}
+
+/* The OS preference, unless the reader has explicitly chosen light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --sem-background: #150024;
+    --sem-surface: #200033;
+    --sem-surface-muted: #28003f;
+    --sem-surface-strong: #33114d;
+
+    --sem-foreground: #ddd5ea;
+    --sem-heading: #ffffff;
+    --sem-muted-foreground: #a99cc0;
+    --sem-subtle-foreground: #887aa3;
+
+    --sem-border: #3a1f55;
+    --sem-border-strong: #4f3070;
+
+    --sem-primary: #a56afd;
+    --sem-primary-hover: #bfb1ff;
+    --sem-primary-foreground: #1a0029;
+    --sem-primary-soft: #33104f;
+
+    --sem-accent: #ff4f82;
+    --sem-accent-hover: #ff7ba1;
+    --sem-accent-foreground: #2a0012;
+    --sem-accent-soft: #4a0f27;
+
+    --sem-inverse: #2e0049;
+    --sem-inverse-foreground: #f4f2f8;
+
+    --sem-success: #4bbd87;
+    --sem-success-soft: #0f3326;
+    --sem-warning: #e0a93f;
+    --sem-warning-soft: #3a2a0c;
+    --sem-danger: #ff6b7d;
+    --sem-danger-soft: #45121b;
+  }
+}
+
+/* An explicit choice, which must beat the OS preference. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --sem-background: #150024;
+  --sem-surface: #200033;
+  --sem-surface-muted: #28003f;
+  --sem-surface-strong: #33114d;
+
+  --sem-foreground: #ddd5ea;
+  --sem-heading: #ffffff;
+  --sem-muted-foreground: #a99cc0;
+  --sem-subtle-foreground: #887aa3;
+
+  --sem-border: #3a1f55;
+  --sem-border-strong: #4f3070;
+
+  --sem-primary: #a56afd;
+  --sem-primary-hover: #bfb1ff;
+  --sem-primary-foreground: #1a0029;
+  --sem-primary-soft: #33104f;
+
+  --sem-accent: #ff4f82;
+  --sem-accent-hover: #ff7ba1;
+  --sem-accent-foreground: #2a0012;
+  --sem-accent-soft: #4a0f27;
+
+  --sem-inverse: #2e0049;
+  --sem-inverse-foreground: #f4f2f8;
+
+  --sem-success: #4bbd87;
+  --sem-success-soft: #0f3326;
+  --sem-warning: #e0a93f;
+  --sem-warning-soft: #3a2a0c;
+  --sem-danger: #ff6b7d;
+  --sem-danger-soft: #45121b;
 }
 
 /* ── Base ───────────────────────────────────────────────────────────────── */
 
 @layer base {
   :root {
-    color-scheme: light;
     /* Consumed by sticky headers and scroll-margin so anchor links don't hide
        their target underneath the fixed header. */
     --header-height: 4rem;
   }
 
   * {
-    @apply border-stone-200;
+    @apply border-border;
   }
 
   html {
@@ -105,12 +283,12 @@
   }
 
   body {
-    @apply bg-white font-sans text-[0.9375rem] leading-relaxed text-lenga-800 antialiased;
+    @apply bg-background font-sans text-[0.9375rem] leading-relaxed text-foreground antialiased;
     text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4 {
-    @apply font-display font-semibold tracking-tight text-lenga-950;
+    @apply font-display font-semibold tracking-tight text-heading;
     text-wrap: balance;
   }
 
@@ -121,7 +299,7 @@
   /* A single, consistent focus treatment. Never remove the indicator -
      keyboard users navigate the whole booking flow with it. */
   :focus-visible {
-    @apply outline-none ring-2 ring-glacier-600 ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
 
   /* Anchor targets clear the sticky header. */
@@ -160,8 +338,8 @@
   /* Skip link: visible only once focused. */
   .skip-link {
     @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100]
-           focus:rounded-md focus:bg-lenga-950 focus:px-4 focus:py-2.5 focus:text-sm
-           focus:font-semibold focus:text-white;
+           focus:rounded-md focus:bg-inverse focus:px-4 focus:py-2.5 focus:text-sm
+           focus:font-semibold focus:text-inverse-foreground;
   }
 
   .container-page {
@@ -175,40 +353,40 @@
   /* Long-form editorial typography for blog posts, destinations and legal
      pages. Tuned for reading, not for density. */
   .prose-vamos {
-    @apply text-[1.0625rem] leading-[1.75] text-lenga-800;
+    @apply text-[1.0625rem] leading-[1.75] text-foreground;
   }
   .prose-vamos > * + * { @apply mt-5; }
   .prose-vamos h2 {
-    @apply mt-12 mb-4 font-display text-2xl font-semibold text-lenga-950 sm:text-[1.75rem];
+    @apply mt-12 mb-4 font-display text-2xl font-semibold text-heading sm:text-[1.75rem];
   }
   .prose-vamos h3 {
-    @apply mt-9 mb-3 font-display text-xl font-semibold text-lenga-950;
+    @apply mt-9 mb-3 font-display text-xl font-semibold text-heading;
   }
   .prose-vamos ul { @apply my-5 space-y-2 pl-5; }
   .prose-vamos ol { @apply my-5 list-decimal space-y-2 pl-5; }
   .prose-vamos ul > li { @apply relative pl-4; }
   .prose-vamos ul > li::before {
     content: '';
-    @apply absolute left-0 top-[0.7em] size-1.5 rounded-full bg-glacier-400;
+    @apply absolute left-0 top-[0.7em] size-1.5 rounded-full bg-primary;
   }
   .prose-vamos a {
-    @apply font-medium text-glacier-700 underline decoration-glacier-300 underline-offset-[3px]
-           transition-colors hover:text-glacier-800 hover:decoration-glacier-600;
+    @apply font-medium text-primary underline decoration-primary/40 underline-offset-[3px]
+           transition-colors hover:text-primary-hover hover:decoration-primary;
   }
-  .prose-vamos strong { @apply font-semibold text-lenga-950; }
+  .prose-vamos strong { @apply font-semibold text-heading; }
   .prose-vamos blockquote {
-    @apply my-7 border-l-[3px] border-glacier-400 bg-stone-50 py-4 pl-5 pr-4 text-lenga-700 italic;
+    @apply my-7 border-l-[3px] border-primary bg-surface-muted py-4 pl-5 pr-4 text-foreground italic;
   }
   .prose-vamos table {
     @apply my-7 w-full border-collapse text-[0.9375rem];
   }
   .prose-vamos th {
-    @apply border-b-2 border-stone-300 px-3 py-2.5 text-left font-semibold text-lenga-950;
+    @apply border-b-2 border-border-strong px-3 py-2.5 text-left font-semibold text-heading;
   }
-  .prose-vamos td { @apply border-b border-stone-200 px-3 py-2.5 align-top; }
-  .prose-vamos hr { @apply my-10 border-stone-200; }
+  .prose-vamos td { @apply border-b border-border px-3 py-2.5 align-top; }
+  .prose-vamos hr { @apply my-10 border-border; }
   .prose-vamos code {
-    @apply rounded bg-stone-100 px-1.5 py-0.5 text-[0.875em] text-lenga-900;
+    @apply rounded bg-surface-strong px-1.5 py-0.5 text-[0.875em] text-heading;
   }
 
   /* Ken-burns drift on the hero. Suppressed under reduced-motion by the

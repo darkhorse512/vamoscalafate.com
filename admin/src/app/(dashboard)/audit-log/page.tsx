@@ -96,21 +96,21 @@ export default async function AuditLogPage({
         />
       ) : (
         <>
-          <ol className="admin-panel divide-y divide-slate-100">
+          <ol className="admin-panel divide-y divide-border">
             {entries.map((entry) => (
               <li key={entry.id} className="flex flex-wrap items-start gap-3 px-4 py-3">
                 <span
                   className={cn(
                     'shrink-0 rounded px-2 py-0.5 text-[0.6875rem] font-semibold',
-                    ACTION_TONES[entry.action] ?? 'bg-slate-100 text-slate-600',
+                    ACTION_TONES[entry.action] ?? 'bg-surface-strong text-muted-foreground',
                   )}
                 >
                   {ACTION_LABELS[entry.action] ?? entry.action}
                 </span>
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-[0.8125rem] text-slate-900">{entry.summary}</p>
-                  <p className="mt-0.5 text-[0.75rem] text-slate-500">
+                  <p className="text-[0.8125rem] text-heading">{entry.summary}</p>
+                  <p className="mt-0.5 text-[0.75rem] text-subtle-foreground">
                     {entry.actor?.name ?? entry.actorEmail ?? 'Sistema'}
                     {' · '}
                     {entry.entityType}
@@ -121,7 +121,7 @@ export default async function AuditLogPage({
 
                 <time
                   dateTime={entry.createdAt.toISOString()}
-                  className="tabular shrink-0 text-[0.75rem] text-slate-500"
+                  className="tabular shrink-0 text-[0.75rem] text-subtle-foreground"
                 >
                   {formatDateTime(entry.createdAt)}
                 </time>
@@ -148,7 +148,7 @@ function FilterLink({ href, active, label }: { href: string; active: boolean; la
       aria-current={active ? 'page' : undefined}
       className={cn(
         'rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
-        active ? 'border-glacier-600 bg-glacier-50' : 'border-slate-300 bg-white hover:bg-slate-50',
+        active ? 'border-violet-600 bg-violet-50' : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >
       {label}

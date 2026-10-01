@@ -5,6 +5,7 @@ import { ROUTES, formatDate, toDate } from '@vamos/shared'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
+import { PhotoCredit } from '@/components/media/PhotoCredit'
 import { SmartImage } from '@/components/media/SmartImage'
 import { TourCarousel } from '@/components/tours/TourCarousel'
 import { articleSchema, breadcrumbSchema, faqSchema, jsonLdScript } from '@/lib/jsonld'
@@ -84,19 +85,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.category ? (
               <Link
                 href={`${ROUTES.blog}?categoria=${post.category.slug}`}
-                className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-glacier-700 hover:text-glacier-900"
+                className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-violet-700 hover:text-violet-900"
               >
                 {post.category.name}
               </Link>
             ) : null}
 
-            <h1 className="mt-3 font-display text-display-md font-bold leading-[1.1] text-lenga-950">
+            <h1 className="mt-3 font-display text-display-md font-bold leading-[1.1] text-heading">
               {post.title}
             </h1>
 
-            <p className="mt-4 text-lg leading-relaxed text-lenga-600">{post.excerpt}</p>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{post.excerpt}</p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-stone-200 pt-5 text-[0.8125rem] text-lenga-500">
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-5 text-[0.8125rem] text-plum-500">
               {post.author ? <span>Por {post.author.name}</span> : null}
               {post.publishedAt ? (
                 <>
@@ -113,8 +114,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </header>
 
         {/* Hero image sits after the title so the LCP element is text. */}
-        <div className="container-page mt-8">
-          <div className="relative mx-auto aspect-[16/9] max-w-4xl overflow-hidden rounded-card bg-stone-100">
+        <figure className="container-page mt-8">
+          <div className="relative mx-auto aspect-[16/9] max-w-4xl overflow-hidden rounded-card bg-surface-strong">
             <SmartImage
               media={post.heroImage}
               seed={post.slug}
@@ -123,20 +124,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               priority
             />
           </div>
-        </div>
+          <figcaption className="mx-auto mt-2 max-w-4xl">
+            <PhotoCredit media={post.heroImage} />
+          </figcaption>
+        </figure>
 
         <div className="container-prose mt-10">
           <Markdown content={post.content} />
 
           {post.tags.length > 0 ? (
-            <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-stone-200 pt-6">
-              <span className="text-xs font-semibold uppercase tracking-wide text-lenga-500">
+            <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
+              <span className="text-xs font-semibold uppercase tracking-wide text-plum-500">
                 Temas
               </span>
               {post.tags.map(({ tag }) => (
                 <span
                   key={tag.id}
-                  className="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-lenga-700"
+                  className="rounded-full bg-surface-strong px-3 py-1 text-xs font-medium text-foreground"
                 >
                   {tag.name}
                 </span>
@@ -146,7 +150,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {faqs.length > 0 ? (
             <section className="mt-12">
-              <h2 className="font-display text-2xl font-semibold text-lenga-950">
+              <h2 className="font-display text-2xl font-semibold text-heading">
                 Preguntas frecuentes
               </h2>
               <FaqList faqs={faqs} className="mt-5" />
@@ -154,16 +158,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           ) : null}
 
           {post.destination ? (
-            <aside className="mt-12 rounded-card border border-stone-200 bg-stone-50 p-6">
-              <h2 className="font-display text-lg font-semibold text-lenga-950">
+            <aside className="mt-12 rounded-card border border-border bg-surface-muted p-6">
+              <h2 className="font-display text-lg font-semibold text-heading">
                 Guía completa: {post.destination.name}
               </h2>
-              <p className="mt-2 text-[0.9375rem] leading-relaxed text-lenga-600">
+              <p className="mt-2 text-[0.9375rem] leading-relaxed text-muted-foreground">
                 Cómo llegar, qué esperar y qué se puede hacer allí.
               </p>
               <Link
                 href={ROUTES.destination(post.destination.slug)}
-                className="mt-3 inline-block text-sm font-semibold text-glacier-700 underline underline-offset-2"
+                className="mt-3 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
               >
                 Ver la guía de {post.destination.name}
               </Link>
@@ -172,11 +176,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         {relatedTours.items.length > 0 ? (
-          <section className="container-page mt-16 border-t border-stone-200 pt-12">
-            <h2 className="font-display text-xl font-semibold text-lenga-950">
+          <section className="container-page mt-16 border-t border-border pt-12">
+            <h2 className="font-display text-xl font-semibold text-heading">
               Experiencias relacionadas
             </h2>
-            <p className="mt-2 text-sm text-lenga-600">
+            <p className="mt-2 text-sm text-muted-foreground">
               Reservá online las excursiones mencionadas en esta guía.
             </p>
             <div className="mt-6">

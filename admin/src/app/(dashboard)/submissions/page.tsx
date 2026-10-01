@@ -69,8 +69,8 @@ export default async function SubmissionsPage({
       header: 'Contacto',
       cell: (row) => (
         <div>
-          <p className="text-slate-900">{row.contactName}</p>
-          <p className="text-[0.75rem] text-slate-500">{row.email}</p>
+          <p className="text-heading">{row.contactName}</p>
+          <p className="text-[0.75rem] text-subtle-foreground">{row.email}</p>
         </div>
       ),
     },
@@ -142,12 +142,12 @@ function FilterLink({
       aria-current={active ? 'page' : undefined}
       className={cn(
         'inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
-        active ? 'border-glacier-600 bg-glacier-50' : 'border-slate-300 bg-white hover:bg-slate-50',
+        active ? 'border-violet-600 bg-violet-50' : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >
       {label}
       {count !== undefined ? (
-        <span className="tabular text-[0.75rem] text-slate-500">{count}</span>
+        <span className="tabular text-[0.75rem] text-subtle-foreground">{count}</span>
       ) : null}
     </Link>
   )

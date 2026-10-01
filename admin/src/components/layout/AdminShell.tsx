@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { LogOut, Menu } from 'lucide-react'
 import { AdminSidebar } from './AdminSidebar'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { logoutAction } from '@/server/actions/auth'
 
 /**
@@ -38,27 +39,29 @@ export function AdminShell({
       />
 
       <div className="lg:pl-(--sidebar-width)">
-        <header className="sticky top-0 z-30 flex h-(--topbar-height) items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-(--topbar-height) items-center justify-between gap-4 border-b border-border bg-surface px-4 sm:px-6">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
             aria-label="Abrir menú"
             aria-expanded={sidebarOpen}
-            className="grid size-9 place-items-center rounded-control text-slate-600 hover:bg-slate-100 lg:hidden"
+            className="grid size-9 place-items-center rounded-control text-muted-foreground hover:bg-surface-strong lg:hidden"
           >
             <Menu className="size-5" aria-hidden="true" />
           </button>
 
           <div className="ml-auto flex items-center gap-3">
+            <ThemeToggle />
+
             <div className="hidden text-right sm:block">
-              <p className="text-[0.8125rem] font-medium leading-tight text-slate-900">
+              <p className="text-[0.8125rem] font-medium leading-tight text-heading">
                 {user.name}
               </p>
-              <p className="text-[0.6875rem] leading-tight text-slate-500">{user.roleLabel}</p>
+              <p className="text-[0.6875rem] leading-tight text-subtle-foreground">{user.roleLabel}</p>
             </div>
 
             <span
-              className="grid size-8 shrink-0 place-items-center rounded-full bg-glacier-700 text-[0.6875rem] font-bold text-white"
+              className="grid size-8 shrink-0 place-items-center rounded-full bg-violet-700 text-[0.6875rem] font-bold text-white"
               aria-hidden="true"
             >
               {initials}
@@ -69,7 +72,7 @@ export function AdminShell({
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="grid size-9 place-items-center rounded-control text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+                className="grid size-9 place-items-center rounded-control text-subtle-foreground transition-colors hover:bg-surface-strong hover:text-heading"
                 aria-label="Cerrar sesión"
                 title="Cerrar sesión"
               >

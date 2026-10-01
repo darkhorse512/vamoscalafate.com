@@ -30,6 +30,7 @@ const cardSelect = {
         select: {
           id: true, url: true, altText: true, caption: true,
           width: true, height: true, blurDataUrl: true, externalUrl: true,
+          license: true, attributionText: true, attributionUrl: true, sourceUrl: true,
         },
       },
     },
@@ -39,6 +40,8 @@ const cardSelect = {
 const mediaSelect = {
   id: true, url: true, altText: true, caption: true,
   width: true, height: true, blurDataUrl: true, externalUrl: true,
+  // Required to render the credit CC BY / CC BY-SA oblige us to show.
+  license: true, attributionText: true, attributionUrl: true, sourceUrl: true,
 } satisfies Prisma.MediaSelect
 
 export type TourListFilters = {

@@ -21,7 +21,7 @@ export default async function LoginPage({
       <div className="w-full max-w-sm">
         <div className="mb-7 text-center">
           <span
-            className="mx-auto grid size-11 place-items-center rounded-lg bg-glacier-600"
+            className="mx-auto grid size-11 place-items-center rounded-lg bg-violet-600"
             aria-hidden="true"
           >
             <svg viewBox="0 0 24 24" className="size-6" fill="none">
@@ -30,16 +30,16 @@ export default async function LoginPage({
             </svg>
           </span>
           <h1 className="mt-4 text-lg font-semibold text-white">Vamos Calafate</h1>
-          <p className="mt-1 text-[0.8125rem] text-slate-400">
+          <p className="mt-1 text-[0.8125rem] text-subtle-foreground">
             Panel de administración
           </p>
         </div>
 
-        <div className="rounded-panel bg-white p-6 shadow-panel">
+        <div className="rounded-panel bg-surface p-6 shadow-panel">
           <LoginForm next={next} />
         </div>
 
-        <p className="mt-6 text-center text-[0.6875rem] leading-relaxed text-slate-500">
+        <p className="mt-6 text-center text-[0.6875rem] leading-relaxed text-subtle-foreground">
           El acceso a este panel queda registrado. Si no sos parte del equipo de Vamos Calafate,
           cerrá esta página.
         </p>

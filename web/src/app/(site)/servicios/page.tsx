@@ -30,7 +30,7 @@ export default async function ServiciosPage({
 
   return (
     <>
-      <div className="border-b border-stone-200 bg-stone-50">
+      <div className="border-b border-border bg-surface-muted">
         <div className="container-page py-8 sm:py-10">
           <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Servicios', path: ROUTES.services }]} />
           <SectionHeading
@@ -49,7 +49,7 @@ export default async function ServiciosPage({
             <li>
               <Link
                 href={ROUTES.services}
-                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-glacier-700 bg-glacier-700 text-white' : 'border-stone-300 bg-white text-lenga-700 hover:border-lenga-400'}`}
+                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-plum-400'}`}
               >
                 Todos
               </Link>
@@ -58,7 +58,7 @@ export default async function ServiciosPage({
               <li key={category.id}>
                 <Link
                   href={`${ROUTES.services}?categoria=${category.slug}`}
-                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-glacier-700 bg-glacier-700 text-white' : 'border-stone-300 bg-white text-lenga-700 hover:border-lenga-400'}`}
+                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-plum-400'}`}
                 >
                   {category.name}
                   <span className="ml-1.5 opacity-60">{category._count.businesses}</span>
@@ -69,13 +69,13 @@ export default async function ServiciosPage({
         ) : null}
 
         {result.items.length === 0 ? (
-          <div className="rounded-card border border-dashed border-stone-300 bg-stone-50 px-6 py-16 text-center">
-            <h2 className="font-display text-lg font-semibold text-lenga-950">
+          <div className="rounded-card border border-dashed border-border-strong bg-surface-muted px-6 py-16 text-center">
+            <h2 className="font-display text-lg font-semibold text-heading">
               Todavía no hay servicios publicados
             </h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-lenga-600">
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
               ¿Ofrecés un servicio turístico en El Calafate?{' '}
-              <Link href={ROUTES.hotelRegister} className="font-semibold text-glacier-700 underline">
+              <Link href={ROUTES.hotelRegister} className="font-semibold text-violet-700 underline">
                 Registralo en la guía
               </Link>
               .
@@ -87,9 +87,9 @@ export default async function ServiciosPage({
               <li key={business.id}>
                 <Link
                   href={ROUTES.service(business.slug)}
-                  className="group block h-full overflow-hidden rounded-card border border-stone-200 bg-white transition-all hover:border-stone-300 hover:shadow-raised"
+                  className="group block h-full overflow-hidden rounded-card border border-border bg-surface transition-all hover:border-border-strong hover:shadow-raised"
                 >
-                  <div className="relative aspect-[16/10] bg-stone-100">
+                  <div className="relative aspect-[16/10] bg-surface-strong">
                     <SmartImage
                       media={business.images[0]?.media}
                       seed={business.slug}
@@ -98,13 +98,13 @@ export default async function ServiciosPage({
                     />
                   </div>
                   <div className="p-4 sm:p-5">
-                    <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-glacier-700">
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
                       {business.category.name}
                     </p>
-                    <h2 className="mt-1.5 font-display text-[1.0625rem] font-semibold text-lenga-950">
+                    <h2 className="mt-1.5 font-display text-[1.0625rem] font-semibold text-heading">
                       {business.name}
                     </h2>
-                    <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                    <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                       {business.summary}
                     </p>
                   </div>

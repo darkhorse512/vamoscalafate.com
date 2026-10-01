@@ -9,6 +9,7 @@ import { ButtonLink } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { Logo } from './Logo'
 import { MobileNav } from './MobileNav'
+import { ThemeToggle } from './ThemeToggle'
 import { PRIMARY_NAV } from './navigation'
 
 /**
@@ -59,8 +60,8 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
       className={cn(
         'fixed inset-x-0 top-0 z-50 h-(--header-height) transition-colors duration-300',
         solid
-          ? 'border-b border-stone-200 bg-white/95 backdrop-blur-sm'
-          : 'bg-gradient-to-b from-lenga-950/55 to-transparent',
+          ? 'border-b border-border bg-white/95 backdrop-blur-sm'
+          : 'bg-gradient-to-b from-plum-950/55 to-transparent',
       )}
     >
       <div className="container-page flex h-full items-center justify-between gap-6">
@@ -98,8 +99,8 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
                       'inline-flex items-center gap-1 rounded-control px-3 py-2 text-[0.8125rem] font-semibold transition-colors',
                       solid
                         ? isActive
-                          ? 'text-glacier-800'
-                          : 'text-lenga-700 hover:bg-stone-100 hover:text-lenga-950'
+                          ? 'text-violet-800'
+                          : 'text-foreground hover:bg-surface-strong hover:text-heading'
                         : 'text-white/90 hover:bg-white/10 hover:text-white',
                     )}
                   >
@@ -122,18 +123,18 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
                         }
                       }}
                     >
-                      <ul className="overflow-hidden rounded-card border border-stone-200 bg-white p-1.5 shadow-float">
+                      <ul className="overflow-hidden rounded-card border border-border bg-surface p-1.5 shadow-float">
                         {item.children.map((child) => (
                           <li key={child.href}>
                             <Link
                               href={child.href}
-                              className="block rounded-[0.3rem] px-3 py-2.5 transition-colors hover:bg-stone-50"
+                              className="block rounded-[0.3rem] px-3 py-2.5 transition-colors hover:bg-surface-muted"
                             >
-                              <span className="block text-[0.8125rem] font-semibold text-lenga-900">
+                              <span className="block text-[0.8125rem] font-semibold text-heading">
                                 {child.label}
                               </span>
                               {child.description ? (
-                                <span className="mt-0.5 block text-xs leading-snug text-lenga-500">
+                                <span className="mt-0.5 block text-xs leading-snug text-plum-500">
                                   {child.description}
                                 </span>
                               ) : null}
@@ -150,12 +151,17 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle
+            tone={solid ? 'solid' : 'over-media'}
+            className="hidden sm:inline-flex"
+          />
+
           <Link
             href={ROUTES.search}
             aria-label="Buscar en el sitio"
             className={cn(
               'hidden size-10 place-items-center rounded-control transition-colors sm:grid',
-              solid ? 'text-lenga-700 hover:bg-stone-100' : 'text-white/90 hover:bg-white/10',
+              solid ? 'text-foreground hover:bg-surface-strong' : 'text-white/90 hover:bg-white/10',
             )}
           >
             <SearchIcon className="size-[1.125rem]" aria-hidden="true" />

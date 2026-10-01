@@ -22,7 +22,7 @@ export default async function EditLegalPage({ params }: { params: Promise<{ id: 
     <>
       <Link
         href="/settings"
-        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-600 hover:text-slate-900"
+        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-muted-foreground hover:text-heading"
       >
         <ArrowLeft className="size-3.5" aria-hidden="true" />
         Volver a ajustes

@@ -127,7 +127,7 @@ export function BlogEditor({
                 required
                 className="admin-input font-mono text-[0.8125rem]"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 /blog/{form.slug || 'sin-slug'}
               </p>
             </div>
@@ -145,22 +145,22 @@ export function BlogEditor({
                 required
                 className="admin-input"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 {form.excerpt.length}/320 · aparece en las tarjetas y como descripción por defecto
               </p>
             </div>
           </section>
 
           <section className="admin-panel overflow-hidden">
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Contenido (Markdown)</h2>
+            <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Contenido (Markdown)</h2>
               <button
                 type="button"
                 onClick={() => setPreview(!preview)}
                 aria-pressed={preview}
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-control px-2.5 py-1 text-[0.75rem] font-medium transition-colors',
-                  preview ? 'bg-glacier-50 text-glacier-800' : 'text-slate-600 hover:bg-slate-100',
+                  preview ? 'bg-violet-50 text-violet-800' : 'text-muted-foreground hover:bg-surface-strong',
                 )}
               >
                 <Eye className="size-3.5" aria-hidden="true" />
@@ -184,19 +184,19 @@ export function BlogEditor({
                   rows={24}
                   required
                   placeholder={'## Un subtítulo\n\nUn párrafo con **negrita** y un [enlace](/excursiones).\n\n- Un ítem\n- Otro ítem'}
-                  className="w-full resize-y border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-relaxed text-slate-800 focus:outline-none focus:ring-0"
+                  className="w-full resize-y border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-relaxed text-foreground focus:outline-none focus:ring-0"
                 />
               </>
             )}
 
-            <p className="border-t border-slate-200 bg-slate-50 px-4 py-2 text-[0.75rem] text-slate-500">
+            <p className="border-t border-border bg-surface-muted px-4 py-2 text-[0.75rem] text-subtle-foreground">
               {form.content.trim().split(/\s+/).filter(Boolean).length} palabras ·{' '}
               {readingTimeMinutes(form.content)} min de lectura
             </p>
           </section>
 
           <section className="admin-panel space-y-4 p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Imagen principal</h2>
+            <h2 className="text-[0.8125rem] font-semibold text-heading">Imagen principal</h2>
             <SingleImageField
               label="Imagen de portada"
               hint="Encabeza el artículo y se usa al compartirlo en redes. Recomendado 1600×900 px o mayor."
@@ -206,7 +206,7 @@ export function BlogEditor({
           </section>
 
           <section className="admin-panel space-y-4 p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">SEO</h2>
+            <h2 className="text-[0.8125rem] font-semibold text-heading">SEO</h2>
 
             <div>
               <label htmlFor="seo-title" className="admin-label">
@@ -220,7 +220,7 @@ export function BlogEditor({
                 placeholder={form.title}
                 className="admin-input"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 {form.seo.title.length}/70 · vacío usa el título del artículo
               </p>
             </div>
@@ -238,7 +238,7 @@ export function BlogEditor({
                 placeholder={form.excerpt}
                 className="admin-input"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 {form.seo.description.length}/160 recomendados · vacío usa el extracto
               </p>
             </div>
@@ -248,16 +248,16 @@ export function BlogEditor({
                 type="checkbox"
                 checked={form.seo.noindex}
                 onChange={(event) => update('seo', { ...form.seo, noindex: event.target.checked })}
-                className="size-4 rounded border-slate-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+                className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
               />
-              <span className="text-[0.8125rem] text-slate-700">noindex</span>
+              <span className="text-[0.8125rem] text-foreground">noindex</span>
             </label>
           </section>
         </div>
 
         <aside className="space-y-5">
           <section className="admin-panel space-y-4 p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Publicación</h2>
+            <h2 className="text-[0.8125rem] font-semibold text-heading">Publicación</h2>
 
             <div>
               <label htmlFor="status" className="admin-label">
@@ -287,7 +287,7 @@ export function BlogEditor({
                 onChange={(event) => update('publishedAt', event.target.value)}
                 className="admin-input"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 Una fecha futura programa la publicación.
               </p>
             </div>
@@ -328,7 +328,7 @@ export function BlogEditor({
                   </option>
                 ))}
               </select>
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 Define qué excursiones se sugieren al final del artículo.
               </p>
             </div>
@@ -338,15 +338,15 @@ export function BlogEditor({
                 type="checkbox"
                 checked={form.featured}
                 onChange={(event) => update('featured', event.target.checked)}
-                className="size-4 rounded border-slate-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+                className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
               />
-              <span className="text-[0.8125rem] text-slate-700">Destacado</span>
+              <span className="text-[0.8125rem] text-foreground">Destacado</span>
             </label>
           </section>
 
           {tags.length > 0 ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Etiquetas</h2>
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Etiquetas</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {tags.map((tag) => {
                   const selected = form.tagIds.includes(tag.id)
@@ -356,8 +356,8 @@ export function BlogEditor({
                       className={cn(
                         'cursor-pointer rounded-full border px-2.5 py-1 text-[0.75rem] transition-colors',
                         selected
-                          ? 'border-glacier-600 bg-glacier-50 text-glacier-800'
-                          : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
+                          ? 'border-violet-600 bg-violet-50 text-violet-800'
+                          : 'border-border-strong bg-surface text-foreground hover:bg-surface-muted',
                       )}
                     >
                       <input
@@ -383,7 +383,7 @@ export function BlogEditor({
         </aside>
       </div>
 
-      <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-border bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
         <Button type="button" variant="outline" onClick={() => router.push('/blog')} disabled={pending}>
           Cancelar
         </Button>
@@ -407,21 +407,21 @@ function MarkdownPreview({ content }: { content: string }) {
   const blocks = content.split('\n\n')
 
   return (
-    <div className="space-y-3 text-[0.875rem] leading-relaxed text-slate-700">
+    <div className="space-y-3 text-[0.875rem] leading-relaxed text-foreground">
       {blocks.map((block, index) => {
         const trimmed = block.trim()
         if (!trimmed) return null
 
         if (trimmed.startsWith('## ')) {
           return (
-            <h3 key={index} className="mt-5 text-[1rem] font-semibold text-slate-900">
+            <h3 key={index} className="mt-5 text-[1rem] font-semibold text-heading">
               {trimmed.slice(3)}
             </h3>
           )
         }
         if (trimmed.startsWith('### ')) {
           return (
-            <h4 key={index} className="mt-4 text-[0.9375rem] font-semibold text-slate-900">
+            <h4 key={index} className="mt-4 text-[0.9375rem] font-semibold text-heading">
               {trimmed.slice(4)}
             </h4>
           )

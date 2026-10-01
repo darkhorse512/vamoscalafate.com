@@ -24,7 +24,7 @@ export function FaqList({
   if (faqs.length === 0) return null
 
   return (
-    <div className={cn('divide-y divide-stone-200 border-y border-stone-200', className)}>
+    <div className={cn('divide-y divide-border border-y border-border', className)}>
       {faqs.map((faq, index) => {
         const isOpen = openIndex === index
         const panelId = `faq-panel-${index}`
@@ -39,14 +39,14 @@ export function FaqList({
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-glacier-800"
+                className="flex w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:text-violet-800"
               >
-                <span className="font-sans text-[0.9375rem] font-semibold text-lenga-950">
+                <span className="font-sans text-[0.9375rem] font-semibold text-heading">
                   {faq.question}
                 </span>
                 <ChevronDown
                   className={cn(
-                    'mt-0.5 size-4 shrink-0 text-lenga-500 transition-transform duration-200',
+                    'mt-0.5 size-4 shrink-0 text-plum-500 transition-transform duration-200',
                     isOpen && 'rotate-180',
                   )}
                   aria-hidden="true"
@@ -59,7 +59,7 @@ export function FaqList({
               role="region"
               aria-labelledby={buttonId}
               hidden={!isOpen}
-              className="pb-5 pr-8 text-[0.9375rem] leading-relaxed text-lenga-700"
+              className="pb-5 pr-8 text-[0.9375rem] leading-relaxed text-foreground"
             >
               {faq.answer.split('\n\n').map((paragraph, i) => (
                 <p key={i} className={i > 0 ? 'mt-3' : undefined}>

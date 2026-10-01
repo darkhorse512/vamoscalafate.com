@@ -170,7 +170,7 @@ export default async function DashboardPage() {
       {/* ── Queues needing attention ──────────────────────────────────── */}
       {pendingReviews > 0 || newContacts > 0 || pendingSubmissions > 0 ? (
         <section className="mt-6" aria-label="Requiere atención">
-          <h2 className="mb-3 text-[0.8125rem] font-semibold text-slate-900">Requiere atención</h2>
+          <h2 className="mb-3 text-[0.8125rem] font-semibold text-heading">Requiere atención</h2>
           <ul className="grid gap-3 sm:grid-cols-3">
             {pendingSubmissions > 0 ? (
               <ActionItem href="/submissions" count={pendingSubmissions} label="solicitudes de alta sin revisar" />
@@ -188,13 +188,13 @@ export default async function DashboardPage() {
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
         {/* ── Recent bookings ──────────────────────────────────────── */}
         <section className="admin-panel overflow-hidden" aria-labelledby="recent-bookings">
-          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-            <h2 id="recent-bookings" className="text-[0.8125rem] font-semibold text-slate-900">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <h2 id="recent-bookings" className="text-[0.8125rem] font-semibold text-heading">
               Últimas reservas
             </h2>
             <Link
               href="/bookings"
-              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-glacier-700 hover:text-glacier-900"
+              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-violet-700 hover:text-violet-900"
             >
               Ver todas
               <ArrowRight className="size-3" aria-hidden="true" />
@@ -202,29 +202,29 @@ export default async function DashboardPage() {
           </div>
 
           {recentBookings.length === 0 ? (
-            <p className="px-4 py-10 text-center text-[0.8125rem] text-slate-500">
+            <p className="px-4 py-10 text-center text-[0.8125rem] text-subtle-foreground">
               Todavía no hay reservas registradas.
             </p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-border">
               {recentBookings.map((booking) => (
                 <li key={booking.id}>
                   <Link
                     href={`/bookings/${booking.id}`}
-                    className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-slate-50"
+                    className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-muted"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-[0.8125rem] font-medium text-slate-900">
+                      <p className="truncate text-[0.8125rem] font-medium text-heading">
                         {booking.reference} · {booking.customer.firstName} {booking.customer.lastName}
                       </p>
-                      <p className="truncate text-[0.75rem] text-slate-500">
+                      <p className="truncate text-[0.75rem] text-subtle-foreground">
                         {booking.items[0]?.tourNameSnapshot ?? '-'} ·{' '}
                         {formatDateTime(booking.createdAt)}
                       </p>
                     </div>
 
                     <div className="flex shrink-0 items-center gap-3">
-                      <span className="tabular text-[0.8125rem] font-medium text-slate-900">
+                      <span className="tabular text-[0.8125rem] font-medium text-heading">
                         {formatMoney(booking.totalCents, booking.currency)}
                       </span>
                       <StatusBadge status={booking.status} />
@@ -238,39 +238,39 @@ export default async function DashboardPage() {
 
         {/* ── Upcoming departures ──────────────────────────────────── */}
         <section className="admin-panel overflow-hidden" aria-labelledby="upcoming">
-          <div className="border-b border-slate-200 px-4 py-3">
-            <h2 id="upcoming" className="text-[0.8125rem] font-semibold text-slate-900">
+          <div className="border-b border-border px-4 py-3">
+            <h2 id="upcoming" className="text-[0.8125rem] font-semibold text-heading">
               Próximas salidas confirmadas
             </h2>
           </div>
 
           {upcomingDepartures.length === 0 ? (
-            <p className="px-4 py-10 text-center text-[0.8125rem] text-slate-500">
+            <p className="px-4 py-10 text-center text-[0.8125rem] text-subtle-foreground">
               No hay salidas confirmadas próximas.
             </p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-border">
               {upcomingDepartures.map((item) => (
                 <li key={item.id}>
                   <Link
                     href={`/bookings/${item.booking.id}`}
-                    className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-slate-50"
+                    className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-muted"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-[0.8125rem] font-medium text-slate-900">
+                      <p className="truncate text-[0.8125rem] font-medium text-heading">
                         {item.tourNameSnapshot}
                       </p>
-                      <p className="text-[0.75rem] text-slate-500">
+                      <p className="text-[0.75rem] text-subtle-foreground">
                         {item.booking.reference} · {item.adults + item.children} pasajeros
                       </p>
                     </div>
 
                     <div className="shrink-0 text-right">
-                      <p className="tabular text-[0.8125rem] font-medium text-slate-900">
+                      <p className="tabular text-[0.8125rem] font-medium text-heading">
                         {item.travelDate.toISOString().slice(0, 10).split('-').reverse().join('/')}
                       </p>
                       {item.departureTime ? (
-                        <p className="text-[0.75rem] text-slate-500">{item.departureTime}</p>
+                        <p className="text-[0.75rem] text-subtle-foreground">{item.departureTime}</p>
                       ) : null}
                     </div>
                   </Link>
@@ -302,7 +302,7 @@ function StatCard({
   compact?: boolean
 }) {
   const tones = {
-    neutral: 'text-slate-500',
+    neutral: 'text-subtle-foreground',
     success: 'text-status-success',
     warning: 'text-status-warning',
   }
@@ -310,25 +310,25 @@ function StatCard({
   return (
     <Link
       href={href}
-      className="admin-panel group block p-4 transition-colors hover:border-glacier-300"
+      className="admin-panel group block p-4 transition-colors hover:border-violet-300"
     >
       <div className="flex items-center gap-2">
         <span className={cn('shrink-0', tones[tone])} aria-hidden="true">
           {icon}
         </span>
-        <p className="text-[0.75rem] font-medium text-slate-500">{label}</p>
+        <p className="text-[0.75rem] font-medium text-subtle-foreground">{label}</p>
       </div>
 
       <p
         className={cn(
-          'tabular mt-2 font-semibold text-slate-900',
+          'tabular mt-2 font-semibold text-heading',
           compact ? 'text-lg' : 'text-2xl',
         )}
       >
         {value}
       </p>
 
-      {detail ? <p className="mt-0.5 text-[0.6875rem] text-slate-500">{detail}</p> : null}
+      {detail ? <p className="mt-0.5 text-[0.6875rem] text-subtle-foreground">{detail}</p> : null}
     </Link>
   )
 }

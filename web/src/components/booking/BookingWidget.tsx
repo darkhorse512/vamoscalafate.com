@@ -240,19 +240,19 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
   return (
     <>
-      <div className="rounded-card border border-stone-200 bg-white shadow-raised">
-        <div className="border-b border-stone-200 p-5">
+      <div className="rounded-card border border-border bg-surface shadow-raised">
+        <div className="border-b border-border p-5">
           <div className="flex items-baseline justify-between gap-3">
             <div>
-              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-lenga-500">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-plum-500">
                 Desde
               </p>
-              <p className="mt-0.5 font-display text-[1.75rem] font-bold leading-none text-lenga-950">
+              <p className="mt-0.5 font-display text-[1.75rem] font-bold leading-none text-heading">
                 {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
               </p>
-              <p className="mt-1 text-xs text-lenga-500">por persona</p>
+              <p className="mt-1 text-xs text-plum-500">por persona</p>
             </div>
-            <p className="text-right text-xs text-lenga-500">
+            <p className="text-right text-xs text-plum-500">
               {formatDuration(tour.durationMinutes)}
             </p>
           </div>
@@ -261,7 +261,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
         <div className="space-y-5 p-5">
           {/* Option */}
           <div>
-            <label htmlFor="bw-option" className="mb-1.5 block text-[0.8125rem] font-bold text-lenga-950">
+            <label htmlFor="bw-option" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
               Opción
             </label>
             <div className="relative">
@@ -272,7 +272,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   setOptionId(event.target.value)
                   setDepartureTime(null)
                 }}
-                className="w-full appearance-none rounded-control border border-stone-300 bg-white py-2.5 pl-3 pr-9 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+                className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
               >
                 {tour.options.map((o) => (
                   <option key={o.id} value={o.id}>
@@ -281,18 +281,18 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                 ))}
               </select>
               <ChevronDown
-                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-lenga-500"
+                className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-plum-500"
                 aria-hidden="true"
               />
             </div>
             {option?.description ? (
-              <p className="mt-1.5 text-xs leading-relaxed text-lenga-500">{option.description}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-plum-500">{option.description}</p>
             ) : null}
           </div>
 
           {/* Date */}
           <div>
-            <label htmlFor="bw-date" className="mb-1.5 block text-[0.8125rem] font-bold text-lenga-950">
+            <label htmlFor="bw-date" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
               Fecha
             </label>
             <input
@@ -303,14 +303,14 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               max={maxDate}
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="w-full rounded-control border border-stone-300 bg-white px-3 py-2.5 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
             />
           </div>
 
           {/* Departure time */}
           {date && slots.length > 1 ? (
             <fieldset>
-              <legend className="mb-1.5 text-[0.8125rem] font-bold text-lenga-950">Horario</legend>
+              <legend className="mb-1.5 text-[0.8125rem] font-bold text-heading">Horario</legend>
               <div className="flex flex-wrap gap-2">
                 {slots.map((slot) => (
                   <button
@@ -322,8 +322,8 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                     className={cn(
                       'rounded-control border px-3 py-2 text-[0.8125rem] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
                       departureTime === slot.departureTime
-                        ? 'border-glacier-700 bg-glacier-700 text-white'
-                        : 'border-stone-300 bg-white text-lenga-800 hover:border-lenga-400',
+                        ? 'border-violet-700 bg-violet-700 text-white'
+                        : 'border-border-strong bg-surface text-foreground hover:border-plum-400',
                     )}
                   >
                     {slot.departureTime ?? 'A coordinar'}
@@ -337,7 +337,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           ) : null}
 
           {loadingSlots ? (
-            <p className="flex items-center gap-2 text-xs text-lenga-500">
+            <p className="flex items-center gap-2 text-xs text-plum-500">
               <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
               Consultando disponibilidad…
             </p>
@@ -345,7 +345,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
           {/* Passengers */}
           <fieldset className="space-y-3">
-            <legend className="text-[0.8125rem] font-bold text-lenga-950">Pasajeros</legend>
+            <legend className="text-[0.8125rem] font-bold text-heading">Pasajeros</legend>
 
             <Counter
               label="Adultos"
@@ -371,7 +371,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
           {/* Pickup */}
           {tour.pickupLocations.length > 0 ? (
             <div>
-              <label htmlFor="bw-pickup" className="mb-1.5 block text-[0.8125rem] font-bold text-lenga-950">
+              <label htmlFor="bw-pickup" className="mb-1.5 block text-[0.8125rem] font-bold text-heading">
                 Punto de encuentro
               </label>
               <div className="relative">
@@ -379,7 +379,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   id="bw-pickup"
                   value={pickupId}
                   onChange={(event) => setPickupId(event.target.value)}
-                  className="w-full appearance-none rounded-control border border-stone-300 bg-white py-2.5 pl-3 pr-9 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+                  className="w-full appearance-none rounded-control border border-border-strong bg-surface py-2.5 pl-3 pr-9 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
                 >
                   <option value="">Elegir más adelante</option>
                   {tour.pickupLocations.map((location) => (
@@ -392,7 +392,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
                   ))}
                 </select>
                 <ChevronDown
-                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-lenga-500"
+                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-plum-500"
                   aria-hidden="true"
                 />
               </div>
@@ -424,8 +424,8 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
 
           {/* Total */}
           {date && activeSlot ? (
-            <div className="space-y-1.5 rounded-control bg-stone-50 p-3.5">
-              <div className="flex justify-between text-xs text-lenga-600">
+            <div className="space-y-1.5 rounded-control bg-surface-muted p-3.5">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>
                   {adults} × {formatMoney(unitCents, tour.currency)}
                 </span>
@@ -433,7 +433,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               </div>
 
               {children > 0 ? (
-                <div className="flex justify-between text-xs text-lenga-600">
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span>
                     {children} menores × {formatMoney(childUnitCents, tour.currency)}
                   </span>
@@ -442,13 +442,13 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               ) : null}
 
               {pickup && pickup.extraCostCents > 0 ? (
-                <div className="flex justify-between text-xs text-lenga-600">
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span>Punto de encuentro</span>
                   <span>{formatMoney(pickup.extraCostCents * passengers, tour.currency)}</span>
                 </div>
               ) : null}
 
-              <div className="flex justify-between border-t border-stone-200 pt-2 text-sm font-bold text-lenga-950">
+              <div className="flex justify-between border-t border-border pt-2 text-sm font-bold text-heading">
                 <span>Total estimado</span>
                 <span>{formatMoney(estimatedTotal, tour.currency)}</span>
               </div>
@@ -466,7 +466,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
             )}
           </Button>
 
-          <ul className="space-y-1.5 text-[0.6875rem] text-lenga-500">
+          <ul className="space-y-1.5 text-[0.6875rem] text-plum-500">
             {option && option.freeCancellationHours > 0 ? (
               <li className="flex items-start gap-1.5">
                 <Check className="mt-px size-3.5 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
@@ -474,7 +474,7 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
               </li>
             ) : null}
             <li className="flex items-start gap-1.5">
-              <ShieldCheck className="mt-px size-3.5 shrink-0 text-glacier-600" aria-hidden="true" />
+              <ShieldCheck className="mt-px size-3.5 shrink-0 text-violet-600" aria-hidden="true" />
               Pago procesado por plataformas seguras
             </li>
           </ul>
@@ -482,11 +482,11 @@ export function BookingWidget({ tour }: { tour: TourDetail }) {
       </div>
 
       {/* Sticky mobile bar - the widget above scrolls away on a phone. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200 bg-white/97 px-4 py-3 backdrop-blur lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/97 px-4 py-3 backdrop-blur lg:hidden">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[0.6875rem] text-lenga-500">Desde</p>
-            <p className="truncate font-display text-lg font-bold leading-none text-lenga-950">
+            <p className="text-[0.6875rem] text-plum-500">Desde</p>
+            <p className="truncate font-display text-lg font-bold leading-none text-heading">
               {formatMoney(tour.fromPriceCents ?? 0, tour.currency)}
             </p>
           </div>
@@ -526,10 +526,10 @@ function Counter({
   return (
     <div className="flex items-center justify-between gap-4">
       <div>
-        <label htmlFor={id} className="text-sm font-medium text-lenga-900">
+        <label htmlFor={id} className="text-sm font-medium text-heading">
           {label}
         </label>
-        {hint ? <p className="text-[0.6875rem] text-lenga-500">{hint}</p> : null}
+        {hint ? <p className="text-[0.6875rem] text-plum-500">{hint}</p> : null}
       </div>
 
       <div className="flex items-center gap-1">
@@ -538,7 +538,7 @@ function Counter({
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           aria-label={`Quitar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-stone-300 text-lenga-700 transition-colors hover:border-lenga-400 disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-plum-400 disabled:opacity-35"
         >
           <Minus className="size-4" aria-hidden="true" />
         </button>
@@ -554,7 +554,7 @@ function Counter({
             const next = Number(event.target.value)
             if (Number.isFinite(next)) onChange(Math.min(max, Math.max(min, next)))
           }}
-          className="w-11 border-0 bg-transparent text-center text-sm font-semibold text-lenga-950 focus:outline-none focus:ring-0"
+          className="w-11 border-0 bg-transparent text-center text-sm font-semibold text-heading focus:outline-none focus:ring-0"
         />
 
         <button
@@ -562,7 +562,7 @@ function Counter({
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           aria-label={`Agregar un ${label.toLowerCase().replace(/e?s$/, '')}`}
-          className="grid size-9 place-items-center rounded-control border border-stone-300 text-lenga-700 transition-colors hover:border-lenga-400 disabled:opacity-35"
+          className="grid size-9 place-items-center rounded-control border border-border-strong text-foreground transition-colors hover:border-plum-400 disabled:opacity-35"
         >
           <Plus className="size-4" aria-hidden="true" />
         </button>

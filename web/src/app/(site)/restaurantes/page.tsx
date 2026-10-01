@@ -27,7 +27,7 @@ export default async function RestaurantesPage({
 
   return (
     <>
-      <div className="border-b border-stone-200 bg-stone-50">
+      <div className="border-b border-border bg-surface-muted">
         <div className="container-page py-8 sm:py-10">
           <Breadcrumbs
             items={[{ name: 'Inicio', path: '/' }, { name: 'Restaurantes', path: ROUTES.restaurants }]}
@@ -44,11 +44,11 @@ export default async function RestaurantesPage({
 
       <div className="container-page py-10 sm:py-12">
         {result.items.length === 0 ? (
-          <div className="rounded-card border border-dashed border-stone-300 bg-stone-50 px-6 py-16 text-center">
-            <h2 className="font-display text-lg font-semibold text-lenga-950">
+          <div className="rounded-card border border-dashed border-border-strong bg-surface-muted px-6 py-16 text-center">
+            <h2 className="font-display text-lg font-semibold text-heading">
               Todavía no hay restaurantes publicados
             </h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-lenga-600">
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
               ¿Tenés un restaurante en El Calafate? Solicitá su publicación en la guía.
             </p>
             <ButtonLink href={ROUTES.hotelRegister} className="mt-6">
@@ -61,9 +61,9 @@ export default async function RestaurantesPage({
               <li key={business.id}>
                 <Link
                   href={ROUTES.restaurant(business.slug)}
-                  className="group flex h-full flex-col overflow-hidden rounded-card border border-stone-200 bg-white transition-all hover:border-stone-300 hover:shadow-raised"
+                  className="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-all hover:border-border-strong hover:shadow-raised"
                 >
-                  <div className="relative aspect-[16/10] bg-stone-100">
+                  <div className="relative aspect-[16/10] bg-surface-strong">
                     <SmartImage
                       media={business.images[0]?.media}
                       seed={business.slug}
@@ -76,26 +76,26 @@ export default async function RestaurantesPage({
 
                   <div className="flex flex-1 flex-col p-4 sm:p-5">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-glacier-700">
+                      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
                         {business.category.name}
                       </p>
                       {business.priceRange ? (
-                        <span className="text-xs font-semibold text-lenga-500">
+                        <span className="text-xs font-semibold text-plum-500">
                           {business.priceRange}
                         </span>
                       ) : null}
                     </div>
 
-                    <h2 className="mt-1.5 font-display text-[1.0625rem] font-semibold text-lenga-950">
+                    <h2 className="mt-1.5 font-display text-[1.0625rem] font-semibold text-heading">
                       {business.name}
                     </h2>
 
-                    <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                    <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                       {business.summary}
                     </p>
 
                     {business.address ? (
-                      <p className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs text-lenga-500">
+                      <p className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs text-plum-500">
                         <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
                         {business.address}
                       </p>

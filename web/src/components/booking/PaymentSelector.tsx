@@ -49,9 +49,9 @@ export function PaymentSelector({
   }
 
   return (
-    <div className="rounded-card border border-stone-200 p-5 sm:p-6">
+    <div className="rounded-card border border-border p-5 sm:p-6">
       <fieldset>
-        <legend className="font-display text-base font-semibold text-lenga-950">
+        <legend className="font-display text-base font-semibold text-heading">
           Medio de pago
         </legend>
 
@@ -62,8 +62,8 @@ export function PaymentSelector({
               className={cn(
                 'flex cursor-pointer items-center gap-3 rounded-control border p-4 transition-colors',
                 selected === provider.key
-                  ? 'border-glacier-700 bg-glacier-50'
-                  : 'border-stone-300 hover:border-lenga-400 hover:bg-stone-50',
+                  ? 'border-violet-700 bg-violet-50'
+                  : 'border-border-strong hover:border-plum-400 hover:bg-surface-muted',
               )}
             >
               <input
@@ -72,10 +72,10 @@ export function PaymentSelector({
                 value={provider.key}
                 checked={selected === provider.key}
                 onChange={() => setSelected(provider.key)}
-                className="size-4 border-stone-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+                className="size-4 border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
               />
-              <CreditCard className="size-5 shrink-0 text-lenga-600" aria-hidden="true" />
-              <span className="text-[0.9375rem] font-medium text-lenga-900">{provider.label}</span>
+              <CreditCard className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <span className="text-[0.9375rem] font-medium text-heading">{provider.label}</span>
             </label>
           ))}
         </div>
@@ -101,7 +101,7 @@ export function PaymentSelector({
         )}
       </Button>
 
-      <p className="mt-3 text-center text-[0.6875rem] text-lenga-500">
+      <p className="mt-3 text-center text-[0.6875rem] text-plum-500">
         Reserva {reference} · Te redirigimos a la plataforma de pago seguro
       </p>
     </div>

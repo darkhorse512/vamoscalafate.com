@@ -49,7 +49,7 @@ export default async function CategoriesPage() {
 
   const columns: Column<Row>[] = [
     { key: 'name', header: 'Nombre', cell: (row) => row.name },
-    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-slate-500">{row.slug}</span> },
+    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-subtle-foreground">{row.slug}</span> },
     { key: 'channel', header: 'Sección', cell: (row) => row.channel },
     { key: 'tours', header: 'Excursiones', numeric: true, cell: (row) => String(row.tours) },
     { key: 'sortOrder', header: 'Orden', numeric: true, cell: (row) => String(row.sortOrder) },
@@ -63,10 +63,10 @@ export default async function CategoriesPage() {
         description="La sección («channel») determina en qué ruta pública aparece cada categoría."
       />
 
-      <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">Categorías de excursiones</h2>
+      <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">Categorías de excursiones</h2>
       <DataTable columns={columns} rows={tourRows} caption="Categorías de excursiones" />
 
-      <h2 className="mb-3 mt-8 text-[0.875rem] font-semibold text-slate-900">
+      <h2 className="mb-3 mt-8 text-[0.875rem] font-semibold text-heading">
         Categorías de comercios
       </h2>
       <div className="admin-panel overflow-hidden">
@@ -83,8 +83,8 @@ export default async function CategoriesPage() {
           <tbody>
             {businessCategories.map((category) => (
               <tr key={category.id}>
-                <td className="font-medium text-slate-900">{category.name}</td>
-                <td className="font-mono text-[0.75rem] text-slate-500">{category.slug}</td>
+                <td className="font-medium text-heading">{category.name}</td>
+                <td className="font-mono text-[0.75rem] text-subtle-foreground">{category.slug}</td>
                 <td>{category.channel}</td>
                 <td className="tabular text-right">{category._count.businesses}</td>
               </tr>

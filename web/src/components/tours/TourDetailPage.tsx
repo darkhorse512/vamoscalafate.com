@@ -74,13 +74,13 @@ export function TourDetailPage({
                 {tour.isDemo ? <Badge tone="warning">Contenido de ejemplo</Badge> : null}
               </div>
 
-              <h1 className="mt-3 font-display text-display-sm font-bold leading-[1.1] text-lenga-950">
+              <h1 className="mt-3 font-display text-display-sm font-bold leading-[1.1] text-heading">
                 {tour.name}
               </h1>
 
-              <p className="mt-4 text-[1.0625rem] leading-relaxed text-lenga-700">{tour.summary}</p>
+              <p className="mt-4 text-[1.0625rem] leading-relaxed text-foreground">{tour.summary}</p>
 
-              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 border-y border-stone-200 py-4 text-sm text-lenga-600">
+              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 border-y border-border py-4 text-sm text-muted-foreground">
                 <Fact icon={<Clock className="size-4" />} label={formatDuration(tour.durationMinutes)} />
                 {tour.location ? (
                   <Fact icon={<MapPin className="size-4" />} label={tour.location} />
@@ -101,13 +101,13 @@ export function TourDetailPage({
             {/* Highlights */}
             {tour.highlights.length > 0 ? (
               <section className="mt-9">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">
+                <h2 className="font-display text-xl font-semibold text-heading">
                   Lo más destacado
                 </h2>
                 <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                   {tour.highlights.map((highlight) => (
-                    <li key={highlight} className="flex items-start gap-2.5 text-[0.9375rem] text-lenga-700">
-                      <Check className="mt-0.5 size-4 shrink-0 text-glacier-600" aria-hidden="true" />
+                    <li key={highlight} className="flex items-start gap-2.5 text-[0.9375rem] text-foreground">
+                      <Check className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
                       {highlight}
                     </li>
                   ))}
@@ -117,14 +117,14 @@ export function TourDetailPage({
 
             {/* Description */}
             <section className="mt-10">
-              <h2 className="font-display text-xl font-semibold text-lenga-950">Descripción</h2>
+              <h2 className="font-display text-xl font-semibold text-heading">Descripción</h2>
               <Markdown content={tour.description} className="prose-vamos mt-4" />
             </section>
 
             {/* Itinerary */}
             {tour.itinerary.length > 0 ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">Itinerario</h2>
+                <h2 className="font-display text-xl font-semibold text-heading">Itinerario</h2>
 
                 <ol className="mt-5 space-y-0">
                   {tour.itinerary.map((step, index) => (
@@ -138,7 +138,7 @@ export function TourDetailPage({
                       ) : null}
 
                       <span
-                        className="relative z-10 grid size-8 shrink-0 place-items-center rounded-full bg-glacier-700 text-xs font-bold text-white"
+                        className="relative z-10 grid size-8 shrink-0 place-items-center rounded-full bg-violet-700 text-xs font-bold text-white"
                         aria-hidden="true"
                       >
                         {index + 1}
@@ -146,16 +146,16 @@ export function TourDetailPage({
 
                       <div className="min-w-0 flex-1 pt-0.5">
                         <div className="flex flex-wrap items-baseline gap-x-3">
-                          <h3 className="font-sans text-[0.9375rem] font-bold text-lenga-950">
+                          <h3 className="font-sans text-[0.9375rem] font-bold text-heading">
                             {step.title}
                           </h3>
                           {step.timeLabel ? (
-                            <span className="text-xs font-medium text-glacier-700">
+                            <span className="text-xs font-medium text-violet-700">
                               {step.timeLabel}
                             </span>
                           ) : null}
                         </div>
-                        <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-lenga-600">
+                        <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-muted-foreground">
                           {step.description}
                         </p>
                       </div>
@@ -170,10 +170,10 @@ export function TourDetailPage({
               <section className="mt-12 grid gap-8 sm:grid-cols-2">
                 {tour.included.length > 0 ? (
                   <div>
-                    <h2 className="font-display text-xl font-semibold text-lenga-950">Incluye</h2>
+                    <h2 className="font-display text-xl font-semibold text-heading">Incluye</h2>
                     <ul className="mt-4 space-y-2.5">
                       {tour.included.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5 text-[0.9375rem] text-lenga-700">
+                        <li key={item} className="flex items-start gap-2.5 text-[0.9375rem] text-foreground">
                           <Check className="mt-0.5 size-4 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
                           {item}
                         </li>
@@ -184,10 +184,10 @@ export function TourDetailPage({
 
                 {tour.excluded.length > 0 ? (
                   <div>
-                    <h2 className="font-display text-xl font-semibold text-lenga-950">No incluye</h2>
+                    <h2 className="font-display text-xl font-semibold text-heading">No incluye</h2>
                     <ul className="mt-4 space-y-2.5">
                       {tour.excluded.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5 text-[0.9375rem] text-lenga-600">
+                        <li key={item} className="flex items-start gap-2.5 text-[0.9375rem] text-muted-foreground">
                           <XIcon className="mt-0.5 size-4 shrink-0 text-stone-400" aria-hidden="true" />
                           {item}
                         </li>
@@ -201,20 +201,20 @@ export function TourDetailPage({
             {/* Pickup */}
             {tour.pickupLocations.length > 0 ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">
+                <h2 className="font-display text-xl font-semibold text-heading">
                   Puntos de encuentro
                 </h2>
-                <ul className="mt-4 divide-y divide-stone-200 rounded-card border border-stone-200">
+                <ul className="mt-4 divide-y divide-border rounded-card border border-border">
                   {tour.pickupLocations.map((location) => (
                     <li key={location.id} className="flex items-start justify-between gap-4 p-4">
                       <div className="min-w-0">
-                        <p className="text-[0.9375rem] font-medium text-lenga-900">{location.name}</p>
+                        <p className="text-[0.9375rem] font-medium text-heading">{location.name}</p>
                         {location.address ? (
-                          <p className="mt-0.5 text-xs text-lenga-500">{location.address}</p>
+                          <p className="mt-0.5 text-xs text-plum-500">{location.address}</p>
                         ) : null}
                       </div>
                       {location.offsetMinutes !== 0 ? (
-                        <span className="shrink-0 text-xs text-lenga-500">
+                        <span className="shrink-0 text-xs text-plum-500">
                           {location.offsetMinutes < 0
                             ? `${Math.abs(location.offsetMinutes)} min antes`
                             : `${location.offsetMinutes} min después`}
@@ -229,7 +229,7 @@ export function TourDetailPage({
             {/* Important information */}
             {tour.importantInfo ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">
+                <h2 className="font-display text-xl font-semibold text-heading">
                   Información importante
                 </h2>
                 <div className="mt-4 rounded-card border-l-[3px] border-[#c9942a] bg-[#fdf9f0] p-5">
@@ -242,7 +242,7 @@ export function TourDetailPage({
             {/* Cancellation */}
             {tour.cancellationPolicy ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">
+                <h2 className="font-display text-xl font-semibold text-heading">
                   Política de cancelación
                 </h2>
                 <Markdown
@@ -252,7 +252,7 @@ export function TourDetailPage({
                 <p className="mt-4 text-sm">
                   <Link
                     href={ROUTES.cancellation}
-                    className="font-medium text-glacier-700 underline underline-offset-2 hover:text-glacier-900"
+                    className="font-medium text-violet-700 underline underline-offset-2 hover:text-violet-900"
                   >
                     Ver la política completa
                   </Link>
@@ -263,8 +263,8 @@ export function TourDetailPage({
             {/* Video */}
             {videoEmbed ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">Video</h2>
-                <div className="mt-4 aspect-video overflow-hidden rounded-card bg-stone-100">
+                <h2 className="font-display text-xl font-semibold text-heading">Video</h2>
+                <div className="mt-4 aspect-video overflow-hidden rounded-card bg-surface-strong">
                   <iframe
                     src={videoEmbed}
                     title={`Video: ${tour.name}`}
@@ -280,7 +280,7 @@ export function TourDetailPage({
             {/* FAQ */}
             {faqs.length > 0 ? (
               <section className="mt-12">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">
+                <h2 className="font-display text-xl font-semibold text-heading">
                   Preguntas frecuentes
                 </h2>
                 <FaqList faqs={faqs} className="mt-4" />
@@ -289,25 +289,25 @@ export function TourDetailPage({
 
             {/* Reviews - only real, approved ones are ever shown. */}
             <section className="mt-12">
-              <h2 className="font-display text-xl font-semibold text-lenga-950">Reseñas</h2>
+              <h2 className="font-display text-xl font-semibold text-heading">Reseñas</h2>
               {tour.reviews.length > 0 ? (
                 <ul className="mt-5 space-y-5">
                   {tour.reviews.map((review) => (
                     <li
                       key={review.id}
-                      className="rounded-card border border-stone-200 p-5"
+                      className="rounded-card border border-border p-5"
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-sans text-sm font-bold text-lenga-950">
+                        <p className="font-sans text-sm font-bold text-heading">
                           {review.authorName}
                           {review.authorCountry ? (
-                            <span className="ml-1.5 font-normal text-lenga-500">
+                            <span className="ml-1.5 font-normal text-plum-500">
                               · {review.authorCountry}
                             </span>
                           ) : null}
                         </p>
                         <p
-                          className="text-sm text-ochre-500"
+                          className="text-sm text-magenta-500"
                           aria-label={`${review.rating} de 5 estrellas`}
                         >
                           {'★'.repeat(review.rating)}
@@ -316,19 +316,19 @@ export function TourDetailPage({
                       </div>
 
                       {review.title ? (
-                        <p className="mt-2 text-[0.9375rem] font-semibold text-lenga-900">
+                        <p className="mt-2 text-[0.9375rem] font-semibold text-heading">
                           {review.title}
                         </p>
                       ) : null}
 
-                      <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-lenga-700">
+                      <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-foreground">
                         {review.content}
                       </p>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="mt-4 rounded-card border border-dashed border-stone-300 bg-stone-50 p-5 text-sm leading-relaxed text-lenga-600">
+                <p className="mt-4 rounded-card border border-dashed border-border-strong bg-surface-muted p-5 text-sm leading-relaxed text-muted-foreground">
                   Esta experiencia todavía no tiene reseñas publicadas. Solo mostramos reseñas de
                   personas que efectivamente realizaron la excursión.
                 </p>
@@ -344,8 +344,8 @@ export function TourDetailPage({
 
         {/* Related */}
         {related.length > 0 ? (
-          <section className="mt-16 border-t border-stone-200 pt-12">
-            <h2 className="font-display text-xl font-semibold text-lenga-950">
+          <section className="mt-16 border-t border-border pt-12">
+            <h2 className="font-display text-xl font-semibold text-heading">
               Otras experiencias que te pueden interesar
             </h2>
             <div className="mt-6">
@@ -356,17 +356,17 @@ export function TourDetailPage({
 
         {/* Related destination guide - internal linking */}
         {tour.destination ? (
-          <section className="mt-12 rounded-card border border-stone-200 bg-stone-50 p-6 sm:p-8">
-            <h2 className="font-display text-lg font-semibold text-lenga-950">
+          <section className="mt-12 rounded-card border border-border bg-surface-muted p-6 sm:p-8">
+            <h2 className="font-display text-lg font-semibold text-heading">
               Antes de ir: {tour.destination.name}
             </h2>
-            <p className="mt-2 max-w-2xl text-[0.9375rem] leading-relaxed text-lenga-600">
+            <p className="mt-2 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
               Leé la guía del destino para entender cómo se llega, qué esperar y cómo combinarlo con
               el resto de tu viaje.
             </p>
             <Link
               href={ROUTES.destination(tour.destination.slug)}
-              className="mt-4 inline-block text-sm font-semibold text-glacier-700 underline underline-offset-2 hover:text-glacier-900"
+              className="mt-4 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
             >
               Ver la guía de {tour.destination.name}
             </Link>
@@ -380,7 +380,7 @@ export function TourDetailPage({
 function Fact({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <li className="inline-flex items-center gap-2">
-      <span className="text-glacier-600" aria-hidden="true">
+      <span className="text-violet-600" aria-hidden="true">
         {icon}
       </span>
       {label}

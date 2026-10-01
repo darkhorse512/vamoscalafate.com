@@ -70,7 +70,7 @@ export default async function SeoPage() {
       </section>
 
       <section className="admin-panel mb-6 p-4">
-        <h2 className="text-[0.875rem] font-semibold text-slate-900">
+        <h2 className="text-[0.875rem] font-semibold text-heading">
           Verificación en Search Console
         </h2>
         <ul className="mt-3 space-y-2 text-[0.8125rem]">
@@ -80,7 +80,7 @@ export default async function SeoPage() {
             ) : (
               <AlertTriangle className="mt-0.5 size-4 shrink-0 text-status-warning" aria-hidden="true" />
             )}
-            <span className="text-slate-700">
+            <span className="text-foreground">
               Meta de verificación:{' '}
               {publicEnv.NEXT_PUBLIC_GSC_VERIFICATION
                 ? 'configurada'
@@ -89,13 +89,13 @@ export default async function SeoPage() {
           </li>
           <li className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-status-success" aria-hidden="true" />
-            <span className="text-slate-700">
+            <span className="text-foreground">
               Sitemap:{' '}
               <a
                 href={`${siteUrl}/sitemap.xml`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-glacier-700 hover:underline"
+                className="text-violet-700 hover:underline"
               >
                 {siteUrl}/sitemap.xml
               </a>
@@ -103,13 +103,13 @@ export default async function SeoPage() {
           </li>
           <li className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-status-success" aria-hidden="true" />
-            <span className="text-slate-700">
+            <span className="text-foreground">
               robots.txt:{' '}
               <a
                 href={`${siteUrl}/robots.txt`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-glacier-700 hover:underline"
+                className="text-violet-700 hover:underline"
               >
                 {siteUrl}/robots.txt
               </a>
@@ -117,7 +117,7 @@ export default async function SeoPage() {
           </li>
           <li className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-status-success" aria-hidden="true" />
-            <span className="text-slate-700">
+            <span className="text-foreground">
               El panel de administración está excluido de la indexación en todos sus niveles.
             </span>
           </li>
@@ -146,26 +146,26 @@ export default async function SeoPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="admin-panel overflow-hidden">
-          <h2 className="border-b border-slate-200 px-4 py-3 text-[0.8125rem] font-semibold text-slate-900">
+          <h2 className="border-b border-border px-4 py-3 text-[0.8125rem] font-semibold text-heading">
             Sin descripción SEO propia ({missingSeoDescription.length})
           </h2>
 
           {missingSeoDescription.length === 0 ? (
-            <p className="px-4 py-8 text-center text-[0.8125rem] text-slate-500">
+            <p className="px-4 py-8 text-center text-[0.8125rem] text-subtle-foreground">
               Todas las excursiones publicadas tienen descripción.
             </p>
           ) : (
             <>
-              <p className="border-b border-slate-100 bg-slate-50 px-4 py-2 text-[0.75rem] text-slate-500">
+              <p className="border-b border-border bg-surface-muted px-4 py-2 text-[0.75rem] text-subtle-foreground">
                 Sin descripción propia se usa el resumen, lo cual suele funcionar. Escribir una
                 específica da más control sobre el fragmento en Google.
               </p>
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-border">
                 {missingSeoDescription.map((tour) => (
                   <li key={tour.id} className="px-4 py-2.5">
                     <Link
                       href={`/tours/${tour.id}/edit`}
-                      className="text-[0.8125rem] text-glacier-700 hover:underline"
+                      className="text-[0.8125rem] text-violet-700 hover:underline"
                     >
                       {tour.name}
                     </Link>
@@ -177,25 +177,25 @@ export default async function SeoPage() {
         </section>
 
         <section className="admin-panel overflow-hidden">
-          <h2 className="border-b border-slate-200 px-4 py-3 text-[0.8125rem] font-semibold text-slate-900">
+          <h2 className="border-b border-border px-4 py-3 text-[0.8125rem] font-semibold text-heading">
             Resúmenes demasiado cortos ({thinSummaries.length})
           </h2>
 
           {thinSummaries.length === 0 ? (
-            <p className="px-4 py-8 text-center text-[0.8125rem] text-slate-500">
+            <p className="px-4 py-8 text-center text-[0.8125rem] text-subtle-foreground">
               Todos los resúmenes tienen longitud suficiente.
             </p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-border">
               {thinSummaries.map((tour) => (
                 <li key={tour.id} className="px-4 py-2.5">
                   <Link
                     href={`/tours/${tour.id}/edit`}
-                    className="text-[0.8125rem] text-glacier-700 hover:underline"
+                    className="text-[0.8125rem] text-violet-700 hover:underline"
                   >
                     {tour.name}
                   </Link>
-                  <p className="mt-0.5 text-[0.75rem] text-slate-500">
+                  <p className="mt-0.5 text-[0.75rem] text-subtle-foreground">
                     {tour.summary.length} caracteres - apuntá a 120–160
                   </p>
                 </li>
@@ -224,8 +224,8 @@ export default async function SeoPage() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="admin-panel p-4">
-      <p className="text-[0.75rem] font-medium text-slate-500">{label}</p>
-      <p className="tabular mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="text-[0.75rem] font-medium text-subtle-foreground">{label}</p>
+      <p className="tabular mt-1 text-2xl font-semibold text-heading">{value}</p>
     </div>
   )
 }

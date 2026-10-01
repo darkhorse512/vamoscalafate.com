@@ -15,7 +15,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
       <span
         className={cn(
           'grid size-9 shrink-0 place-items-center rounded-[0.3rem] transition-colors',
-          tone === 'light' ? 'bg-white/15 ring-1 ring-white/25' : 'bg-lenga-950',
+          tone === 'light' ? 'bg-white/15 ring-1 ring-white/25' : 'bg-inverse',
         )}
         aria-hidden="true"
       >
@@ -31,7 +31,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
         <span
           className={cn(
             'font-display text-[1.0625rem] font-bold tracking-tight',
-            tone === 'light' ? 'text-white' : 'text-lenga-950',
+            tone === 'light' ? 'text-white' : 'text-heading',
           )}
         >
           Vamos Calafate
@@ -39,7 +39,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
         <span
           className={cn(
             'mt-0.5 text-[0.5625rem] font-semibold uppercase tracking-[0.16em]',
-            tone === 'light' ? 'text-white/65' : 'text-lenga-500',
+            tone === 'light' ? 'text-white/65' : 'text-plum-500',
           )}
         >
           Patagonia Argentina

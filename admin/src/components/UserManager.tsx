@@ -112,10 +112,10 @@ export function UserManager({
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td className="font-medium text-slate-900">
+                <td className="font-medium text-heading">
                   {user.name}
                   {user.id === currentUserId ? (
-                    <span className="ml-2 text-[0.6875rem] font-normal text-slate-500">(vos)</span>
+                    <span className="ml-2 text-[0.6875rem] font-normal text-subtle-foreground">(vos)</span>
                   ) : null}
                 </td>
                 <td>{user.email}</td>
@@ -141,7 +141,7 @@ export function UserManager({
                   <button
                     type="button"
                     onClick={() => { setEditing(user); setCreating(false) }}
-                    className="text-[0.8125rem] font-medium text-glacier-700 hover:underline"
+                    className="text-[0.8125rem] font-medium text-violet-700 hover:underline"
                   >
                     Editar
                   </button>
@@ -165,9 +165,9 @@ export function UserManager({
             role="dialog"
             aria-modal="true"
             aria-labelledby="user-dialog-title"
-            className="relative w-full max-w-md rounded-panel bg-white p-5 shadow-panel"
+            className="relative w-full max-w-md rounded-panel bg-surface p-5 shadow-panel"
           >
-            <h2 id="user-dialog-title" className="text-[0.9375rem] font-semibold text-slate-900">
+            <h2 id="user-dialog-title" className="text-[0.9375rem] font-semibold text-heading">
               {editing ? `Editar ${editing.name}` : 'Nuevo usuario'}
             </h2>
 
@@ -212,7 +212,7 @@ export function UserManager({
                   autoComplete="new-password"
                   className="admin-input"
                 />
-                <p className="mt-1 text-[0.75rem] text-slate-500">
+                <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                   {editing
                     ? 'Dejala vacía para no cambiarla. Al rotarla se cierran todas sus sesiones.'
                     : 'Mínimo 12 caracteres, con mayúscula, minúscula y número.'}
@@ -249,9 +249,9 @@ export function UserManager({
                       type="checkbox"
                       name="isActive"
                       defaultChecked={editing ? editing.isActive : true}
-                      className="size-4 rounded border-slate-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+                      className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
                     />
-                    <span className="text-[0.8125rem] text-slate-700">Cuenta activa</span>
+                    <span className="text-[0.8125rem] text-foreground">Cuenta activa</span>
                   </label>
                 </>
               )}

@@ -16,7 +16,7 @@ export function CtaBanner({
   secondary?: { href: string; label: string }
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-lenga-950">
+    <section className="relative isolate overflow-hidden bg-inverse">
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 opacity-45"
@@ -28,7 +28,7 @@ export function CtaBanner({
 
       <div className="container-page py-16 text-center sm:py-20">
         {eyebrow ? (
-          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-glacier-300">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-violet-300">
             {eyebrow}
           </p>
         ) : null}

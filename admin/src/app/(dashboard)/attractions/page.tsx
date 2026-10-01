@@ -31,7 +31,7 @@ export default async function AttractionsPage() {
   const columns: Column<Row>[] = [
     { key: 'name', header: 'Atracción', cell: (row) => row.name },
     { key: 'destination', header: 'Destino', cell: (row) => row.destinationName },
-    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-slate-500">{row.slug}</span> },
+    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-subtle-foreground">{row.slug}</span> },
     { key: 'status', header: 'Estado', cell: (row) => <StatusBadge status={row.status} /> },
   ]
 

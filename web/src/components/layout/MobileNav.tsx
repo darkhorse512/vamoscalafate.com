@@ -79,7 +79,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
         aria-expanded={open}
         className={cn(
           'grid size-10 place-items-center rounded-control transition-colors lg:hidden',
-          tone === 'dark' ? 'text-lenga-800 hover:bg-stone-100' : 'text-white hover:bg-white/10',
+          tone === 'dark' ? 'text-foreground hover:bg-surface-strong' : 'text-white hover:bg-white/10',
         )}
       >
         <Menu className="size-5" aria-hidden="true" />
@@ -91,7 +91,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
             type="button"
             aria-label="Cerrar menú"
             onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-lenga-950/55 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-plum-950/55 backdrop-blur-[2px]"
           />
 
           <div
@@ -99,10 +99,10 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
             role="dialog"
             aria-modal="true"
             aria-label="Menú de navegación"
-            className="absolute inset-y-0 right-0 flex w-full max-w-[22rem] flex-col bg-white shadow-float"
+            className="absolute inset-y-0 right-0 flex w-full max-w-[22rem] flex-col bg-surface shadow-float"
           >
-            <div className="flex h-(--header-height) shrink-0 items-center justify-between border-b border-stone-200 px-5">
-              <span className="font-display text-base font-bold text-lenga-950">Menú</span>
+            <div className="flex h-(--header-height) shrink-0 items-center justify-between border-b border-border px-5">
+              <span className="font-display text-base font-bold text-heading">Menú</span>
               <button
                 type="button"
                 onClick={() => {
@@ -110,7 +110,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                   triggerRef.current?.focus()
                 }}
                 aria-label="Cerrar menú"
-                className="grid size-10 place-items-center rounded-control text-lenga-700 hover:bg-stone-100"
+                className="grid size-10 place-items-center rounded-control text-foreground hover:bg-surface-strong"
               >
                 <X className="size-5" aria-hidden="true" />
               </button>
@@ -119,7 +119,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
             <nav aria-label="Navegación móvil" className="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
               <Link
                 href={ROUTES.search}
-                className="mb-3 flex items-center gap-2.5 rounded-control border border-stone-200 bg-stone-50 px-3.5 py-3 text-sm text-lenga-500"
+                className="mb-3 flex items-center gap-2.5 rounded-control border border-border bg-surface-muted px-3.5 py-3 text-sm text-plum-500"
               >
                 <SearchIcon className="size-4" aria-hidden="true" />
                 Buscar excursiones, hoteles, artículos…
@@ -133,7 +133,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                       <div className="flex items-stretch">
                         <Link
                           href={item.href}
-                          className="flex-1 rounded-control px-3.5 py-3 text-[0.9375rem] font-semibold text-lenga-900 hover:bg-stone-50"
+                          className="flex-1 rounded-control px-3.5 py-3 text-[0.9375rem] font-semibold text-heading hover:bg-surface-muted"
                         >
                           {item.label}
                         </Link>
@@ -143,7 +143,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                             onClick={() => setExpanded(isExpanded ? null : item.label)}
                             aria-expanded={isExpanded}
                             aria-label={`${isExpanded ? 'Contraer' : 'Expandir'} ${item.label}`}
-                            className="grid w-11 shrink-0 place-items-center rounded-control text-lenga-500 hover:bg-stone-50"
+                            className="grid w-11 shrink-0 place-items-center rounded-control text-plum-500 hover:bg-surface-muted"
                           >
                             <ChevronDown
                               className={cn('size-4 transition-transform', isExpanded && 'rotate-180')}
@@ -154,12 +154,12 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                       </div>
 
                       {item.children && isExpanded ? (
-                        <ul className="mb-1 ml-3.5 space-y-0.5 border-l border-stone-200 pl-3">
+                        <ul className="mb-1 ml-3.5 space-y-0.5 border-l border-border pl-3">
                           {item.children.map((child) => (
                             <li key={child.href}>
                               <Link
                                 href={child.href}
-                                className="block rounded-control px-3 py-2.5 text-sm text-lenga-600 hover:bg-stone-50 hover:text-lenga-900"
+                                className="block rounded-control px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface-muted hover:text-heading"
                               >
                                 {child.label}
                               </Link>
@@ -173,7 +173,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
               </ul>
             </nav>
 
-            <div className="shrink-0 space-y-2 border-t border-stone-200 p-4">
+            <div className="shrink-0 space-y-2 border-t border-border p-4">
               <ButtonLink href={ROUTES.tours} fullWidth size="md">
                 Ver excursiones
               </ButtonLink>
@@ -187,7 +187,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
                 </ButtonLink>
               )}
               {CONTACT.email ? (
-                <p className="pt-1 text-center text-xs text-lenga-500">{CONTACT.email}</p>
+                <p className="pt-1 text-center text-xs text-plum-500">{CONTACT.email}</p>
               ) : null}
             </div>
           </div>

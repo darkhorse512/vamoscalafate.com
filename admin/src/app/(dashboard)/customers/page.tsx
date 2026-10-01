@@ -106,7 +106,7 @@ export default async function CustomersPage({
         />
         <button
           type="submit"
-          className="h-9.5 rounded-control border border-slate-300 bg-white px-4 text-[0.8125rem] font-medium text-slate-700 hover:bg-slate-50"
+          className="h-9.5 rounded-control border border-border-strong bg-surface px-4 text-[0.8125rem] font-medium text-foreground hover:bg-surface-muted"
         >
           Buscar
         </button>

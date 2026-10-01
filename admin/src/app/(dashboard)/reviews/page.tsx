@@ -56,13 +56,13 @@ export default async function ReviewsPage({
             className={cn(
               'inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
               status === value
-                ? 'border-glacier-600 bg-glacier-50'
-                : 'border-slate-300 bg-white hover:bg-slate-50',
+                ? 'border-violet-600 bg-violet-50'
+                : 'border-border-strong bg-surface hover:bg-surface-muted',
             )}
           >
             {value === 'ALL' ? 'Todas' : <StatusBadge status={value} />}
             {value !== 'ALL' ? (
-              <span className="tabular text-[0.75rem] text-slate-500">
+              <span className="tabular text-[0.75rem] text-subtle-foreground">
                 {countByStatus[value] ?? 0}
               </span>
             ) : null}
@@ -84,10 +84,10 @@ export default async function ReviewsPage({
               <li key={review.id} className="admin-panel p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-[0.875rem] font-semibold text-slate-900">
+                    <p className="text-[0.875rem] font-semibold text-heading">
                       {review.authorName}
                       {review.authorCountry ? (
-                        <span className="ml-1.5 font-normal text-slate-500">
+                        <span className="ml-1.5 font-normal text-subtle-foreground">
                           · {review.authorCountry}
                         </span>
                       ) : null}
@@ -97,7 +97,7 @@ export default async function ReviewsPage({
                         </span>
                       ) : null}
                     </p>
-                    <p className="text-[0.75rem] text-slate-500">
+                    <p className="text-[0.75rem] text-subtle-foreground">
                       {subject?.name ?? 'Sin entidad'} · {formatDate(review.createdAt)}
                     </p>
                   </div>
@@ -115,10 +115,10 @@ export default async function ReviewsPage({
                 </div>
 
                 {review.title ? (
-                  <p className="mt-2.5 text-[0.875rem] font-medium text-slate-900">{review.title}</p>
+                  <p className="mt-2.5 text-[0.875rem] font-medium text-heading">{review.title}</p>
                 ) : null}
 
-                <p className="mt-1.5 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+                <p className="mt-1.5 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
                   {review.content}
                 </p>
 

@@ -53,26 +53,26 @@ export default async function CheckoutPage({
         ]}
       />
 
-      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
         {settled ? 'Estado de tu reserva' : 'Elegí cómo pagar'}
       </h1>
 
       <div className="mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-10">
         <div className="min-w-0">
           {settled ? (
-            <div className="rounded-card border border-stone-200 bg-stone-50 p-6">
-              <h2 className="font-display text-lg font-semibold text-lenga-950">
+            <div className="rounded-card border border-border bg-surface-muted p-6">
+              <h2 className="font-display text-lg font-semibold text-heading">
                 Esta reserva ya no requiere pago
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-lenga-600">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 El estado actual de la reserva {booking.reference} es{' '}
-                <strong className="font-semibold text-lenga-900">{booking.status}</strong>. Si creés
+                <strong className="font-semibold text-heading">{booking.status}</strong>. Si creés
                 que se trata de un error, respondé al correo de confirmación indicando la
                 referencia.
               </p>
               <Link
                 href={ROUTES.tours}
-                className="mt-5 inline-block text-sm font-semibold text-glacier-700 underline underline-offset-2"
+                className="mt-5 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
               >
                 Ver otras excursiones
               </Link>
@@ -108,7 +108,7 @@ export default async function CheckoutPage({
             />
           )}
 
-          <div className="mt-6 flex items-start gap-2.5 text-xs leading-relaxed text-lenga-500">
+          <div className="mt-6 flex items-start gap-2.5 text-xs leading-relaxed text-plum-500">
             <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
             <p>
               El pago se procesa íntegramente en la plataforma del proveedor. Vamos Calafate no
@@ -118,10 +118,10 @@ export default async function CheckoutPage({
         </div>
 
         <aside className="mt-8 lg:sticky lg:top-24 lg:mt-0 lg:self-start">
-          <div className="rounded-card border border-stone-200 bg-stone-50 p-5">
-            <h2 className="font-display text-base font-semibold text-lenga-950">Resumen</h2>
+          <div className="rounded-card border border-border bg-surface-muted p-5">
+            <h2 className="font-display text-base font-semibold text-heading">Resumen</h2>
 
-            <dl className="mt-4 space-y-2.5 border-b border-stone-200 pb-4 text-[0.8125rem]">
+            <dl className="mt-4 space-y-2.5 border-b border-border pb-4 text-[0.8125rem]">
               <Row label="Referencia" value={booking.reference} />
               {item ? <Row label="Experiencia" value={item.tourNameSnapshot} /> : null}
               {item ? <Row label="Opción" value={item.optionNameSnapshot} /> : null}
@@ -135,7 +135,7 @@ export default async function CheckoutPage({
               ) : null}
             </dl>
 
-            <div className="mt-4 flex justify-between font-display text-base font-bold text-lenga-950">
+            <div className="mt-4 flex justify-between font-display text-base font-bold text-heading">
               <span>Total</span>
               <span>{formatMoney(booking.totalCents, booking.currency)}</span>
             </div>
@@ -149,8 +149,8 @@ export default async function CheckoutPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-lenga-500">{label}</dt>
-      <dd className="text-right font-medium text-lenga-900">{value}</dd>
+      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )
 }

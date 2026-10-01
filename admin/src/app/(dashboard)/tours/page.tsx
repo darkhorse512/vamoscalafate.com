@@ -162,7 +162,7 @@ export default async function ToursPage({
           />
           <button
             type="submit"
-            className="h-9.5 rounded-control border border-slate-300 bg-white px-4 text-[0.8125rem] font-medium text-slate-700 hover:bg-slate-50"
+            className="h-9.5 rounded-control border border-border-strong bg-surface px-4 text-[0.8125rem] font-medium text-foreground hover:bg-surface-muted"
           >
             Buscar
           </button>
@@ -211,7 +211,7 @@ function FilterLink({
       aria-current={active ? 'page' : undefined}
       className={cn(
         'inline-flex items-center rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
-        active ? 'border-glacier-600 bg-glacier-50' : 'border-slate-300 bg-white hover:bg-slate-50',
+        active ? 'border-violet-600 bg-violet-50' : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >
       {label}

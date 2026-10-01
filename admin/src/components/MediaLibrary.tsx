@@ -106,9 +106,9 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
               accept="image/jpeg,image/png,image/webp,image/avif,application/pdf"
               onChange={(event) => upload(event.target.files)}
               disabled={pending}
-              className="block w-full text-[0.8125rem] text-slate-600 file:mr-3 file:rounded-control file:border-0 file:bg-glacier-700 file:px-3.5 file:py-2 file:text-[0.8125rem] file:font-medium file:text-white hover:file:bg-glacier-800"
+              className="block w-full text-[0.8125rem] text-muted-foreground file:mr-3 file:rounded-control file:border-0 file:bg-violet-700 file:px-3.5 file:py-2 file:text-[0.8125rem] file:font-medium file:text-white hover:file:bg-violet-800"
             />
-            <p className="mt-1 text-[0.75rem] text-slate-500">
+            <p className="mt-1 text-[0.75rem] text-subtle-foreground">
               JPG, PNG, WebP, AVIF o PDF. Máximo 8 MB por imagen. SVG no está permitido por
               seguridad.
             </p>
@@ -136,7 +136,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
                 Agregar
               </Button>
             </div>
-            <p className="mt-1 text-[0.75rem] text-slate-500">
+            <p className="mt-1 text-[0.75rem] text-subtle-foreground">
               Los videos no se alojan: se embeben desde el proveedor.
             </p>
           </div>
@@ -145,7 +145,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
 
       {items.length === 0 ? (
         <div className="admin-panel px-6 py-14 text-center">
-          <p className="text-[0.8125rem] text-slate-500">
+          <p className="text-[0.8125rem] text-subtle-foreground">
             La biblioteca está vacía. Subí las fotos de las excursiones para reemplazar los
             marcadores de posición del sitio público.
           </p>
@@ -157,9 +157,9 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
               <button
                 type="button"
                 onClick={() => setSelected(item)}
-                className="admin-panel group block w-full overflow-hidden text-left transition-colors hover:border-glacier-300"
+                className="admin-panel group block w-full overflow-hidden text-left transition-colors hover:border-violet-300"
               >
-                <div className="relative aspect-square bg-slate-100">
+                <div className="relative aspect-square bg-surface-strong">
                   {item.type === 'IMAGE' ? (
                     <Image
                       src={item.url}
@@ -169,7 +169,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
                       className="object-cover"
                     />
                   ) : (
-                    <span className="grid size-full place-items-center text-slate-400">
+                    <span className="grid size-full place-items-center text-subtle-foreground">
                       {item.type === 'VIDEO' ? (
                         <Film className="size-8" aria-hidden="true" />
                       ) : (
@@ -180,10 +180,10 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
                 </div>
 
                 <div className="p-2.5">
-                  <p className="truncate text-[0.75rem] font-medium text-slate-900">
+                  <p className="truncate text-[0.75rem] font-medium text-heading">
                     {item.filename}
                   </p>
-                  <p className="mt-0.5 text-[0.6875rem] text-slate-500">{item.sizeLabel}</p>
+                  <p className="mt-0.5 text-[0.6875rem] text-subtle-foreground">{item.sizeLabel}</p>
 
                   {item.type === 'IMAGE' && !item.altText ? (
                     <p className="mt-1 text-[0.625rem] font-semibold text-status-warning">
@@ -210,18 +210,18 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
             role="dialog"
             aria-modal="true"
             aria-label={`Detalles de ${selected.filename}`}
-            className="relative w-full max-w-md rounded-panel bg-white p-5 shadow-panel"
+            className="relative w-full max-w-md rounded-panel bg-surface p-5 shadow-panel"
           >
-            <h2 className="truncate text-[0.9375rem] font-semibold text-slate-900">
+            <h2 className="truncate text-[0.9375rem] font-semibold text-heading">
               {selected.filename}
             </h2>
-            <p className="mt-0.5 text-[0.75rem] text-slate-500">
+            <p className="mt-0.5 text-[0.75rem] text-subtle-foreground">
               {selected.mimeType} · {selected.sizeLabel} · {selected.uploadedBy} ·{' '}
               {selected.createdAt}
             </p>
 
             {selected.type === 'IMAGE' ? (
-              <div className="relative mt-4 aspect-video overflow-hidden rounded-control bg-slate-100">
+              <div className="relative mt-4 aspect-video overflow-hidden rounded-control bg-surface-strong">
                 <Image
                   src={selected.url}
                   alt={selected.altText || selected.filename}
@@ -251,7 +251,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
                 placeholder="Describí la imagen para quien no puede verla"
                 className="admin-input"
               />
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 Obligatorio para accesibilidad. Describí el contenido, no repitas el nombre del
                 archivo.
               </p>

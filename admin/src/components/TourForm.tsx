@@ -325,7 +325,7 @@ export function TourForm({
 
       {/* ── Options: the pricing model ─────────────────────────────── */}
       <Section title={`Opciones y precios (${form.options.length})`} defaultOpen>
-        <p className="mb-3 text-[0.8125rem] text-slate-500">
+        <p className="mb-3 text-[0.8125rem] text-subtle-foreground">
           El precio vive en las opciones, no en la excursión. Cada opción puede tener su propio
           precio, capacidad, horarios y política de cancelación.
         </p>
@@ -338,12 +338,12 @@ export function TourForm({
 
         <div className="space-y-3">
           {form.options.map((option, index) => (
-            <div key={index} className="rounded-control border border-slate-200 p-4">
+            <div key={index} className="rounded-control border border-border p-4">
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-[0.8125rem] font-semibold text-slate-900">
+                <h3 className="text-[0.8125rem] font-semibold text-heading">
                   Opción {index + 1}
                   {option.id ? null : (
-                    <span className="ml-2 text-[0.6875rem] font-normal text-slate-500">nueva</span>
+                    <span className="ml-2 text-[0.6875rem] font-normal text-subtle-foreground">nueva</span>
                   )}
                 </h3>
                 {form.options.length > 1 ? (
@@ -596,9 +596,9 @@ export function TourForm({
       <Section title={`Itinerario (${form.itinerary.length})`}>
         <div className="space-y-3">
           {form.itinerary.map((step, index) => (
-            <div key={index} className="rounded-control border border-slate-200 p-3.5">
+            <div key={index} className="rounded-control border border-border p-3.5">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[0.75rem] font-semibold text-slate-600">Paso {index + 1}</span>
+                <span className="text-[0.75rem] font-semibold text-muted-foreground">Paso {index + 1}</span>
                 <button
                   type="button"
                   onClick={() => update('itinerary', form.itinerary.filter((_, i) => i !== index))}
@@ -668,7 +668,7 @@ export function TourForm({
           {form.pickupLocations.map((location, index) => (
             <div
               key={index}
-              className="grid gap-3 rounded-control border border-slate-200 p-3.5 sm:grid-cols-[2fr_2fr_1fr_1fr_auto]"
+              className="grid gap-3 rounded-control border border-border p-3.5 sm:grid-cols-[2fr_2fr_1fr_1fr_auto]"
             >
               <input
                 value={location.name}
@@ -723,7 +723,7 @@ export function TourForm({
                   update('pickupLocations', form.pickupLocations.filter((_, i) => i !== index))
                 }
                 aria-label={`Quitar punto ${index + 1}`}
-                className="grid size-9 place-items-center self-end rounded-control border border-slate-300 text-status-danger hover:bg-slate-50"
+                className="grid size-9 place-items-center self-end rounded-control border border-border-strong text-status-danger hover:bg-surface-muted"
               >
                 <Trash2 className="size-4" aria-hidden="true" />
               </button>
@@ -751,9 +751,9 @@ export function TourForm({
       <Section title={`Preguntas frecuentes (${form.faqs.length})`}>
         <div className="space-y-3">
           {form.faqs.map((faq, index) => (
-            <div key={index} className="rounded-control border border-slate-200 p-3.5">
+            <div key={index} className="rounded-control border border-border p-3.5">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[0.75rem] font-semibold text-slate-600">
+                <span className="text-[0.75rem] font-semibold text-muted-foreground">
                   Pregunta {index + 1}
                 </span>
                 <button
@@ -827,7 +827,7 @@ export function TourForm({
       </Section>
 
       <Section title="SEO">
-        <p className="mb-3 text-[0.8125rem] text-slate-500">
+        <p className="mb-3 text-[0.8125rem] text-subtle-foreground">
           Dejá los campos vacíos para usar los valores derivados del nombre y el resumen.
         </p>
 
@@ -896,7 +896,7 @@ export function TourForm({
 
       {/* Sticky action bar: the form is long, and saving should never require
           scrolling to the bottom. */}
-      <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-border bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
         <Button type="button" variant="outline" onClick={() => router.push('/tours')} disabled={pending}>
           Cancelar
         </Button>
@@ -927,17 +927,17 @@ function Section({
           type="button"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
-          className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-slate-50"
+          className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-surface-muted"
         >
-          <span className="text-[0.875rem] font-semibold text-slate-900">{title}</span>
+          <span className="text-[0.875rem] font-semibold text-heading">{title}</span>
           <ChevronDown
-            className={cn('size-4 text-slate-500 transition-transform', open && 'rotate-180')}
+            className={cn('size-4 text-subtle-foreground transition-transform', open && 'rotate-180')}
             aria-hidden="true"
           />
         </button>
       </h2>
 
-      {open ? <div className="space-y-4 border-t border-slate-200 p-4">{children}</div> : null}
+      {open ? <div className="space-y-4 border-t border-border p-4">{children}</div> : null}
     </section>
   )
 }
@@ -967,7 +967,7 @@ function Field({
           {error}
         </p>
       ) : hint ? (
-        <p className="mt-1 text-[0.75rem] text-slate-500">{hint}</p>
+        <p className="mt-1 text-[0.75rem] text-subtle-foreground">{hint}</p>
       ) : null}
     </div>
   )
@@ -988,9 +988,9 @@ function Checkbox({
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="size-4 rounded border-slate-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+        className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
       />
-      <span className="text-[0.8125rem] text-slate-700">{label}</span>
+      <span className="text-[0.8125rem] text-foreground">{label}</span>
     </label>
   )
 }

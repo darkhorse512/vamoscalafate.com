@@ -159,8 +159,8 @@ export function BookingForm({
           </div>
         ) : null}
 
-        <fieldset className="rounded-card border border-stone-200 p-5 sm:p-6">
-          <legend className="px-2 font-display text-base font-semibold text-lenga-950">
+        <fieldset className="rounded-card border border-border p-5 sm:p-6">
+          <legend className="px-2 font-display text-base font-semibold text-heading">
             Tus datos
           </legend>
 
@@ -175,14 +175,14 @@ export function BookingForm({
 
           {pickupLocations.length > 0 ? (
             <div className="mt-5">
-              <label htmlFor="pickup" className="mb-1.5 block text-[0.8125rem] font-semibold text-lenga-900">
+              <label htmlFor="pickup" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
                 Punto de encuentro
               </label>
               <select
                 id="pickup"
                 value={pickupId}
                 onChange={(event) => setPickupId(event.target.value)}
-                className="w-full rounded-control border border-stone-300 bg-white px-3 py-2.5 text-sm focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+                className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
               >
                 <option value="">Coordinar por email</option>
                 {pickupLocations.map((location) => (
@@ -198,7 +198,7 @@ export function BookingForm({
           ) : null}
 
           <div className="mt-5">
-            <label htmlFor="specialRequests" className="mb-1.5 block text-[0.8125rem] font-semibold text-lenga-900">
+            <label htmlFor="specialRequests" className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
               Comentarios
             </label>
             <textarea
@@ -207,7 +207,7 @@ export function BookingForm({
               rows={3}
               maxLength={1000}
               placeholder="Restricciones alimentarias, movilidad reducida, viajás con niños pequeños…"
-              className="w-full rounded-control border border-stone-300 bg-white px-3 py-2.5 text-sm focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+              className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
             />
           </div>
         </fieldset>
@@ -218,21 +218,21 @@ export function BookingForm({
           <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
         </div>
 
-        <div className="mt-5 space-y-3 rounded-card border border-stone-200 p-5">
+        <div className="mt-5 space-y-3 rounded-card border border-border p-5">
           <label className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
               name="acceptedTerms"
               required
-              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
             />
-            <span className="text-[0.8125rem] leading-relaxed text-lenga-700">
+            <span className="text-[0.8125rem] leading-relaxed text-foreground">
               Acepto los{' '}
-              <Link href={ROUTES.terms} className="font-medium text-glacier-700 underline" target="_blank">
+              <Link href={ROUTES.terms} className="font-medium text-violet-700 underline" target="_blank">
                 términos y condiciones
               </Link>{' '}
               y la{' '}
-              <Link href={ROUTES.cancellation} className="font-medium text-glacier-700 underline" target="_blank">
+              <Link href={ROUTES.cancellation} className="font-medium text-violet-700 underline" target="_blank">
                 política de cancelación
               </Link>
               . <span className="text-[#9b3232]">*</span>
@@ -243,9 +243,9 @@ export function BookingForm({
             <input
               type="checkbox"
               name="marketingOptIn"
-              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+              className="mt-0.5 size-4 shrink-0 rounded border-stone-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
             />
-            <span className="text-[0.8125rem] leading-relaxed text-lenga-700">
+            <span className="text-[0.8125rem] leading-relaxed text-foreground">
               Quiero recibir novedades y ofertas de Vamos Calafate.
             </span>
           </label>
@@ -254,10 +254,10 @@ export function BookingForm({
 
       {/* ── Summary ─────────────────────────────────────────────────── */}
       <aside className="mt-8 lg:sticky lg:top-24 lg:mt-0 lg:self-start">
-        <div className="rounded-card border border-stone-200 bg-stone-50 p-5">
-          <h2 className="font-display text-base font-semibold text-lenga-950">Tu reserva</h2>
+        <div className="rounded-card border border-border bg-surface-muted p-5">
+          <h2 className="font-display text-base font-semibold text-heading">Tu reserva</h2>
 
-          <dl className="mt-4 space-y-2.5 border-b border-stone-200 pb-4 text-[0.8125rem]">
+          <dl className="mt-4 space-y-2.5 border-b border-border pb-4 text-[0.8125rem]">
             <Row label="Experiencia" value={tour.name} />
             <Row label="Opción" value={option.name} />
             <Row label="Fecha" value={formatDate(selection.date)} />
@@ -270,7 +270,7 @@ export function BookingForm({
           </dl>
 
           <dl className="mt-4 space-y-2 text-[0.8125rem]">
-            <div className="flex justify-between text-lenga-600">
+            <div className="flex justify-between text-muted-foreground">
               <dt>
                 {selection.adults} × {formatMoney(breakdown.adultUnitCents, breakdown.currency)}
               </dt>
@@ -278,7 +278,7 @@ export function BookingForm({
             </div>
 
             {selection.children > 0 ? (
-              <div className="flex justify-between text-lenga-600">
+              <div className="flex justify-between text-muted-foreground">
                 <dt>
                   {selection.children} menores × {formatMoney(breakdown.childUnitCents, breakdown.currency)}
                 </dt>
@@ -287,13 +287,13 @@ export function BookingForm({
             ) : null}
 
             {pickupCost > 0 ? (
-              <div className="flex justify-between text-lenga-600">
+              <div className="flex justify-between text-muted-foreground">
                 <dt>Punto de encuentro</dt>
                 <dd>{formatMoney(pickupCost, breakdown.currency)}</dd>
               </div>
             ) : null}
 
-            <div className="flex justify-between border-t border-stone-200 pt-3 font-display text-base font-bold text-lenga-950">
+            <div className="flex justify-between border-t border-border pt-3 font-display text-base font-bold text-heading">
               <dt>Total</dt>
               <dd>{formatMoney(displayTotal, breakdown.currency)}</dd>
             </div>
@@ -316,7 +316,7 @@ export function BookingForm({
             )}
           </Button>
 
-          <p className="mt-3 text-center text-[0.6875rem] leading-relaxed text-lenga-500">
+          <p className="mt-3 text-center text-[0.6875rem] leading-relaxed text-plum-500">
             Todavía no se realiza ningún cargo. En el siguiente paso elegís el medio de pago.
           </p>
 
@@ -328,7 +328,7 @@ export function BookingForm({
         </div>
 
         <p className="mt-4 text-center text-xs">
-          <Link href={tour.detailPath} className="text-lenga-500 underline underline-offset-2 hover:text-lenga-800">
+          <Link href={tour.detailPath} className="text-plum-500 underline underline-offset-2 hover:text-foreground">
             Modificar la selección
           </Link>
         </p>
@@ -340,8 +340,8 @@ export function BookingForm({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-lenga-500">{label}</dt>
-      <dd className="text-right font-medium text-lenga-900">{value}</dd>
+      <dt className="shrink-0 text-plum-500">{label}</dt>
+      <dd className="text-right font-medium text-heading">{value}</dd>
     </div>
   )
 }
@@ -369,7 +369,7 @@ function Field({
 
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-lenga-900">
+      <label htmlFor={name} className="mb-1.5 block text-[0.8125rem] font-semibold text-heading">
         {label}
         {required ? <span className="ml-0.5 text-[#9b3232]">*</span> : null}
       </label>
@@ -383,15 +383,15 @@ function Field({
         aria-invalid={fieldErrors ? true : undefined}
         aria-describedby={cn(hint && hintId, fieldErrors && errorId) || undefined}
         className={cn(
-          'w-full rounded-control border bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
+          'w-full rounded-control border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1',
           fieldErrors
             ? 'border-[#9b3232] focus:border-[#9b3232] focus:ring-[#9b3232]'
-            : 'border-stone-300 focus:border-glacier-600 focus:ring-glacier-600',
+            : 'border-border-strong focus:border-violet-600 focus:ring-violet-600',
         )}
       />
 
       {hint && !fieldErrors ? (
-        <p id={hintId} className="mt-1 text-[0.6875rem] text-lenga-500">
+        <p id={hintId} className="mt-1 text-[0.6875rem] text-plum-500">
           {hint}
         </p>
       ) : null}

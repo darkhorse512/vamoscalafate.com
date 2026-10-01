@@ -18,8 +18,8 @@ export function LoginForm({ next }: { next?: string }) {
   return (
     <form action={formAction} className="space-y-4">
       <div>
-        <h2 className="text-[0.9375rem] font-semibold text-slate-900">Iniciar sesión</h2>
-        <p className="mt-1 text-[0.8125rem] text-slate-500">
+        <h2 className="text-[0.9375rem] font-semibold text-heading">Iniciar sesión</h2>
+        <p className="mt-1 text-[0.8125rem] text-subtle-foreground">
           Ingresá con tu cuenta de administración.
         </p>
       </div>
@@ -79,7 +79,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-control bg-glacier-700 text-[0.875rem] font-medium text-white transition-colors hover:bg-glacier-800 disabled:opacity-60"
+      className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-control bg-violet-700 text-[0.875rem] font-medium text-white transition-colors hover:bg-violet-800 disabled:opacity-60"
     >
       {pending ? (
         <>

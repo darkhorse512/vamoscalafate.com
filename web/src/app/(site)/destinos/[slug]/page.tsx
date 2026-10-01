@@ -5,6 +5,7 @@ import { ROUTES } from '@vamos/shared'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
+import { PhotoCredit } from '@/components/media/PhotoCredit'
 import { SmartImage } from '@/components/media/SmartImage'
 import { TourCarousel } from '@/components/tours/TourCarousel'
 import { breadcrumbSchema, destinationSchema, faqSchema, jsonLdScript } from '@/lib/jsonld'
@@ -65,7 +66,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
     <>
       {ld ? <script type="application/ld+json" dangerouslySetInnerHTML={ld} /> : null}
 
-      <div className="relative isolate flex min-h-[26rem] items-end overflow-hidden bg-lenga-950">
+      <div className="relative isolate flex min-h-[26rem] items-end overflow-hidden bg-inverse">
         <div className="absolute inset-0 -z-10">
           <SmartImage
             media={destination.heroImage}
@@ -76,6 +77,14 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
           />
           <div className="absolute inset-0 scrim-bottom" />
         </div>
+
+        {/* Credit over the image itself — there is no page background here to
+            place it on, and the licence requires it alongside the work. */}
+        <PhotoCredit
+          media={destination.heroImage}
+          tone="light"
+          className="absolute bottom-2 right-4 z-10 text-right"
+        />
 
         <div className="container-page relative pb-10 pt-24">
           <Breadcrumbs items={crumbs} tone="light" />
@@ -94,14 +103,14 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
       {destination.attractions.length > 0 ? (
         <section className="container-page mt-16">
-          <h2 className="font-display text-2xl font-semibold text-lenga-950">Qué ver y hacer</h2>
+          <h2 className="font-display text-2xl font-semibold text-heading">Qué ver y hacer</h2>
           <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {destination.attractions.map((attraction) => (
               <li
                 key={attraction.id}
-                className="overflow-hidden rounded-card border border-stone-200 bg-white"
+                className="overflow-hidden rounded-card border border-border bg-surface"
               >
-                <div className="relative aspect-[16/10] bg-stone-100">
+                <div className="relative aspect-[16/10] bg-surface-strong">
                   <SmartImage
                     media={attraction.image}
                     seed={attraction.slug}
@@ -110,14 +119,14 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                   />
                 </div>
                 <div className="p-5">
-                  <h3 className="font-display text-[1.0625rem] font-semibold text-lenga-950">
+                  <h3 className="font-display text-[1.0625rem] font-semibold text-heading">
                     {attraction.name}
                   </h3>
-                  <p className="mt-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                  <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                     {attraction.summary}
                   </p>
                   {attraction.openingInfo || attraction.entryFeeInfo ? (
-                    <dl className="mt-3 space-y-1 border-t border-stone-200 pt-3 text-xs text-lenga-500">
+                    <dl className="mt-3 space-y-1 border-t border-border pt-3 text-xs text-plum-500">
                       {attraction.openingInfo ? (
                         <div>
                           <dt className="inline font-semibold">Horarios: </dt>
@@ -141,10 +150,10 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
       {tours.items.length > 0 ? (
         <section className="container-page mt-16">
-          <h2 className="font-display text-2xl font-semibold text-lenga-950">
+          <h2 className="font-display text-2xl font-semibold text-heading">
             Excursiones en {destination.name}
           </h2>
-          <p className="mt-2 text-sm text-lenga-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             Experiencias que podés reservar online para conocer este destino.
           </p>
           <div className="mt-6">
@@ -155,7 +164,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
       {faqs.length > 0 ? (
         <section className="container-prose mt-16">
-          <h2 className="font-display text-2xl font-semibold text-lenga-950">
+          <h2 className="font-display text-2xl font-semibold text-heading">
             Preguntas frecuentes
           </h2>
           <FaqList faqs={faqs} className="mt-5" />
@@ -163,8 +172,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       ) : null}
 
       {posts.items.length > 0 ? (
-        <section className="container-page mt-16 border-t border-stone-200 pt-12">
-          <h2 className="font-display text-xl font-semibold text-lenga-950">
+        <section className="container-page mt-16 border-t border-border pt-12">
+          <h2 className="font-display text-xl font-semibold text-heading">
             Seguí leyendo en la guía de viaje
           </h2>
           <ul className="mt-5 grid gap-4 sm:grid-cols-3">
@@ -172,12 +181,12 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
               <li key={post.id}>
                 <Link
                   href={ROUTES.blogPost(post.slug)}
-                  className="block rounded-card border border-stone-200 p-4 transition-colors hover:border-glacier-300 hover:bg-stone-50"
+                  className="block rounded-card border border-border p-4 transition-colors hover:border-violet-300 hover:bg-surface-muted"
                 >
-                  <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-lenga-950">
+                  <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading">
                     {post.title}
                   </h3>
-                  <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-lenga-600">
+                  <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                     {post.excerpt}
                   </p>
                 </Link>

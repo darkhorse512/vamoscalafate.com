@@ -97,8 +97,8 @@ export default async function BookingsPage({
       header: 'Cliente',
       cell: (row) => (
         <div>
-          <p className="font-medium text-slate-900">{row.customerName}</p>
-          <p className="text-[0.75rem] text-slate-500">{row.customerEmail}</p>
+          <p className="font-medium text-heading">{row.customerName}</p>
+          <p className="text-[0.75rem] text-subtle-foreground">{row.customerEmail}</p>
         </div>
       ),
     },
@@ -155,7 +155,7 @@ export default async function BookingsPage({
         />
         <button
           type="submit"
-          className="h-9.5 rounded-control border border-slate-300 bg-white px-4 text-[0.8125rem] font-medium text-slate-700 hover:bg-slate-50"
+          className="h-9.5 rounded-control border border-border-strong bg-surface px-4 text-[0.8125rem] font-medium text-foreground hover:bg-surface-muted"
         >
           Buscar
         </button>
@@ -197,13 +197,13 @@ function FilterLink({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-[0.8125rem] transition-colors',
         active
-          ? 'border-glacier-600 bg-glacier-50'
-          : 'border-slate-300 bg-white hover:bg-slate-50',
+          ? 'border-violet-600 bg-violet-50'
+          : 'border-border-strong bg-surface hover:bg-surface-muted',
       )}
     >
       {label}
       {count !== undefined ? (
-        <span className="tabular text-[0.75rem] text-slate-500">{count}</span>
+        <span className="tabular text-[0.75rem] text-subtle-foreground">{count}</span>
       ) : null}
     </Link>
   )

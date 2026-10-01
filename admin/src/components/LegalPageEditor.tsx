@@ -104,7 +104,7 @@ export function LegalPageEditor({
             required
             className="admin-input font-mono text-[0.8125rem] leading-relaxed"
           />
-          <p className="mt-1 text-[0.75rem] text-slate-500">
+          <p className="mt-1 text-[0.75rem] text-subtle-foreground">
             Admite ## títulos, **negrita**, listas, tablas y &gt; citas.
           </p>
         </div>

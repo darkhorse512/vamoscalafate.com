@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMetadata({
 export default function RegistrarPage() {
   return (
     <>
-      <div className="border-b border-stone-200 bg-stone-50">
+      <div className="border-b border-border bg-surface-muted">
         <div className="container-page py-8 sm:py-10">
           <Breadcrumbs
             items={[
@@ -40,8 +40,8 @@ export default function RegistrarPage() {
           <SubmissionForm />
 
           <aside className="mt-10 lg:mt-0">
-            <div className="rounded-card border border-stone-200 bg-stone-50 p-5">
-              <h2 className="font-display text-base font-semibold text-lenga-950">Cómo funciona</h2>
+            <div className="rounded-card border border-border bg-surface-muted p-5">
+              <h2 className="font-display text-base font-semibold text-heading">Cómo funciona</h2>
 
               <ol className="mt-4 space-y-4">
                 {[
@@ -52,20 +52,20 @@ export default function RegistrarPage() {
                 ].map((step, index) => (
                   <li key={step.title} className="flex gap-3">
                     <span
-                      className="grid size-6 shrink-0 place-items-center rounded-full bg-glacier-700 text-[0.6875rem] font-bold text-white"
+                      className="grid size-6 shrink-0 place-items-center rounded-full bg-violet-700 text-[0.6875rem] font-bold text-white"
                       aria-hidden="true"
                     >
                       {index + 1}
                     </span>
                     <div>
-                      <p className="text-[0.8125rem] font-semibold text-lenga-900">{step.title}</p>
-                      <p className="mt-0.5 text-xs leading-relaxed text-lenga-600">{step.detail}</p>
+                      <p className="text-[0.8125rem] font-semibold text-heading">{step.title}</p>
+                      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{step.detail}</p>
                     </div>
                   </li>
                 ))}
               </ol>
 
-              <p className="mt-5 flex gap-2 border-t border-stone-200 pt-4 text-xs leading-relaxed text-lenga-500">
+              <p className="mt-5 flex gap-2 border-t border-border pt-4 text-xs leading-relaxed text-plum-500">
                 <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-[#2f6f4f]" aria-hidden="true" />
                 Las solicitudes no se publican automáticamente. Un responsable revisa cada una.
               </p>

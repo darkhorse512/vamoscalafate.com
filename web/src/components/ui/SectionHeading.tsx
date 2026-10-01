@@ -34,20 +34,20 @@ export function SectionHeading({
     >
       <div className={cn('max-w-2xl', align === 'center' && 'mx-auto text-center')}>
         {eyebrow ? (
-          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-glacier-700">
+          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-violet-700">
             {eyebrow}
           </p>
         ) : null}
         <Tag className="text-[1.75rem] leading-[1.15] sm:text-[2.125rem]">{title}</Tag>
         {description ? (
-          <p className="mt-3 text-[0.9375rem] leading-relaxed text-lenga-600">{description}</p>
+          <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">{description}</p>
         ) : null}
       </div>
 
       {link ? (
         <Link
           href={link.href}
-          className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-glacier-700 transition-colors hover:text-glacier-900"
+          className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-violet-700 transition-colors hover:text-violet-900"
         >
           {link.label}
           <ArrowRight

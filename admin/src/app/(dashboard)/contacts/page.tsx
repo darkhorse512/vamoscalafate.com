@@ -53,14 +53,14 @@ export default async function ContactsPage({
               <li key={contact.id} className="admin-panel p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-[0.875rem] font-semibold text-slate-900">
+                    <p className="text-[0.875rem] font-semibold text-heading">
                       {contact.subject}
                     </p>
-                    <p className="text-[0.75rem] text-slate-500">
+                    <p className="text-[0.75rem] text-subtle-foreground">
                       {contact.name} ·{' '}
                       <a
                         href={`mailto:${contact.email}?subject=Re: ${encodeURIComponent(contact.subject)}`}
-                        className="text-glacier-700 hover:underline"
+                        className="text-violet-700 hover:underline"
                       >
                         {contact.email}
                       </a>
@@ -72,12 +72,12 @@ export default async function ContactsPage({
                   <StatusBadge status={contact.status} />
                 </div>
 
-                <p className="mt-2.5 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+                <p className="mt-2.5 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
                   {contact.message}
                 </p>
 
                 {contact.tourSlug || contact.utmSource ? (
-                  <p className="mt-2 text-[0.75rem] text-slate-500">
+                  <p className="mt-2 text-[0.75rem] text-subtle-foreground">
                     {contact.tourSlug ? `Excursión: ${contact.tourSlug}` : ''}
                     {contact.tourSlug && contact.utmSource ? ' · ' : ''}
                     {contact.utmSource ? `Fuente: ${contact.utmSource}` : ''}

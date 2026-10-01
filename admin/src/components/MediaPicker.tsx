@@ -191,15 +191,15 @@ function MediaPickerDialog({
         role="dialog"
         aria-modal="true"
         aria-label="Seleccionar imágenes"
-        className="relative flex max-h-[88vh] w-full max-w-4xl flex-col rounded-panel bg-white shadow-panel"
+        className="relative flex max-h-[88vh] w-full max-w-4xl flex-col rounded-panel bg-surface shadow-panel"
       >
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-3.5">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
           <div>
-            <h2 className="text-[0.9375rem] font-semibold text-slate-900">
+            <h2 className="text-[0.9375rem] font-semibold text-heading">
               {multiple ? 'Seleccionar imágenes' : 'Seleccionar imagen'}
             </h2>
-            <p className="mt-0.5 text-[0.75rem] text-slate-500">
+            <p className="mt-0.5 text-[0.75rem] text-subtle-foreground">
               {selection.length} seleccionada{selection.length === 1 ? '' : 's'}
               {multiple ? ' · el orden de selección define el orden de la galería' : ''}
             </p>
@@ -208,14 +208,14 @@ function MediaPickerDialog({
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="grid size-9 place-items-center rounded-control text-slate-500 hover:bg-slate-100"
+            className="grid size-9 place-items-center rounded-control text-subtle-foreground hover:bg-surface-strong"
           >
             <X className="size-5" aria-hidden="true" />
           </button>
         </div>
 
         {/* Upload + search */}
-        <div className="shrink-0 space-y-3 border-b border-slate-200 p-4">
+        <div className="shrink-0 space-y-3 border-b border-border p-4">
           {error ? <Alert tone="danger">{error}</Alert> : null}
 
           {missingAlt > 0 ? (
@@ -238,28 +238,28 @@ function MediaPickerDialog({
             }}
             className={cn(
               'rounded-control border-2 border-dashed p-4 text-center transition-colors',
-              dragging ? 'border-glacier-500 bg-glacier-50' : 'border-slate-300 bg-slate-50',
+              dragging ? 'border-violet-500 bg-violet-50' : 'border-border-strong bg-surface-muted',
             )}
           >
             {uploadProgress ? (
-              <p className="inline-flex items-center gap-2 text-[0.8125rem] text-slate-700">
+              <p className="inline-flex items-center gap-2 text-[0.8125rem] text-foreground">
                 <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                 {uploadProgress}
               </p>
             ) : (
               <>
-                <Upload className="mx-auto size-5 text-slate-400" aria-hidden="true" />
-                <p className="mt-1.5 text-[0.8125rem] text-slate-600">
+                <Upload className="mx-auto size-5 text-subtle-foreground" aria-hidden="true" />
+                <p className="mt-1.5 text-[0.8125rem] text-muted-foreground">
                   Arrastrá imágenes acá, o{' '}
                   <button
                     type="button"
                     onClick={() => fileInput.current?.click()}
-                    className="font-medium text-glacier-700 underline hover:text-glacier-900"
+                    className="font-medium text-violet-700 underline hover:text-violet-900"
                   >
                     elegí archivos
                   </button>
                 </p>
-                <p className="mt-1 text-[0.6875rem] text-slate-500">
+                <p className="mt-1 text-[0.6875rem] text-subtle-foreground">
                   JPG, PNG, WebP o AVIF · máximo 8 MB cada una
                 </p>
               </>
@@ -277,7 +277,7 @@ function MediaPickerDialog({
 
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground"
               aria-hidden="true"
             />
             <label htmlFor="media-search" className="sr-only">
@@ -301,14 +301,14 @@ function MediaPickerDialog({
         {/* Grid */}
         <div className="min-h-0 flex-1 overflow-y-auto p-4">
           {loading && items.length === 0 ? (
-            <p className="py-12 text-center text-[0.8125rem] text-slate-500">Cargando…</p>
+            <p className="py-12 text-center text-[0.8125rem] text-subtle-foreground">Cargando…</p>
           ) : items.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-[0.8125rem] text-slate-600">
+              <p className="text-[0.8125rem] text-muted-foreground">
                 {query ? 'Sin resultados para esa búsqueda.' : 'La biblioteca está vacía.'}
               </p>
               {!query ? (
-                <p className="mt-1 text-[0.75rem] text-slate-500">
+                <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                   Subí las primeras fotos arrastrándolas al recuadro de arriba.
                 </p>
               ) : null}
@@ -328,11 +328,11 @@ function MediaPickerDialog({
                       className={cn(
                         'relative block w-full overflow-hidden rounded-control ring-2 transition-all',
                         isSelected
-                          ? 'ring-glacier-600'
-                          : 'ring-transparent hover:ring-slate-300',
+                          ? 'ring-violet-600'
+                          : 'ring-transparent hover:ring-border-strong',
                       )}
                     >
-                      <span className="relative block aspect-[4/3] bg-slate-100">
+                      <span className="relative block aspect-[4/3] bg-surface-strong">
                         <Image
                           src={item.url}
                           alt={item.altText || item.filename}
@@ -343,7 +343,7 @@ function MediaPickerDialog({
                       </span>
 
                       {isSelected ? (
-                        <span className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-full bg-glacier-600 text-[0.6875rem] font-bold text-white">
+                        <span className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-full bg-violet-600 text-[0.6875rem] font-bold text-white">
                           {multiple ? index + 1 : <Check className="size-3.5" aria-hidden="true" />}
                         </span>
                       ) : null}
@@ -358,7 +358,7 @@ function MediaPickerDialog({
                       ) : null}
                     </button>
 
-                    <p className="mt-1 truncate text-[0.6875rem] text-slate-500" title={item.filename}>
+                    <p className="mt-1 truncate text-[0.6875rem] text-subtle-foreground" title={item.filename}>
                       {item.filename}
                     </p>
 
@@ -368,7 +368,7 @@ function MediaPickerDialog({
                         onBlur={(event) => saveAlt(item.id, event.target.value)}
                         placeholder="Texto alternativo…"
                         aria-label={`Texto alternativo de ${item.filename}`}
-                        className="mt-1 w-full rounded border border-slate-300 px-1.5 py-1 text-[0.6875rem] focus:border-glacier-600 focus:outline-none"
+                        className="mt-1 w-full rounded border border-border-strong px-1.5 py-1 text-[0.6875rem] focus:border-violet-600 focus:outline-none"
                       />
                     ) : null}
                   </li>
@@ -398,11 +398,11 @@ function MediaPickerDialog({
         </div>
 
         {/* Footer */}
-        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-200 px-5 py-3.5">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3.5">
           <button
             type="button"
             onClick={() => setSelection([])}
-            className="text-[0.8125rem] text-slate-500 hover:text-slate-900"
+            className="text-[0.8125rem] text-subtle-foreground hover:text-heading"
           >
             Limpiar selección
           </button>

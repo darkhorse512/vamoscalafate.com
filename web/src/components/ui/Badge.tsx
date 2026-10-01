@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils'
 type Tone = 'neutral' | 'glacier' | 'lenga' | 'ochre' | 'success' | 'warning' | 'danger'
 
 const TONES: Record<Tone, string> = {
-  neutral: 'bg-stone-100 text-lenga-700 ring-stone-200',
-  glacier: 'bg-glacier-50 text-glacier-800 ring-glacier-200',
-  lenga: 'bg-lenga-50 text-lenga-800 ring-lenga-200',
-  ochre: 'bg-[#fdf6e8] text-ochre-600 ring-[#f0e0bd]',
+  neutral: 'bg-surface-strong text-foreground ring-border',
+  glacier: 'bg-violet-50 text-violet-800 ring-violet-200',
+  lenga: 'bg-plum-50 text-foreground ring-plum-200',
+  ochre: 'bg-[#fdf6e8] text-magenta-600 ring-[#f0e0bd]',
   success: 'bg-[#edf5f0] text-[#2f6f4f] ring-[#c9e2d4]',
   warning: 'bg-[#fbf4e6] text-[#8a6014] ring-[#eddfc0]',
   danger: 'bg-[#fbeeee] text-[#9b3232] ring-[#f0d2d2]',

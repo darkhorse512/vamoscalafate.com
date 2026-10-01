@@ -44,7 +44,7 @@ export default async function SubmissionDetailPage({
     <>
       <Link
         href="/submissions"
-        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-600 hover:text-slate-900"
+        className="mb-4 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-muted-foreground hover:text-heading"
       >
         <ArrowLeft className="size-3.5" aria-hidden="true" />
         Volver a solicitudes
@@ -59,7 +59,7 @@ export default async function SubmissionDetailPage({
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="space-y-6">
           <section className="admin-panel p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Datos enviados</h2>
+            <h2 className="text-[0.8125rem] font-semibold text-heading">Datos enviados</h2>
 
             <dl className="mt-3 grid gap-x-6 gap-y-2.5 text-[0.8125rem] sm:grid-cols-2">
               <Row label="Tipo" value={submission.kind === 'HOTEL' ? 'Alojamiento' : 'Comercio'} />
@@ -74,12 +74,12 @@ export default async function SubmissionDetailPage({
 
             {submission.website ? (
               <p className="mt-3 text-[0.8125rem]">
-                <span className="text-slate-500">Sitio web: </span>
+                <span className="text-subtle-foreground">Sitio web: </span>
                 <a
                   href={submission.website}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                  className="break-all text-glacier-700 hover:underline"
+                  className="break-all text-violet-700 hover:underline"
                 >
                   {submission.website}
                 </a>
@@ -88,22 +88,22 @@ export default async function SubmissionDetailPage({
           </section>
 
           <section className="admin-panel p-4">
-            <h2 className="text-[0.8125rem] font-semibold text-slate-900">Descripción</h2>
-            <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+            <h2 className="text-[0.8125rem] font-semibold text-heading">Descripción</h2>
+            <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
               {submission.description}
             </p>
           </section>
 
           {submission.amenities.length > 0 || submission.services.length > 0 ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">
                 {submission.kind === 'HOTEL' ? 'Servicios declarados' : 'Qué ofrece'}
               </h2>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {[...submission.amenities, ...submission.services].map((item) => (
                   <li
                     key={item}
-                    className="rounded-full bg-slate-100 px-2.5 py-1 text-[0.75rem] text-slate-700"
+                    className="rounded-full bg-surface-strong px-2.5 py-1 text-[0.75rem] text-foreground"
                   >
                     {item}
                   </li>
@@ -114,8 +114,8 @@ export default async function SubmissionDetailPage({
 
           {submission.imageUrls.length > 0 || submission.videoUrls.length > 0 ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Medios enviados</h2>
-              <p className="mt-1 text-[0.75rem] text-slate-500">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Medios enviados</h2>
+              <p className="mt-1 text-[0.75rem] text-subtle-foreground">
                 Enlaces proporcionados por el solicitante. Verificalos antes de aprobar: no se
                 descargan automáticamente.
               </p>
@@ -127,7 +127,7 @@ export default async function SubmissionDetailPage({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      className="inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-glacier-700 hover:underline"
+                      className="inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-violet-700 hover:underline"
                     >
                       {url}
                       <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
@@ -140,10 +140,10 @@ export default async function SubmissionDetailPage({
 
           {submission.extraInfo ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">
                 Información adicional
               </h2>
-              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
                 {submission.extraInfo}
               </p>
             </section>
@@ -153,12 +153,12 @@ export default async function SubmissionDetailPage({
         <aside className="space-y-6">
           {publishedUrl ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Ficha publicada</h2>
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Ficha publicada</h2>
               <a
                 href={publishedUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-glacier-700 hover:underline"
+                className="mt-2 inline-flex items-center gap-1.5 break-all text-[0.8125rem] text-violet-700 hover:underline"
               >
                 Ver en el sitio público
                 <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
@@ -168,12 +168,12 @@ export default async function SubmissionDetailPage({
 
           {submission.reviewNotes ? (
             <section className="admin-panel p-4">
-              <h2 className="text-[0.8125rem] font-semibold text-slate-900">Notas de revisión</h2>
-              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-slate-700">
+              <h2 className="text-[0.8125rem] font-semibold text-heading">Notas de revisión</h2>
+              <p className="mt-2 whitespace-pre-line text-[0.8125rem] leading-relaxed text-foreground">
                 {submission.reviewNotes}
               </p>
               {submission.reviewedBy && submission.reviewedAt ? (
-                <p className="mt-2 text-[0.75rem] text-slate-500">
+                <p className="mt-2 text-[0.75rem] text-subtle-foreground">
                   {submission.reviewedBy.name} · {formatDateTime(submission.reviewedAt)}
                 </p>
               ) : null}
@@ -196,8 +196,8 @@ export default async function SubmissionDetailPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-slate-500">{label}</dt>
-      <dd className="mt-0.5 break-words font-medium text-slate-900">{value}</dd>
+      <dt className="text-subtle-foreground">{label}</dt>
+      <dd className="mt-0.5 break-words font-medium text-heading">{value}</dd>
     </div>
   )
 }

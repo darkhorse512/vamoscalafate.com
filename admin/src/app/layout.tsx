@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ThemeScript } from '@/components/ThemeScript'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,12 +33,21 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#1d252b',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8fafb' },
+    { media: '(prefers-color-scheme: dark)', color: '#0e1418' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={inter.variable}>
+    // `suppressHydrationWarning`: ThemeScript sets data-theme on <html> before
+    // React hydrates, so the client markup legitimately differs from the
+    // server's.
+    <html lang="es-AR" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body>{children}</body>
     </html>
   )

@@ -29,15 +29,15 @@ export function CookieConsent() {
       role="dialog"
       aria-label="Preferencias de cookies"
       aria-live="polite"
-      className="fixed inset-x-3 bottom-3 z-[80] mx-auto max-w-2xl rounded-card border border-stone-200 bg-white p-4 shadow-float sm:inset-x-6 sm:bottom-6 sm:p-5"
+      className="fixed inset-x-3 bottom-3 z-[80] mx-auto max-w-2xl rounded-card border border-border bg-surface p-4 shadow-float sm:inset-x-6 sm:bottom-6 sm:p-5"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <p className="flex-1 text-[0.8125rem] leading-relaxed text-lenga-700">
+        <p className="flex-1 text-[0.8125rem] leading-relaxed text-foreground">
           Usamos cookies necesarias para que el sitio funcione y, con tu permiso, cookies
           analíticas para entender cómo se usa.{' '}
           <Link
             href={ROUTES.cookies}
-            className="font-medium text-glacier-700 underline underline-offset-2 hover:text-glacier-900"
+            className="font-medium text-violet-700 underline underline-offset-2 hover:text-violet-900"
           >
             Más información
           </Link>

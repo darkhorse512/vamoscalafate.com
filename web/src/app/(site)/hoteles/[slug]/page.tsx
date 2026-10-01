@@ -73,7 +73,7 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
 
             {hotel.starRating ? (
               <p
-                className="flex items-center gap-0.5 text-ochre-500"
+                className="flex items-center gap-0.5 text-magenta-500"
                 aria-label={`${hotel.starRating} estrellas`}
               >
                 {Array.from({ length: hotel.starRating }, (_, i) => (
@@ -82,11 +82,11 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
               </p>
             ) : null}
 
-            <h1 className="mt-2 font-display text-display-sm font-bold leading-tight text-lenga-950">
+            <h1 className="mt-2 font-display text-display-sm font-bold leading-tight text-heading">
               {hotel.name}
             </h1>
 
-            <p className="mt-3 text-[1.0625rem] leading-relaxed text-lenga-700">{hotel.summary}</p>
+            <p className="mt-3 text-[1.0625rem] leading-relaxed text-foreground">{hotel.summary}</p>
 
             <div className="mt-8">
               <Markdown content={hotel.description} />
@@ -94,14 +94,14 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
 
             {hotel.amenities.length > 0 ? (
               <section className="mt-10">
-                <h2 className="font-display text-xl font-semibold text-lenga-950">Servicios</h2>
+                <h2 className="font-display text-xl font-semibold text-heading">Servicios</h2>
                 <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                   {hotel.amenities.map(({ amenity }) => (
                     <li
                       key={amenity.id}
-                      className="flex items-center gap-2.5 text-[0.9375rem] text-lenga-700"
+                      className="flex items-center gap-2.5 text-[0.9375rem] text-foreground"
                     >
-                      <span className="size-1.5 shrink-0 rounded-full bg-glacier-400" aria-hidden="true" />
+                      <span className="size-1.5 shrink-0 rounded-full bg-violet-400" aria-hidden="true" />
                       {amenity.name}
                     </li>
                   ))}
@@ -111,21 +111,21 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
           </div>
 
           <aside className="mt-10 lg:sticky lg:top-24 lg:mt-0 lg:self-start">
-            <div className="rounded-card border border-stone-200 bg-stone-50 p-5">
-              <h2 className="font-display text-base font-semibold text-lenga-950">Contacto</h2>
+            <div className="rounded-card border border-border bg-surface-muted p-5">
+              <h2 className="font-display text-base font-semibold text-heading">Contacto</h2>
 
               <ul className="mt-4 space-y-3 text-sm">
                 {hotel.address ? (
                   <li className="flex items-start gap-2.5">
-                    <MapPin className="mt-0.5 size-4 shrink-0 text-glacier-600" aria-hidden="true" />
-                    <span className="text-lenga-700">{hotel.address}</span>
+                    <MapPin className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <span className="text-foreground">{hotel.address}</span>
                   </li>
                 ) : null}
 
                 {hotel.phone ? (
                   <li className="flex items-start gap-2.5">
-                    <Phone className="mt-0.5 size-4 shrink-0 text-glacier-600" aria-hidden="true" />
-                    <a href={`tel:${hotel.phone}`} className="text-glacier-700 hover:underline">
+                    <Phone className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <a href={`tel:${hotel.phone}`} className="text-violet-700 hover:underline">
                       {hotel.phone}
                     </a>
                   </li>
@@ -133,8 +133,8 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
 
                 {hotel.email ? (
                   <li className="flex items-start gap-2.5">
-                    <Mail className="mt-0.5 size-4 shrink-0 text-glacier-600" aria-hidden="true" />
-                    <a href={`mailto:${hotel.email}`} className="break-all text-glacier-700 hover:underline">
+                    <Mail className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
+                    <a href={`mailto:${hotel.email}`} className="break-all text-violet-700 hover:underline">
                       {hotel.email}
                     </a>
                   </li>
@@ -142,12 +142,12 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
 
                 {hotel.website ? (
                   <li className="flex items-start gap-2.5">
-                    <Globe className="mt-0.5 size-4 shrink-0 text-glacier-600" aria-hidden="true" />
+                    <Globe className="mt-0.5 size-4 shrink-0 text-violet-600" aria-hidden="true" />
                     <a
                       href={hotel.website}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      className="break-all text-glacier-700 hover:underline"
+                      className="break-all text-violet-700 hover:underline"
                     >
                       Sitio web
                     </a>
@@ -155,22 +155,22 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
                 ) : null}
               </ul>
 
-              <p className="mt-5 border-t border-stone-200 pt-4 text-xs leading-relaxed text-lenga-500">
+              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-plum-500">
                 Esta ficha es informativa. La reserva se realiza directamente con el
                 establecimiento; Vamos Calafate no gestiona alojamientos.
               </p>
             </div>
 
-            <div className="mt-4 rounded-card border border-stone-200 p-5">
-              <h2 className="font-sans text-sm font-bold text-lenga-950">
+            <div className="mt-4 rounded-card border border-border p-5">
+              <h2 className="font-sans text-sm font-bold text-heading">
                 ¿Ya tenés dónde dormir?
               </h2>
-              <p className="mt-1.5 text-xs leading-relaxed text-lenga-600">
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
                 Reservá las excursiones y el traslado desde el aeropuerto.
               </p>
               <Link
                 href={ROUTES.tours}
-                className="mt-3 inline-block text-[0.8125rem] font-semibold text-glacier-700 underline underline-offset-2"
+                className="mt-3 inline-block text-[0.8125rem] font-semibold text-violet-700 underline underline-offset-2"
               >
                 Ver excursiones
               </Link>

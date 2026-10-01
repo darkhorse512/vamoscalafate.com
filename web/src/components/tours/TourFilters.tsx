@@ -78,7 +78,7 @@ export function TourFilters({
   const panel = (
     <div className="space-y-7">
       <fieldset>
-        <legend className="mb-3 text-[0.8125rem] font-bold text-lenga-950">Categoría</legend>
+        <legend className="mb-3 text-[0.8125rem] font-bold text-heading">Categoría</legend>
         <div className="flex flex-wrap gap-2">
           <FilterChip
             active={!current.categoria}
@@ -100,7 +100,7 @@ export function TourFilters({
       </fieldset>
 
       <fieldset>
-        <legend className="mb-3 text-[0.8125rem] font-bold text-lenga-950">Exigencia física</legend>
+        <legend className="mb-3 text-[0.8125rem] font-bold text-heading">Exigencia física</legend>
         <div className="flex flex-wrap gap-2">
           {[
             { value: 'EASY', label: 'Baja' },
@@ -120,7 +120,7 @@ export function TourFilters({
       </fieldset>
 
       <fieldset>
-        <legend className="mb-3 text-[0.8125rem] font-bold text-lenga-950">Duración</legend>
+        <legend className="mb-3 text-[0.8125rem] font-bold text-heading">Duración</legend>
         <div className="flex flex-wrap gap-2">
           {[
             { value: '240', label: 'Hasta 4 h' },
@@ -141,7 +141,7 @@ export function TourFilters({
 
       {priceSteps.length > 0 ? (
         <fieldset>
-          <legend className="mb-3 text-[0.8125rem] font-bold text-lenga-950">Precio máximo</legend>
+          <legend className="mb-3 text-[0.8125rem] font-bold text-heading">Precio máximo</legend>
           <div className="flex flex-wrap gap-2">
             {priceSteps.map((step) => (
               <FilterChip
@@ -160,7 +160,7 @@ export function TourFilters({
       <div>
         <label
           htmlFor="filter-fecha"
-          className="mb-2 block text-[0.8125rem] font-bold text-lenga-950"
+          className="mb-2 block text-[0.8125rem] font-bold text-heading"
         >
           Disponible el
         </label>
@@ -170,7 +170,7 @@ export function TourFilters({
           min={today}
           value={current.fecha}
           onChange={(event) => update('fecha', event.target.value || null)}
-          className="w-full rounded-control border border-stone-300 bg-white px-3 py-2.5 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+          className="w-full rounded-control border border-border-strong bg-surface px-3 py-2.5 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
         />
       </div>
 
@@ -189,9 +189,9 @@ export function TourFilters({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p
           aria-live="polite"
-          className={cn('text-sm text-lenga-600', isPending && 'opacity-55')}
+          className={cn('text-sm text-muted-foreground', isPending && 'opacity-55')}
         >
-          <strong className="font-semibold text-lenga-950">{totalResults}</strong>{' '}
+          <strong className="font-semibold text-heading">{totalResults}</strong>{' '}
           {totalResults === 1 ? 'resultado' : 'resultados'}
         </p>
 
@@ -203,7 +203,7 @@ export function TourFilters({
             id="orden"
             value={current.orden}
             onChange={(event) => update('orden', event.target.value)}
-            className="h-10 rounded-control border border-stone-300 bg-white px-3 text-[0.8125rem] font-medium text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+            className="h-10 rounded-control border border-border-strong bg-surface px-3 text-[0.8125rem] font-medium text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
           >
             <option value="destacados">Destacados</option>
             <option value="precio-asc">Menor precio</option>
@@ -222,7 +222,7 @@ export function TourFilters({
             <SlidersHorizontal className="size-4" aria-hidden="true" />
             Filtros
             {activeCount > 0 ? (
-              <span className="ml-0.5 grid size-5 place-items-center rounded-full bg-glacier-700 text-[0.625rem] font-bold text-white">
+              <span className="ml-0.5 grid size-5 place-items-center rounded-full bg-violet-700 text-[0.625rem] font-bold text-white">
                 {activeCount}
               </span>
             ) : null}
@@ -245,13 +245,13 @@ export function TourFilters({
             type="button"
             aria-label="Cerrar filtros"
             onClick={() => setMobileOpen(false)}
-            className="absolute inset-0 bg-lenga-950/50"
+            className="absolute inset-0 bg-plum-950/50"
           />
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Filtros"
-            className="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-2xl bg-white p-5 pb-8"
+            className="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-2xl bg-surface p-5 pb-8"
           >
             <div className="mb-5 flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold">Filtros</h2>
@@ -259,7 +259,7 @@ export function TourFilters({
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Cerrar filtros"
-                className="grid size-9 place-items-center rounded-control text-lenga-600 hover:bg-stone-100"
+                className="grid size-9 place-items-center rounded-control text-muted-foreground hover:bg-surface-strong"
               >
                 <X className="size-5" aria-hidden="true" />
               </button>
@@ -296,13 +296,13 @@ function FilterChip({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.8125rem] font-medium transition-colors',
         active
-          ? 'border-glacier-700 bg-glacier-700 text-white'
-          : 'border-stone-300 bg-white text-lenga-700 hover:border-lenga-400 hover:bg-stone-50',
+          ? 'border-violet-700 bg-violet-700 text-white'
+          : 'border-border-strong bg-surface text-foreground hover:border-plum-400 hover:bg-surface-muted',
       )}
     >
       {label}
       {count !== undefined ? (
-        <span className={cn('text-xs', active ? 'text-white/70' : 'text-lenga-400')}>{count}</span>
+        <span className={cn('text-xs', active ? 'text-white/70' : 'text-plum-400')}>{count}</span>
       ) : null}
     </button>
   )

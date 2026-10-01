@@ -19,7 +19,7 @@ export default async function DestinosPage() {
 
   return (
     <>
-      <div className="border-b border-stone-200 bg-stone-50">
+      <div className="border-b border-border bg-surface-muted">
         <div className="container-page py-8 sm:py-10">
           <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Destinos', path: ROUTES.destinations }]} />
           <SectionHeading

@@ -101,7 +101,7 @@ export default async function SettingsPage() {
       />
 
       <section className="mb-8">
-        <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">
+        <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">
           Estado de las integraciones
         </h2>
 
@@ -122,7 +122,7 @@ export default async function SettingsPage() {
                 )}
 
                 <div className="min-w-0">
-                  <p className="text-[0.8125rem] font-semibold text-slate-900">
+                  <p className="text-[0.8125rem] font-semibold text-heading">
                     {integration.name}
                     <span
                       className={`ml-2 text-[0.6875rem] font-medium ${
@@ -132,10 +132,10 @@ export default async function SettingsPage() {
                       {integration.ok ? 'Configurada' : 'Sin configurar'}
                     </span>
                   </p>
-                  <p className="mt-1 text-[0.75rem] leading-relaxed text-slate-600">
+                  <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
                     {integration.detail}
                   </p>
-                  <p className="mt-1 text-[0.6875rem] text-slate-500">
+                  <p className="mt-1 text-[0.6875rem] text-subtle-foreground">
                     {integration.requirement}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default async function SettingsPage() {
           ))}
         </ul>
 
-        <p className="mt-3 text-[0.75rem] text-slate-500">
+        <p className="mt-3 text-[0.75rem] text-subtle-foreground">
           Las credenciales se configuran en el archivo <code className="font-mono">.env</code> del
           servidor y requieren reiniciar el proceso con PM2. Nunca se editan desde este panel.
         </p>
@@ -155,7 +155,7 @@ export default async function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">Ajustes del sitio</h2>
+        <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">Ajustes del sitio</h2>
         <SettingsEditor
           settings={settings.map((setting) => ({
             key: setting.key,
@@ -170,7 +170,7 @@ export default async function SettingsPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">Páginas legales</h2>
+        <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">Páginas legales</h2>
         <div className="admin-panel overflow-hidden">
           <table className="admin-table">
             <caption className="sr-only">Páginas legales editables</caption>
@@ -187,12 +187,12 @@ export default async function SettingsPage() {
                   <td>
                     <Link
                       href={`/settings/pages/${page.id}`}
-                      className="font-medium text-glacier-700 hover:underline"
+                      className="font-medium text-violet-700 hover:underline"
                     >
                       {page.title}
                     </Link>
                   </td>
-                  <td className="font-mono text-[0.75rem] text-slate-500">/{page.slug}</td>
+                  <td className="font-mono text-[0.75rem] text-subtle-foreground">/{page.slug}</td>
                   <td>{page.status}</td>
                 </tr>
               ))}
@@ -200,7 +200,7 @@ export default async function SettingsPage() {
           </table>
         </div>
 
-        <p className="mt-3 text-[0.75rem] text-slate-500">
+        <p className="mt-3 text-[0.75rem] text-subtle-foreground">
           Los textos legales que vienen con la instalación son plantillas estructurales, no
           documentos definitivos. Hacelos revisar por un profesional antes de operar.
         </p>

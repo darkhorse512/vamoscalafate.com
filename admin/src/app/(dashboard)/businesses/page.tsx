@@ -56,7 +56,7 @@ export default async function BusinessesPage() {
     },
     { key: 'category', header: 'Categoría', cell: (row) => row.categoryName },
     { key: 'channel', header: 'Sección', cell: (row) => row.channel },
-    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-slate-500">{row.slug}</span> },
+    { key: 'slug', header: 'Slug', cell: (row) => <span className="font-mono text-[0.75rem] text-subtle-foreground">{row.slug}</span> },
     { key: 'status', header: 'Estado', cell: (row) => <StatusBadge status={row.status} /> },
   ]
 

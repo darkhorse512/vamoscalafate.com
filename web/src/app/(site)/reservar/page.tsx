@@ -84,17 +84,17 @@ export default async function ReservarPage({
   } catch {
     return (
       <div className="container-page py-20">
-        <div className="mx-auto max-w-lg rounded-card border border-stone-200 bg-stone-50 p-8 text-center">
-          <h1 className="font-display text-xl font-semibold text-lenga-950">
+        <div className="mx-auto max-w-lg rounded-card border border-border bg-surface-muted p-8 text-center">
+          <h1 className="font-display text-xl font-semibold text-heading">
             Esa salida ya no está disponible
           </h1>
-          <p className="mt-3 text-sm leading-relaxed text-lenga-600">
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             Los lugares para la fecha y el horario que elegiste se ocuparon mientras completabas la
             reserva. Elegí otra fecha y volvé a intentar.
           </p>
           <a
             href={ROUTES.tour(tour.slug)}
-            className="mt-6 inline-block text-sm font-semibold text-glacier-700 underline underline-offset-2"
+            className="mt-6 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
           >
             Volver a {tour.name}
           </a>
@@ -116,7 +116,7 @@ export default async function ReservarPage({
         ]}
       />
 
-      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
         Completá tu reserva
       </h1>
 

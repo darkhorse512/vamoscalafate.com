@@ -64,7 +64,7 @@ export function SubmissionReview({
 
   return (
     <section className="admin-panel p-4">
-      <h2 className="text-[0.8125rem] font-semibold text-slate-900">Revisión</h2>
+      <h2 className="text-[0.8125rem] font-semibold text-heading">Revisión</h2>
 
       {message ? (
         <div className="mt-3">
@@ -73,7 +73,7 @@ export function SubmissionReview({
       ) : null}
 
       {isFinal ? (
-        <p className="mt-2 text-[0.8125rem] text-slate-500">
+        <p className="mt-2 text-[0.8125rem] text-subtle-foreground">
           Esta solicitud ya tiene una decisión final. Podés cambiarla, pero avisale al solicitante.
         </p>
       ) : null}
@@ -98,9 +98,9 @@ export function SubmissionReview({
           type="checkbox"
           checked={notify}
           onChange={(event) => setNotify(event.target.checked)}
-          className="size-4 rounded border-slate-400 text-glacier-700 focus:ring-2 focus:ring-glacier-600"
+          className="size-4 rounded border-slate-400 text-violet-700 focus:ring-2 focus:ring-violet-600"
         />
-        <span className="text-[0.8125rem] text-slate-700">Notificar por correo al solicitante</span>
+        <span className="text-[0.8125rem] text-foreground">Notificar por correo al solicitante</span>
       </label>
 
       <div className="mt-4 space-y-2">
@@ -150,7 +150,7 @@ export function SubmissionReview({
       </div>
 
       {!notesRequired ? (
-        <p className="mt-2 text-[0.75rem] text-slate-500">
+        <p className="mt-2 text-[0.75rem] text-subtle-foreground">
           Para rechazar o pedir datos, escribí al menos 10 caracteres en las notas.
         </p>
       ) : null}

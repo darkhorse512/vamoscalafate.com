@@ -111,7 +111,7 @@ export function BookingActions({
 
   return (
     <section className="admin-panel p-4">
-      <h2 className="text-[0.8125rem] font-semibold text-slate-900">Acciones</h2>
+      <h2 className="text-[0.8125rem] font-semibold text-heading">Acciones</h2>
 
       {error ? (
         <div className="mt-3">
@@ -127,7 +127,7 @@ export function BookingActions({
 
       <div className="mt-3 space-y-2">
         {available.length === 0 ? (
-          <p className="text-[0.8125rem] text-slate-500">
+          <p className="text-[0.8125rem] text-subtle-foreground">
             No hay transiciones disponibles desde el estado actual.
           </p>
         ) : (
@@ -162,7 +162,7 @@ export function BookingActions({
         ) : null}
       </div>
 
-      <div className="mt-5 border-t border-slate-200 pt-4">
+      <div className="mt-5 border-t border-border pt-4">
         <label htmlFor="internal-notes" className="admin-label">
           Notas internas
         </label>

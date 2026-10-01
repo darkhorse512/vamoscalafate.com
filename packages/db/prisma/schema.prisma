@@ -307,6 +307,17 @@ model Media {
   /// For MediaType.VIDEO pointing at YouTube/Vimeo rather than a stored file.
   externalUrl String?
 
+  /// Licensing provenance.
+  ///
+  /// Required for anything imported under a Creative Commons licence: CC BY
+  /// and CC BY-SA oblige us to credit the author and name the licence
+  /// wherever the work is shown. Storing it on the row is what makes that
+  /// credit automatic rather than something a person has to remember.
+  license         String?
+  attributionText String?
+  attributionUrl  String?
+  sourceUrl       String?
+
   uploadedById String?
   uploadedBy   AdminUser? @relation("MediaUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
 

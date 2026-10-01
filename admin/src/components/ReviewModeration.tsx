@@ -28,7 +28,7 @@ export function ReviewModeration({
   }
 
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+    <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
       {currentStatus !== 'APPROVED' ? (
         <Button size="sm" disabled={pending} onClick={() => moderate('APPROVED')}>
           {pending ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" /> : null}

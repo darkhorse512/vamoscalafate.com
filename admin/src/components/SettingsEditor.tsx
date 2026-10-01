@@ -58,11 +58,11 @@ export function SettingsEditor({ settings }: { settings: Setting[] }) {
 
       {groups.map((group) => (
         <section key={group} className="admin-panel overflow-hidden">
-          <h3 className="border-b border-slate-200 px-4 py-2.5 text-[0.8125rem] font-semibold text-slate-900">
+          <h3 className="border-b border-border px-4 py-2.5 text-[0.8125rem] font-semibold text-heading">
             {GROUP_LABELS[group] ?? group}
           </h3>
 
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-border">
             {settings
               .filter((setting) => setting.group === group)
               .map((setting) => {
@@ -111,7 +111,7 @@ export function SettingsEditor({ settings }: { settings: Setting[] }) {
                       </Button>
                     </div>
 
-                    <p className="mt-1 font-mono text-[0.6875rem] text-slate-400">{setting.key}</p>
+                    <p className="mt-1 font-mono text-[0.6875rem] text-subtle-foreground">{setting.key}</p>
                   </li>
                 )
               })}

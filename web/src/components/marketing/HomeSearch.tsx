@@ -41,7 +41,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
       onSubmit={onSubmit}
       role="search"
       aria-label="Buscar experiencias"
-      className="rounded-card border border-stone-200 bg-white p-3 shadow-float sm:p-4"
+      className="rounded-card border border-border bg-surface p-3 shadow-float sm:p-4"
     >
       <div className="grid gap-3 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)_auto]">
         <div>
@@ -50,7 +50,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
           </label>
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-lenga-400"
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-plum-400"
               aria-hidden="true"
             />
             <input
@@ -59,7 +59,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Perito Moreno, navegación, traslado…"
-              className="h-11 w-full rounded-control border border-stone-300 bg-white pl-9 pr-3 text-sm text-lenga-900 placeholder:text-lenga-400 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+              className="h-11 w-full rounded-control border border-border-strong bg-surface pl-9 pr-3 text-sm text-heading placeholder:text-plum-400 focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
             />
           </div>
         </div>
@@ -72,7 +72,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
             id="home-cat"
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="h-11 w-full rounded-control border border-stone-300 bg-white px-3 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
           >
             <option value="">Todas las categorías</option>
             {categories.map((c) => (
@@ -93,7 +93,7 @@ export function HomeSearch({ categories }: { categories: { slug: string; name: s
             min={today}
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="h-11 w-full rounded-control border border-stone-300 bg-white px-3 text-sm text-lenga-900 focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600"
+            className="h-11 w-full rounded-control border border-border-strong bg-surface px-3 text-sm text-heading focus:border-violet-600 focus:outline-none focus:ring-1 focus:ring-violet-600"
           />
         </div>
 

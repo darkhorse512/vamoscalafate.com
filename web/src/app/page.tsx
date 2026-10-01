@@ -88,7 +88,7 @@ export default async function HomePage() {
         </section>
 
         {/* ── 4. Why Vamos Calafate ─────────────────────────────────────── */}
-        <section className="border-y border-stone-200 bg-stone-50 py-16 sm:py-20">
+        <section className="border-y border-border bg-surface-muted py-16 sm:py-20">
           <div className="container-page">
             <SectionHeading
               eyebrow="Por qué reservar acá"
@@ -133,20 +133,20 @@ export default async function HomePage() {
               <li key={category.id}>
                 <Link
                   href={`${ROUTES.tours}?categoria=${category.slug}`}
-                  className="group flex h-full flex-col justify-between rounded-card border border-stone-200 bg-white p-5 transition-all hover:border-glacier-300 hover:shadow-raised"
+                  className="group flex h-full flex-col justify-between rounded-card border border-border bg-surface p-5 transition-all hover:border-violet-300 hover:shadow-raised"
                 >
                   <div>
-                    <h3 className="font-display text-[1.0625rem] font-semibold text-lenga-950">
+                    <h3 className="font-display text-[1.0625rem] font-semibold text-heading">
                       {category.name}
                     </h3>
                     {category.description ? (
-                      <p className="mt-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                      <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                         {category.description}
                       </p>
                     ) : null}
                   </div>
 
-                  <p className="mt-5 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-glacier-700">
+                  <p className="mt-5 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-violet-700">
                     {category._count.tours}{' '}
                     {category._count.tours === 1 ? 'experiencia' : 'experiencias'}
                     <ArrowRight
@@ -162,7 +162,7 @@ export default async function HomePage() {
 
         {/* ── 6. Transfers ──────────────────────────────────────────────── */}
         {transfers.items.length > 0 ? (
-          <section className="border-y border-stone-200 bg-stone-50 py-16 sm:py-20">
+          <section className="border-y border-border bg-surface-muted py-16 sm:py-20">
             <div className="container-page">
               <SectionHeading
                 eyebrow="Traslados"
@@ -193,7 +193,7 @@ export default async function HomePage() {
 
         {/* ── 8. Hotels & businesses ────────────────────────────────────── */}
         {hotels.items.length > 0 ? (
-          <section className="border-y border-stone-200 bg-stone-50 py-16 sm:py-20">
+          <section className="border-y border-border bg-surface-muted py-16 sm:py-20">
             <div className="container-page">
               <SectionHeading
                 eyebrow="Guía local"
@@ -207,7 +207,7 @@ export default async function HomePage() {
                   <li key={hotel.id}>
                     <Link
                       href={ROUTES.hotel(hotel.slug)}
-                      className="group flex h-full gap-4 rounded-card border border-stone-200 bg-white p-3.5 transition-all hover:border-stone-300 hover:shadow-subtle"
+                      className="group flex h-full gap-4 rounded-card border border-border bg-surface p-3.5 transition-all hover:border-border-strong hover:shadow-subtle"
                     >
                       <div className="relative size-20 shrink-0 overflow-hidden rounded-[0.3rem]">
                         <SmartImage
@@ -219,14 +219,14 @@ export default async function HomePage() {
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-lenga-950">
+                        <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading">
                           {hotel.name}
                         </h3>
-                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-lenga-600">
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                           {hotel.summary}
                         </p>
                         {hotel.address ? (
-                          <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-lenga-500">
+                          <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-plum-500">
                             <MapPin className="size-3" aria-hidden="true" />
                             {hotel.address}
                           </p>
@@ -237,11 +237,11 @@ export default async function HomePage() {
                 ))}
               </ul>
 
-              <p className="mt-8 text-center text-sm text-lenga-600">
+              <p className="mt-8 text-center text-sm text-muted-foreground">
                 ¿Tenés un hotel o comercio en El Calafate?{' '}
                 <Link
                   href={ROUTES.hotelRegister}
-                  className="font-semibold text-glacier-700 underline underline-offset-2 hover:text-glacier-900"
+                  className="font-semibold text-violet-700 underline underline-offset-2 hover:text-violet-900"
                 >
                   Registralo en la guía
                 </Link>
@@ -278,20 +278,20 @@ export default async function HomePage() {
 
                       <div className="mt-4">
                         {post.category ? (
-                          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-glacier-700">
+                          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
                             {post.category.name}
                           </p>
                         ) : null}
 
-                        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-lenga-950 group-hover:text-glacier-800">
+                        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading group-hover:text-violet-800">
                           {post.title}
                         </h3>
 
-                        <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                        <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                           {post.excerpt}
                         </p>
 
-                        <p className="mt-3 text-xs text-lenga-500">
+                        <p className="mt-3 text-xs text-plum-500">
                           {post.publishedAt ? formatDate(post.publishedAt) : null}
                           {' · '}
                           {post.readingTime} min de lectura
@@ -333,13 +333,13 @@ function ValueProp({
   return (
     <li>
       <span
-        className="grid size-10 place-items-center rounded-control bg-glacier-50 text-glacier-700"
+        className="grid size-10 place-items-center rounded-control bg-violet-50 text-violet-700"
         aria-hidden="true"
       >
         {icon}
       </span>
-      <h3 className="mt-4 font-sans text-[0.9375rem] font-bold text-lenga-950">{title}</h3>
-      <p className="mt-2 text-[0.8125rem] leading-relaxed text-lenga-600">{description}</p>
+      <h3 className="mt-4 font-sans text-[0.9375rem] font-bold text-heading">{title}</h3>
+      <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">{description}</p>
     </li>
   )
 }

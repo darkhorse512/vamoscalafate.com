@@ -59,7 +59,7 @@ export function SingleImageField({
 
       {media ? (
         <div className="flex items-start gap-3">
-          <div className="relative aspect-[4/3] w-40 shrink-0 overflow-hidden rounded-control bg-slate-100 ring-1 ring-slate-200">
+          <div className="relative aspect-[4/3] w-40 shrink-0 overflow-hidden rounded-control bg-surface-strong ring-1 ring-border">
             <Image
               src={media.url}
               alt={media.altText || media.filename}
@@ -70,12 +70,12 @@ export function SingleImageField({
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[0.8125rem] font-medium text-slate-900">
+            <p className="truncate text-[0.8125rem] font-medium text-heading">
               {media.filename}
             </p>
 
             {media.altText ? (
-              <p className="mt-0.5 truncate text-[0.75rem] text-slate-500">{media.altText}</p>
+              <p className="mt-0.5 truncate text-[0.75rem] text-subtle-foreground">{media.altText}</p>
             ) : (
               <p className="mt-0.5 inline-flex items-center gap-1 text-[0.75rem] text-status-warning">
                 <AlertTriangle className="size-3" aria-hidden="true" />
@@ -102,14 +102,14 @@ export function SingleImageField({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex aspect-[4/3] w-40 flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-slate-300 bg-slate-50 text-slate-500 transition-colors hover:border-glacier-400 hover:text-glacier-700"
+          className="flex aspect-[4/3] w-40 flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted text-subtle-foreground transition-colors hover:border-violet-400 hover:text-violet-700"
         >
           <ImagePlus className="size-5" aria-hidden="true" />
           <span className="text-[0.75rem] font-medium">Elegir imagen</span>
         </button>
       )}
 
-      {hint ? <p className="mt-1.5 text-[0.75rem] text-slate-500">{hint}</p> : null}
+      {hint ? <p className="mt-1.5 text-[0.75rem] text-subtle-foreground">{hint}</p> : null}
 
       <MediaPicker
         open={open}
@@ -214,7 +214,7 @@ export function GalleryField({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex w-full flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-slate-300 bg-slate-50 py-8 text-slate-500 transition-colors hover:border-glacier-400 hover:text-glacier-700"
+          className="flex w-full flex-col items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-border-strong bg-surface-muted py-8 text-subtle-foreground transition-colors hover:border-violet-400 hover:text-violet-700"
         >
           <ImagePlus className="size-6" aria-hidden="true" />
           <span className="text-[0.8125rem] font-medium">Agregar imágenes a la galería</span>
@@ -231,8 +231,8 @@ export function GalleryField({
               <li key={item.id} className="group relative">
                 <div
                   className={cn(
-                    'relative aspect-[4/3] overflow-hidden rounded-control bg-slate-100 ring-2 transition-all',
-                    isCover ? 'ring-glacier-600' : 'ring-slate-200',
+                    'relative aspect-[4/3] overflow-hidden rounded-control bg-surface-strong ring-2 transition-all',
+                    isCover ? 'ring-violet-600' : 'ring-border',
                   )}
                 >
                   <Image
@@ -244,7 +244,7 @@ export function GalleryField({
                   />
 
                   {isCover ? (
-                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-glacier-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
+                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-violet-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                       <Star className="size-2.5 fill-current" aria-hidden="true" />
                       Portada
                     </span>
@@ -267,7 +267,7 @@ export function GalleryField({
                       onClick={() => move(index, -1)}
                       disabled={index === 0}
                       aria-label={`Mover ${item.filename} antes`}
-                      className="grid size-6 place-items-center rounded text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                      className="grid size-6 place-items-center rounded text-subtle-foreground hover:bg-surface-strong disabled:opacity-30"
                     >
                       <ArrowLeft className="size-3.5" aria-hidden="true" />
                     </button>
@@ -276,7 +276,7 @@ export function GalleryField({
                       onClick={() => move(index, 1)}
                       disabled={index === media.length - 1}
                       aria-label={`Mover ${item.filename} después`}
-                      className="grid size-6 place-items-center rounded text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                      className="grid size-6 place-items-center rounded text-subtle-foreground hover:bg-surface-strong disabled:opacity-30"
                     >
                       <ArrowRight className="size-3.5" aria-hidden="true" />
                     </button>
@@ -289,7 +289,7 @@ export function GalleryField({
                         onClick={() => onCoverChange(item.id)}
                         aria-label={`Usar ${item.filename} como portada`}
                         title="Usar como portada"
-                        className="grid size-6 place-items-center rounded text-slate-500 hover:bg-slate-100 hover:text-glacier-700"
+                        className="grid size-6 place-items-center rounded text-subtle-foreground hover:bg-surface-strong hover:text-violet-700"
                       >
                         <Star className="size-3.5" aria-hidden="true" />
                       </button>
@@ -310,7 +310,7 @@ export function GalleryField({
         </ul>
       )}
 
-      {hint ? <p className="mt-2 text-[0.75rem] text-slate-500">{hint}</p> : null}
+      {hint ? <p className="mt-2 text-[0.75rem] text-subtle-foreground">{hint}</p> : null}
 
       <MediaPicker
         open={open}

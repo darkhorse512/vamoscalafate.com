@@ -24,7 +24,7 @@ export function Price({
   className?: string
 }) {
   if (cents === null || cents === undefined) {
-    return <span className={cn('text-sm text-lenga-500', className)}>Consultar precio</span>
+    return <span className={cn('text-sm text-plum-500', className)}>Consultar precio</span>
   }
 
   const sizes = {
@@ -36,17 +36,17 @@ export function Price({
   return (
     <span className={cn('inline-flex flex-wrap items-baseline gap-x-1.5', className)}>
       {from ? (
-        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-lenga-500">
+        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-plum-500">
           Desde
         </span>
       ) : null}
 
-      <span className={cn('font-display font-bold text-lenga-950', sizes[size])}>
+      <span className={cn('font-display font-bold text-heading', sizes[size])}>
         {formatMoney(cents, currency)}
       </span>
 
       {perPerson ? (
-        <span className="text-xs font-medium text-lenga-500">por persona</span>
+        <span className="text-xs font-medium text-plum-500">por persona</span>
       ) : null}
     </span>
   )

@@ -32,7 +32,7 @@ export default async function FaqPage() {
     <>
       {ld ? <script type="application/ld+json" dangerouslySetInnerHTML={ld} /> : null}
 
-      <div className="border-b border-stone-200 bg-stone-50">
+      <div className="border-b border-border bg-surface-muted">
         <div className="container-page py-8 sm:py-10">
           <Breadcrumbs items={crumbs} />
           <SectionHeading
@@ -48,16 +48,16 @@ export default async function FaqPage() {
       <div className="container-prose py-10 sm:py-12">
         <FaqList faqs={faqs} />
 
-        <div className="mt-12 rounded-card border border-stone-200 bg-stone-50 p-6 text-center">
-          <h2 className="font-display text-lg font-semibold text-lenga-950">
+        <div className="mt-12 rounded-card border border-border bg-surface-muted p-6 text-center">
+          <h2 className="font-display text-lg font-semibold text-heading">
             ¿No encontraste lo que buscabas?
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-lenga-600">
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
             Escribinos y te respondemos. Si es sobre una reserva existente, incluí la referencia.
           </p>
           <Link
             href={ROUTES.contact}
-            className="mt-5 inline-flex h-11 items-center rounded-control bg-glacier-700 px-5 text-sm font-semibold text-white hover:bg-glacier-800"
+            className="mt-5 inline-flex h-11 items-center rounded-control bg-violet-700 px-5 text-sm font-semibold text-white hover:bg-violet-800"
           >
             Hacer una consulta
           </Link>

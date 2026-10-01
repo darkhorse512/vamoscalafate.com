@@ -163,7 +163,7 @@ const PALETTES = [
   {
     // Lenga forest, autumn
     skyTop: '#3d6b74', skyBottom: '#cfe0d6', sun: '#fdf6e8',
-    far: '#5f8a7b', mid: '#3a6355', near: '#21372f', // lenga-950
+    far: '#5f8a7b', mid: '#3a6355', near: '#21372f', // plum-950
     water: '#417a6c', waterDeep: '#18302a', snow: '#f2fbf6',
   },
   {
@@ -213,7 +213,7 @@ export function PhotoPlaceholder({
 
   return (
     <div
-      className={cn('absolute inset-0 size-full overflow-hidden bg-stone-100', className)}
+      className={cn('absolute inset-0 size-full overflow-hidden bg-surface-strong', className)}
       // Decorative: the surrounding card or figure carries the accessible name.
       role="presentation"
       aria-hidden="true"

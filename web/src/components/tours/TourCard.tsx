@@ -43,11 +43,11 @@ export function TourCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-card border border-stone-200 bg-white transition-all duration-200 hover:border-stone-300 hover:shadow-raised focus-within:ring-2 focus-within:ring-glacier-600 focus-within:ring-offset-2',
+        'group relative flex flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-200 hover:border-border-strong hover:shadow-raised focus-within:ring-2 focus-within:ring-violet-600 focus-within:ring-offset-2',
         className,
       )}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
+      <div className="relative aspect-[4/3] overflow-hidden bg-surface-strong">
         <SmartImage
           media={cover}
           seed={tour.slug}
@@ -65,21 +65,21 @@ export function TourCard({
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-glacier-700">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-violet-700">
           {tour.category.name}
         </p>
 
-        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-lenga-950">
+        <h3 className="mt-2 font-display text-[1.0625rem] font-semibold leading-snug text-heading">
           <Link href={href} className="before:absolute before:inset-0 focus:outline-none">
             {tour.name}
           </Link>
         </h3>
 
-        <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+        <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
           {tour.summary}
         </p>
 
-        <ul className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-1.5 text-xs text-lenga-500">
+        <ul className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-1.5 text-xs text-plum-500">
           <li className="inline-flex items-center gap-1.5">
             <Clock className="size-3.5 shrink-0" aria-hidden="true" />
             {formatDurationLabel(tour.durationMinutes)}
@@ -102,7 +102,7 @@ export function TourCard({
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-4">
           <Price cents={tour.fromPriceCents} currency={tour.currency} from size="md" />
-          <span className="text-[0.8125rem] font-semibold text-glacier-700 transition-colors group-hover:text-glacier-900">
+          <span className="text-[0.8125rem] font-semibold text-violet-700 transition-colors group-hover:text-violet-900">
             Ver detalle
           </span>
         </div>

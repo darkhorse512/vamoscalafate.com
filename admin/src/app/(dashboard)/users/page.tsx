@@ -42,7 +42,7 @@ export default async function UsersPage() {
       />
 
       <section className="mt-8">
-        <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">Roles disponibles</h2>
+        <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">Roles disponibles</h2>
 
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {(Object.keys(ROLE_DESCRIPTIONS) as (keyof typeof ROLE_DESCRIPTIONS)[]).map((role) => {
@@ -52,19 +52,19 @@ export default async function UsersPage() {
             return (
               <li key={role} className="admin-panel p-4">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-[0.8125rem] font-semibold text-slate-900">
+                  <h3 className="text-[0.8125rem] font-semibold text-heading">
                     {ROLE_DESCRIPTIONS[role].name}
                   </h3>
-                  <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.625rem] text-slate-600">
+                  <code className="rounded bg-surface-strong px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
                     {role}
                   </code>
                 </div>
 
-                <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-slate-600">
+                <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">
                   {ROLE_DESCRIPTIONS[role].description}
                 </p>
 
-                <p className="mt-3 text-[0.75rem] text-slate-500">
+                <p className="mt-3 text-[0.75rem] text-subtle-foreground">
                   {role === 'SUPER_ADMIN'
                     ? 'Acceso a todas las secciones sin restricción.'
                     : `Acceso a: ${resources.join(', ')}`}
@@ -76,7 +76,7 @@ export default async function UsersPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-3 text-[0.875rem] font-semibold text-slate-900">Sesiones activas</h2>
+        <h2 className="mb-3 text-[0.875rem] font-semibold text-heading">Sesiones activas</h2>
         <div className="admin-panel overflow-hidden">
           <table className="admin-table">
             <caption className="sr-only">Sesiones activas por usuario</caption>
@@ -92,8 +92,8 @@ export default async function UsersPage() {
               {users.map((user) => (
                 <tr key={user.id}>
                   <td>
-                    <p className="font-medium text-slate-900">{user.name}</p>
-                    <p className="text-[0.75rem] text-slate-500">{user.email}</p>
+                    <p className="font-medium text-heading">{user.name}</p>
+                    <p className="text-[0.75rem] text-subtle-foreground">{user.email}</p>
                   </td>
                   <td>
                     {user.lastLoginAt ? formatDateTime(user.lastLoginAt) : 'Nunca ingresó'}

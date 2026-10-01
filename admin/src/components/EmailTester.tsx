@@ -29,8 +29,8 @@ export function EmailTester({ defaultTo }: { defaultTo: string }) {
 
   return (
     <div className="admin-panel p-4">
-      <h3 className="text-[0.8125rem] font-semibold text-slate-900">Probar el envío de correo</h3>
-      <p className="mt-1 text-[0.75rem] text-slate-500">
+      <h3 className="text-[0.8125rem] font-semibold text-heading">Probar el envío de correo</h3>
+      <p className="mt-1 text-[0.75rem] text-subtle-foreground">
         Envía un mensaje real con la configuración actual y muestra el resultado exacto.
       </p>
 

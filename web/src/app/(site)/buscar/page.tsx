@@ -35,7 +35,7 @@ export default async function BuscarPage({
     <div className="container-page py-8 sm:py-10">
       <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Buscar', path: ROUTES.search }]} />
 
-      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-lenga-950">
+      <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
         Buscar
       </h1>
 
@@ -44,43 +44,43 @@ export default async function BuscarPage({
       </div>
 
       {!results ? (
-        <p className="mt-10 text-sm text-lenga-600">
+        <p className="mt-10 text-sm text-muted-foreground">
           Escribí al menos 2 caracteres para buscar entre excursiones, traslados, alojamientos,
           comercios, destinos y artículos.
         </p>
       ) : results.total === 0 ? (
-        <div className="mt-10 rounded-card border border-dashed border-stone-300 bg-stone-50 px-6 py-14 text-center">
-          <SearchIcon className="mx-auto size-8 text-lenga-400" aria-hidden="true" />
-          <h2 className="mt-4 font-display text-lg font-semibold text-lenga-950">
+        <div className="mt-10 rounded-card border border-dashed border-border-strong bg-surface-muted px-6 py-14 text-center">
+          <SearchIcon className="mx-auto size-8 text-plum-400" aria-hidden="true" />
+          <h2 className="mt-4 font-display text-lg font-semibold text-heading">
             No encontramos resultados para «{query}»
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-lenga-600">
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
             Probá con otros términos, o mirá el catálogo completo de excursiones.
           </p>
           <Link
             href={ROUTES.tours}
-            className="mt-5 inline-block text-sm font-semibold text-glacier-700 underline underline-offset-2"
+            className="mt-5 inline-block text-sm font-semibold text-violet-700 underline underline-offset-2"
           >
             Ver todas las excursiones
           </Link>
         </div>
       ) : (
         <div className="mt-8">
-          <p aria-live="polite" className="text-sm text-lenga-600">
-            <strong className="font-semibold text-lenga-950">{results.total}</strong>{' '}
+          <p aria-live="polite" className="text-sm text-muted-foreground">
+            <strong className="font-semibold text-heading">{results.total}</strong>{' '}
             {results.total === 1 ? 'resultado' : 'resultados'} para «{query}»
           </p>
 
           <div className="mt-8 space-y-10">
             {results.groups.map((group) => (
               <section key={group.type}>
-                <h2 className="font-display text-lg font-semibold text-lenga-950">{group.label}</h2>
+                <h2 className="font-display text-lg font-semibold text-heading">{group.label}</h2>
 
-                <ul className="mt-4 divide-y divide-stone-200 border-y border-stone-200">
+                <ul className="mt-4 divide-y divide-border border-y border-border">
                   {group.results.map((result) => (
                     <li key={`${result.type}-${result.id}`}>
-                      <Link href={result.url} className="flex gap-4 py-4 transition-colors hover:bg-stone-50">
-                        <div className="relative size-16 shrink-0 overflow-hidden rounded-[0.3rem] bg-stone-100 sm:size-20">
+                      <Link href={result.url} className="flex gap-4 py-4 transition-colors hover:bg-surface-muted">
+                        <div className="relative size-16 shrink-0 overflow-hidden rounded-[0.3rem] bg-surface-strong sm:size-20">
                           <SmartImage
                             media={
                               result.imageUrl
@@ -93,6 +93,19 @@ export default async function BuscarPage({
                                     height: null,
                                     blurDataUrl: null,
                                     externalUrl: null,
+                                    /*
+                                     * Search returns a flat projection with
+                                     * no licence data, so no credit is
+                                     * rendered on these thumbnails. That is
+                                     * the normal reading of "attribution
+                                     * reasonable to the medium": the credit
+                                     * appears in full on the page each result
+                                     * links to, one click away.
+                                     */
+                                    license: null,
+                                    attributionText: null,
+                                    attributionUrl: null,
+                                    sourceUrl: null,
                                   }
                                 : null
                             }
@@ -103,14 +116,14 @@ export default async function BuscarPage({
                         </div>
 
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-sans text-[0.9375rem] font-semibold text-lenga-950">
+                          <h3 className="font-sans text-[0.9375rem] font-semibold text-heading">
                             {result.title}
                           </h3>
-                          <p className="mt-1 line-clamp-2 text-[0.8125rem] leading-relaxed text-lenga-600">
+                          <p className="mt-1 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                             {result.excerpt}
                           </p>
                           {result.priceCents ? (
-                            <p className="mt-1.5 text-[0.8125rem] font-semibold text-lenga-900">
+                            <p className="mt-1.5 text-[0.8125rem] font-semibold text-heading">
                               Desde {formatMoney(result.priceCents, result.currency ?? 'ARS')}
                             </p>
                           ) : null}

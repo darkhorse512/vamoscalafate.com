@@ -8,12 +8,17 @@
    a cool neutral palette, tighter type, tabular data, and no decoration that
    does not carry information.
 
-   The one shared element is the glacier accent, so the two applications still
+   The one shared element is the violet accent, so the two applications still
    read as the same product.
+
+   As on the public site, interface chrome uses the semantic tokens
+   (`bg-surface`, `text-foreground`, `border-border`) rather than the fixed
+   ramps, so the dark theme works without a second set of components. Fixed
+   ramp values are for the few places colour must not change.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* Cool slate neutrals - distinct from the public site's warm stone. */
+  /* Cool slate neutrals - distinct from the public site's violet-tinted stone. */
   --color-slate-50: #f8fafb;
   --color-slate-100: #f1f4f6;
   --color-slate-200: #e3e8ec;
@@ -27,28 +32,48 @@
   --color-slate-950: #121a1f;
 
   /* Shared accent, tying the two apps together. */
-  --color-glacier-50: #f0f7fa;
-  --color-glacier-100: #dcedf4;
-  --color-glacier-200: #bcdce9;
-  --color-glacier-300: #8dc3d8;
-  --color-glacier-400: #56a2c1;
-  --color-glacier-500: #3585a7;
-  --color-glacier-600: #2a6c8c;
-  --color-glacier-700: #255872;
-  --color-glacier-800: #244a5f;
-  --color-glacier-900: #223f51;
+  --color-violet-50: #f4f2ff;
+  --color-violet-100: #ebe7ff;
+  --color-violet-200: #d9d2ff;
+  --color-violet-300: #bfb1ff;
+  --color-violet-400: #a56afd;
+  --color-violet-500: #6c58fe;
+  --color-violet-600: #5a3ef0;
+  --color-violet-700: #4b2fd6;
+  --color-violet-800: #3e28ad;
+  --color-violet-900: #35258a;
+  --color-violet-950: #211552;
+
+  /* ── Semantic tokens, redefined per theme below ────────────────────────── */
+  --color-background: var(--sem-background);
+  --color-surface: var(--sem-surface);
+  --color-surface-muted: var(--sem-surface-muted);
+  --color-surface-strong: var(--sem-surface-strong);
+
+  --color-foreground: var(--sem-foreground);
+  --color-heading: var(--sem-heading);
+  --color-muted-foreground: var(--sem-muted-foreground);
+  --color-subtle-foreground: var(--sem-subtle-foreground);
+
+  --color-border: var(--sem-border);
+  --color-border-strong: var(--sem-border-strong);
+
+  --color-primary: var(--sem-primary);
+  --color-primary-hover: var(--sem-primary-hover);
+  --color-primary-foreground: var(--sem-primary-foreground);
+  --color-primary-soft: var(--sem-primary-soft);
 
   /* Status colours, used consistently across every badge and chart. */
-  --color-status-success: #2f6f4f;
-  --color-status-successBg: #edf5f0;
-  --color-status-warning: #8a6014;
-  --color-status-warningBg: #fbf4e6;
-  --color-status-danger: #9b3232;
-  --color-status-dangerBg: #fbeeee;
-  --color-status-info: #255872;
-  --color-status-infoBg: #eef5f8;
-  --color-status-neutral: #51606c;
-  --color-status-neutralBg: #f1f4f6;
+  --color-status-success: var(--sem-success);
+  --color-status-successBg: var(--sem-success-bg);
+  --color-status-warning: var(--sem-warning);
+  --color-status-warningBg: var(--sem-warning-bg);
+  --color-status-danger: var(--sem-danger);
+  --color-status-dangerBg: var(--sem-danger-bg);
+  --color-status-info: var(--sem-info);
+  --color-status-infoBg: var(--sem-info-bg);
+  --color-status-neutral: var(--sem-muted-foreground);
+  --color-status-neutralBg: var(--sem-surface-strong);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* Tabular figures keep money and counts aligned in tables. */
@@ -61,27 +86,124 @@
   --radius-panel: 0.5rem;
 }
 
+/* ── Light, on bare :root so no colour is defined only inside a query ────── */
+:root {
+  color-scheme: light;
+
+  --sem-background: #f8fafb;
+  --sem-surface: #ffffff;
+  --sem-surface-muted: #f8fafb;
+  --sem-surface-strong: #f1f4f6;
+
+  --sem-foreground: #2c363e;
+  --sem-heading: #1d252b;
+  --sem-muted-foreground: #51606c;
+  --sem-subtle-foreground: #6b7a87;
+
+  --sem-border: #e3e8ec;
+  --sem-border-strong: #cbd3da;
+
+  --sem-primary: #5a3ef0;
+  --sem-primary-hover: #4b2fd6;
+  --sem-primary-foreground: #ffffff;
+  --sem-primary-soft: #ebe7ff;
+
+  --sem-success: #1f7a52;
+  --sem-success-bg: #e8f5ee;
+  --sem-warning: #8a6014;
+  --sem-warning-bg: #fbf4e6;
+  --sem-danger: #b32d3d;
+  --sem-danger-bg: #fbeeef;
+  --sem-info: #4b2fd6;
+  --sem-info-bg: #ebe7ff;
+}
+
+/* Dark palette, applied for the OS preference unless light was chosen. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --sem-background: #0e1418;
+    --sem-surface: #161e24;
+    --sem-surface-muted: #1b242b;
+    --sem-surface-strong: #222d35;
+
+    --sem-foreground: #d4dde3;
+    --sem-heading: #f1f4f6;
+    --sem-muted-foreground: #97a4af;
+    --sem-subtle-foreground: #7d8b97;
+
+    --sem-border: #2a353d;
+    --sem-border-strong: #3a4751;
+
+    --sem-primary: #a56afd;
+    --sem-primary-hover: #bfb1ff;
+    --sem-primary-foreground: #1a0029;
+    --sem-primary-soft: #2b2047;
+
+    --sem-success: #4bbd87;
+    --sem-success-bg: #11291f;
+    --sem-warning: #e0a93f;
+    --sem-warning-bg: #2d2411;
+    --sem-danger: #ff7a89;
+    --sem-danger-bg: #331519;
+    --sem-info: #bfb1ff;
+    --sem-info-bg: #241b3d;
+  }
+}
+
+/* An explicit choice, which must beat the OS preference. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --sem-background: #0e1418;
+  --sem-surface: #161e24;
+  --sem-surface-muted: #1b242b;
+  --sem-surface-strong: #222d35;
+
+  --sem-foreground: #d4dde3;
+  --sem-heading: #f1f4f6;
+  --sem-muted-foreground: #97a4af;
+  --sem-subtle-foreground: #7d8b97;
+
+  --sem-border: #2a353d;
+  --sem-border-strong: #3a4751;
+
+  --sem-primary: #a56afd;
+  --sem-primary-hover: #bfb1ff;
+  --sem-primary-foreground: #1a0029;
+  --sem-primary-soft: #2b2047;
+
+  --sem-success: #4bbd87;
+  --sem-success-bg: #11291f;
+  --sem-warning: #e0a93f;
+  --sem-warning-bg: #2d2411;
+  --sem-danger: #ff7a89;
+  --sem-danger-bg: #331519;
+  --sem-info: #bfb1ff;
+  --sem-info-bg: #241b3d;
+}
+
 @layer base {
   :root {
-    color-scheme: light;
     --sidebar-width: 15rem;
     --topbar-height: 3.5rem;
   }
 
   * {
-    @apply border-slate-200;
+    @apply border-border;
   }
 
   body {
-    @apply bg-slate-50 font-sans text-[0.875rem] leading-normal text-slate-800 antialiased;
+    @apply bg-background font-sans text-[0.875rem] leading-normal text-foreground antialiased;
   }
 
   h1, h2, h3, h4 {
-    @apply font-semibold tracking-tight text-slate-900;
+    @apply font-semibold tracking-tight text-heading;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-glacier-600 ring-offset-1 ring-offset-white;
+    @apply outline-none ring-2 ring-primary ring-offset-1 ring-offset-background;
   }
 
   /* Money and counts line up column-wise. */
@@ -99,18 +221,18 @@
 
 @layer components {
   .admin-input {
-    @apply w-full rounded-control border border-slate-300 bg-white px-3 py-2
-           text-[0.875rem] text-slate-900 placeholder:text-slate-400
-           focus:border-glacier-600 focus:outline-none focus:ring-1 focus:ring-glacier-600
-           disabled:bg-slate-100 disabled:text-slate-500;
+    @apply w-full rounded-control border border-border-strong bg-surface px-3 py-2
+           text-[0.875rem] text-heading placeholder:text-subtle-foreground
+           focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary
+           disabled:bg-surface-strong disabled:text-muted-foreground;
   }
 
   .admin-label {
-    @apply mb-1.5 block text-[0.8125rem] font-medium text-slate-700;
+    @apply mb-1.5 block text-[0.8125rem] font-medium text-foreground;
   }
 
   .admin-panel {
-    @apply rounded-panel border border-slate-200 bg-white shadow-card;
+    @apply rounded-panel border border-border bg-surface shadow-card;
   }
 
   /* Dense table defaults, shared by every DataTable instance. */
@@ -118,13 +240,13 @@
     @apply w-full border-collapse text-[0.8125rem];
   }
   .admin-table th {
-    @apply whitespace-nowrap border-b border-slate-200 bg-slate-50 px-3 py-2.5 text-left
-           text-[0.6875rem] font-semibold uppercase tracking-wide text-slate-500;
+    @apply whitespace-nowrap border-b border-border bg-surface-muted px-3 py-2.5 text-left
+           text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle-foreground;
   }
   .admin-table td {
-    @apply border-b border-slate-100 px-3 py-2.5 align-middle text-slate-700;
+    @apply border-b border-border px-3 py-2.5 align-middle text-foreground;
   }
   .admin-table tbody tr:hover {
-    @apply bg-slate-50;
+    @apply bg-surface-muted;
   }
 }
