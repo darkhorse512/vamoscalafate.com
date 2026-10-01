@@ -42,7 +42,7 @@ export function TourCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-float focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2',
+        'group relative flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-float has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary has-[:focus-visible]:ring-offset-2',
         className,
       )}
     >

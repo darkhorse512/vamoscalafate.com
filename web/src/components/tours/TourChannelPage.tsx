@@ -86,7 +86,10 @@ export async function TourChannelPage({
       </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
-        <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10">
+        {/* Row 1 (sort bar) sizes to its content; any extra height from the taller
+            filter sidebar goes to row 2. Without this, a short result list
+            left a large gap between the sort bar and the cards. */}
+        <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10">
           <TourFilters
             basePath={basePath}
             categories={categories.map((c) => ({

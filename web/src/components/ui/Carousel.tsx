@@ -16,8 +16,11 @@ import { cn } from '@/lib/utils'
  *  · Slides are Server Components passed as `children`, so the cards inside
  *    ship no client JavaScript of their own.
  *
- * The client code here does only what CSS cannot: enable and disable the
- * arrows at the ends, and track which slide is showing.
+ * Underneath sits a control bar: a slim scrollbar whose thumb is as wide as
+ * the visible share of the row and sits where the view is — it can be
+ * dragged, and clicking the track jumps there — plus a position counter and
+ * the arrows. On desktop the row can also be dragged with the mouse; touch
+ * keeps the native swipe.
  */
 export function Carousel({
   children,
@@ -25,21 +28,24 @@ export function Carousel({
   /** Tailwind basis classes controlling how many slides are visible. */
   slideClass = 'basis-[86%] sm:basis-[48%] lg:basis-[31.5%]',
   className,
-  showDots = true,
 }: {
   children: React.ReactNode
   ariaLabel: string
   slideClass?: string
   className?: string
-  showDots?: boolean
 }) {
   const trackRef = useRef<HTMLUListElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
+
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [slideCount, setSlideCount] = useState(0)
+  /** Thumb geometry as fractions of the track: width and left offset. */
+  const [thumb, setThumb] = useState({ size: 1, offset: 0 })
+  const [dragging, setDragging] = useState(false)
 
-  /** Recomputes arrow state and the active dot from the scroll position. */
+  /** Recomputes arrows, counter and thumb from the scroll position. */
   const sync = useCallback(() => {
     const track = trackRef.current
     if (!track) return
@@ -49,10 +55,15 @@ export function Carousel({
     setAtStart(scrollLeft <= 2)
     setAtEnd(scrollLeft + clientWidth >= scrollWidth - 2)
 
+    const size = scrollWidth > 0 ? Math.min(1, clientWidth / scrollWidth) : 1
+    const maxScroll = Math.max(1, scrollWidth - clientWidth)
+    setThumb({ size, offset: (scrollLeft / maxScroll) * (1 - size) })
+
     const slides = Array.from(track.children) as HTMLElement[]
     setSlideCount(slides.length)
 
-    // The active slide is whichever starts nearest the container's left edge.
+    // The active slide is whichever starts nearest the container's left edge;
+    // at the very end, the last slide (it may never reach the left edge).
     let nearest = 0
     let smallest = Number.POSITIVE_INFINITY
     slides.forEach((slide, index) => {
@@ -62,7 +73,7 @@ export function Carousel({
         nearest = index
       }
     })
-    setActiveIndex(nearest)
+    setActiveIndex(scrollLeft + clientWidth >= scrollWidth - 2 ? slides.length - 1 : nearest)
   }, [])
 
   useEffect(() => {
@@ -82,43 +93,111 @@ export function Carousel({
     }
   }, [sync])
 
-  /** Scrolls by one slide width, honouring the reduced-motion preference. */
+  const behavior = (): ScrollBehavior =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+
+  /** Scrolls by one slide width. */
   const scrollByPage = useCallback((direction: 1 | -1) => {
     const track = trackRef.current
     if (!track) return
-
     const first = track.firstElementChild as HTMLElement | null
     const step = first ? first.getBoundingClientRect().width + 20 : track.clientWidth * 0.8
-
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    track.scrollBy({ left: step * direction, behavior: prefersReduced ? 'auto' : 'smooth' })
+    track.scrollBy({ left: step * direction, behavior: behavior() })
   }, [])
 
-  const goTo = useCallback((index: number) => {
+  // ── Mouse drag on the slides (desktop) ───────────────────────────────────
+  /*
+   * Scroll-snap fights a manual drag, so it is suspended while dragging and
+   * restored afterwards, letting the browser settle on the nearest slide. A
+   * drag must not also count as a click on the card under the pointer, so a
+   * movement past a few pixels swallows the click that follows.
+   */
+  const drag = useRef({ active: false, startX: 0, startScroll: 0, moved: false })
+
+  function onTrackPointerDown(event: React.PointerEvent<HTMLUListElement>) {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return
     const track = trackRef.current
     if (!track) return
-    const slide = track.children[index] as HTMLElement | undefined
-    if (!slide) return
+    drag.current = { active: true, startX: event.clientX, startScroll: track.scrollLeft, moved: false }
+  }
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  function onTrackPointerMove(event: React.PointerEvent<HTMLUListElement>) {
+    const track = trackRef.current
+    const state = drag.current
+    if (!track || !state.active) return
+    const delta = event.clientX - state.startX
+    if (!state.moved && Math.abs(delta) > 5) {
+      state.moved = true
+      setDragging(true)
+      track.setPointerCapture(event.pointerId)
+    }
+    if (state.moved) track.scrollLeft = state.startScroll - delta
+  }
+
+  function endTrackDrag(event: React.PointerEvent<HTMLUListElement>) {
+    const track = trackRef.current
+    if (!drag.current.active) return
+    drag.current.active = false
+    if (track?.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId)
+    setDragging(false)
+  }
+
+  // ── Scrollbar thumb drag and track click ────────────────────────────────
+  const thumbDrag = useRef({ active: false, startX: 0, startScroll: 0 })
+
+  function onThumbPointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    const track = trackRef.current
+    if (!track) return
+    event.preventDefault()
+    event.stopPropagation()
+    thumbDrag.current = { active: true, startX: event.clientX, startScroll: track.scrollLeft }
+    event.currentTarget.setPointerCapture(event.pointerId)
+    setDragging(true)
+  }
+
+  function onThumbPointerMove(event: React.PointerEvent<HTMLDivElement>) {
+    const track = trackRef.current
+    const bar = barRef.current
+    if (!track || !bar || !thumbDrag.current.active) return
+    // Convert pointer travel along the bar into scroll distance.
+    const ratio = (track.scrollWidth - track.clientWidth) / (bar.clientWidth * (1 - thumb.size) || 1)
+    track.scrollLeft = thumbDrag.current.startScroll + (event.clientX - thumbDrag.current.startX) * ratio
+  }
+
+  function onThumbPointerUp(event: React.PointerEvent<HTMLDivElement>) {
+    thumbDrag.current.active = false
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+    setDragging(false)
+  }
+
+  function onBarPointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    const track = trackRef.current
+    const bar = barRef.current
+    if (!track || !bar) return
+    const rect = bar.getBoundingClientRect()
+    // Centre the thumb on the pressed point.
+    const fraction = (event.clientX - rect.left) / rect.width - thumb.size / 2
+    const clamped = Math.min(1 - thumb.size, Math.max(0, fraction))
     track.scrollTo({
-      left: slide.offsetLeft - track.offsetLeft,
-      behavior: prefersReduced ? 'auto' : 'smooth',
+      left: (clamped / Math.max(0.0001, 1 - thumb.size)) * (track.scrollWidth - track.clientWidth),
+      behavior: behavior(),
     })
-  }, [])
+  }
+
+  const scrollable = thumb.size < 0.999
+  const pad = (n: number) => String(n).padStart(2, '0')
 
   return (
     <div className={cn('relative', className)}>
       <ul
         ref={trackRef}
-        // `group` on the section lets the arrows fade in on hover.
         className={cn(
-          'no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5',
-          // Room for the card shadow so it is not clipped by overflow.
-          'py-2 sm:-mx-1 sm:px-1',
+          'no-scrollbar -mx-5 flex gap-5 overflow-x-auto px-5 sm:-mx-1 sm:px-1',
+          // Room for the card shadow and hover lift so they are not clipped.
+          'pb-3 pt-2',
+          dragging ? 'cursor-grabbing select-none snap-none' : 'snap-x snap-mandatory scroll-smooth lg:cursor-grab',
         )}
         // Keyboard users can focus the track and scroll it with arrow keys.
         tabIndex={0}
@@ -134,6 +213,18 @@ export function Carousel({
             scrollByPage(-1)
           }
         }}
+        onPointerDown={onTrackPointerDown}
+        onPointerMove={onTrackPointerMove}
+        onPointerUp={endTrackDrag}
+        onPointerCancel={endTrackDrag}
+        onClickCapture={(event) => {
+          if (drag.current.moved) {
+            event.preventDefault()
+            event.stopPropagation()
+            drag.current.moved = false
+          }
+        }}
+        onDragStart={(event) => event.preventDefault()}
       >
         {Array.isArray(children)
           ? children.map((child, index) => (
@@ -148,56 +239,83 @@ export function Carousel({
           : children}
       </ul>
 
-      {/* Arrows: desktop only. On touch, swiping is the natural gesture and a
-          floating arrow just covers content. */}
-      <button
-        type="button"
-        onClick={() => scrollByPage(-1)}
-        disabled={atStart}
-        aria-label={`Anterior: ${ariaLabel}`}
-        className={cn(
-          'absolute -left-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
-          'hover:border-primary/40 hover:text-primary-hover',
-          atStart && 'pointer-events-none opacity-0',
-        )}
-      >
-        <ChevronLeft className="size-5" aria-hidden="true" />
-      </button>
-
-      <button
-        type="button"
-        onClick={() => scrollByPage(1)}
-        disabled={atEnd}
-        aria-label={`Siguiente: ${ariaLabel}`}
-        className={cn(
-          'absolute -right-4 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-surface/95 text-foreground shadow-raised backdrop-blur transition-all lg:grid',
-          'hover:border-primary/40 hover:text-primary-hover',
-          atEnd && 'pointer-events-none opacity-0',
-        )}
-      >
-        <ChevronRight className="size-5" aria-hidden="true" />
-      </button>
-
-      {showDots && slideCount > 1 ? (
-        <div className="mt-5 flex justify-center gap-1.5" role="tablist" aria-label={`Ir a un elemento: ${ariaLabel}`}>
-          {Array.from({ length: slideCount }, (_, index) => (
-            <button
-              key={index}
-              type="button"
-              role="tab"
-              aria-selected={index === activeIndex}
-              aria-label={`Ir al elemento ${index + 1}`}
-              onClick={() => goTo(index)}
+      {/* ── Control bar ─────────────────────────────────────────────── */}
+      {scrollable ? (
+        <div className="mt-5 flex items-center gap-4 sm:gap-6">
+          <div
+            ref={barRef}
+            onPointerDown={onBarPointerDown}
+            className="group relative h-6 flex-1 cursor-pointer touch-none"
+            aria-hidden="true"
+          >
+            {/* Track */}
+            <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-border transition-[height] duration-200 group-hover:h-1.5" />
+            {/* Thumb */}
+            <div
+              onPointerDown={onThumbPointerDown}
+              onPointerMove={onThumbPointerMove}
+              onPointerUp={onThumbPointerUp}
+              onPointerCancel={onThumbPointerUp}
               className={cn(
-                'h-1.5 rounded-full transition-all duration-300',
-                index === activeIndex
-                  ? 'w-7 bg-gradient-to-r from-violet-600 to-magenta-500'
-                  : 'w-1.5 bg-surface-strong hover:bg-stone-400',
+                'absolute top-1/2 -translate-y-1/2 cursor-grab rounded-full bg-gradient-to-r from-violet-600 to-magenta-500 active:cursor-grabbing',
+                // Exclusive branches: `cn` does not merge conflicting heights.
+                dragging ? 'h-1.5 shadow-[0_0_0_4px_rgb(108_88_254/0.15)]' : 'h-1 group-hover:h-1.5',
               )}
+              style={{
+                width: `${thumb.size * 100}%`,
+                left: `${thumb.offset * 100}%`,
+                // No easing while dragging, so the thumb tracks the pointer.
+                transitionProperty: dragging ? 'height, box-shadow' : 'left, height, box-shadow',
+                transitionDuration: dragging ? '0ms, 200ms, 200ms' : '150ms',
+              }}
             />
-          ))}
+          </div>
+
+          <p className="shrink-0 font-display text-sm tabular-nums text-muted-foreground" aria-live="polite">
+            <span className="font-bold text-heading">{pad(activeIndex + 1)}</span>
+            <span className="mx-1 text-subtle-foreground">/</span>
+            {pad(slideCount)}
+          </p>
+
+          <div className="flex shrink-0 gap-2">
+            <ArrowButton label={`Anterior: ${ariaLabel}`} disabled={atStart} onClick={() => scrollByPage(-1)}>
+              <ChevronLeft className="size-5" aria-hidden="true" />
+            </ArrowButton>
+            <ArrowButton label={`Siguiente: ${ariaLabel}`} disabled={atEnd} onClick={() => scrollByPage(1)}>
+              <ChevronRight className="size-5" aria-hidden="true" />
+            </ArrowButton>
+          </div>
         </div>
       ) : null}
     </div>
+  )
+}
+
+function ArrowButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className={cn(
+        'grid size-11 place-items-center rounded-full border transition-all duration-200',
+        disabled
+          ? 'cursor-not-allowed border-border text-subtle-foreground/50'
+          : 'border-border-strong bg-surface text-heading shadow-subtle hover:-translate-y-px hover:border-transparent hover:bg-gradient-to-br hover:from-violet-600 hover:to-magenta-500 hover:text-white hover:shadow-[0_8px_20px_rgb(108_88_254/0.3)]',
+      )}
+    >
+      {children}
+    </button>
   )
 }
