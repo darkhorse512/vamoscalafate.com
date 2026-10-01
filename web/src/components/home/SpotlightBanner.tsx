@@ -13,7 +13,15 @@ import { Price } from '@/components/tours/Price'
  * booking — duration, place, price — on the other. Everything shown comes
  * from the tour record, so the banner cannot drift from the product page.
  */
-export function SpotlightBanner({ tour }: { tour: SpotlightTour }) {
+export function SpotlightBanner({
+  tour,
+  eyebrow = 'Experiencia imperdible',
+  ctaLabel = 'Ver fechas y reservar',
+}: {
+  tour: SpotlightTour
+  eyebrow?: string
+  ctaLabel?: string
+}) {
   const [main, second, third] = tour.images
 
   return (
@@ -56,7 +64,7 @@ export function SpotlightBanner({ tour }: { tour: SpotlightTour }) {
         <div className="reveal">
           <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-magenta-300">
             <span className="accent-rule" aria-hidden="true" />
-            Experiencia imperdible · {tour.categoryName}
+            {eyebrow} · {tour.categoryName}
           </p>
 
           <h2 className="mt-4 font-display text-display-md font-bold leading-[1.08] text-white">
@@ -98,7 +106,7 @@ export function SpotlightBanner({ tour }: { tour: SpotlightTour }) {
               <Price cents={tour.fromPriceCents} currency={tour.currency} from size="lg" />
             </div>
             <ButtonLink href={ROUTES.tour(tour.slug)} size="lg" variant="accent" className="shadow-accent">
-              Ver fechas y reservar
+              {ctaLabel}
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
           </div>

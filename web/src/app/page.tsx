@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { ArrowRight, Clock, Compass, MapPin, MessagesSquare, ShieldCheck } from 'lucide-react'
+import {
+  ArrowRight, Clock, Compass, Heart, Map as MapIcon, MapPin, MessagesSquare, ShieldCheck, Star, Users,
+} from 'lucide-react'
 import { ROUTES, absoluteUrl } from '@vamos/shared'
+import type { HomeConfig, HomeSectionId } from '@vamos/validation'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
@@ -16,63 +19,69 @@ import { PhotoMarquee } from '@/components/home/PhotoMarquee'
 import { StoryCarousel } from '@/components/home/StoryCarousel'
 import { ReviewsCarousel } from '@/components/home/ReviewsCarousel'
 import { MustSeeBanner } from '@/components/home/MustSeeBanner'
-import { SEASONS } from '@/lib/seasons'
-import {
-  getCatalogue,
-  getCategoryTiles,
-  getHeroSlides,
-  getMustSeeTours,
-  getHomeReviews,
-  getSeasonImages,
-  getShowcasePhotos,
-  getSpotlightTour,
-} from '@/server/queries/home'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { ButtonLink } from '@/components/ui/Button'
-import { TourCarousel } from '@/components/tours/TourCarousel'
 import { TourCard } from '@/components/tours/TourCard'
 import { DestinationCarousel } from '@/components/marketing/DestinationCarousel'
 import { SmartImage } from '@/components/media/SmartImage'
 import { HomeSearch } from '@/components/marketing/HomeSearch'
-import { getTourCategories, listTours } from '@/server/queries/tours'
+import { cn } from '@/lib/utils'
+import { getTourCategories } from '@/server/queries/tours'
+import { getHeroImage, listBlogPosts, listDestinations, listHotels } from '@/server/queries/content'
 import {
-  getHeroImage,
-  getSiteSettings,
-  listBlogPosts,
-  listDestinations,
-  listHotels,
-} from '@/server/queries/content'
-
-/** Distances are road distances, rounded; they describe the route, not a service promise. */
-const TRANSFER_ROUTES = [
-  { from: 'Aeropuerto FTE', to: 'El Calafate', detail: 'Unos 23 km por la Ruta 11 · aprox. 25 minutos' },
-  { from: 'El Calafate', to: 'El Chaltén', detail: 'Unos 215 km por las rutas 40 y 23 · aprox. 3 horas' },
-]
+  getCatalogue,
+  getCategoryTiles,
+  getHeroSlides,
+  getHomeConfig,
+  getHomeReviews,
+  getMediaByIds,
+  getMustSeeTours,
+  getSeasonImages,
+  getShowcasePhotos,
+  getSpotlightTour,
+} from '@/server/queries/home'
 
 export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl('/') },
 }
 
+/** Sections drawn full-bleed; the others alternate white / tinted bands. */
+const FULL_BLEED: HomeSectionId[] = ['search', 'spotlight', 'facts', 'cta']
+
+const WHY_ICONS = {
+  compass: Compass,
+  clock: Clock,
+  shield: ShieldCheck,
+  messages: MessagesSquare,
+  star: Star,
+  heart: Heart,
+  map: MapIcon,
+  users: Users,
+} as const
+
 /**
  * Homepage.
  *
- * A Server Component throughout: the only client JavaScript is the header,
- * the search box and the consent banner. Everything else - hero, grids,
- * editorial - is HTML on first paint.
+ * Rendered entirely from the homepage configuration that editors manage in
+ * the admin ("Página de inicio"): which sections appear, in what order, and
+ * all their texts, images, buttons and items. Without a saved configuration
+ * the defaults reproduce the page as designed.
  *
- * Data is fetched in parallel; a waterfall of sequential awaits here would
- * add a full round-trip per section to TTFB.
+ * A section that is switched off, or that has nothing real to show (no
+ * approved reviews, no hotels yet), renders nothing rather than an empty
+ * frame. Data is fetched in parallel.
  */
 export default async function HomePage() {
+  const config = await getHomeConfig()
+  const s = config.sections
+
   const [
+    hero,
+    heroImage,
     categories,
-    transfers,
     destinations,
     posts,
     hotels,
-    settings,
-    heroImage,
-    slides,
     tiles,
     spotlight,
     showcase,
@@ -80,47 +89,318 @@ export default async function HomePage() {
     seasonImages,
     catalogue,
     mustSee,
+    chosenMedia,
   ] = await Promise.all([
-    getTourCategories('excursiones'),
-    listTours({ channel: 'traslados', pageSize: 6 }),
-    listDestinations(),
-    listBlogPosts({ pageSize: 8 }),
-    listHotels({ pageSize: 3 }),
-    getSiteSettings(),
-    getHeroImage(),
     getHeroSlides(),
+    getHeroImage(),
+    getTourCategories('excursiones'),
+    listDestinations(),
+    listBlogPosts({ pageSize: s.guide.count }),
+    listHotels({ pageSize: 3 }),
     getCategoryTiles('excursiones'),
-    getSpotlightTour(),
-    getShowcasePhotos(16),
+    s.spotlight.tourSlug ? getSpotlightTour(s.spotlight.tourSlug) : Promise.resolve(null),
+    getShowcasePhotos(s.gallery.maxPhotos),
     getHomeReviews(9),
     getSeasonImages(),
-    getCatalogue(),
-    getMustSeeTours(),
+    getCatalogue(s.catalogue.tourSlugs),
+    getMustSeeTours(s.catalogue.banner.tourSlugs),
+    getMediaByIds([s.facts.imageId, s.cta.imageId, ...s.seasons.items.map((item) => item.imageId)]),
   ])
 
-  const heroTitle =
-    typeof settings['site.heroTitle'] === 'string'
-      ? settings['site.heroTitle']
-      : 'Viví la Patagonia desde El Calafate'
+  // Alternate the tinted background across the band sections that are on.
+  let band = 0
+  const tinted = new Map<HomeSectionId, boolean>()
+  for (const id of config.order) {
+    if (!s[id].enabled || FULL_BLEED.includes(id)) continue
+    tinted.set(id, band % 2 === 1)
+    band += 1
+  }
 
-  const heroSubtitle =
-    typeof settings['site.heroSubtitle'] === 'string'
-      ? settings['site.heroSubtitle']
-      : 'Excursiones al Glaciar Perito Moreno, navegaciones por el Lago Argentino y traslados, con reserva online.'
+  const firstSlide = config.hero.slides[0]!
 
-  // An operator-written headline overrides the first slide's copy.
-  const heroSlides = slides.map((slide, index) =>
-    index === 0 ? { ...slide, title: heroTitle, description: heroSubtitle } : slide,
-  )
+  const render: Record<HomeSectionId, () => React.ReactNode> = {
+    // ── Search ───────────────────────────────────────────────────────────
+    search: () => (
+      <section key="search" className="relative z-20 -mt-10 pb-4" aria-label="Buscar experiencias">
+        <div className="container-page">
+          <HomeSearch categories={categories.map((c) => ({ slug: c.slug, name: c.name }))} />
+        </div>
+      </section>
+    ),
 
-  const seasons = SEASONS.map((season) => ({
-    ...season,
-    goodFor: [...season.goodFor],
-    media: seasonImages[season.imageSlug] ?? null,
-  }))
+    // ── Catalogue, with the "3 imperdibles" banner and closing card ──────
+    catalogue: () => {
+      if (catalogue.length === 0) return null
+      const split = s.catalogue.banner.enabled ? s.catalogue.tilesBeforeBanner : catalogue.length
+      const before = catalogue.slice(0, split)
+      const after = catalogue.slice(split)
+      const closing = s.catalogue.closingCard
+      // The closing card fills an incomplete last row so the grid never ends ragged.
+      const remainder = after.length % 3
+      const showClosing = closing.enabled && after.length > 0 && remainder !== 0
 
-  const factsImage = seasonImages['glaciar-perito-moreno'] ?? heroImage
-  const ctaImage = seasonImages['lago-argentino'] ?? seasonImages['el-chalten'] ?? null
+      return (
+        <Band key="catalogue" tinted={tinted.get('catalogue')}>
+          <Heading content={s.catalogue.heading} link={{ href: ROUTES.tours, label: 'Ver el catálogo con filtros' }} />
+
+          {before.length > 0 ? (
+            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {before.map((tour, index) => (
+                <li key={tour.id} className="reveal flex min-w-0">
+                  <TourCard tour={tour} priority={index < 3} className="w-full" />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          {s.catalogue.banner.enabled ? (
+            <div className={before.length > 0 ? 'my-12' : 'mb-12 mt-10'}>
+              <MustSeeBanner tours={mustSee} content={s.catalogue.banner} />
+            </div>
+          ) : null}
+
+          {after.length > 0 ? (
+            <ul className={cn('grid gap-6 sm:grid-cols-2 lg:grid-cols-3', !s.catalogue.banner.enabled && 'mt-10')}>
+              {after.map((tour) => (
+                <li key={tour.id} className="reveal flex min-w-0">
+                  <TourCard tour={tour} className="w-full" />
+                </li>
+              ))}
+              {showClosing ? (
+                <li
+                  className={cn(
+                    'reveal flex min-w-0',
+                    remainder === 1 && 'lg:col-span-2',
+                    after.length % 2 === 0 && 'sm:col-span-2 lg:col-span-1',
+                  )}
+                >
+                  <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-[1.25rem] bg-aurora p-7 text-white shadow-raised sm:p-9">
+                    <div>
+                      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">{closing.eyebrow}</p>
+                      <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-white sm:text-[1.75rem]">
+                        {closing.title}
+                      </h3>
+                      <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/75">{closing.body}</p>
+                    </div>
+                    <div className="mt-7 flex flex-wrap gap-3">
+                      {closing.primary.label ? (
+                        <ButtonLink href={closing.primary.href || ROUTES.contact} variant="accent">
+                          {closing.primary.label}
+                          <ArrowRight className="size-4" aria-hidden="true" />
+                        </ButtonLink>
+                      ) : null}
+                      {closing.secondary.label ? (
+                        <ButtonLink href={closing.secondary.href || ROUTES.tours} variant="glass">
+                          {closing.secondary.label}
+                        </ButtonLink>
+                      ) : null}
+                    </div>
+                  </div>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
+        </Band>
+      )
+    },
+
+    // ── Experience types ─────────────────────────────────────────────────
+    categories: () =>
+      tiles.length > 0 ? (
+        <Band key="categories" tinted={tinted.get('categories')} dots>
+          <Heading content={s.categories.heading} link={{ href: ROUTES.tours, label: 'Ver el catálogo completo' }} />
+          <div className="mt-10">
+            <CategoryTiles categories={tiles} />
+          </div>
+        </Band>
+      ) : null,
+
+    // ── Spotlight ────────────────────────────────────────────────────────
+    spotlight: () =>
+      spotlight ? (
+        <SpotlightBanner key="spotlight" tour={spotlight} eyebrow={s.spotlight.eyebrow} ctaLabel={s.spotlight.ctaLabel} />
+      ) : null,
+
+    // ── Destinations ─────────────────────────────────────────────────────
+    destinations: () =>
+      destinations.length > 0 ? (
+        <Band key="destinations" tinted={tinted.get('destinations')}>
+          <Heading content={s.destinations.heading} link={{ href: ROUTES.destinations, label: 'Ver todos los destinos' }} />
+          <div className="reveal mt-10">
+            <DestinationCarousel destinations={destinations} ariaLabel="Destinos de la región" />
+          </div>
+        </Band>
+      ) : null,
+
+    // ── Facts ────────────────────────────────────────────────────────────
+    facts: () => (
+      <FactsBanner
+        key="facts"
+        media={chosenMedia[s.facts.imageId] ?? seasonImages['glaciar-perito-moreno'] ?? heroImage}
+        eyebrow={s.facts.eyebrow}
+        title={s.facts.title}
+        items={s.facts.items}
+      />
+    ),
+
+    // ── Seasons ──────────────────────────────────────────────────────────
+    seasons: () => (
+      <Band key="seasons" tinted={tinted.get('seasons')}>
+        <Heading content={s.seasons.heading} align="center" />
+        <div className="reveal mt-10">
+          <SeasonTabs
+            seasons={s.seasons.items.map((item) => ({
+              ...item,
+              media: chosenMedia[item.imageId] ?? seasonImages[item.imageFrom] ?? null,
+            }))}
+          />
+        </div>
+      </Band>
+    ),
+
+    // ── Photo strip ──────────────────────────────────────────────────────
+    gallery: () =>
+      showcase.length >= 4 ? (
+        <section
+          key="gallery"
+          className={cn('py-16 sm:py-24', tinted.get('gallery') && 'border-y border-border bg-surface-muted')}
+        >
+          <div className="container-page">
+            <Heading content={s.gallery.heading} align="center" />
+          </div>
+          <div className="mt-10">
+            <PhotoMarquee photos={showcase} />
+          </div>
+        </section>
+      ) : null,
+
+    // ── Reviews: only real, approved ones ────────────────────────────────
+    reviews: () =>
+      reviews.length > 0 ? (
+        <Band key="reviews" tinted={tinted.get('reviews')}>
+          <Heading content={s.reviews.heading} />
+          <div className="reveal mt-10">
+            <ReviewsCarousel reviews={reviews} />
+          </div>
+        </Band>
+      ) : null,
+
+    // ── Why book here ────────────────────────────────────────────────────
+    why: () => (
+      <section
+        key="why"
+        className={cn(
+          'relative overflow-hidden py-16 sm:py-24',
+          tinted.get('why') && 'border-y border-border bg-surface-muted',
+        )}
+      >
+        <div
+          className="pointer-events-none absolute -right-40 -top-40 size-[30rem] rounded-full bg-violet-500/10 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-magenta-500/10 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="container-page relative">
+          <Heading content={s.why.heading} align="center" />
+          <ul
+            className={cn(
+              'mt-12 grid gap-5 sm:grid-cols-2',
+              s.why.items.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4',
+            )}
+          >
+            {s.why.items.map((item) => {
+              const Icon = WHY_ICONS[item.icon]
+              return (
+                <li
+                  key={item.title}
+                  className="reveal group rounded-[1.25rem] border border-border bg-surface p-6 shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-raised"
+                >
+                  <span
+                    className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-magenta-500 text-white shadow-[0_8px_20px_rgb(108_88_254/0.3)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
+                    aria-hidden="true"
+                  >
+                    <Icon className="size-5" />
+                  </span>
+                  <h3 className="mt-5 font-sans text-base font-bold text-heading">{item.title}</h3>
+                  <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">{item.description}</p>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </section>
+    ),
+
+    // ── Travel guide ─────────────────────────────────────────────────────
+    guide: () =>
+      posts.items.length > 0 ? (
+        <Band key="guide" tinted={tinted.get('guide')}>
+          <Heading content={s.guide.heading} link={{ href: ROUTES.blog, label: 'Ver todos los artículos' }} />
+          <div className="reveal mt-10">
+            <StoryCarousel posts={posts.items} />
+          </div>
+        </Band>
+      ) : null,
+
+    // ── Where to stay: shown once real listings exist ────────────────────
+    hotels: () =>
+      hotels.items.length > 0 ? (
+        <Band key="hotels" tinted={tinted.get('hotels')}>
+          <Heading content={s.hotels.heading} link={{ href: ROUTES.hotels, label: 'Ver la guía completa' }} />
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {hotels.items.map((hotel) => (
+              <li key={hotel.id} className="reveal">
+                <Link
+                  href={ROUTES.hotel(hotel.slug)}
+                  className="group flex h-full gap-4 rounded-[1.25rem] border border-border bg-surface p-3.5 shadow-subtle transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-raised"
+                >
+                  <div className="relative size-24 shrink-0 overflow-hidden rounded-card">
+                    <SmartImage
+                      media={hotel.images[0]?.media}
+                      seed={hotel.slug}
+                      alt={hotel.name}
+                      sizes="96px"
+                      className="transition-transform duration-500 group-hover:scale-[1.08]"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 py-1">
+                    <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading group-hover:text-primary">
+                      {hotel.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{hotel.summary}</p>
+                    {hotel.address ? (
+                      <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-muted-foreground">
+                        <MapPin className="size-3" aria-hidden="true" />
+                        {hotel.address}
+                      </p>
+                    ) : null}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Band>
+      ) : null,
+
+    // ── Closing call to action ───────────────────────────────────────────
+    cta: () => (
+      <CtaBanner
+        key="cta"
+        eyebrow={s.cta.eyebrow}
+        title={s.cta.title}
+        description={s.cta.description}
+        primary={{ href: s.cta.primary.href || ROUTES.tours, label: s.cta.primary.label || 'Ver excursiones' }}
+        secondary={
+          s.cta.secondary.label ? { href: s.cta.secondary.href || ROUTES.contact, label: s.cta.secondary.label } : undefined
+        }
+        media={chosenMedia[s.cta.imageId] ?? seasonImages['lago-argentino'] ?? null}
+      />
+    ),
+  }
+
+  const lastEnabled = [...config.order].reverse().find((id) => s[id].enabled)
 
   return (
     <>
@@ -128,368 +408,56 @@ export default async function HomePage() {
       <Header overHero />
 
       <main id="contenido">
-        {/* ── 1. Hero slider (falls back to a single hero) ──────────────── */}
-        {heroSlides.length > 1 ? (
-          <HeroSlider slides={heroSlides} />
+        {hero.slides.length > 0 ? (
+          <HeroSlider slides={hero.slides} autoplaySeconds={hero.autoplaySeconds} />
         ) : (
-          <Hero media={heroImage} title={heroTitle} subtitle={heroSubtitle} />
+          <Hero media={heroImage} title={firstSlide.title} subtitle={firstSlide.description} />
         )}
 
-        {/* ── 2. Search ─────────────────────────────────────────────────── */}
-        <section className="relative z-20 -mt-10 pb-4" aria-label="Buscar experiencias">
-          <div className="container-page">
-            <HomeSearch categories={categories.map((c) => ({ slug: c.slug, name: c.name }))} />
-          </div>
-        </section>
-
-        {/* ── 3. Every excursion, in the business's order, with the
-                "3 imperdibles" banner after the first row ──────────────── */}
-        <section className="container-page py-16 sm:py-24">
-          <SectionHeading
-            eyebrow="Nuestras excursiones"
-            title="Excursiones desde El Calafate"
-            description="Glaciares, navegaciones, trekking y aventura: todo lo que podés reservar online."
-            link={{ href: ROUTES.tours, label: 'Ver el catálogo con filtros' }}
-          />
-
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {catalogue.slice(0, 3).map((tour, index) => (
-              <li key={tour.id} className="reveal flex min-w-0">
-                <TourCard tour={tour} priority={index < 3} className="w-full" />
-              </li>
-            ))}
-          </ul>
-
-          <div className="my-12">
-            <MustSeeBanner tours={mustSee} />
-          </div>
-
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {catalogue.slice(3).map((tour) => (
-              <li key={tour.id} className="reveal flex min-w-0">
-                <TourCard tour={tour} className="w-full" />
-              </li>
-            ))}
-            {/* Completes a short last row, so the grid never ends ragged. */}
-            {(catalogue.length - 3) % 3 !== 0 ? (
-              <li
-                className={`reveal flex min-w-0 ${(catalogue.length - 3) % 3 === 1 ? 'lg:col-span-2' : ''} ${(catalogue.length - 3) % 2 === 0 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
-              >
-                <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-[1.25rem] bg-aurora p-7 text-white shadow-raised sm:p-9">
-                  <div>
-                    <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">¿Armamos tu viaje?</p>
-                    <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-white sm:text-[1.75rem]">
-                      Combinamos excursiones según tus días en El Calafate
-                    </h3>
-                    <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/75">
-                      Contanos cuántos días tenés y qué te gustaría hacer: te armamos el itinerario y te pasamos
-                      las bonificaciones disponibles.
-                    </p>
-                  </div>
-                  <div className="mt-7 flex flex-wrap gap-3">
-                    <ButtonLink href={ROUTES.contact} variant="accent">
-                      Escribinos
-                      <ArrowRight className="size-4" aria-hidden="true" />
-                    </ButtonLink>
-                    <ButtonLink href={ROUTES.mustSee} variant="glass">
-                      Ver los 3 imperdibles
-                    </ButtonLink>
-                  </div>
-                </div>
-              </li>
-            ) : null}
-          </ul>
-        </section>
-
-        {/* ── 4. Experience types, as a photo bento ─────────────────────── */}
-        {tiles.length > 0 ? (
-          <section className="relative border-y border-border bg-surface-muted py-16 sm:py-24">
-            <div className="bg-dots pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
-            <div className="container-page relative">
-              <SectionHeading
-                eyebrow="Explorá por tipo de experiencia"
-                title="Elegí cómo querés conocer la región"
-                description="Hielo, agua, montaña o estepa: cada forma de recorrer Los Glaciares cuenta otra historia."
-                link={{ href: ROUTES.tours, label: 'Ver el catálogo completo' }}
-              />
-              <div className="mt-10">
-                <CategoryTiles categories={tiles} />
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 5. Spotlight banner ───────────────────────────────────────── */}
-        {spotlight ? <SpotlightBanner tour={spotlight} /> : null}
-
-        {/* ── 6. Destinations ───────────────────────────────────────────── */}
-        <section className="container-page py-16 sm:py-24">
-          <SectionHeading
-            eyebrow="Destinos"
-            title="La región, explicada"
-            description="Qué es cada lugar, cómo se llega y qué se puede hacer allí."
-            link={{ href: ROUTES.destinations, label: 'Ver todos los destinos' }}
-          />
-          <div className="reveal mt-10">
-            <DestinationCarousel destinations={destinations} ariaLabel="Destinos de la región" />
-          </div>
-        </section>
-
-        {/* ── 7. Facts banner ───────────────────────────────────────────── */}
-        <FactsBanner media={factsImage} />
-
-        {/* ── 8. When to travel ─────────────────────────────────────────── */}
-        <section className="container-page py-16 sm:py-24">
-          <SectionHeading
-            eyebrow="Cuándo viajar"
-            title="Cada estación, otra Patagonia"
-            description="El Calafate se visita todo el año. Esto es lo que cambia según cuándo vengas."
-            align="center"
-          />
-          <div className="reveal mt-10">
-            <SeasonTabs seasons={seasons} />
-          </div>
-        </section>
-
-        {/* ── 9. Transfers, as a split feature ────────────────────────── */}
-        {transfers.items.length > 0 ? (
-          <section className="relative overflow-hidden border-y border-border bg-surface-muted py-16 sm:py-24">
-            <div className="bg-dots pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
-            <div className="container-page relative grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,2fr)] lg:gap-14">
-              <div className="reveal lg:sticky lg:top-28 lg:self-start">
-                <SectionHeading
-                  eyebrow="Traslados"
-                  title="Llegá y movete sin resolverlo sobre la marcha"
-                  description="Del aeropuerto al centro y de El Calafate a El Chaltén, con seguimiento del vuelo."
-                />
-                <ol className="mt-8 space-y-0">
-                  {TRANSFER_ROUTES.map((route, index) => (
-                    <li key={route.from} className="relative flex gap-4 pb-6 last:pb-0">
-                      {index < TRANSFER_ROUTES.length - 1 ? (
-                        <span className="absolute left-[0.6875rem] top-7 h-[calc(100%-1.25rem)] w-px bg-gradient-to-b from-primary/60 to-transparent" aria-hidden="true" />
-                      ) : null}
-                      <span className="mt-1 grid size-6 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-magenta-500 text-[0.6875rem] font-bold text-white">
-                        {index + 1}
-                      </span>
-                      <div>
-                        <p className="text-[0.9375rem] font-semibold text-heading">
-                          {route.from} <span className="text-primary">→</span> {route.to}
-                        </p>
-                        <p className="mt-0.5 text-[0.8125rem] text-muted-foreground">{route.detail}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-                <Link
-                  href={ROUTES.transfers}
-                  className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-hover"
-                >
-                  Ver todos los traslados
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </div>
-
-              <div className="reveal">
-                {transfers.items.length <= 2 ? (
-                  <ul className="grid gap-5 sm:grid-cols-2">
-                    {transfers.items.map((tour) => (
-                      <li key={tour.id} className="flex">
-                        <TourCard tour={tour} className="w-full" />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <TourCarousel tours={transfers.items} ariaLabel="Traslados disponibles" />
-                )}
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 10. Photo strip ───────────────────────────────────────────── */}
-        {showcase.length >= 4 ? (
-          <section className="py-16 sm:py-24">
-            <div className="container-page">
-              <SectionHeading
-                eyebrow="Galería"
-                title="La Patagonia austral en imágenes"
-                align="center"
-              />
-            </div>
-            <div className="mt-10">
-              <PhotoMarquee photos={showcase} />
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 11. Reviews (only real, approved ones) ────────────────────── */}
-        {reviews.length > 0 ? (
-          <section className="border-y border-border bg-surface-muted py-16 sm:py-24">
-            <div className="container-page">
-              <SectionHeading eyebrow="Opiniones" title="Lo que cuentan quienes ya viajaron" />
-              <div className="reveal mt-10">
-                <ReviewsCarousel reviews={reviews} />
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 12. Why book here ─────────────────────────────────────────── */}
-        <section className="relative overflow-hidden py-16 sm:py-24">
-          <div
-            className="pointer-events-none absolute -right-40 -top-40 size-[30rem] rounded-full bg-violet-500/10 blur-3xl"
-            aria-hidden="true"
-          />
-          <div
-            className="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-magenta-500/10 blur-3xl"
-            aria-hidden="true"
-          />
-          <div className="container-page relative">
-            <SectionHeading
-              eyebrow="Por qué reservar acá"
-              title="Reservá con información clara, antes de viajar"
-              align="center"
-            />
-            <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <ValueProp
-                icon={<Compass className="size-5" aria-hidden="true" />}
-                title="Información verificable"
-                description="Distancias, accesos y condiciones de cada actividad, sin promesas que el clima patagónico no puede sostener."
-              />
-              <ValueProp
-                icon={<Clock className="size-5" aria-hidden="true" />}
-                title="Disponibilidad real"
-                description="Los lugares que ves son los que hay. La reserva confirma sobre cupo real, no sobre una estimación."
-              />
-              <ValueProp
-                icon={<ShieldCheck className="size-5" aria-hidden="true" />}
-                title="Pago seguro"
-                description="Procesado por plataformas de pago establecidas. No almacenamos datos de tu tarjeta."
-              />
-              <ValueProp
-                icon={<MessagesSquare className="size-5" aria-hidden="true" />}
-                title="Respuesta directa"
-                description="Consultas por correo o WhatsApp antes y después de reservar, con la referencia de tu reserva."
-              />
-            </ul>
-          </div>
-        </section>
-
-        {/* ── 13. Travel guide ──────────────────────────────────────────── */}
-        {posts.items.length > 0 ? (
-          <section className="border-t border-border bg-surface-muted py-16 sm:py-24">
-            <div className="container-page">
-              <SectionHeading
-                eyebrow="Guía de viaje"
-                title="Todo lo que conviene saber antes de venir"
-                description="Cuántos días quedarse, cómo llegar, qué llevar y cómo organizar cada día."
-                link={{ href: ROUTES.blog, label: 'Ver todos los artículos' }}
-              />
-              <div className="reveal mt-10">
-                <StoryCarousel posts={posts.items} />
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 14. Where to stay ─────────────────────────────────────────── */}
-        {hotels.items.length > 0 ? (
-          <section className="container-page py-16 sm:py-24">
-            <SectionHeading
-              eyebrow="Guía local"
-              title="Dónde dormir y dónde comer"
-              description="Alojamientos, restaurantes y servicios de El Calafate."
-              link={{ href: ROUTES.hotels, label: 'Ver la guía completa' }}
-            />
-
-            <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {hotels.items.map((hotel) => (
-                <li key={hotel.id} className="reveal">
-                  <Link
-                    href={ROUTES.hotel(hotel.slug)}
-                    className="group flex h-full gap-4 rounded-[1.25rem] border border-border bg-surface p-3.5 shadow-subtle transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-raised"
-                  >
-                    <div className="relative size-24 shrink-0 overflow-hidden rounded-card">
-                      <SmartImage
-                        media={hotel.images[0]?.media}
-                        seed={hotel.slug}
-                        alt={hotel.name}
-                        sizes="96px"
-                        className="transition-transform duration-500 group-hover:scale-[1.08]"
-                      />
-                    </div>
-
-                    <div className="min-w-0 flex-1 py-1">
-                      <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading group-hover:text-primary">
-                        {hotel.name}
-                      </h3>
-                      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-                        {hotel.summary}
-                      </p>
-                      {hotel.address ? (
-                        <p className="mt-2 inline-flex items-center gap-1 text-[0.6875rem] text-muted-foreground">
-                          <MapPin className="size-3" aria-hidden="true" />
-                          {hotel.address}
-                        </p>
-                      ) : null}
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-[1.25rem] border border-primary/20 bg-primary-soft px-6 py-5 sm:flex-row">
-              <p className="text-sm text-foreground">
-                <span className="font-semibold text-heading">¿Tenés un hotel o comercio en El Calafate?</span>{' '}
-                Sumalo gratis a la guía local.
-              </p>
-              <Link
-                href={ROUTES.hotelRegister}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
-              >
-                Registrar mi negocio
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ── 15. Closing call to action ────────────────────────────────── */}
-        <CtaBanner
-          eyebrow="Empezá a planificar"
-          title="Tu viaje a El Calafate, resuelto antes de llegar"
-          description="Elegí la excursión, seleccioná la fecha y reservá online. Si tenés dudas, escribinos: respondemos antes de que pagues."
-          primary={{ href: ROUTES.tours, label: 'Ver excursiones' }}
-          secondary={{ href: ROUTES.contact, label: 'Hacer una consulta' }}
-          media={ctaImage}
-        />
+        {config.order.map((id) => (s[id].enabled ? render[id]() : null))}
       </main>
 
-      <Footer flush />
+      {/* A page ending in a full-bleed band sits flush against the footer. */}
+      <Footer flush={lastEnabled === 'cta' || lastEnabled === 'spotlight' || lastEnabled === 'facts'} />
       <WhatsAppButton context="homepage" />
     </>
   )
 }
 
-function ValueProp({
-  icon,
-  title,
-  description,
+/** Standard section band: optional tinted background and dot pattern. */
+function Band({
+  tinted = false,
+  dots = false,
+  children,
 }: {
-  icon: React.ReactNode
-  title: string
-  description: string
+  tinted?: boolean
+  dots?: boolean
+  children: React.ReactNode
 }) {
   return (
-    <li className="reveal group rounded-[1.25rem] border border-border bg-surface p-6 shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-raised">
-      <span
-        className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-magenta-500 text-white shadow-[0_8px_20px_rgb(108_88_254/0.3)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
-        aria-hidden="true"
-      >
-        {icon}
-      </span>
-      <h3 className="mt-5 font-sans text-base font-bold text-heading">{title}</h3>
-      <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">{description}</p>
-    </li>
+    <section className={cn('relative py-16 sm:py-24', tinted && 'border-y border-border bg-surface-muted')}>
+      {dots && tinted ? <div className="bg-dots pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" /> : null}
+      <div className="container-page relative">{children}</div>
+    </section>
+  )
+}
+
+function Heading({
+  content,
+  link,
+  align,
+}: {
+  content: HomeConfig['sections']['catalogue']['heading']
+  link?: { href: string; label: string }
+  align?: 'left' | 'center'
+}) {
+  return (
+    <SectionHeading
+      eyebrow={content.eyebrow || undefined}
+      title={content.title}
+      description={content.description || undefined}
+      link={align === 'center' ? undefined : link}
+      align={align}
+    />
   )
 }

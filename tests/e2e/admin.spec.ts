@@ -174,3 +174,41 @@ test.describe('admin visual identity', () => {
     await expect(page.getByRole('navigation', { name: /Navegación del panel/i })).toBeVisible()
   })
 })
+
+test.describe('homepage editor', () => {
+  test('edits, hides and reorders sections, and the public homepage follows', async ({ page, browser }) => {
+    await page.goto(`${ADMIN_URL}/homepage`)
+    await expect(page.getByRole('heading', { name: 'Página de inicio', level: 1 })).toBeVisible()
+
+    // Change the closing call-to-action title.
+    const stamp = `Prueba e2e ${Date.now()}`
+    await page.locator('#home-cta').getByRole('button', { name: /Llamado final/ }).click()
+    const title = page.locator('#home-cta').getByLabel(/^Título/)
+    await title.fill(stamp)
+
+    // Hide the facts banner and move the CTA up one place.
+    await page.locator('#home-facts').getByRole('button', { name: 'Ocultar sección' }).click()
+    await page.locator('#home-cta').getByRole('button', { name: 'Subir' }).click()
+
+    await expect(page.getByText('Hay cambios sin guardar')).toBeVisible()
+    await page.getByRole('button', { name: 'Guardar y publicar' }).click()
+    await expect(page.getByText(/Cambios guardados y publicados/)).toBeVisible()
+
+    // The public site, in a fresh unauthenticated context.
+    const visitor = await browser.newContext({ storageState: undefined })
+    const home = await visitor.newPage()
+    const site = process.env.E2E_WEB_URL ?? 'http://localhost:3000'
+    await expect(async () => {
+      await home.goto(site + '/')
+      await expect(home.getByRole('heading', { name: stamp })).toBeVisible({ timeout: 2_000 })
+    }).toPass({ timeout: 20_000 })
+    await expect(home.getByText('Uno de los paisajes de hielo')).toHaveCount(0)
+    await visitor.close()
+
+    // Restore the original configuration so the run leaves no trace.
+    await page.getByRole('button', { name: 'Valores originales' }).click()
+    await page.getByRole('button', { name: 'Cargar valores originales' }).click()
+    await page.getByRole('button', { name: 'Guardar y publicar' }).click()
+    await expect(page.getByText(/Cambios guardados y publicados/)).toBeVisible()
+  })
+})

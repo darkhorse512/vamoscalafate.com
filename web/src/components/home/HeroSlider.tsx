@@ -2,13 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowRight, ChevronLeft, ChevronRight, MapPin, Pause, Play } from 'lucide-react'
-import { ROUTES } from '@vamos/shared'
 import type { HeroSlide } from '@/server/queries/home'
 import { ButtonLink } from '@/components/ui/Button'
 import { SmartImage } from '@/components/media/SmartImage'
 import { cn } from '@/lib/utils'
+import { Highlight, plainText } from './Highlight'
 
-const DWELL_MS = 7000
 
 /**
  * Full-bleed homepage slider.
@@ -18,7 +17,7 @@ const DWELL_MS = 7000
  * element is text, not an image decode), and means the slider is a readable
  * hero even if JavaScript never arrives.
  *
- * Autoplay advances every DWELL_MS. Each slide's bar fills in step with a
+ * Autoplay advances every `autoplaySeconds` (set in the homepage editor). Each slide's bar fills in step with a
  * frame-driven clock, so it shows exactly how much of the slide's time has
  * passed — and freezes in place when paused. It pauses for the pause button
  * (WCAG 2.2.2), for keyboard focus inside the slider, and while the tab is
@@ -27,7 +26,8 @@ const DWELL_MS = 7000
  * Photo credits for these images live on the photo-credits page linked from
  * the footer, rather than over the photographs.
  */
-export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
+export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[]; autoplaySeconds?: number }) {
+  const DWELL_MS = autoplaySeconds * 1000
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [keyboardFocus, setKeyboardFocus] = useState(false)
@@ -68,7 +68,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
         bar.style.transform = `scaleX(${fill})`
       })
     },
-    [],
+    [DWELL_MS],
   )
 
   // A new slide always starts from zero, however it was reached.
@@ -102,7 +102,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
 
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [running, index, go, paint])
+  }, [running, index, go, paint, DWELL_MS])
 
   // Environment signals that should stop the clock.
   useEffect(() => {
@@ -214,7 +214,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                     isActive && 'animate-rise-in [animation-delay:120ms]',
                   )}
                 >
-                  {slide.title}
+                  <Highlight text={slide.title} />
                 </Heading>
 
                 <p
@@ -236,15 +236,11 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                     {slide.cta.label}
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </ButtonLink>
-                  {/* A second, different destination: when the slide already
-                      points at the catalogue, offer the planning guide. */}
-                  <ButtonLink
-                    href={slide.cta.href === ROUTES.tours ? ROUTES.blogPost('que-hacer-en-el-calafate') : ROUTES.tours}
-                    size="lg"
-                    variant="glass"
-                  >
-                    {slide.cta.href === ROUTES.tours ? 'Qué hacer en El Calafate' : 'Todas las excursiones'}
-                  </ButtonLink>
+                  {slide.secondary ? (
+                    <ButtonLink href={slide.secondary.href} size="lg" variant="glass">
+                      {slide.secondary.label}
+                    </ButtonLink>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -312,7 +308,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
 
 
       <p className="sr-only" aria-live="polite">
-        {`Diapositiva ${index + 1} de ${count}: ${active.title}`}
+        {`Diapositiva ${index + 1} de ${count}: ${plainText(active.title)}`}
       </p>
     </section>
   )

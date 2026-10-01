@@ -1,17 +1,18 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   BedDouble, CalendarCheck, CreditCard, FileText, Image as ImageIcon, Inbox,
-  Landmark, LayoutDashboard, MapPin, Mountain, ScrollText, Search, Settings,
+  Landmark, LayoutDashboard, LayoutTemplate, MapPin, Mountain, ScrollText, Search, Settings,
   Shield, Star, Store, Tags, Users, X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ADMIN_NAV, type NavGroup } from './navigation'
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  LayoutDashboard, CalendarCheck, Users, CreditCard, Mountain, Tags, MapPin,
+  LayoutDashboard, LayoutTemplate, CalendarCheck, Users, CreditCard, Mountain, Tags, MapPin,
   Landmark, BedDouble, Store, Inbox, Star, FileText, Image: ImageIcon, Search,
   Settings, Shield, ScrollText,
 }
@@ -42,18 +43,20 @@ export function AdminSidebar({
   const content = (
     <nav aria-label="Navegación del panel" className="flex h-full flex-col">
       <div className="flex h-(--topbar-height) shrink-0 items-center justify-between border-b border-slate-800 px-4">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <span className="grid size-7 shrink-0 place-items-center rounded bg-violet-600" aria-hidden="true">
-            <svg viewBox="0 0 24 24" className="size-4" fill="none">
-              <path d="M2 16.5 L7 8 L11 13 L15.5 5.5 L22 16.5 Z" fill="#ffffff" />
-              <path d="M2 17.8 h20 v1.6 H2 Z" fill="#ffffff" opacity="0.7" />
-            </svg>
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="text-[0.8125rem] font-bold text-white">Vamos Calafate</span>
-            <span className="mt-0.5 text-[0.5625rem] font-medium uppercase tracking-[0.13em] text-subtle-foreground">
-              Administración
-            </span>
+        {/* The artwork carries the name; the light rendition reads on the
+            dark sidebar. A small badge marks this as the console. */}
+        <Link href="/dashboard" className="flex items-center gap-2.5" aria-label="Vamos Calafate - panel">
+          <Image
+            src="/brand/logo-light.png"
+            alt=""
+            width={646}
+            height={192}
+            unoptimized
+            priority
+            className="h-8 w-auto"
+          />
+          <span className="rounded bg-white/10 px-1.5 py-0.5 text-[0.5625rem] font-semibold uppercase tracking-[0.12em] text-slate-300">
+            Admin
           </span>
         </Link>
 

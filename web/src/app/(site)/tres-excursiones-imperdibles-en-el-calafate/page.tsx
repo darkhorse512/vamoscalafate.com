@@ -8,7 +8,7 @@ import { ButtonLink } from '@/components/ui/Button'
 import { SmartImage } from '@/components/media/SmartImage'
 import { ContactForm } from '@/components/content/ContactForm'
 import { Price } from '@/components/tours/Price'
-import { getMustSeeTours } from '@/server/queries/home'
+import { getHomeConfig, getMustSeeTours } from '@/server/queries/home'
 
 export const metadata: Metadata = {
   title: 'Tres excursiones imperdibles en El Calafate',
@@ -37,7 +37,8 @@ const SECTIONS = [
 ]
 
 export default async function MustSeePage() {
-  const tours = await getMustSeeTours()
+  const config = await getHomeConfig()
+  const tours = await getMustSeeTours(config.sections.catalogue.banner.tourSlugs)
 
   return (
     <>

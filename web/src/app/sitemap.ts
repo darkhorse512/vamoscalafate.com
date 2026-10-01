@@ -36,7 +36,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl('/'), lastModified: now, changeFrequency: 'daily', priority: 1 },
     { url: absoluteUrl(ROUTES.tours), lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: absoluteUrl(ROUTES.transfers), lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: absoluteUrl(ROUTES.destinations), lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: absoluteUrl(ROUTES.blog), lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     { url: absoluteUrl(ROUTES.hotels), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },

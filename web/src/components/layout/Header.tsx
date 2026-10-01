@@ -65,7 +65,7 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
       )}
     >
       <div className="container-page flex h-full items-center justify-between gap-6">
-        <Logo tone={tone} />
+        <Logo tone={tone} priority />
 
         {/* Keyed on the pathname so an open dropdown cannot linger over the
             page the visitor just navigated to. */}

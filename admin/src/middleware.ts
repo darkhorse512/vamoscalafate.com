@@ -46,6 +46,8 @@ export const config = {
     /**
      * Everything except Next internals, the auth endpoints and static files.
      */
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|api/health).*)',
+    // Brand assets and icons are public: the login page shows the logo to
+    // visitors who are, by definition, not signed in yet.
+    '/((?!_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|brand/|robots.txt|api/health).*)',
   ],
 }

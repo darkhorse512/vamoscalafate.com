@@ -22,7 +22,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
       <div className="container-page py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,2.6fr)]">
           <div>
-            <Logo tone="light" />
+            <Logo tone="light" size="lg" />
 
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-stone-400">
               Excursiones, traslados y experiencias en El Calafate, Santa Cruz. Reserva online y

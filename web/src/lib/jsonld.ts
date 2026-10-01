@@ -24,6 +24,9 @@ export function organizationSchema(): JsonLd {
     '@id': `${SITE.url}/#organization`,
     name: SITE.name,
     url: SITE.url,
+    // Shown by search engines next to the business; must be crawlable.
+    logo: `${SITE.url}/brand/logo.png`,
+    image: `${SITE.url}/brand/icon-512.png`,
     description: SITE.description,
     areaServed: {
       '@type': 'Place',

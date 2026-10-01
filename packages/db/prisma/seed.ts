@@ -489,8 +489,6 @@ async function seedLegalPages() {
 async function seedSiteSettings() {
   const settings = [
     { key: 'site.tagline', group: 'general', label: 'Lema del sitio', value: 'Excursiones, traslados y experiencias en El Calafate' },
-    { key: 'site.heroTitle', group: 'general', label: 'Título del hero', value: 'Viví la Patagonia desde El Calafate' },
-    { key: 'site.heroSubtitle', group: 'general', label: 'Subtítulo del hero', value: 'Excursiones al Glaciar Perito Moreno, navegaciones por el Lago Argentino y traslados, con reserva online.' },
     { key: 'contact.address', group: 'contact', label: 'Dirección', value: 'El Calafate, Santa Cruz, Argentina' },
     { key: 'contact.hours', group: 'contact', label: 'Horario de atención', value: 'Lunes a sábado, 9 a 20 h (ART)' },
     { key: 'social.instagram', group: 'social', label: 'Instagram', value: '' },
@@ -599,22 +597,35 @@ async function main() {
   console.log('')
   console.log('╔══════════════════════════════════════════════════════════════╗')
   console.log('║  VAMOS CALAFATE - database seed                              ║')
-  console.log('║  Demo content is marked isDemo=true and must be replaced     ║')
-  console.log('║  with real commercial data before going live.                ║')
+  console.log('║  Seeds structure only: roles, admin, destinations, legal     ║')
+  console.log('║  pages, settings. SEED_DEMO=1 adds sample tours and listings. ║')
   console.log('╚══════════════════════════════════════════════════════════════╝')
   console.log('')
 
   await seedRbac()
   await seedAdminUser()
   const destinationIds = await seedDestinations()
-  const { tourIds: categoryIds, businessIds } = await seedCategories()
-  await seedTours(categoryIds, destinationIds)
-  await seedAvailability()
-  await seedBlog(destinationIds)
   await seedGlobalFaqs()
   await seedLegalPages()
   await seedSiteSettings()
-  await seedDirectory(destinationIds, businessIds)
+
+  /*
+   * Sample tours, articles and directory listings are opt-in, for a fresh
+   * development database only. They upsert by slug, so running them against
+   * the live database would overwrite the real catalogue (loaded by
+   * scripts/load-catalog.mjs) with placeholders and flag it as demo.
+   */
+  if (process.env.SEED_DEMO === '1') {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SEED_DEMO=1 refuses to run with NODE_ENV=production.')
+    }
+    const { tourIds: categoryIds, businessIds } = await seedCategories()
+    await seedTours(categoryIds, destinationIds)
+    await seedAvailability()
+    await seedBlog(destinationIds)
+    await seedDirectory(destinationIds, businessIds)
+    console.log('  Demo content seeded (isDemo=true).')
+  }
 
   console.log('')
   console.log('  Seed complete.')

@@ -24,7 +24,8 @@ export default async function SettingsPage() {
   await requirePermission('settings:read')
 
   const [settings, pages] = await Promise.all([
-    prisma.siteSetting.findMany({ orderBy: [{ group: 'asc' }, { key: 'asc' }] }),
+    // The homepage document has its own editor (Página de inicio).
+    prisma.siteSetting.findMany({ where: { group: { not: 'homepage' } }, orderBy: [{ group: 'asc' }, { key: 'asc' }] }),
     prisma.staticPage.findMany({
       orderBy: { title: 'asc' },
       select: { id: true, slug: true, title: true, status: true, updatedAt: true },

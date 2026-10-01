@@ -29,7 +29,7 @@ export default function NotFound() {
           <ul className="mx-auto mt-8 grid max-w-2xl gap-3 sm:grid-cols-2">
             {[
               { href: ROUTES.tours, label: 'Excursiones', detail: 'Todo el catálogo' },
-              { href: ROUTES.transfers, label: 'Traslados', detail: 'Aeropuerto y El Chaltén' },
+              { href: ROUTES.mustSee, label: '3 imperdibles', detail: 'Lo que no te podés perder' },
               { href: ROUTES.blog, label: 'Guía de viaje', detail: 'Artículos prácticos' },
               { href: ROUTES.contact, label: 'Contacto', detail: 'Hacenos una consulta' },
             ].map((link) => (

@@ -4,6 +4,7 @@ import { ROUTES } from '@vamos/shared'
 import type { TourCard } from '@vamos/types'
 import { ButtonLink } from '@/components/ui/Button'
 import { SmartImage } from '@/components/media/SmartImage'
+import { Highlight } from './Highlight'
 
 /**
  * "3 Imperdibles en El Calafate" — the moving banner the brief asked for in
@@ -13,7 +14,15 @@ import { SmartImage } from '@/components/media/SmartImage'
  * perderte estos tours!") and leads to a page that explains the three tours
  * and the bundle promotion. The three photographs are the tours' own covers.
  */
-export function MustSeeBanner({ tours }: { tours: TourCard[] }) {
+export type MustSeeContent = {
+  badge: string
+  headlineFront: string
+  headlineBack: string
+  body: string
+  cta: { label: string; href: string }
+}
+
+export function MustSeeBanner({ tours, content }: { tours: TourCard[]; content: MustSeeContent }) {
   if (tours.length < 3) return null
 
   return (
@@ -30,29 +39,27 @@ export function MustSeeBanner({ tours }: { tours: TourCard[] }) {
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-magenta-200 ring-1 ring-inset ring-white/20">
             <Sparkles className="size-3.5" aria-hidden="true" />
-            Bonificación especial
+            {content.badge}
           </p>
 
           {/* Both messages are in the DOM; screen readers get the first. */}
           <h2 className="flip-headline mt-5 font-display text-[2.125rem] font-bold leading-[1.05] text-white sm:text-[3rem]">
             <span className="flip-headline__inner">
               <span className="flip-headline__face">
-                <span className="text-gradient">3 imperdibles</span> en El Calafate
+                <Highlight text={content.headlineFront} />
               </span>
               <span className="flip-headline__face flip-headline__face--back" aria-hidden="true">
-                ¡No podés perderte <span className="text-gradient">estos tours</span>!
+                <Highlight text={content.headlineBack} />
               </span>
             </span>
           </h2>
 
           <p className="mt-5 max-w-md text-[0.9375rem] leading-relaxed text-white/80">
-            El Glaciar Perito Moreno, la Navegación Todo Glaciares y El Chaltén: las tres excursiones que
-            definen un viaje a la Patagonia. <strong className="text-white">Contratando las tres accedés a
-            importantes bonificaciones.</strong>
+            <Highlight text={content.body} />
           </p>
 
-          <ButtonLink href={ROUTES.mustSee} variant="accent" size="lg" className="mt-7 shadow-accent">
-            Ver los 3 imperdibles
+          <ButtonLink href={content.cta.href || ROUTES.mustSee} variant="accent" size="lg" className="mt-7 shadow-accent">
+            {content.cta.label || 'Ver los 3 imperdibles'}
             <ArrowRight className="size-4" aria-hidden="true" />
           </ButtonLink>
         </div>

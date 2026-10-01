@@ -55,6 +55,7 @@ export const ADMIN_NAV: NavGroup[] = [
   {
     title: 'Contenido',
     items: [
+      { label: 'Página de inicio', href: '/homepage', icon: 'LayoutTemplate', resource: 'settings' },
       { label: 'Blog', href: '/blog', icon: 'FileText', resource: 'blog' },
       { label: 'Medios', href: '/media', icon: 'Image', resource: 'media' },
       { label: 'SEO', href: '/seo', icon: 'Search', resource: 'seo' },

@@ -1,6 +1,7 @@
 import { cacheTags, prisma } from '@vamos/db'
 import { ROUTES } from '@vamos/shared'
 import type { MediaRef, TourCard } from '@vamos/types'
+import { HOME_CONFIG_KEY, resolveHomeConfig, type HomeConfig } from '@vamos/validation'
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 import { mediaSelect } from './content.ts'
 import { cardSelect } from './tours.ts'
@@ -25,114 +26,77 @@ export type HeroSlide = {
   title: string
   description: string
   cta: { href: string; label: string }
+  secondary: { href: string; label: string } | null
   /** Short label for the slide selector. */
   tabLabel: string
 }
 
+/** The homepage configuration (admin → Página de inicio), merged over defaults. */
+export const getHomeConfig = cachedQuery(
+  async (): Promise<HomeConfig> => {
+    const row = await prisma.siteSetting.findUnique({ where: { key: HOME_CONFIG_KEY }, select: { value: true } })
+    return resolveHomeConfig(row?.value)
+  },
+  ['home', 'config'],
+  { tags: [cacheTags.siteSettings], revalidate: REVALIDATE.content },
+)
+
+/** Media rows by id, for images chosen in the homepage editor. */
+export const getMediaByIds = cachedQuery(
+  async (ids: string[]): Promise<Record<string, MediaRef>> => {
+    const unique = [...new Set(ids.filter(Boolean))]
+    if (unique.length === 0) return {}
+    const rows = await prisma.media.findMany({ where: { id: { in: unique } }, select: mediaSelect })
+    return Object.fromEntries(rows.map((row) => [row.id, row]))
+  },
+  ['home', 'media-by-id'],
+  { tags: [cacheTags.siteSettings], revalidate: REVALIDATE.content },
+)
+
+async function coverOf(kind: 'tour' | 'destination', slug: string): Promise<MediaRef | null> {
+  if (!slug) return null
+  if (kind === 'tour') {
+    const tour = await prisma.tour.findFirst({
+      where: { slug, ...published },
+      select: {
+        images: { orderBy: [{ isCover: 'desc' }, { sortOrder: 'asc' }], take: 1, select: { media: { select: mediaSelect } } },
+      },
+    })
+    return tour?.images[0]?.media ?? null
+  }
+  const destination = await prisma.destination.findFirst({
+    where: { slug, ...published },
+    select: { heroImage: { select: mediaSelect } },
+  })
+  return destination?.heroImage ?? null
+}
+
 /**
- * The slide plan. Each one points at a real tour or destination; a slide
- * whose source is missing, unpublished or has no photograph is dropped rather
- * than shown half-empty.
+ * Hero slides from the configuration. A slide uses its chosen image, or else
+ * the cover of the tour/destination it points at; a slide with neither, or
+ * switched off, is dropped rather than shown blank.
  */
-const SLIDE_PLAN = [
-  {
-    kind: 'destination',
-    slug: 'glaciar-perito-moreno',
-    eyebrow: 'Parque Nacional Los Glaciares',
-    title: 'Viví la Patagonia desde El Calafate',
-    description:
-      'Excursiones al Glaciar Perito Moreno, navegaciones por el Lago Argentino y traslados, con reserva online.',
-    label: 'Ver excursiones',
-    href: ROUTES.tours,
-    tab: 'Perito Moreno',
-  },
-  {
-    kind: 'tour',
-    slug: 'minitrekking-perito-moreno',
-    eyebrow: 'Trekking sobre hielo',
-    title: 'Caminá sobre el glaciar',
-    description:
-      'Con crampones y guías de montaña, recorré la superficie del Perito Moreno entre grietas y sumideros de hielo azul.',
-    label: 'Ver el minitrekking',
-    tab: 'Minitrekking',
-  },
-  {
-    kind: 'tour',
-    slug: 'navegacion-todo-glaciares',
-    eyebrow: 'Navegación lacustre',
-    title: 'Navegá entre témpanos',
-    description:
-      'Los brazos del Lago Argentino llevan a frentes glaciares que solo se alcanzan por agua, como el Upsala y el Spegazzini.',
-    label: 'Ver la navegación',
-    tab: 'Todo Glaciares',
-  },
-  {
-    kind: 'destination',
-    slug: 'el-chalten',
-    eyebrow: 'Capital nacional del trekking',
-    title: 'El Chaltén y el Fitz Roy',
-    description:
-      'A unas tres horas por la Ruta 40, los senderos más célebres de la Patagonia parten desde el mismo pueblo.',
-    label: 'Conocer El Chaltén',
-    tab: 'El Chaltén',
-  },
-  {
-    kind: 'destination',
-    slug: 'lago-argentino',
-    eyebrow: 'El lago más grande del país',
-    title: 'Lago Argentino',
-    description:
-      'Aguas color turquesa alimentadas por el deshielo, con El Calafate asomado a su orilla sur.',
-    label: 'Explorar el lago',
-    tab: 'Lago Argentino',
-  },
-] as const
-
 export const getHeroSlides = cachedQuery(
-  async (): Promise<HeroSlide[]> => {
+  async (): Promise<{ slides: HeroSlide[]; autoplaySeconds: number }> => {
+    const config = await getHomeConfig()
+    const chosen = await getMediaByIds(config.hero.slides.map((slide) => slide.imageId))
     const slides: HeroSlide[] = []
-
-    for (const plan of SLIDE_PLAN) {
-      let media: MediaRef | null = null
-      let href = 'href' in plan ? plan.href : ''
-
-      if (plan.kind === 'tour') {
-        const tour = await prisma.tour.findFirst({
-          where: { slug: plan.slug, ...published },
-          select: {
-            slug: true,
-            images: {
-              orderBy: [{ isCover: 'desc' }, { sortOrder: 'asc' }],
-              take: 1,
-              select: { media: { select: mediaSelect } },
-            },
-          },
-        })
-        media = tour?.images[0]?.media ?? null
-        href ||= tour ? ROUTES.tour(tour.slug) : ''
-      } else {
-        const destination = await prisma.destination.findFirst({
-          where: { slug: plan.slug, ...published },
-          select: { slug: true, heroImage: { select: mediaSelect } },
-        })
-        media = destination?.heroImage ?? null
-        href ||= destination ? ROUTES.destination(destination.slug) : ''
-      }
-
-      if (!media || !href) continue
-
+    for (const [index, slide] of config.hero.slides.entries()) {
+      if (!slide.enabled) continue
+      const media = chosen[slide.imageId] ?? (await coverOf(slide.imageFrom.kind, slide.imageFrom.slug))
+      if (!media || !slide.title) continue
       slides.push({
-        id: plan.slug,
+        id: `slide-${index}`,
         media,
-        eyebrow: plan.eyebrow,
-        title: plan.title,
-        description: plan.description,
-        cta: { href, label: plan.label },
-        tabLabel: plan.tab,
+        eyebrow: slide.eyebrow,
+        title: slide.title,
+        description: slide.description,
+        cta: slide.primary.label && slide.primary.href ? slide.primary : { label: 'Ver excursiones', href: ROUTES.tours },
+        secondary: slide.secondary.label && slide.secondary.href ? slide.secondary : null,
+        tabLabel: slide.tabLabel || slide.title,
       })
     }
-
-    return slides
+    return { slides, autoplaySeconds: config.hero.autoplaySeconds }
   },
   ['home', 'hero-slides'],
   {
@@ -221,7 +185,7 @@ export type SpotlightTour = {
  * first featured tour that has at least two photographs to compose with.
  */
 export const getSpotlightTour = cachedQuery(
-  async (): Promise<SpotlightTour | null> => {
+  async (slug: string): Promise<SpotlightTour | null> => {
     const select = {
       slug: true,
       name: true,
@@ -240,7 +204,7 @@ export const getSpotlightTour = cachedQuery(
     }
 
     const preferred = await prisma.tour.findFirst({
-      where: { slug: 'minitrekking-perito-moreno', ...published },
+      where: { slug, ...published },
       select,
     })
     const tour =
@@ -375,7 +339,7 @@ export const getHomeReviews = cachedQuery(
 /** A photograph for each season tab, taken from existing destinations. */
 export const getSeasonImages = cachedQuery(
   async (): Promise<Record<string, MediaRef | null>> => {
-    const slugs = ['glaciar-perito-moreno', 'lago-argentino', 'el-chalten', 'parque-nacional-los-glaciares']
+    const slugs = ['glaciar-perito-moreno', 'lago-argentino', 'el-chalten', 'parque-nacional-los-glaciares', 'el-calafate']
     const rows = await prisma.destination.findMany({
       where: { slug: { in: slugs }, ...published },
       select: { slug: true, heroImage: { select: mediaSelect } },
@@ -435,30 +399,28 @@ export const getLicensedPhotos = cachedQuery(
  * featured subset.
  */
 export const getCatalogue = cachedQuery(
-  async (): Promise<TourCard[]> =>
-    (await prisma.tour.findMany({
+  async (slugs: string[]): Promise<TourCard[]> => {
+    const tours = (await prisma.tour.findMany({
       where: { ...published, category: { channel: 'excursiones' } },
       orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
       select: cardSelect,
-    })) as TourCard[],
+    })) as TourCard[]
+    if (slugs.length === 0) return tours
+    // The editor's selection, in the editor's order; unpublished ones drop out.
+    return slugs.flatMap((slug) => tours.filter((tour) => tour.slug === slug))
+  },
   ['home', 'catalogue'],
-  { tags: [cacheTags.tours], revalidate: REVALIDATE.listing },
+  { tags: [cacheTags.tours, cacheTags.siteSettings], revalidate: REVALIDATE.listing },
 )
 
-/** The three excursions the "3 imperdibles" banner and page feature. */
-export const MUST_SEE_SLUGS = [
-  'glaciar-perito-moreno-pasarelas',
-  'navegacion-todo-glaciares',
-  'el-chalten-trekking-libre',
-] as const
-
+/** Tours for the "3 imperdibles" banner, in the configured order. */
 export const getMustSeeTours = cachedQuery(
-  async (): Promise<TourCard[]> => {
+  async (slugs: string[]): Promise<TourCard[]> => {
     const tours = (await prisma.tour.findMany({
-      where: { ...published, slug: { in: [...MUST_SEE_SLUGS] } },
+      where: { ...published, slug: { in: slugs } },
       select: cardSelect,
     })) as TourCard[]
-    return MUST_SEE_SLUGS.flatMap((slug) => tours.filter((tour) => tour.slug === slug))
+    return slugs.flatMap((slug) => tours.filter((tour) => tour.slug === slug))
   },
   ['home', 'must-see'],
   { tags: [cacheTags.tours], revalidate: REVALIDATE.content },
