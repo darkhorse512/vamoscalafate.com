@@ -151,10 +151,12 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle
-            tone={solid ? 'solid' : 'over-media'}
-            className="hidden sm:inline-flex"
-          />
+          {/* Visibility lives on wrappers: `cn` does not merge conflicting
+              utilities, so `hidden` passed to a component whose own base class
+              is `inline-flex` lost and both controls showed on phones. */}
+          <div className="hidden sm:block">
+            <ThemeToggle tone={solid ? 'solid' : 'over-media'} />
+          </div>
 
           <Link
             href={ROUTES.search}
@@ -167,14 +169,15 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
             <SearchIcon className="size-[1.125rem]" aria-hidden="true" />
           </Link>
 
-          <ButtonLink
-            href={ROUTES.tours}
-            size="sm"
-            variant={solid ? 'primary' : 'accent'}
-            className="hidden sm:inline-flex"
-          >
-            Reservar
-          </ButtonLink>
+          <div className="hidden sm:block">
+            <ButtonLink
+              href={ROUTES.tours}
+              size="sm"
+              variant={solid ? 'primary' : 'accent'}
+            >
+              Reservar
+            </ButtonLink>
+          </div>
 
           {/*
             Keyed on the pathname so navigating remounts the drawer, which

@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { ROUTES } from '@vamos/shared'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
@@ -12,6 +11,10 @@ import { breadcrumbSchema, destinationSchema, faqSchema, jsonLdScript } from '@/
 import { buildMetadata } from '@/lib/seo'
 import { getDestinationBySlug, getDestinationSlugs, listBlogPosts } from '@/server/queries/content'
 import { listTours } from '@/server/queries/tours'
+import { ArrowDown } from 'lucide-react'
+import { ButtonLink } from '@/components/ui/Button'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { StoryCarousel } from '@/components/home/StoryCarousel'
 
 export async function generateStaticParams() {
   const destinations = await getDestinationSlugs()
@@ -59,14 +62,14 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
   // Products and editorial for this place - the hub of the internal link graph.
   const [tours, posts] = await Promise.all([
     listTours({ destinationSlug: destination.slug, pageSize: 6 }),
-    listBlogPosts({ pageSize: 3 }),
+    listBlogPosts({ pageSize: 6 }),
   ])
 
   return (
     <>
       {ld ? <script type="application/ld+json" dangerouslySetInnerHTML={ld} /> : null}
 
-      <div className="relative isolate flex min-h-[26rem] items-end overflow-hidden bg-inverse">
+      <div className="relative isolate flex min-h-[min(70svh,36rem)] items-end overflow-hidden bg-inverse">
         <div className="absolute inset-0 -z-10">
           <SmartImage
             media={destination.heroImage}
@@ -75,7 +78,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 scrim-bottom" />
+          <div className="absolute inset-0 bg-gradient-to-r from-plum-950/80 via-plum-950/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-plum-950/90 via-plum-950/20 to-transparent" />
         </div>
 
         {/* Credit over the image itself — there is no page background here to
@@ -86,29 +90,70 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
           className="absolute bottom-2 right-4 z-10 text-right"
         />
 
-        <div className="container-page relative pb-10 pt-24">
+        <div className="container-page relative pb-14 pt-28">
           <Breadcrumbs items={crumbs} tone="light" />
-          <h1 className="mt-4 max-w-3xl font-display text-display-md font-bold leading-[1.08] text-white">
+          <p className="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">
+            <span className="accent-rule" aria-hidden="true" />
+            Destino · Patagonia austral
+          </p>
+          <h1 className="mt-3 max-w-3xl font-display text-display-lg font-bold leading-[1.04] text-white">
             {destination.name}
           </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/85">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:text-[1.0625rem]">
             {destination.shortIntro}
           </p>
+          {tours.items.length > 0 ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="#excursiones" size="lg" variant="accent">
+                Ver {tours.items.length} {tours.items.length === 1 ? 'experiencia' : 'experiencias'}
+                <ArrowDown className="size-4" aria-hidden="true" />
+              </ButtonLink>
+            </div>
+          ) : null}
         </div>
       </div>
 
-      <div className="container-prose mt-12">
-        <Markdown content={destination.description} />
+      <div className="container-page mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+        <div className="max-w-[68ch]">
+          <Markdown content={destination.description} />
+        </div>
+
+        {/* Planning card: the next step from reading to booking. */}
+        <aside className="lg:sticky lg:top-28 lg:self-start">
+          <div className="overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-raised">
+            <div className="bg-aurora px-6 py-6 text-white">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">
+                Planificá tu visita
+              </p>
+              <p className="mt-2 font-display text-xl font-semibold leading-snug">{destination.name}</p>
+            </div>
+            <div className="space-y-4 p-6">
+              {tours.items.length > 0 ? (
+                <p className="text-sm text-foreground">
+                  <span className="font-semibold text-heading">{tours.items.length}</span>{' '}
+                  {tours.items.length === 1 ? 'experiencia disponible' : 'experiencias disponibles'} para
+                  reservar online.
+                </p>
+              ) : null}
+              <ButtonLink href={tours.items.length > 0 ? '#excursiones' : ROUTES.tours} fullWidth variant="accent">
+                Ver excursiones
+              </ButtonLink>
+              <ButtonLink href={ROUTES.contact} fullWidth variant="outline">
+                Hacer una consulta
+              </ButtonLink>
+            </div>
+          </div>
+        </aside>
       </div>
 
       {destination.attractions.length > 0 ? (
-        <section className="container-page mt-16">
-          <h2 className="font-display text-2xl font-semibold text-heading">Qué ver y hacer</h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="container-page mt-20">
+          <SectionHeading eyebrow="Imperdibles" title="Qué ver y hacer" />
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {destination.attractions.map((attraction) => (
               <li
                 key={attraction.id}
-                className="overflow-hidden rounded-card border border-border bg-surface"
+                className="group overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:shadow-raised"
               >
                 <div className="relative aspect-[16/10] bg-surface-strong">
                   <SmartImage
@@ -116,6 +161,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     seed={attraction.slug}
                     alt={attraction.name}
                     sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 31vw"
+                    className="transition-transform duration-700 group-hover:scale-[1.06]"
                   />
                 </div>
                 <div className="p-5">
@@ -149,50 +195,38 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       ) : null}
 
       {tours.items.length > 0 ? (
-        <section className="container-page mt-16">
-          <h2 className="font-display text-2xl font-semibold text-heading">
-            Excursiones en {destination.name}
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Experiencias que podés reservar online para conocer este destino.
-          </p>
-          <div className="mt-6">
-            <TourCarousel tours={tours.items} ariaLabel={`Excursiones en ${destination.name}`} />
+        <section id="excursiones" className="mt-20 border-y border-border bg-surface-muted py-16 sm:py-20">
+          <div className="container-page">
+            <SectionHeading
+              eyebrow="Reservá online"
+              title={`Excursiones en ${destination.name}`}
+              description="Experiencias que podés reservar online para conocer este destino."
+              link={{ href: ROUTES.tours, label: 'Ver el catálogo completo' }}
+            />
+            <div className="mt-10">
+              <TourCarousel tours={tours.items} ariaLabel={`Excursiones en ${destination.name}`} />
+            </div>
           </div>
         </section>
       ) : null}
 
       {faqs.length > 0 ? (
-        <section className="container-prose mt-16">
-          <h2 className="font-display text-2xl font-semibold text-heading">
-            Preguntas frecuentes
-          </h2>
-          <FaqList faqs={faqs} className="mt-5" />
+        <section className="container-prose py-16 sm:py-20">
+          <SectionHeading eyebrow="Antes de ir" title="Preguntas frecuentes" />
+          <FaqList faqs={faqs} className="mt-8" />
         </section>
       ) : null}
 
       {posts.items.length > 0 ? (
-        <section className="container-page mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-xl font-semibold text-heading">
-            Seguí leyendo en la guía de viaje
-          </h2>
-          <ul className="mt-5 grid gap-4 sm:grid-cols-3">
-            {posts.items.map((post) => (
-              <li key={post.id}>
-                <Link
-                  href={ROUTES.blogPost(post.slug)}
-                  className="block rounded-card border border-border p-4 transition-colors hover:border-primary/40 hover:bg-surface-muted"
-                >
-                  <h3 className="font-sans text-[0.9375rem] font-semibold leading-snug text-heading">
-                    {post.title}
-                  </h3>
-                  <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <section className="container-page py-16 sm:py-20">
+          <SectionHeading
+            eyebrow="Guía de viaje"
+            title="Seguí leyendo antes de viajar"
+            link={{ href: ROUTES.blog, label: 'Ver todos los artículos' }}
+          />
+          <div className="mt-10">
+            <StoryCarousel posts={posts.items} />
+          </div>
         </section>
       ) : null}
     </>

@@ -12,11 +12,13 @@ import { FOOTER_NAV } from './navigation'
  * reachable from every page, which is what gives a content site a shallow
  * crawl depth without resorting to a link dump.
  */
-export function Footer() {
+export function Footer({ flush = false }: { flush?: boolean } = {}) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-24 border-t border-plum-800 bg-inverse text-stone-300">
+    // `flush` drops the top margin when the page already ends in a full-bleed
+    // band, which would otherwise leave a white strip above the footer.
+    <footer className={`${flush ? '' : 'mt-24 '}border-t border-plum-800 bg-inverse text-stone-300`}>
       <div className="container-page py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,2.6fr)]">
           <div>

@@ -6,6 +6,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SmartImage } from '@/components/media/SmartImage'
 import { buildMetadata } from '@/lib/seo'
 import { getBusinessCategories, listBusinesses } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Servicios turísticos en El Calafate',
@@ -30,18 +31,17 @@ export default async function ServiciosPage({
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Servicios', path: ROUTES.services }]} />
+      <PageBanner imageSlug="el-calafate">
+          <Breadcrumbs tone="light" items={[{ name: 'Inicio', path: '/' }, { name: 'Servicios', path: ROUTES.services }]} />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Guía local"
             title="Servicios turísticos en El Calafate"
             description="Alquiler de autos, equipamiento outdoor, agencias y otros servicios útiles durante tu estadía."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         {categories.length > 0 ? (

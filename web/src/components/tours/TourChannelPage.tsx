@@ -7,6 +7,7 @@ import { TourGrid } from './TourGrid'
 import { getTourCategories, getTourFacets, listTours } from '@/server/queries/tours'
 import { tourFiltersSchema } from '@vamos/validation'
 import { buildQuery, cn } from '@/lib/utils'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 /**
  * Shared catalogue page for every product channel (excursiones, traslados,
@@ -63,9 +64,8 @@ export async function TourChannelPage({
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs
+      <PageBanner imageSlug={channel === 'traslados' ? 'lago-argentino' : channel === 'servicios' ? 'el-calafate' : 'glaciar-perito-moreno'}>
+          <Breadcrumbs tone="light"
             items={[
               { name: 'Inicio', path: '/' },
               { name: title, path: basePath },
@@ -76,14 +76,14 @@ export async function TourChannelPage({
           />
 
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow={eyebrow}
             title={activeCategory ? activeCategory.name : title}
             description={activeCategory?.description ?? description}
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10">
@@ -98,7 +98,7 @@ export async function TourChannelPage({
             totalResults={result.total}
           />
 
-          <div className="lg:col-start-2 lg:row-start-1">
+          <div className="lg:col-start-2 lg:row-start-2">
             {result.items.length === 0 ? (
               <EmptyState basePath={basePath} />
             ) : (

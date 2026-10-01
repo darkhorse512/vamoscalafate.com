@@ -2,6 +2,24 @@ import type { MediaRef } from '@vamos/types'
 import { cn } from '@/lib/utils'
 
 /**
+ * Some Commons records give a profile URL as the author. Show the account
+ * name it points at rather than the raw address.
+ */
+function authorLabel(raw: string | null | undefined): string | null {
+  const value = raw?.trim()
+  if (!value) return null
+  if (!/^https?:\/\//i.test(value)) return value
+  try {
+    const url = new URL(value)
+    const segment = url.pathname.split('/').filter(Boolean).pop()
+    const site = url.hostname.replace(/^www\./, '').split('.')[0]
+    return segment ? `${segment} (${site})` : url.hostname
+  } catch {
+    return value
+  }
+}
+
+/**
  * Renders the photographer credit a Creative Commons licence requires.
  *
  * CC BY and CC BY-SA are permissive but conditional: reuse is allowed only if
@@ -24,7 +42,7 @@ export function PhotoCredit({
 }) {
   if (!media?.license || media.license === 'NONE') return null
 
-  const author = media.attributionText?.trim()
+  const author = authorLabel(media.attributionText)
   const licence = media.license.trim()
 
   return (
@@ -108,10 +126,10 @@ export function PhotoCredits({
               rel="noopener noreferrer nofollow"
               className="underline-offset-2 hover:underline"
             >
-              {media.attributionText?.trim() || 'Autor desconocido'}
+              {authorLabel(media.attributionText) ?? 'Autor desconocido'}
             </a>
           ) : (
-            media.attributionText?.trim() || 'Autor desconocido'
+            (authorLabel(media.attributionText) ?? 'Autor desconocido')
           )}
           {` (${media.license})`}
         </span>

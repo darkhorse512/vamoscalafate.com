@@ -5,6 +5,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { ContactForm } from '@/components/content/ContactForm'
 import { buildMetadata } from '@/lib/seo'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contacto',
@@ -24,18 +25,17 @@ export default async function ContactoPage({
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Contacto', path: ROUTES.contact }]} />
+      <PageBanner imageSlug="lago-argentino">
+          <Breadcrumbs tone="light" items={[{ name: 'Inicio', path: '/' }, { name: 'Contacto', path: ROUTES.contact }]} />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Escribinos"
             title="¿Tenés una consulta?"
             description="Respondemos dudas sobre excursiones, disponibilidad, traslados y armado de itinerarios."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">

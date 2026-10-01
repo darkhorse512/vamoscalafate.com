@@ -6,6 +6,7 @@ import { breadcrumbSchema, jsonLdScript } from '@/lib/jsonld'
 import { buildMetadata } from '@/lib/seo'
 import { formatDate } from '@vamos/shared'
 import { getStaticPage } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 /**
  * Renderer for the editable legal pages.
@@ -40,17 +41,15 @@ export async function LegalPage({ slug }: { slug: string }) {
     <>
       {ld ? <script type="application/ld+json" dangerouslySetInnerHTML={ld} /> : null}
 
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={crumbs} />
-          <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-heading">
+      <PageBanner>
+          <Breadcrumbs tone="light" items={crumbs} />
+          <h1 className="mt-5 font-display text-display-sm font-bold leading-tight text-white">
             {page.title}
           </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-white/65">
             Última actualización: {formatDate(page.updatedAt)}
           </p>
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-prose py-10 sm:py-12">
         <Markdown content={page.content} />

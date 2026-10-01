@@ -7,6 +7,7 @@ import { FaqList } from '@/components/content/FaqList'
 import { breadcrumbSchema, faqSchema, jsonLdScript } from '@/lib/jsonld'
 import { buildMetadata } from '@/lib/seo'
 import { getGlobalFaqs } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Preguntas frecuentes',
@@ -32,18 +33,17 @@ export default async function FaqPage() {
     <>
       {ld ? <script type="application/ld+json" dangerouslySetInnerHTML={ld} /> : null}
 
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={crumbs} />
+      <PageBanner imageSlug="lago-argentino">
+          <Breadcrumbs tone="light" items={crumbs} />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Ayuda"
             title="Preguntas frecuentes"
             description="Lo que más nos consultan sobre reservas, pagos, cancelaciones y las excursiones."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-prose py-10 sm:py-12">
         <FaqList faqs={faqs} />

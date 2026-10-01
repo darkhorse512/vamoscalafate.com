@@ -30,7 +30,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
       <span className="flex flex-col leading-none">
         <span
           className={cn(
-            'font-display text-[1.0625rem] font-bold tracking-tight',
+            'whitespace-nowrap font-display text-[1.0625rem] font-bold tracking-tight',
             tone === 'light' ? 'text-white' : 'text-heading',
           )}
         >
@@ -38,7 +38,7 @@ export function Logo({ tone = 'dark', className }: { tone?: 'dark' | 'light'; cl
         </span>
         <span
           className={cn(
-            'mt-0.5 text-[0.5625rem] font-semibold uppercase tracking-[0.16em]',
+            'mt-0.5 whitespace-nowrap text-[0.5625rem] font-semibold uppercase tracking-[0.16em]',
             tone === 'light' ? 'text-white/65' : 'text-muted-foreground',
           )}
         >

@@ -6,6 +6,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SmartImage } from '@/components/media/SmartImage'
 import { buildMetadata } from '@/lib/seo'
 import { listDestinations } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Destinos de la Patagonia austral',
@@ -19,18 +20,17 @@ export default async function DestinosPage() {
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Destinos', path: ROUTES.destinations }]} />
+      <PageBanner imageSlug="parque-nacional-los-glaciares">
+          <Breadcrumbs tone="light" items={[{ name: 'Inicio', path: '/' }, { name: 'Destinos', path: ROUTES.destinations }]} />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Qué hacer"
             title="Destinos de la Patagonia austral"
             description="La región explicada lugar por lugar: qué es cada sitio, cómo se accede y qué se puede hacer allí."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         <ul className="grid gap-6 sm:grid-cols-2">

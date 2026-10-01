@@ -8,6 +8,7 @@ import { SmartImage } from '@/components/media/SmartImage'
 import { ButtonLink } from '@/components/ui/Button'
 import { buildMetadata } from '@/lib/seo'
 import { listHotels } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Hoteles y alojamientos en El Calafate',
@@ -27,10 +28,10 @@ export default async function HotelesPage({
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs items={[{ name: 'Inicio', path: '/' }, { name: 'Hoteles', path: ROUTES.hotels }]} />
+      <PageBanner imageSlug="el-calafate">
+          <Breadcrumbs tone="light" items={[{ name: 'Inicio', path: '/' }, { name: 'Hoteles', path: ROUTES.hotels }]} />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Guía local"
             title="Dónde alojarse en El Calafate"
@@ -38,8 +39,7 @@ export default async function HotelesPage({
             link={{ href: ROUTES.hotelRegister, label: 'Registrar mi alojamiento' }}
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         {result.items.length === 0 ? (

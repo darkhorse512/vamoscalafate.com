@@ -8,6 +8,7 @@ import { SmartImage } from '@/components/media/SmartImage'
 import { ButtonLink } from '@/components/ui/Button'
 import { buildMetadata } from '@/lib/seo'
 import { listBusinesses } from '@/server/queries/content'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Dónde comer en El Calafate',
@@ -27,20 +28,19 @@ export default async function RestaurantesPage({
 
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs
+      <PageBanner imageSlug="el-calafate">
+          <Breadcrumbs tone="light"
             items={[{ name: 'Inicio', path: '/' }, { name: 'Restaurantes', path: ROUTES.restaurants }]}
           />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Guía local"
             title="Dónde comer en El Calafate"
             description="Restaurantes, parrillas y cafeterías de la ciudad, con su especialidad y datos de contacto."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         {result.items.length === 0 ? (

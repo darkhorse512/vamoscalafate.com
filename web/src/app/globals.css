@@ -453,3 +453,116 @@
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOTION & DECORATION
+
+   All motion here is decoration, so every keyframe is neutralised by the
+   reduced-motion rule in the base layer, and every scroll-driven effect sits
+   behind @supports: a browser without it simply shows the content, unmoved.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Slow push-in on the active hero slide. Restarted per slide by remounting. */
+@keyframes slide-kenburns {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.12) translate3d(-1%, -1.5%, 0); }
+}
+
+/* Fills a slide's progress bar over its dwell time. */
+@keyframes slide-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Staggered entrance for the active slide's copy. */
+@keyframes rise-in {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Infinite photo strip. The track holds the set twice, so -50% lands exactly
+   on the start of the duplicate and the loop is seamless. */
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes float-soft {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+@layer utilities {
+  .animate-kenburns { animation: slide-kenburns 9s ease-out forwards; }
+  .animate-progress { animation: slide-progress linear forwards; transform-origin: left; }
+  .animate-rise-in  { animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .animate-float    { animation: float-soft 6s ease-in-out infinite; }
+
+  .marquee-track {
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+  }
+  .marquee-track[data-direction='reverse'] { animation-direction: reverse; }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track { animation-play-state: paused; }
+
+  /* Fade the strip out at both edges rather than cropping it hard. */
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  /* Sections ease in as they scroll into view — zero JavaScript. */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 38%;
+    }
+  }
+
+  /* Brand gradient text, for a single emphasised word in a heading. */
+  .text-gradient {
+    background: linear-gradient(100deg, #a56afd 0%, #ff2e70 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft violet and magenta light for dark feature bands. */
+  .bg-aurora {
+    background:
+      radial-gradient(ellipse 55% 70% at 12% 0%, rgb(108 88 254 / 0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 60% at 92% 100%, rgb(255 46 112 / 0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 70% 20%, rgb(165 106 253 / 0.18) 0%, transparent 60%),
+      #200033;
+  }
+
+  /* Faint dot grid behind light feature sections. */
+  .bg-dots {
+    background-image: radial-gradient(rgb(108 88 254 / 0.14) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* A violet-to-magenta hairline used as a section accent. */
+  .accent-rule {
+    height: 3px;
+    width: 3rem;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #6c58fe, #ff2e70);
+  }
+}
+
+/* Under reduced motion the photo strip stops and becomes a scrollable rail,
+   so the photographs remain reachable rather than frozen mid-animation. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .marquee-track { animation: none !important; }
+  /* The scroll-driven reveal ignores animation-duration, so the global
+     reduced-motion rule does not neutralise it — content would sit at
+     opacity 0 until scrolled into range. Remove it outright. */
+  .reveal { animation: none !important; }
+}

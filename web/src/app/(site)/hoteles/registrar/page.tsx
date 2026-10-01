@@ -5,6 +5,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SubmissionForm } from '@/components/content/SubmissionForm'
 import { buildMetadata } from '@/lib/seo'
+import { PageBanner } from '@/components/marketing/PageBanner'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Registrá tu hotel o comercio',
@@ -16,9 +17,8 @@ export const metadata: Metadata = buildMetadata({
 export default function RegistrarPage() {
   return (
     <>
-      <div className="border-b border-border bg-surface-muted">
-        <div className="container-page py-8 sm:py-10">
-          <Breadcrumbs
+      <PageBanner imageSlug="el-calafate">
+          <Breadcrumbs tone="light"
             items={[
               { name: 'Inicio', path: '/' },
               { name: 'Hoteles', path: ROUTES.hotels },
@@ -26,14 +26,14 @@ export default function RegistrarPage() {
             ]}
           />
           <SectionHeading
+            tone="light"
             as="h1"
             eyebrow="Para establecimientos"
             title="Sumá tu establecimiento a la guía"
             description="Publicamos alojamientos, restaurantes y servicios de El Calafate. Completá el formulario y revisamos tu solicitud."
             className="mt-5"
           />
-        </div>
-      </div>
+      </PageBanner>
 
       <div className="container-page py-10 sm:py-12">
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">

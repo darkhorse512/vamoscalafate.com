@@ -10,24 +10,34 @@ import { cn } from '@/lib/utils'
  * keyboard and assistive technology.
  */
 
-type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent'
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent' | 'glass'
 type Size = 'sm' | 'md' | 'lg'
 
+// Pill-shaped with a slight lift on hover: the press feels physical without
+// any layout shift, since only `transform` moves.
 const BASE =
-  'inline-flex items-center justify-center gap-2 rounded-control font-semibold ' +
-  'transition-colors duration-150 disabled:pointer-events-none disabled:opacity-55 ' +
+  'inline-flex items-center justify-center gap-2 rounded-full font-semibold ' +
+  'transition-all duration-200 hover:-translate-y-px active:translate-y-0 ' +
+  'disabled:pointer-events-none disabled:opacity-55 ' +
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-violet-700 text-white hover:bg-violet-800 active:bg-violet-900 focus-visible:ring-primary',
+    'bg-gradient-to-r from-violet-600 to-violet-700 text-white shadow-[0_6px_18px_rgb(90_62_240/0.28)] ' +
+    'hover:from-violet-700 hover:to-violet-800 hover:shadow-[0_10px_24px_rgb(90_62_240/0.36)] focus-visible:ring-primary',
   secondary:
     'bg-plum-900 text-white hover:bg-inverse active:bg-black focus-visible:ring-plum-700',
   outline:
     'border border-border-strong bg-surface text-heading hover:border-primary hover:bg-surface-muted focus-visible:ring-primary',
   ghost: 'text-foreground hover:bg-surface-strong focus-visible:ring-primary',
+  // Frosted, for use over photographs and dark bands. A variant of its own
+  // because `cn` does not merge: overriding `ghost` left its surface-coloured
+  // hover in the cascade, racing the override.
+  glass:
+    'border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 focus-visible:ring-white/70',
   accent:
-    'bg-magenta-500 text-white hover:bg-magenta-600 active:bg-magenta-600 focus-visible:ring-magenta-500',
+    'bg-gradient-to-r from-magenta-500 to-magenta-600 text-white shadow-accent ' +
+    'hover:from-magenta-600 hover:to-magenta-700 hover:shadow-[0_10px_26px_rgb(255_46_112/0.4)] focus-visible:ring-magenta-500',
 }
 
 const SIZES: Record<Size, string> = {

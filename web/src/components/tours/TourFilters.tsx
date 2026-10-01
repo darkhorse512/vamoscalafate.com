@@ -185,8 +185,12 @@ export function TourFilters({
 
   return (
     <>
-      {/* Sort + mobile trigger */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      {/* Sort + mobile trigger.
+          This component returns siblings straight into the page's two-column
+          grid, so each one is placed explicitly: left to auto-placement, the
+          sort bar took the narrow sidebar column and pushed the filters below
+          every result. */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 lg:col-start-2 lg:row-start-1 lg:self-start">
         <p
           aria-live="polite"
           className={cn('text-sm text-muted-foreground', isPending && 'opacity-55')}
@@ -233,7 +237,7 @@ export function TourFilters({
       {/* Desktop sidebar */}
       <aside
         aria-label="Filtros de búsqueda"
-        className="hidden lg:sticky lg:top-24 lg:block lg:self-start"
+        className="hidden lg:sticky lg:top-24 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:block lg:self-start"
       >
         {panel}
       </aside>
@@ -296,7 +300,7 @@ function FilterChip({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.8125rem] font-medium transition-colors',
         active
-          ? 'border-violet-700 bg-violet-700 text-white'
+          ? 'border-transparent bg-gradient-to-r from-violet-600 to-magenta-500 text-white shadow-[0_6px_16px_rgb(108_88_254/0.25)]'
           : 'border-border-strong bg-surface text-foreground hover:border-primary hover:bg-surface-muted',
       )}
     >

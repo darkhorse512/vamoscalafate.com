@@ -67,8 +67,7 @@ export function Hero({
           <ButtonLink
             href={ROUTES.blogPost('que-hacer-en-el-calafate')}
             size="lg"
-            className="border border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
-            variant="ghost"
+            variant="glass"
           >
             Qué hacer en El Calafate
           </ButtonLink>

@@ -5,7 +5,7 @@ import type {
 } from '@vamos/types'
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 
-const mediaSelect = {
+export const mediaSelect = {
   id: true, url: true, altText: true, caption: true,
   width: true, height: true, blurDataUrl: true, externalUrl: true,
   // Required to render the credit CC BY / CC BY-SA oblige us to show.
