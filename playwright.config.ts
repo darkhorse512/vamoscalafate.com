@@ -11,6 +11,20 @@ import { defineConfig, devices } from '@playwright/test'
  * Start the database and seed it before running:
  *   pnpm db:migrate:deploy && pnpm db:seed && pnpm build && pnpm test:e2e
  */
+/*
+ * The admin suite needs a real administrator password, which the repository
+ * deliberately does not contain. Supply it for the run:
+ *   E2E_ADMIN_PASSWORD='…' pnpm test:e2e
+ */
+const CAN_SIGN_IN = Boolean(process.env.E2E_ADMIN_PASSWORD)
+
+if (!CAN_SIGN_IN) {
+  console.warn(
+    '\n⚠  E2E_ADMIN_PASSWORD is not set — the admin suite will not run.' +
+      '\n   Set it to the administrator password to include those tests.\n',
+  )
+}
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: false,
@@ -33,7 +47,7 @@ export default defineConfig({
      * each test's own login exhausts the five-attempt rate limit and the run
      * fails on the limiter doing its job.
      */
-    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    ...(CAN_SIGN_IN ? [{ name: 'setup', testMatch: /auth\.setup\.ts/ }] : []),
 
     {
       name: 'chromium',
@@ -44,15 +58,26 @@ export default defineConfig({
       testIgnore: [/mobile\.spec\.ts/, /admin\.spec\.ts/, /auth\.setup\.ts/],
     },
 
-    {
-      name: 'admin',
-      testMatch: /admin\.spec\.ts/,
-      dependencies: ['setup'],
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'tests/e2e/.auth/admin.json',
-      },
-    },
+    /*
+     * Dropped entirely when no admin password is available, rather than left
+     * in to fail. Skipping only the sign-in step would leave these tests
+     * running without a session: they would be redirected to the login screen
+     * and report eleven assertion failures that say nothing about the
+     * application. An absent project is reported as absent, which is honest.
+     */
+    ...(CAN_SIGN_IN
+      ? [
+          {
+            name: 'admin',
+            testMatch: /admin\.spec\.ts/,
+            dependencies: ['setup'],
+            use: {
+              ...devices['Desktop Chrome'],
+              storageState: 'tests/e2e/.auth/admin.json',
+            },
+          },
+        ]
+      : []),
     // The mobile booking path is the primary conversion route, so it is
     // covered as a first-class target rather than an afterthought.
     { name: 'mobile', use: { ...devices['Pixel 7'] }, testMatch: /mobile\.spec\.ts/ },

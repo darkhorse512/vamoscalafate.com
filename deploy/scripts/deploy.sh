@@ -84,6 +84,16 @@ pnpm db:migrate:deploy || fail "prisma migrate deploy"
 step "Building applications"
 pnpm build || fail "build"
 
+# The apps run as $PM2_USER but a build run by root leaves root-owned output.
+# Next then cannot create .next/cache, so every optimised image is re-encoded
+# on every request — the site stays up and merely gets slow, which is why this
+# went unnoticed. Realign ownership rather than requiring the build to run as
+# a particular user.
+if [ "$(id -un)" != "$PM2_USER" ]; then
+  step "Realigning build ownership to $PM2_USER"
+  chown -R "$PM2_USER:$PM2_USER" web/.next admin/.next || fail "chown build output"
+fi
+
 step "Reloading processes"
 pm2_do reload ecosystem.config.cjs --env production --update-env || fail "pm2 reload"
 pm2_do save
