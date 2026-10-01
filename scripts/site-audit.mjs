@@ -1,3 +1,10 @@
+/**
+ * Site-wide smoke audit: loads key pages at desktop and phone width and
+ * reports HTTP errors, console errors, horizontal overflow, broken images,
+ * missing alt text, duplicate ids, h1 count and broken internal links.
+ *
+ *   node scripts/site-audit.mjs   (against http://localhost:3000)
+ */
 import { chromium, devices } from '@playwright/test'
 const BASE = 'http://localhost:3000'
 const PAGES = ['/', '/excursiones', '/excursiones/minitrekking-perito-moreno', '/destinos',
