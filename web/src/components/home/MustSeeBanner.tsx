@@ -31,13 +31,13 @@ export function MustSeeBanner({ tours, content }: { tours: TourCard[]; content: 
       className="reveal relative isolate overflow-hidden rounded-[1.75rem] bg-aurora text-white shadow-float"
     >
       <div
-        className="pointer-events-none absolute -left-20 -top-24 -z-10 size-72 rounded-full bg-magenta-500/25 blur-3xl"
+        className="pointer-events-none absolute -left-20 -top-24 -z-10 size-72 rounded-full bg-sunset-500/25 blur-3xl"
         aria-hidden="true"
       />
 
       <div className="grid items-center gap-8 p-6 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-magenta-200 ring-1 ring-inset ring-white/20">
+          <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sunset-200 ring-1 ring-inset ring-white/20">
             <Sparkles className="size-3.5" aria-hidden="true" />
             {content.badge}
           </p>
@@ -78,8 +78,8 @@ export function MustSeeBanner({ tours, content }: { tours: TourCard[]; content: 
                   sizes="(max-width: 1023px) 30vw, 18vw"
                   className="transition-transform duration-700 group-hover:scale-[1.08]"
                 />
-                <span className="absolute inset-0 bg-gradient-to-t from-plum-950/85 via-transparent to-transparent" />
-                <span className="absolute left-3 top-3 grid size-8 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-magenta-500 font-display text-sm font-bold">
+                <span className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-transparent to-transparent" />
+                <span className="absolute left-3 top-3 grid size-8 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 font-display text-sm font-bold">
                   {index + 1}
                 </span>
                 <span className="absolute inset-x-3 bottom-3 font-display text-sm font-semibold leading-tight sm:text-base">

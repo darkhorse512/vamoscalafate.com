@@ -174,8 +174,8 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
 
         {/* Legibility: weighted left where the copy sits, and to the bottom
             where the selector sits. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-plum-950/85 via-plum-950/45 to-plum-950/5" />
-        <div className="absolute inset-0 bg-gradient-to-t from-plum-950/90 via-plum-950/10 to-plum-950/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/45 to-navy-950/5" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/10 to-navy-950/40" />
       </div>
 
       {/* ── Copy ───────────────────────────────────────────────────────── */}

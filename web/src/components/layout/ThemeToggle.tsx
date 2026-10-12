@@ -114,7 +114,7 @@ export function ThemeToggle({
               'grid size-7 place-items-center rounded-full transition-colors',
               active
                 ? onMedia
-                  ? 'bg-white/90 text-plum-950'
+                  ? 'bg-white/90 text-navy-950'
                   : 'bg-surface text-primary shadow-subtle'
                 : onMedia
                   ? 'text-white/70 hover:text-white'

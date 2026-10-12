@@ -136,7 +136,7 @@ export function SubmissionForm() {
               className={cn(
                 'flex cursor-pointer items-start gap-3 rounded-control border p-4 transition-colors',
                 kind === option.value
-                  ? 'border-violet-700 bg-primary-soft'
+                  ? 'border-sky-700 bg-primary-soft'
                   : 'border-border-strong hover:border-primary',
               )}
             >

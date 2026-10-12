@@ -67,7 +67,7 @@ export default async function BlogPage({
                 className={cn(
                   'inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors',
                   !categorySlug
-                    ? 'to-magenta-500 border-transparent bg-gradient-to-r from-violet-600 text-white shadow-[0_6px_16px_rgb(108_88_254/0.28)]'
+                    ? 'to-sky-600 border-transparent bg-gradient-to-r from-navy-700 text-white shadow-[0_6px_16px_rgb(0_88_120/0.28)]'
                     : 'border-border-strong bg-surface text-foreground hover:border-primary',
                 )}
               >
@@ -83,7 +83,7 @@ export default async function BlogPage({
                     className={cn(
                       'inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors',
                       categorySlug === category.slug
-                        ? 'to-magenta-500 border-transparent bg-gradient-to-r from-violet-600 text-white shadow-[0_6px_16px_rgb(108_88_254/0.28)]'
+                        ? 'to-sky-600 border-transparent bg-gradient-to-r from-navy-700 text-white shadow-[0_6px_16px_rgb(0_88_120/0.28)]'
                         : 'border-border-strong bg-surface text-foreground hover:border-primary',
                     )}
                   >
@@ -127,7 +127,7 @@ export default async function BlogPage({
                           className="transition-transform duration-700 group-hover:scale-[1.05]"
                         />
                         {lead ? (
-                          <span className="from-magenta-500 to-magenta-600 shadow-accent absolute top-4 left-4 rounded-full bg-gradient-to-r px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-white uppercase">
+                          <span className="from-sunset-600 to-sunset-700 shadow-accent absolute top-4 left-4 rounded-full bg-gradient-to-r px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-white uppercase">
                             Lo último
                           </span>
                         ) : null}
@@ -185,7 +185,7 @@ export default async function BlogPage({
                 className={cn(
                   'rounded-control grid size-10 place-items-center text-sm font-medium',
                   p === result.page
-                    ? 'bg-violet-700 text-white'
+                    ? 'bg-sky-700 text-white'
                     : 'border-border-strong text-foreground hover:bg-surface-muted border',
                 )}
               >

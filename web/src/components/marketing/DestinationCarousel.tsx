@@ -35,14 +35,14 @@ export function DestinationCarousel({
             sizes="(max-width: 639px) 80vw, (max-width: 1023px) 46vw, 32vw"
             className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-plum-950/90 via-plum-950/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
 
-          <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-magenta-500 group-hover:ring-magenta-500">
+          <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-sunset-500 group-hover:ring-sunset-500">
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </span>
 
           <div className="relative p-6">
-            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-violet-300">Destino</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-sky-300">Destino</p>
             <h3 className="mt-1.5 font-display text-2xl font-semibold leading-tight text-white">
               {destination.name}
             </h3>

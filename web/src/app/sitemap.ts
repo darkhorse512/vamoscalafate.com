@@ -43,6 +43,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl(ROUTES.services), lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: absoluteUrl(ROUTES.hotelRegister), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: absoluteUrl(ROUTES.contact), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: absoluteUrl(ROUTES.agencies), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: absoluteUrl(ROUTES.groups), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: absoluteUrl(ROUTES.faq), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: absoluteUrl(ROUTES.terms), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
     { url: absoluteUrl(ROUTES.privacy), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },

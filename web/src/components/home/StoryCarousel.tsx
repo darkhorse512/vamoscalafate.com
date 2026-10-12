@@ -27,7 +27,7 @@ export function StoryCarousel({ posts }: { posts: BlogPostCard[] }) {
               sizes="(max-width: 639px) 82vw, (max-width: 1023px) 47vw, 31vw"
               className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-plum-950/95 via-plum-950/35 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/35 to-transparent" />
 
             {post.category ? (
               <span className="absolute left-4 top-4 rounded-full bg-white/15 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-white ring-1 ring-inset ring-white/25 backdrop-blur-md">

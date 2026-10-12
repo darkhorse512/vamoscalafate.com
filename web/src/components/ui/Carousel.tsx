@@ -259,11 +259,11 @@ export function Carousel({
               onPointerCancel={onThumbPointerUp}
               className={cn(
                 'absolute top-1/2 -translate-y-1/2 cursor-grab overflow-hidden rounded-full active:cursor-grabbing',
-                'bg-[linear-gradient(90deg,#6c58fe_0%,#a56afd_45%,#ff2e70_100%)]',
+                'bg-[linear-gradient(90deg,#005878_0%,#2f9cc4_45%,#ff5a1f_100%)]',
                 // Exclusive branches: `cn` does not merge conflicting heights.
                 dragging
-                  ? 'h-3.5 shadow-[0_0_0_5px_rgb(108_88_254/0.16),0_4px_14px_rgb(108_88_254/0.45)]'
-                  : 'h-2 shadow-[0_2px_10px_rgb(108_88_254/0.35)] group-hover:h-3.5 group-hover:shadow-[0_4px_14px_rgb(108_88_254/0.45)]',
+                  ? 'h-3.5 shadow-[0_0_0_5px_rgb(0_88_120/0.16),0_4px_14px_rgb(0_88_120/0.45)]'
+                  : 'h-2 shadow-[0_2px_10px_rgb(0_88_120/0.35)] group-hover:h-3.5 group-hover:shadow-[0_4px_14px_rgb(0_88_120/0.45)]',
               )}
               style={{
                 width: `${thumb.size * 100}%`,
@@ -331,7 +331,7 @@ function ArrowButton({
         'grid size-11 place-items-center rounded-full border transition-all duration-200',
         disabled
           ? 'cursor-not-allowed border-border text-subtle-foreground/50'
-          : 'border-border-strong bg-surface text-heading shadow-subtle hover:-translate-y-px hover:border-transparent hover:bg-gradient-to-br hover:from-violet-600 hover:to-magenta-500 hover:text-white hover:shadow-[0_8px_20px_rgb(108_88_254/0.3)]',
+          : 'border-border-strong bg-surface text-heading shadow-subtle hover:-translate-y-px hover:border-transparent hover:bg-gradient-to-br hover:from-navy-700 hover:to-sky-600 hover:text-white hover:shadow-[0_8px_20px_rgb(0_88_120/0.3)]',
       )}
     >
       {children}

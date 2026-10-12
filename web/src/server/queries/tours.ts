@@ -1,4 +1,5 @@
 import { cacheTags, prisma, type Prisma } from '@vamos/db'
+import { RATE_SELECT } from '@vamos/shared'
 import type { Paginated, TourCard, TourDetail } from '@vamos/types'
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 
@@ -28,7 +29,7 @@ export const cardSelect = {
     select: {
       media: {
         select: {
-          id: true, url: true, altText: true, caption: true,
+          id: true, url: true, mimeType: true, altText: true, caption: true,
           width: true, height: true, blurDataUrl: true, externalUrl: true,
           license: true, attributionText: true, attributionUrl: true, sourceUrl: true,
         },
@@ -38,7 +39,7 @@ export const cardSelect = {
 } satisfies Prisma.TourSelect
 
 const mediaSelect = {
-  id: true, url: true, altText: true, caption: true,
+  id: true, url: true, mimeType: true, altText: true, caption: true,
   width: true, height: true, blurDataUrl: true, externalUrl: true,
   // Required to render the credit CC BY / CC BY-SA oblige us to show.
   license: true, attributionText: true, attributionUrl: true, sourceUrl: true,
@@ -172,9 +173,19 @@ async function getTourBySlugUncached(slug: string): Promise<TourDetail | null> {
       options: {
         where: { isActive: true },
         orderBy: { sortOrder: 'asc' },
-        include: { priceTiers: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } } },
+        include: {
+          priceTiers: {
+            where: { isActive: true },
+            orderBy: { sortOrder: 'asc' },
+            include: { rates: { select: RATE_SELECT, orderBy: { startDate: 'asc' } } },
+          },
+        },
       },
-      extras: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
+      extras: {
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+        include: { media: { select: mediaSelect } },
+      },
       itinerary: { orderBy: { sortOrder: 'asc' } },
       pickupLocations: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
       faqs: { where: { isPublished: true }, orderBy: { sortOrder: 'asc' } },

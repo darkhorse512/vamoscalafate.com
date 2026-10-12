@@ -14,8 +14,8 @@ import { cn } from '@/lib/utils'
  * `tone` names the BACKGROUND: "dark" = light page surface (default, which
  * also follows the theme), "light" = on a photo or dark band.
  */
-const WIDTH = 646
-const HEIGHT = 192
+const WIDTH = 1040
+const HEIGHT = 240
 
 export function Logo({
   tone = 'dark',
@@ -28,7 +28,7 @@ export function Logo({
   className?: string
   priority?: boolean
 }) {
-  // Rendered height; width follows the artwork's 3.36:1 ratio.
+  // Rendered height; width follows the artwork's 4.33:1 ratio.
   const height = { sm: 'h-8', md: 'h-10 sm:h-11', lg: 'h-12 sm:h-14' }[size]
   const common = { width: WIDTH, height: HEIGHT, unoptimized: true, priority }
 

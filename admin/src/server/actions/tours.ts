@@ -113,6 +113,14 @@ export async function createTourAction(input: unknown): Promise<ActionResult<{ i
                   ageMax: tier.ageMax ?? null,
                   priceCents: toCents(tier.price),
                   sortOrder: tierIndex,
+                  rates: {
+                    create: tier.rates.map((rate) => ({
+                      label: rate.label || null,
+                      startDate: new Date(`${rate.startDate}T00:00:00.000Z`),
+                      endDate: new Date(`${rate.endDate}T00:00:00.000Z`),
+                      priceCents: toCents(rate.price),
+                    })),
+                  },
                 })),
               },
             })),
@@ -124,6 +132,11 @@ export async function createTourAction(input: unknown): Promise<ActionResult<{ i
               description: extra.description || null,
               priceCents: toCents(extra.price),
               perPerson: extra.perPerson,
+              required: extra.required,
+              highlight: extra.highlight,
+              badge: extra.badge || null,
+              details: extra.details,
+              mediaId: extra.mediaId || null,
               isActive: extra.isActive,
               sortOrder: index,
             })),
@@ -371,10 +384,28 @@ export async function updateTourAction(
           const owned = tier.id
             ? await tx.tourPriceTier.findFirst({ where: { id: tier.id, optionId }, select: { id: true } })
             : null
-          if (owned) {
-            await tx.tourPriceTier.update({ where: { id: owned.id }, data: tierData })
-          } else {
-            await tx.tourPriceTier.create({ data: { ...tierData, optionId } })
+          const tierId = owned
+            ? (await tx.tourPriceTier.update({ where: { id: owned.id }, data: tierData })).id
+            : (await tx.tourPriceTier.create({ data: { ...tierData, optionId } })).id
+
+          /*
+           * Seasonal rates are replaced wholesale, unlike the bands above.
+           * Nothing references a rate: a booking stores the price it was
+           * charged, not a pointer to the rule that produced it. A season
+           * removed from the form is therefore a season that should no longer
+           * be charged, and the simplest way to mean that is to delete it.
+           */
+          await tx.tourPriceRate.deleteMany({ where: { tierId } })
+          if (tier.rates.length) {
+            await tx.tourPriceRate.createMany({
+              data: tier.rates.map((rate) => ({
+                tierId,
+                label: rate.label || null,
+                startDate: new Date(`${rate.startDate}T00:00:00.000Z`),
+                endDate: new Date(`${rate.endDate}T00:00:00.000Z`),
+                priceCents: toCents(rate.price),
+              })),
+            })
           }
         }
       }
@@ -391,6 +422,11 @@ export async function updateTourAction(
           description: extra.description || null,
           priceCents: toCents(extra.price),
           perPerson: extra.perPerson,
+          required: extra.required,
+          highlight: extra.highlight,
+          badge: extra.badge || null,
+          details: extra.details,
+          mediaId: extra.mediaId || null,
           isActive: extra.isActive,
           sortOrder: extraIndex,
         }

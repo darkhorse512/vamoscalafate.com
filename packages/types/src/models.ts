@@ -27,6 +27,7 @@ export type {
   TourItineraryStep,
   TourOption,
   TourPriceTier,
+  TourPriceRate,
   TourExtra,
   TourAvailability,
   TourPickupLocation,

@@ -115,7 +115,7 @@ export function BusinessDetail({
                       className="flex items-center gap-2.5 text-[0.9375rem] text-foreground"
                     >
                       <span
-                        className="size-1.5 shrink-0 rounded-full bg-violet-400"
+                        className="size-1.5 shrink-0 rounded-full bg-sky-400"
                         aria-hidden="true"
                       />
                       {service}

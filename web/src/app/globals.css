@@ -20,12 +20,13 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    VAMOS CALAFATE - design system
 
-   A deep-violet palette: near-black plum for ink and immersive surfaces,
-   electric violet for navigation and primary action, and a hot magenta
-   reserved for the one thing on a page we want pressed — book now.
+   The palette is taken from the logo: its deep navy (#005878) and glacier
+   blue (#88d0e8), with a warm sunset orange as the single action colour.
+   Navy and orange are near-opposites on the colour wheel, so a booking
+   button cannot be mistaken for anything else on the page.
 
    TWO LAYERS, AND THE DISTINCTION MATTERS
-   1. Ramps (`plum-*`, `violet-*`, `magenta-*`, `stone-*`) are fixed colours.
+   1. Ramps (`navy-*`, `sky-*`, `sunset-*`, `stone-*`) are fixed colours.
       Use them only where the colour must NOT change between themes: text over
       photography, scrims, the brand mark.
    2. Semantic tokens (`bg-surface`, `text-foreground`, `border-border`, …)
@@ -33,64 +34,72 @@
       all interface chrome should use these — a component written against
       `bg-white` is permanently light and silently breaks the dark theme.
 
+   CONTRAST
+   Every text/background pair below was measured against WCAG AA (4.5:1 for
+   body text, 3:1 for large text and non-text marks). That is why the orange
+   that fills a button is deeper than the orange used for badges and
+   graphics: white on the bright brand orange is only 3.1:1.
+
    Deliberately avoided: heavy border radii and the card-on-card stacking that
    makes a travel site read as a SaaS dashboard.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Plum: ink and immersive dark surfaces ─────────────────────────────── */
-  --color-plum-50: #f7f4fb;
-  --color-plum-100: #efe9f7;
-  --color-plum-200: #dcd0ed;
-  --color-plum-300: #c0abdd;
-  --color-plum-400: #9f80c7;
-  --color-plum-500: #8259ad;
-  --color-plum-600: #6b4291;
-  --color-plum-700: #4a2a6b;
-  --color-plum-800: #3a1f55;
-  --color-plum-900: #2e0049;
-  --color-plum-950: #200033;
+  /* ── Navy: the logo's dark blue. Ink and immersive dark surfaces ───────── */
+  --color-navy-50: #eff7fa;
+  --color-navy-100: #d9edf4;
+  --color-navy-200: #b4dbe8;
+  --color-navy-300: #80c2d7;
+  --color-navy-400: #44a2bf;
+  --color-navy-500: #2285a6;
+  --color-navy-600: #1a6b8b;
+  --color-navy-700: #005878;
+  --color-navy-800: #06475f;
+  --color-navy-900: #0a3a4e;
+  --color-navy-950: #04212e;
 
-  /* ── Violet: primary. Navigation, links, selected state ───────────────── */
-  --color-violet-50: #f4f2ff;
-  --color-violet-100: #ebe7ff;
-  --color-violet-200: #d9d2ff;
-  --color-violet-300: #bfb1ff;
-  --color-violet-400: #a56afd;
-  --color-violet-500: #6c58fe;
-  --color-violet-600: #5a3ef0;
-  --color-violet-700: #4b2fd6;
-  --color-violet-800: #3e28ad;
-  --color-violet-900: #35258a;
-  --color-violet-950: #211552;
+  /* ── Sky: the logo's glacier blue. Navigation, links, selected state ───── */
+  --color-sky-50: #f0f9fd;
+  --color-sky-100: #ddf1fa;
+  --color-sky-200: #bde6f5;
+  --color-sky-300: #88d0e8;
+  --color-sky-400: #56b8da;
+  --color-sky-500: #2f9cc4;
+  --color-sky-600: #1f7da6;
+  --color-sky-700: #1c6686;
+  --color-sky-800: #1d556e;
+  --color-sky-900: #1c475d;
+  --color-sky-950: #0e2c3d;
 
-  /* ── Magenta: the booking colour. Used sparingly, or it stops meaning
-        anything — one primary action per view ────────────────────────────── */
-  --color-magenta-50: #fff1f5;
-  --color-magenta-100: #ffe3ea;
-  --color-magenta-200: #ffc9d8;
-  --color-magenta-300: #ffa0bb;
-  --color-magenta-400: #ff6694;
-  --color-magenta-500: #ff2e70;
-  --color-magenta-600: #d3245c;
-  --color-magenta-700: #b01d4d;
-  --color-magenta-800: #8f1a41;
-  --color-magenta-900: #771939;
-  --color-magenta-950: #42081b;
+  /* ── Sunset: the booking colour. Used sparingly, or it stops meaning
+        anything — one primary action per view.
+        500 is the brand orange, for badges and graphics; 600–700 fill
+        buttons, where white text needs 4.5:1 ───────────────────────────── */
+  --color-sunset-50: #fff4ed;
+  --color-sunset-100: #ffe6d5;
+  --color-sunset-200: #ffc8aa;
+  --color-sunset-300: #ffa274;
+  --color-sunset-400: #ff7a44;
+  --color-sunset-500: #ff5a1f;
+  --color-sunset-600: #d2420a;
+  --color-sunset-700: #b8420f;
+  --color-sunset-800: #96380f;
+  --color-sunset-900: #7a3010;
+  --color-sunset-950: #431505;
 
-  /* ── Stone: neutrals, carrying a trace of the plum hue so greys never go
-        cold against the violet ───────────────────────────────────────────── */
-  --color-stone-50: #faf9fc;
-  --color-stone-100: #f4f2f8;
-  --color-stone-200: #e8e4ef;
-  --color-stone-300: #d5cfe0;
-  --color-stone-400: #b2aac4;
-  --color-stone-500: #8d84a3;
-  --color-stone-600: #6f6684;
-  --color-stone-700: #5a526c;
-  --color-stone-800: #463f56;
-  --color-stone-900: #332d41;
-  --color-stone-950: #1d1828;
+  /* ── Stone: neutrals, carrying a trace of the navy hue so greys never go
+        warm against the blue ─────────────────────────────────────────────── */
+  --color-stone-50: #f8fafb;
+  --color-stone-100: #f1f5f7;
+  --color-stone-200: #e3eaee;
+  --color-stone-300: #cbd8de;
+  --color-stone-400: #9fb3bd;
+  --color-stone-500: #7a929f;
+  --color-stone-600: #5c7684;
+  --color-stone-700: #48606d;
+  --color-stone-800: #374c57;
+  --color-stone-900: #2a3a44;
+  --color-stone-950: #16222a;
 
   /* ── Semantic tokens ───────────────────────────────────────────────────── */
   /*
@@ -145,12 +154,12 @@
 
   /* ── Elevation ─────────────────────────────────────────────────────────── */
   /* Tinted with the plum hue rather than neutral black: a grey shadow over a
-     violet-tinted surface reads as dirt. */
-  --shadow-subtle: 0 1px 2px rgb(32 0 51 / 0.05), 0 1px 3px rgb(32 0 51 / 0.06);
-  --shadow-raised: 0 2px 4px rgb(32 0 51 / 0.05), 0 8px 24px rgb(32 0 51 / 0.09);
-  --shadow-float: 0 4px 8px rgb(32 0 51 / 0.06), 0 16px 48px rgb(32 0 51 / 0.14);
+     sky-tinted surface reads as dirt. */
+  --shadow-subtle: 0 1px 2px rgb(4 33 46 / 0.05), 0 1px 3px rgb(4 33 46 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(4 33 46 / 0.06), 0 8px 24px rgb(4 33 46 / 0.10);
+  --shadow-float: 0 4px 8px rgb(4 33 46 / 0.07), 0 16px 48px rgb(4 33 46 / 0.16);
   /* Glow for the magenta CTA — the one place a coloured shadow is warranted. */
-  --shadow-accent: 0 4px 14px rgb(255 46 112 / 0.3);
+  --shadow-accent: 0 4px 14px rgb(210 66 10 / 0.35);
 
   --radius-card: 0.875rem;
   --radius-control: 0.5rem;
@@ -171,29 +180,29 @@
 
   --sem-background: #ffffff;
   --sem-surface: #ffffff;
-  --sem-surface-muted: #faf9fc;
-  --sem-surface-strong: #f4f2f8;
+  --sem-surface-muted: #f8fafb;
+  --sem-surface-strong: #f1f5f7;
 
-  --sem-foreground: #413a55;
-  --sem-heading: #200033;
-  --sem-muted-foreground: #6f6684;
-  --sem-subtle-foreground: #8d84a3;
+  --sem-foreground: #1f3d4a;
+  --sem-heading: #06475f;
+  --sem-muted-foreground: #54707f;
+  --sem-subtle-foreground: #6b8694;
 
-  --sem-border: #e8e4ef;
-  --sem-border-strong: #d5cfe0;
+  --sem-border: #e3eaee;
+  --sem-border-strong: #cbd8de;
 
-  --sem-primary: #5a3ef0;
-  --sem-primary-hover: #4b2fd6;
+  --sem-primary: #005878;
+  --sem-primary-hover: #06475f;
   --sem-primary-foreground: #ffffff;
-  --sem-primary-soft: #ebe7ff;
+  --sem-primary-soft: #ddf1fa;
 
-  --sem-accent: #ff2e70;
-  --sem-accent-hover: #d3245c;
+  --sem-accent: #d2420a;
+  --sem-accent-hover: #b8420f;
   --sem-accent-foreground: #ffffff;
-  --sem-accent-soft: #ffe3ea;
+  --sem-accent-soft: #ffe6d5;
 
-  --sem-inverse: #200033;
-  --sem-inverse-foreground: #f4f2f8;
+  --sem-inverse: #04212e;
+  --sem-inverse-foreground: #eff7fa;
 
   --sem-success: #1f7a52;
   --sem-success-soft: #e4f6ed;
@@ -208,31 +217,31 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --sem-background: #150024;
-    --sem-surface: #200033;
-    --sem-surface-muted: #28003f;
-    --sem-surface-strong: #33114d;
+    --sem-background: #04212e;
+    --sem-surface: #0a3a4e;
+    --sem-surface-muted: #0d4157;
+    --sem-surface-strong: #134f68;
 
-    --sem-foreground: #ddd5ea;
+    --sem-foreground: #cfe3ec;
     --sem-heading: #ffffff;
-    --sem-muted-foreground: #a99cc0;
-    --sem-subtle-foreground: #887aa3;
+    --sem-muted-foreground: #9fbccb;
+    --sem-subtle-foreground: #7ea5b8;
 
-    --sem-border: #3a1f55;
-    --sem-border-strong: #4f3070;
+    --sem-border: #1a5570;
+    --sem-border-strong: #246a89;
 
-    --sem-primary: #a56afd;
-    --sem-primary-hover: #bfb1ff;
-    --sem-primary-foreground: #1a0029;
-    --sem-primary-soft: #33104f;
+    --sem-primary: #88d0e8;
+    --sem-primary-hover: #bde6f5;
+    --sem-primary-foreground: #04212e;
+    --sem-primary-soft: #11485e;
 
-    --sem-accent: #ff4f82;
-    --sem-accent-hover: #ff7ba1;
-    --sem-accent-foreground: #2a0012;
-    --sem-accent-soft: #4a0f27;
+    --sem-accent: #ff7a44;
+    --sem-accent-hover: #ffa274;
+    --sem-accent-foreground: #2a0d02;
+    --sem-accent-soft: #58240d;
 
-    --sem-inverse: #2e0049;
-    --sem-inverse-foreground: #f4f2f8;
+    --sem-inverse: #0a3a4e;
+    --sem-inverse-foreground: #eff7fa;
 
     --sem-success: #4bbd87;
     --sem-success-soft: #0f3326;
@@ -247,31 +256,31 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --sem-background: #150024;
-  --sem-surface: #200033;
-  --sem-surface-muted: #28003f;
-  --sem-surface-strong: #33114d;
+  --sem-background: #04212e;
+  --sem-surface: #0a3a4e;
+  --sem-surface-muted: #0d4157;
+  --sem-surface-strong: #134f68;
 
-  --sem-foreground: #ddd5ea;
+  --sem-foreground: #cfe3ec;
   --sem-heading: #ffffff;
-  --sem-muted-foreground: #a99cc0;
-  --sem-subtle-foreground: #887aa3;
+  --sem-muted-foreground: #9fbccb;
+  --sem-subtle-foreground: #7ea5b8;
 
-  --sem-border: #3a1f55;
-  --sem-border-strong: #4f3070;
+  --sem-border: #1a5570;
+  --sem-border-strong: #246a89;
 
-  --sem-primary: #a56afd;
-  --sem-primary-hover: #bfb1ff;
-  --sem-primary-foreground: #1a0029;
-  --sem-primary-soft: #33104f;
+  --sem-primary: #88d0e8;
+  --sem-primary-hover: #bde6f5;
+  --sem-primary-foreground: #04212e;
+  --sem-primary-soft: #11485e;
 
-  --sem-accent: #ff4f82;
-  --sem-accent-hover: #ff7ba1;
-  --sem-accent-foreground: #2a0012;
-  --sem-accent-soft: #4a0f27;
+  --sem-accent: #ff7a44;
+  --sem-accent-hover: #ffa274;
+  --sem-accent-foreground: #2a0d02;
+  --sem-accent-soft: #58240d;
 
-  --sem-inverse: #2e0049;
-  --sem-inverse-foreground: #f4f2f8;
+  --sem-inverse: #0a3a4e;
+  --sem-inverse-foreground: #eff7fa;
 
   --sem-success: #4bbd87;
   --sem-success-soft: #0f3326;
@@ -562,7 +571,7 @@
 
   /* Brand gradient text, for a single emphasised word in a heading. */
   .text-gradient {
-    background: linear-gradient(100deg, #a56afd 0%, #ff2e70 100%);
+    background: linear-gradient(100deg, #2f9cc4 0%, #ff5a1f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -571,24 +580,24 @@
   /* Soft violet and magenta light for dark feature bands. */
   .bg-aurora {
     background:
-      radial-gradient(ellipse 55% 70% at 12% 0%, rgb(108 88 254 / 0.45) 0%, transparent 60%),
-      radial-gradient(ellipse 45% 60% at 92% 100%, rgb(255 46 112 / 0.28) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 50% at 70% 20%, rgb(165 106 253 / 0.18) 0%, transparent 60%),
-      #200033;
+      radial-gradient(ellipse 55% 70% at 12% 0%, rgb(34 133 166 / 0.55) 0%, transparent 62%),
+      radial-gradient(ellipse 45% 60% at 92% 100%, rgb(255 90 31 / 0.26) 0%, transparent 58%),
+      radial-gradient(ellipse 40% 50% at 70% 20%, rgb(136 208 232 / 0.16) 0%, transparent 60%),
+      #0a3a4e;
   }
 
   /* Faint dot grid behind light feature sections. */
   .bg-dots {
-    background-image: radial-gradient(rgb(108 88 254 / 0.14) 1px, transparent 1px);
+    background-image: radial-gradient(rgb(31 125 166 / 0.16) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
-  /* A violet-to-magenta hairline used as a section accent. */
+  /* A sky-to-magenta hairline used as a section accent. */
   .accent-rule {
     height: 3px;
     width: 3rem;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #6c58fe, #ff2e70);
+    background: linear-gradient(90deg, #005878, #ff5a1f);
   }
 }
 
@@ -624,27 +633,27 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --scrollbar-track: #f4f2f8;
-  --scrollbar-thumb-from: #a56afd;
-  --scrollbar-thumb-to: #ff4f82;
-  --scrollbar-thumb-hover-from: #6c58fe;
-  --scrollbar-thumb-hover-to: #ff2e70;
+  --scrollbar-track: #f1f5f7;
+  --scrollbar-thumb-from: #2f9cc4;
+  --scrollbar-thumb-to: #ff7a44;
+  --scrollbar-thumb-hover-from: #005878;
+  --scrollbar-thumb-hover-to: #ff5a1f;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --scrollbar-track: #1a002b;
-    --scrollbar-thumb-from: #6c58fe;
-    --scrollbar-thumb-to: #d3245c;
-    --scrollbar-thumb-hover-from: #a56afd;
-    --scrollbar-thumb-hover-to: #ff4f82;
+    --scrollbar-track: #082c3c;
+    --scrollbar-thumb-from: #2f9cc4;
+    --scrollbar-thumb-to: #d2420a;
+    --scrollbar-thumb-hover-from: #88d0e8;
+    --scrollbar-thumb-hover-to: #ff7a44;
   }
 }
 :root[data-theme='dark'] {
-  --scrollbar-track: #1a002b;
-  --scrollbar-thumb-from: #6c58fe;
-  --scrollbar-thumb-to: #d3245c;
-  --scrollbar-thumb-hover-from: #a56afd;
-  --scrollbar-thumb-hover-to: #ff4f82;
+  --scrollbar-track: #082c3c;
+  --scrollbar-thumb-from: #2f9cc4;
+  --scrollbar-thumb-to: #d2420a;
+  --scrollbar-thumb-hover-from: #88d0e8;
+  --scrollbar-thumb-hover-to: #ff7a44;
 }
 
 @supports not selector(::-webkit-scrollbar) {

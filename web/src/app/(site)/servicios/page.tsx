@@ -49,7 +49,7 @@ export default async function ServiciosPage({
             <li>
               <Link
                 href={ROUTES.services}
-                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
+                className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${!categorySlug ? 'border-sky-700 bg-sky-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
               >
                 Todos
               </Link>
@@ -58,7 +58,7 @@ export default async function ServiciosPage({
               <li key={category.id}>
                 <Link
                   href={`${ROUTES.services}?categoria=${category.slug}`}
-                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-violet-700 bg-violet-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
+                  className={`inline-flex rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${categorySlug === category.slug ? 'border-sky-700 bg-sky-700 text-white' : 'border-border-strong bg-surface text-foreground hover:border-primary'}`}
                 >
                   {category.name}
                   <span className="ml-1.5 opacity-60">{category._count.businesses}</span>

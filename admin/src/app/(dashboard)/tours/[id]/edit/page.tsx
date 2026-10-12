@@ -24,7 +24,13 @@ export default async function EditTourPage({ params }: { params: Promise<{ id: s
         images: { orderBy: { sortOrder: 'asc' } },
         options: {
           orderBy: { sortOrder: 'asc' },
-          include: { priceTiers: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } } },
+          include: {
+            priceTiers: {
+              where: { isActive: true },
+              orderBy: { sortOrder: 'asc' },
+              include: { rates: { orderBy: { startDate: 'asc' } } },
+            },
+          },
         },
         extras: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
         itinerary: { orderBy: { sortOrder: 'asc' } },

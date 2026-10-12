@@ -18,7 +18,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* Cool slate neutrals - distinct from the public site's violet-tinted stone. */
+  /* Cool slate neutrals - distinct from the public site's sky-tinted stone. */
   --color-slate-50: #f8fafb;
   --color-slate-100: #f1f4f6;
   --color-slate-200: #e3e8ec;
@@ -32,17 +32,17 @@
   --color-slate-950: #121a1f;
 
   /* Shared accent, tying the two apps together. */
-  --color-violet-50: #f4f2ff;
-  --color-violet-100: #ebe7ff;
-  --color-violet-200: #d9d2ff;
-  --color-violet-300: #bfb1ff;
-  --color-violet-400: #a56afd;
-  --color-violet-500: #6c58fe;
-  --color-violet-600: #5a3ef0;
-  --color-violet-700: #4b2fd6;
-  --color-violet-800: #3e28ad;
-  --color-violet-900: #35258a;
-  --color-violet-950: #211552;
+  --color-sky-50: #f0f9fd;
+  --color-sky-100: #ddf1fa;
+  --color-sky-200: #bde6f5;
+  --color-sky-300: #88d0e8;
+  --color-sky-400: #56b8da;
+  --color-sky-500: #2f9cc4;
+  --color-sky-600: #1f7da6;
+  --color-sky-700: #1c6686;
+  --color-sky-800: #1d556e;
+  --color-sky-900: #1c475d;
+  --color-sky-950: #0e2c3d;
 
   /* ── Semantic tokens, redefined per theme below ────────────────────────── */
   --color-background: var(--sem-background);
@@ -103,10 +103,10 @@
   --sem-border: #e3e8ec;
   --sem-border-strong: #cbd3da;
 
-  --sem-primary: #5a3ef0;
-  --sem-primary-hover: #4b2fd6;
+  --sem-primary: #005878;
+  --sem-primary-hover: #06475f;
   --sem-primary-foreground: #ffffff;
-  --sem-primary-soft: #ebe7ff;
+  --sem-primary-soft: #ddf1fa;
 
   --sem-success: #1f7a52;
   --sem-success-bg: #e8f5ee;
@@ -114,8 +114,8 @@
   --sem-warning-bg: #fbf4e6;
   --sem-danger: #b32d3d;
   --sem-danger-bg: #fbeeef;
-  --sem-info: #4b2fd6;
-  --sem-info-bg: #ebe7ff;
+  --sem-info: #1c6686;
+  --sem-info-bg: #ddf1fa;
 }
 
 /* Dark palette, applied for the OS preference unless light was chosen. */
@@ -136,10 +136,10 @@
     --sem-border: #2a353d;
     --sem-border-strong: #3a4751;
 
-    --sem-primary: #a56afd;
-    --sem-primary-hover: #bfb1ff;
-    --sem-primary-foreground: #1a0029;
-    --sem-primary-soft: #2b2047;
+    --sem-primary: #88d0e8;
+    --sem-primary-hover: #bde6f5;
+    --sem-primary-foreground: #04212e;
+    --sem-primary-soft: #11485e;
 
     --sem-success: #4bbd87;
     --sem-success-bg: #11291f;
@@ -147,8 +147,8 @@
     --sem-warning-bg: #2d2411;
     --sem-danger: #ff7a89;
     --sem-danger-bg: #331519;
-    --sem-info: #bfb1ff;
-    --sem-info-bg: #241b3d;
+    --sem-info: #bde6f5;
+    --sem-info-bg: #11485e;
   }
 }
 
@@ -169,10 +169,10 @@
   --sem-border: #2a353d;
   --sem-border-strong: #3a4751;
 
-  --sem-primary: #a56afd;
-  --sem-primary-hover: #bfb1ff;
-  --sem-primary-foreground: #1a0029;
-  --sem-primary-soft: #2b2047;
+  --sem-primary: #88d0e8;
+  --sem-primary-hover: #bde6f5;
+  --sem-primary-foreground: #04212e;
+  --sem-primary-soft: #11485e;
 
   --sem-success: #4bbd87;
   --sem-success-bg: #11291f;
@@ -180,8 +180,8 @@
   --sem-warning-bg: #2d2411;
   --sem-danger: #ff7a89;
   --sem-danger-bg: #331519;
-  --sem-info: #bfb1ff;
-  --sem-info-bg: #241b3d;
+  --sem-info: #bde6f5;
+  --sem-info-bg: #11485e;
 }
 
 @layer base {
@@ -255,7 +255,7 @@
    palette. Chromium ignores ::-webkit-scrollbar once `scrollbar-color` is
    set, so the standard property is reserved for Firefox. */
 @supports not selector(::-webkit-scrollbar) {
-  html { scrollbar-width: thin; scrollbar-color: #a56afd transparent; }
+  html { scrollbar-width: thin; scrollbar-color: #2f9cc4 transparent; }
 }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }

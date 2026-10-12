@@ -32,6 +32,23 @@ export function formatMoney(
   }).format(cents / 100)
 }
 
+/**
+ * Short form for tight spaces, e.g. 39500000 + "ARS" → "$ 395 k".
+ *
+ * Only for places where the full figure cannot fit - a price under a day
+ * number in a calendar cell is 44px wide. Never for a total a customer is
+ * agreeing to pay: that is always shown in full.
+ */
+export function formatMoneyCompact(cents: number, currency: string = 'ARS'): string {
+  const locale = LOCALE_BY_CURRENCY[currency] ?? 'es-AR'
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    notation: 'compact',
+    maximumFractionDigits: 0,
+  }).format(cents / 100)
+}
+
 /** Converts a major-unit amount (what an admin types) into minor units. */
 export function toCents(amount: number): number {
   return Math.round(amount * 100)

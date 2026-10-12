@@ -18,7 +18,7 @@ const BASE =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-violet-700 text-white hover:bg-violet-800 focus-visible:ring-primary',
+  primary: 'bg-sky-700 text-white hover:bg-sky-800 focus-visible:ring-primary',
   secondary: 'bg-slate-800 text-white hover:bg-slate-900 focus-visible:ring-slate-600',
   outline: 'border border-border-strong bg-surface text-foreground hover:bg-surface-muted focus-visible:ring-primary',
   ghost: 'text-muted-foreground hover:bg-surface-strong hover:text-heading focus-visible:ring-primary',

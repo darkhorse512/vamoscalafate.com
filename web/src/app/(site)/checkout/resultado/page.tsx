@@ -121,7 +121,7 @@ export default async function CheckoutResultPage({
           {isFailed || isPending ? (
             <Link
               href={`${ROUTES.checkout}?ref=${encodeURIComponent(booking.reference)}`}
-              className="inline-flex h-11 items-center justify-center rounded-control bg-violet-700 px-5 text-sm font-semibold text-white hover:bg-violet-800"
+              className="inline-flex h-11 items-center justify-center rounded-control bg-sky-700 px-5 text-sm font-semibold text-white hover:bg-sky-800"
             >
               Volver al pago
             </Link>

@@ -78,8 +78,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-plum-950/80 via-plum-950/35 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-plum-950/90 via-plum-950/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/80 via-navy-950/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
         </div>
 
         {/* Credit over the image itself — there is no page background here to
@@ -92,7 +92,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
         <div className="container-page relative pb-14 pt-28">
           <Breadcrumbs items={crumbs} tone="light" />
-          <p className="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">
+          <p className="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sky-300">
             <span className="accent-rule" aria-hidden="true" />
             Destino · Patagonia austral
           </p>
@@ -122,7 +122,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <div className="overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-raised">
             <div className="bg-aurora px-6 py-6 text-white">
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sky-300">
                 Planificá tu visita
               </p>
               <p className="mt-2 font-display text-xl font-semibold leading-snug">{destination.name}</p>

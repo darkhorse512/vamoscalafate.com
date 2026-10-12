@@ -104,6 +104,8 @@ export const FOOTER_NAV = [
     title: 'Vamos Calafate',
     links: [
       { label: 'Contacto', href: ROUTES.contact },
+      { label: 'Grupos y familias', href: ROUTES.groups },
+      { label: 'Agencias y operadores', href: ROUTES.agencies },
       { label: 'Preguntas frecuentes', href: ROUTES.faq },
       { label: 'Registrar mi hotel', href: ROUTES.hotelRegister },
       { label: 'Términos y condiciones', href: ROUTES.terms },

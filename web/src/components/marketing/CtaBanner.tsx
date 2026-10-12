@@ -26,14 +26,14 @@ export function CtaBanner({
       {media?.url ? (
         <div className="absolute inset-0 -z-10" aria-hidden="true">
           <SmartImage media={media} seed="cta" alt="" sizes="100vw" />
-          <div className="absolute inset-0 bg-plum-950/75" />
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-900/50 via-transparent to-magenta-900/40" />
+          <div className="absolute inset-0 bg-navy-950/75" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-900/50 via-transparent to-sunset-900/40" />
         </div>
       ) : null}
 
       <div className="reveal container-page py-20 text-center sm:py-28">
         {eyebrow ? (
-          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-violet-300">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sky-300">
             {eyebrow}
           </p>
         ) : null}

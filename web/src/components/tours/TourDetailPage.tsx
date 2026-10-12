@@ -14,7 +14,9 @@ import { BookingWidget } from '@/components/booking/BookingWidget'
 import { FaqList } from '@/components/content/FaqList'
 import { Markdown } from '@/components/content/Markdown'
 import { Gallery } from '@/components/media/Gallery'
+import { VideoPlayer } from '@/components/media/VideoPlayer'
 import { TourCarousel } from './TourCarousel'
+import { TourUpgrade } from './TourUpgrade'
 import { TourMap } from './TourMap'
 import { breadcrumbSchema, faqSchema, jsonLdScript, tourSchema } from '@/lib/jsonld'
 import { toEmbedUrl } from '@/lib/utils'
@@ -52,8 +54,20 @@ export function TourDetailPage({
 
   const ld = jsonLdScript(schemas)
   const galleryImages = tour.images.map((i) => i.media)
+  /**
+   * A tour's video is either hosted here or embedded from YouTube/Vimeo.
+   *
+   * `mimeType` decides which: a self-hosted row carries the MP4 in `url` and
+   * uses `externalUrl` for its poster frame, while an embedded row has no file
+   * of its own and keeps the watch page in `externalUrl`. Reading `externalUrl`
+   * alone would mistake a poster for a video.
+   */
   const video = tour.videos[0]?.media
-  const videoEmbed = video?.externalUrl ? toEmbedUrl(video.externalUrl) : null
+  const selfHosted = video?.mimeType?.startsWith('video/') ? video : null
+  const videoEmbed = !selfHosted && video?.externalUrl ? toEmbedUrl(video.externalUrl) : null
+
+  /** Upgrades (Captain Club, Salón VIP) get a panel instead of a checkbox. */
+  const upgrades = tour.extras.filter((extra) => extra.highlight && extra.isActive)
 
   const firstOption = tour.options[0]
   const freeCancellationHours = Math.max(0, ...tour.options.map((o) => o.freeCancellationHours ?? 0))
@@ -73,7 +87,7 @@ export function TourDetailPage({
         </div>
 
         <div className="flex flex-col">
-          <p className="rounded-2xl bg-plum-950 px-5 py-3.5 text-[0.875rem] font-medium leading-snug text-white shadow-raised dark:bg-plum-900">
+          <p className="rounded-2xl bg-navy-950 px-5 py-3.5 text-[0.875rem] font-medium leading-snug text-white shadow-raised dark:bg-navy-900">
             {tour.summary}
           </p>
 
@@ -105,7 +119,7 @@ export function TourDetailPage({
           </dl>
 
           {/* Price summary — the full selection happens in the widget below. */}
-          <div className="mt-6 rounded-[1.25rem] border border-magenta-500/30 bg-gradient-to-br from-accent-soft/70 via-surface to-primary-soft/60 p-5">
+          <div className="mt-6 rounded-[1.25rem] border border-sunset-500/30 bg-gradient-to-br from-accent-soft/70 via-surface to-primary-soft/60 p-5">
             <p className="text-[0.75rem] font-semibold text-accent">Desde</p>
             <p className="font-display text-[2.25rem] font-bold leading-none text-heading">
               {formatMoney(tour.fromPriceCents ?? firstOption?.priceCents ?? 0, tour.currency)}
@@ -164,7 +178,7 @@ export function TourDetailPage({
                 <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                   {tour.highlights.map((highlight) => (
                     <li key={highlight} className="flex items-start gap-3 text-[0.9375rem] leading-relaxed text-foreground">
-                      <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-magenta-500 text-white">
+                      <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 text-white">
                         <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
                       </span>
                       {highlight}
@@ -189,12 +203,12 @@ export function TourDetailPage({
                     <li key={step.id} className="relative flex gap-5 pb-9 last:pb-0">
                       {index < tour.itinerary.length - 1 ? (
                         <span
-                          className="absolute bottom-0 left-[1.4375rem] top-12 border-l-2 border-dashed border-plum-300 dark:border-plum-700"
+                          className="absolute bottom-0 left-[1.4375rem] top-12 border-l-2 border-dashed border-navy-300 dark:border-navy-700"
                           aria-hidden="true"
                         />
                       ) : null}
                       <span
-                        className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full bg-plum-950 font-display text-lg font-bold text-white shadow-raised ring-4 ring-surface dark:bg-violet-700"
+                        className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full bg-navy-950 font-display text-lg font-bold text-white shadow-raised ring-4 ring-surface dark:bg-sky-700"
                         aria-hidden="true"
                       >
                         {index + 1}
@@ -222,6 +236,23 @@ export function TourDetailPage({
                 <SectionTitle>Mapa del recorrido</SectionTitle>
                 <div className="mt-6">
                   <TourMap src={tour.mapEmbedUrl} title={`Mapa del recorrido: ${tour.name}`} />
+                </div>
+              </section>
+            ) : null}
+
+            {/* Upgrades: Captain Club, Salón VIP */}
+            {upgrades.length > 0 ? (
+              <section>
+                <SectionTitle>Servicios exclusivos</SectionTitle>
+                <div className="mt-6 space-y-6">
+                  {upgrades.map((extra, index) => (
+                    <TourUpgrade
+                      key={extra.id}
+                      extra={extra}
+                      currency={tour.currency}
+                      reverse={index % 2 === 1}
+                    />
+                  ))}
                 </div>
               </section>
             ) : null}
@@ -300,7 +331,28 @@ export function TourDetailPage({
             ) : null}
 
             {/* Video */}
-            {videoEmbed ? (
+            {selfHosted ? (
+              <section>
+                <SectionTitle>Video</SectionTitle>
+                <div className="mt-6 flex justify-center sm:justify-start">
+                  <VideoPlayer
+                    src={selfHosted.url}
+                    poster={selfHosted.externalUrl}
+                    title={selfHosted.altText ?? tour.name}
+                    aspect={
+                      selfHosted.width && selfHosted.height && selfHosted.width >= selfHosted.height
+                        ? 'wide'
+                        : 'vertical'
+                    }
+                    className={
+                      selfHosted.width && selfHosted.height && selfHosted.width >= selfHosted.height
+                        ? 'w-full'
+                        : 'w-full max-w-[20rem]'
+                    }
+                  />
+                </div>
+              </section>
+            ) : videoEmbed ? (
               <section>
                 <SectionTitle>Video</SectionTitle>
                 <div className="mt-6 aspect-video overflow-hidden rounded-2xl bg-surface-strong shadow-raised">
@@ -333,7 +385,7 @@ export function TourDetailPage({
                     <li key={review.id} className="rounded-2xl border border-border bg-surface p-5 shadow-subtle">
                       <div className="flex items-center justify-between gap-3">
                         <p className="flex items-center gap-3 text-sm font-bold text-heading">
-                          <span className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-magenta-500 text-sm text-white">
+                          <span className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 text-sm text-white">
                             {review.authorName.charAt(0).toUpperCase()}
                           </span>
                           <span>
@@ -343,7 +395,7 @@ export function TourDetailPage({
                             ) : null}
                           </span>
                         </p>
-                        <p className="text-sm text-magenta-500" aria-label={`${review.rating} de 5 estrellas`}>
+                        <p className="text-sm text-sunset-500" aria-label={`${review.rating} de 5 estrellas`}>
                           {'★'.repeat(review.rating)}
                           <span className="text-border-strong">{'★'.repeat(5 - review.rating)}</span>
                         </p>
@@ -385,7 +437,7 @@ export function TourDetailPage({
         {/* Destination guide — internal linking */}
         {tour.destination ? (
           <section className="relative mt-16 overflow-hidden rounded-[1.5rem] bg-aurora p-8 text-white sm:p-10">
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">Guía del destino</p>
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sky-300">Guía del destino</p>
             <h2 className="mt-2 font-display text-2xl font-semibold text-white sm:text-[1.75rem]">
               Antes de ir: {tour.destination.name}
             </h2>

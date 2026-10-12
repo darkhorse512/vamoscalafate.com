@@ -94,6 +94,8 @@ export const ROUTES = {
   book: '/reservar',
   checkout: '/checkout',
   contact: '/contacto',
+  agencies: '/agencias',
+  groups: '/grupos',
   faq: '/preguntas-frecuentes',
   terms: '/terminos',
   privacy: '/privacidad',

@@ -244,7 +244,7 @@ export function GalleryField({
                   />
 
                   {isCover ? (
-                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-violet-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
+                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-sky-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                       <Star className="size-2.5 fill-current" aria-hidden="true" />
                       Portada
                     </span>

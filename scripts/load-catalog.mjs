@@ -33,10 +33,16 @@ const require = createRequire(new URL('../web/package.json', import.meta.url))
 const sharp = require('sharp')
 
 config({ path: path.join(process.cwd(), 'web/.env') })
-const PHOTOS = process.argv[2]
+/**
+ * Directory holding the Drive photo folders. Optional: without it the script
+ * updates every text, price band and add-on and leaves the existing images
+ * untouched. That matters because the texts change far more often than the
+ * photographs, and re-downloading 200 originals to correct a sentence is not
+ * a workflow anyone will follow.
+ */
+const PHOTOS = process.argv[2] ?? null
 if (!PHOTOS) {
-  console.error('Usage: load-catalog.mjs <photos-dir>')
-  process.exit(1)
+  console.log('Sin carpeta de fotos: se actualizan textos, tarifas y opcionales; las imágenes quedan como están.\n')
 }
 const STORAGE = process.env.STORAGE_LOCAL_DIR
 const PUBLIC_BASE = (process.env.STORAGE_PUBLIC_URL ?? '').replace(/\/$/, '')
@@ -178,7 +184,7 @@ Si querés vivir el glaciar todavía más de cerca, podés agregar a tu reserva 
       'Trekking sobre el hielo de 90 minutos',
       'Navegación frente a la pared del glaciar',
     ],
-    excluded: [PARK_TICKET, 'Comidas: llevá tu vianda y agua (no hay dónde comprar)', 'Traslado desde tu hotel (podés sumarlo como opcional)'],
+    excluded: [PARK_TICKET, 'Comidas: llevá tu vianda y agua (no hay dónde comprar)', 'Traslado desde tu hotel (se suma a la reserva; el precio «desde» no lo incluye)'],
     description: `
 Si buscás una experiencia única en la Patagonia argentina, el Minitrekking sobre el Glaciar Perito Moreno es imperdible.
 
@@ -202,9 +208,11 @@ Es muy variable y puede cambiar en minutos. En verano la temperatura promedio va
 
 Campera y pantalón impermeables, botas de trekking, mochila, lentes de sol, protector solar, guantes y gorro. La actividad no incluye comida: llevá tu vianda y una botella para el agua, porque no hay dónde comprar.
 
-## Con o sin traslado
+## El traslado
 
-Podés llegar por tus medios a Puerto Bajo de las Sombras o sumar el **traslado desde tu hotel**, que incluye además **una hora de visita a las pasarelas** del glaciar. Es una excursión de día completo: te recomendamos no planear otra actividad para ese día.
+La excursión se opera con **traslado desde tu hotel**, que incluye además **una hora de visita a las pasarelas** del glaciar camino al puerto. Por eso se suma a toda reserva: el precio «desde» corresponde a la actividad y el traslado se detalla como una línea aparte, con su importe a la vista antes de pagar.
+
+Es una excursión de día completo: te recomendamos no planear otra actividad para ese día.
 `,
     importantInfo: `**Edad: de 8 a 65 años.** Por exigencia del operador, otras edades no pueden realizar la actividad.
 
@@ -217,8 +225,8 @@ ${SCHEDULE_NOTE}
 ${NO_RECEPTION_NOTE}`,
     cancellationPolicy: 'Cancelación sin cargo hasta 24 horas antes de la excursión.',
     itinerary: [
-      { time: '07:00', title: 'Búsqueda por tu hotel (si contrataste traslado)', text: 'Salida hacia el Parque Nacional por la Ruta 11.' },
-      { title: 'Visita a las pasarelas', text: 'Una hora en los miradores frente al glaciar (solo con traslado).' },
+      { time: '07:00', title: 'Búsqueda por tu hotel', text: 'Salida hacia el Parque Nacional por la Ruta 11.' },
+      { title: 'Visita a las pasarelas', text: 'Una hora en los miradores frente al glaciar.' },
       { title: 'Puerto Bajo de las Sombras', text: 'Embarque y cruce del Brazo Rico hasta la costa del glaciar.' },
       { title: 'Trekking sobre el hielo', text: '90 minutos con crampones y guías especializados, con brindis final.' },
       { title: 'Navegación de regreso', text: 'Vista de la pared del glaciar desde el agua.' },
@@ -226,7 +234,7 @@ ${NO_RECEPTION_NOTE}`,
     options: [
       {
         name: 'Minitrekking',
-        description: 'Encuentro en Puerto Bajo de las Sombras. Sumá el traslado desde tu hotel en «Opcionales».',
+        description: 'Te buscamos por tu hotel, visitamos las pasarelas y embarcamos en Puerto Bajo de las Sombras.',
         departureTimes: ['07:00'],
         durationMinutes: 11 * 60,
         capacity: 20,
@@ -241,6 +249,7 @@ ${NO_RECEPTION_NOTE}`,
         name: 'Traslado desde tu hotel + visita a las pasarelas',
         description: 'Búsqueda y regreso a tu hotel en El Calafate, con una hora de visita a las pasarelas del glaciar.',
         price: 10000,
+        required: true,
       },
     ],
     seo: {
@@ -521,7 +530,7 @@ ${SCHEDULE_NOTE}`,
       'Desembarco en el refugio del Glaciar Spegazzini',
       'Guía en español e inglés durante la navegación',
     ],
-    excluded: [PARK_TICKET, 'Comidas (salvo con Captain Club)', 'Traslado desde tu hotel (podés sumarlo como opcional)'],
+    excluded: [PARK_TICKET, 'Comidas (salvo con Captain Club)', 'Traslado desde tu hotel (se suma a la reserva; el precio «desde» no lo incluye)'],
     description: `
 ## Una experiencia única para los amantes de la naturaleza
 
@@ -539,12 +548,12 @@ Para una visita más exclusiva, el **Captain Club** suma la navegación en el sa
 
 ## Traslado
 
-El recorrido dura aproximadamente 11 horas y no incluye la salida desde tu hotel: podés sumar el **traslado ida y vuelta desde tu hotel** como opcional.
+El recorrido dura aproximadamente 11 horas y embarca en Puerto Punta Bandera, a 47 km de El Calafate. El **traslado ida y vuelta desde tu hotel** se suma a toda reserva: el precio «desde» corresponde a la navegación y el traslado se detalla como una línea aparte, con su importe a la vista antes de pagar.
 `,
     importantInfo: SCHEDULE_NOTE,
     cancellationPolicy: 'Cancelación sin cargo hasta 24 horas antes de la navegación.',
     itinerary: [
-      { time: '08:30', title: 'Embarque en Puerto Punta Bandera', text: 'A 47 km de El Calafate. Si contrataste traslado, te buscamos antes por tu hotel.' },
+      { time: '08:30', title: 'Embarque en Puerto Punta Bandera', text: 'A 47 km de El Calafate. Te buscamos antes por tu hotel.' },
       { title: 'Témpanos y Glaciar Upsala', text: 'Navegación por el Brazo Norte del Lago Argentino.' },
       { title: 'Desembarco en el Glaciar Spegazzini', text: 'Refugio, almuerzo, senderos y fotos frente al glaciar.' },
       { time: '16:00', title: 'Regreso a Puerto Punta Bandera', text: 'Fin de la navegación.' },
@@ -552,7 +561,7 @@ El recorrido dura aproximadamente 11 horas y no incluye la salida desde tu hotel
     options: [
       {
         name: 'Navegación Todo Glaciares',
-        description: 'Embarque en Puerto Punta Bandera. Sumá el traslado o el Captain Club en «Opcionales».',
+        description: 'Traslado desde tu hotel y embarque en Puerto Punta Bandera. Podés sumar el Captain Club.',
         departureTimes: ['08:30'],
         durationMinutes: 11 * 60,
         capacity: 60,
@@ -564,8 +573,26 @@ El recorrido dura aproximadamente 11 horas y no incluye la salida desde tu hotel
       },
     ],
     extras: [
-      { name: 'Traslado desde tu hotel al puerto', description: 'Búsqueda y regreso a tu hotel en El Calafate.', price: 7500 },
-      { name: 'Upgrade Captain Club', description: 'Salón VIP del capitán (máx. 20 personas) con comida y bebidas libres, y salón privado en el refugio del Spegazzini.', price: 25200 },
+      {
+        name: 'Traslado desde tu hotel al puerto',
+        description: 'Búsqueda y regreso a tu hotel en El Calafate. Puerto Punta Bandera está a 47 km del centro.',
+        price: 7500,
+        required: true,
+      },
+      {
+        name: 'Captain Club',
+        description:
+          'El salón del capitán, en la cubierta superior del catamarán: hasta veinte pasajeros, servicio de comida y bebidas durante toda la navegación, y un salón privado en el refugio del Spegazzini mientras el resto del pasaje desembarca.',
+        price: 25200,
+        highlight: true,
+        badge: 'Servicio opcional',
+        details: [
+          'Salón exclusivo en la cubierta superior, para un máximo de 20 pasajeros',
+          'Comida y bebidas libres durante toda la navegación',
+          'Salón privado en el refugio del Glaciar Spegazzini',
+          'Mejor punto de vista del barco para fotografiar los frentes de hielo',
+        ],
+      },
     ],
     seo: {
       title: 'Navegación Todo Glaciares: Upsala y Spegazzini',
@@ -766,7 +793,7 @@ ${SCHEDULE_NOTE}`,
       'Seguro',
       'Acceso para sillas de ruedas o movilidad reducida (con acompañante)',
     ],
-    excluded: [PARK_TICKET, 'Vianda gourmet (podés sumarla como opcional)', 'Traslado desde tu hotel (podés sumarlo como opcional)'],
+    excluded: [PARK_TICKET, 'Vianda gourmet (podés sumarla como opcional)', 'Traslado desde tu hotel (se suma a la reserva; el precio «desde» no lo incluye)'],
     description: `
 ## Explorá los glaciares y el sabor de la Patagonia
 
@@ -795,7 +822,7 @@ ${NO_RECEPTION_NOTE}
 ${SCHEDULE_NOTE}`,
     cancellationPolicy: 'Cancelación sin cargo hasta 24 horas antes de la navegación.',
     itinerary: [
-      { time: '07:00', title: 'Búsqueda por tu hotel (si contrataste traslado)', text: 'Viaje hasta Puerto La Soledad.' },
+      { time: '07:00', title: 'Búsqueda por tu hotel', text: 'Viaje hasta Puerto La Soledad.' },
       { time: '08:30', title: 'Embarque en Puerto La Soledad', text: 'Inicio de la navegación por el Lago Argentino.' },
       { title: 'Upsala, Spegazzini, Seco y Perito Moreno', text: 'Navegación frente a los glaciares, con vianda gourmet a bordo si la sumaste.' },
       { title: 'Desembarco en Puesto de las Vacas', text: 'Visita a un antiguo puesto de estancia.' },
@@ -804,7 +831,7 @@ ${SCHEDULE_NOTE}`,
     options: [
       {
         name: 'Glaciares Gourmet',
-        description: 'Embarque a las 8:30 en Puerto La Soledad. Sumá vianda, salón VIP o traslado en «Opcionales».',
+        description: 'Traslado desde tu hotel y embarque a las 8:30 en Puerto La Soledad. Podés sumar vianda o Salón VIP.',
         departureTimes: ['08:30'],
         durationMinutes: 9 * 60,
         capacity: 60,
@@ -817,8 +844,26 @@ ${SCHEDULE_NOTE}`,
     ],
     extras: [
       { name: 'Vianda gourmet', description: 'Sándwich de cordero con mostaza casera, queso criollo y cebollas caramelizadas, papas horneadas, quesos ahumados, mousse de caramelo y bebida sin alcohol.', price: 5000 },
-      { name: 'Acceso al Salón VIP', description: 'Salón VIP a bordo (máx. 12 personas) con almuerzo gourmet premium y bebidas con y sin alcohol.', price: 36500 },
-      { name: 'Traslado desde tu hotel al puerto', description: 'Búsqueda desde las 7:00 y regreso a tu hotel en El Calafate.', price: 8000 },
+      {
+        name: 'Salón VIP',
+        description:
+          'Un salón para doce pasajeros, con almuerzo gourmet servido a bordo y barra con y sin alcohol durante toda la navegación.',
+        price: 36500,
+        highlight: true,
+        badge: 'Servicio opcional',
+        details: [
+          'Salón exclusivo a bordo, para un máximo de 12 pasajeros',
+          'Almuerzo gourmet servido durante la navegación',
+          'Bebidas con y sin alcohol incluidas',
+          'Reemplaza la vianda: no hace falta sumarla por separado',
+        ],
+      },
+      {
+        name: 'Traslado desde tu hotel al puerto',
+        description: 'Búsqueda desde las 7:00 y regreso a tu hotel en El Calafate.',
+        price: 8000,
+        required: true,
+      },
     ],
     seo: {
       title: 'Navegación Glaciares Gourmet en el Lago Argentino',
@@ -1202,6 +1247,15 @@ async function main() {
         description: extra.description,
         priceCents: ARS(extra.price),
         perPerson: extra.perPerson ?? true,
+        // The operator always provides this service for the tour: the booking
+        // includes it, while the advertised "desde" price does not, because
+        // the activity is quoted on its own.
+        required: extra.required ?? false,
+        // Presented as an upgrade panel on the tour page rather than as a row
+        // in the add-on list.
+        highlight: extra.highlight ?? false,
+        badge: extra.badge ?? null,
+        details: extra.details ?? [],
         isActive: true,
         sortOrder: extraIndex,
       }
@@ -1239,12 +1293,20 @@ async function main() {
     await prisma.tourPickupLocation.updateMany({ where: { tourId }, data: { isActive: false } })
 
     // Photos
-    const mediaIds = await importPhotos(tour)
-    await prisma.tourImage.deleteMany({ where: { tourId } })
-    await prisma.tourImage.createMany({
-      data: mediaIds.map((mediaId, index) => ({ tourId, mediaId, isCover: index === 0, sortOrder: index })),
-    })
-    console.log(`  ${tour.options.length} opción(es), ${tour.extras.length} opcional(es), ${mediaIds.length} fotos · ${hash(tour.description)}`)
+    let photoCount = null
+    if (PHOTOS) {
+      const mediaIds = await importPhotos(tour)
+      await prisma.tourImage.deleteMany({ where: { tourId } })
+      await prisma.tourImage.createMany({
+        data: mediaIds.map((mediaId, index) => ({ tourId, mediaId, isCover: index === 0, sortOrder: index })),
+      })
+      photoCount = mediaIds.length
+    }
+    console.log(
+      `  ${tour.options.length} opción(es), ${tour.extras.length} opcional(es)` +
+        (photoCount === null ? '' : `, ${photoCount} fotos`) +
+        ` · ${hash(tour.description)}`,
+    )
   }
 
   // Placeholders that are not part of the business's catalogue.

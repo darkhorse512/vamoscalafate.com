@@ -26,13 +26,13 @@ export async function PageBanner({
       {media ? (
         <div className="absolute inset-0 -z-10" aria-hidden="true">
           <SmartImage media={media} seed={`banner-${imageSlug}`} alt="" sizes="100vw" priority quality={75} />
-          <div className="absolute inset-0 bg-gradient-to-r from-plum-950/95 via-plum-950/75 to-plum-950/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-plum-950/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/75 to-navy-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 to-transparent" />
         </div>
       ) : null}
 
       <div
-        className="pointer-events-none absolute -right-24 -top-24 -z-10 size-80 rounded-full bg-magenta-500/20 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 -z-10 size-80 rounded-full bg-sunset-500/20 blur-3xl"
         aria-hidden="true"
       />
 

@@ -376,7 +376,7 @@ export function DatePicker({
                           soldOut && !selected && 'text-subtle-foreground line-through decoration-1',
                           isToday && !selected && 'ring-1 ring-inset ring-primary/40',
                           selected &&
-                            'bg-gradient-to-br from-violet-600 to-magenta-500 font-bold text-white shadow-[0_6px_16px_rgb(108_88_254/0.35)]',
+                            'bg-gradient-to-br from-navy-700 to-sky-600 font-bold text-white shadow-[0_6px_16px_rgb(0_88_120/0.35)]',
                         )}
                       >
                         <span>{parse(iso).getUTCDate()}</span>

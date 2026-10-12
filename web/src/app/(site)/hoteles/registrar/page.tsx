@@ -52,7 +52,7 @@ export default function RegistrarPage() {
                 ].map((step, index) => (
                   <li key={step.title} className="flex gap-3">
                     <span
-                      className="grid size-6 shrink-0 place-items-center rounded-full bg-violet-700 text-[0.6875rem] font-bold text-white"
+                      className="grid size-6 shrink-0 place-items-center rounded-full bg-sky-700 text-[0.6875rem] font-bold text-white"
                       aria-hidden="true"
                     >
                       {index + 1}

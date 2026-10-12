@@ -49,8 +49,8 @@ export function AdminSidebar({
           <Image
             src="/brand/logo-light.png"
             alt=""
-            width={646}
-            height={192}
+            width={1040}
+            height={240}
             unoptimized
             priority
             className="h-8 w-auto"
@@ -90,7 +90,7 @@ export function AdminSidebar({
                       className={cn(
                         'flex items-center gap-2.5 rounded-control px-2.5 py-2 text-[0.8125rem] font-medium transition-colors',
                         isActive
-                          ? 'bg-violet-700 text-white'
+                          ? 'bg-sky-700 text-white'
                           : 'text-slate-300 hover:bg-slate-800 hover:text-white',
                       )}
                     >

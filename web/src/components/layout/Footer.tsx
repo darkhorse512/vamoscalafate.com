@@ -18,7 +18,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
   return (
     // `flush` drops the top margin when the page already ends in a full-bleed
     // band, which would otherwise leave a white strip above the footer.
-    <footer className={`${flush ? '' : 'mt-24 '}border-t border-plum-800 bg-inverse text-stone-300`}>
+    <footer className={`${flush ? '' : 'mt-24 '}border-t border-navy-800 bg-inverse text-stone-300`}>
       <div className="container-page py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,2.6fr)]">
           <div>
@@ -31,7 +31,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
 
             <address className="mt-6 space-y-2.5 text-sm not-italic text-stone-400">
               <div className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-violet-400" aria-hidden="true" />
+                <MapPin className="mt-0.5 size-4 shrink-0 text-sky-400" aria-hidden="true" />
                 <span>
                   {LOCATION.city}, {LOCATION.province}, {LOCATION.country}
                 </span>
@@ -39,7 +39,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
 
               {CONTACT.phone ? (
                 <div className="flex items-start gap-2.5">
-                  <Phone className="mt-0.5 size-4 shrink-0 text-violet-400" aria-hidden="true" />
+                  <Phone className="mt-0.5 size-4 shrink-0 text-sky-400" aria-hidden="true" />
                   <a href={`tel:${CONTACT.phone}`} className="transition-colors hover:text-white">
                     {CONTACT.phone}
                   </a>
@@ -47,7 +47,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
               ) : null}
 
               <div className="flex items-start gap-2.5">
-                <Mail className="mt-0.5 size-4 shrink-0 text-violet-400" aria-hidden="true" />
+                <Mail className="mt-0.5 size-4 shrink-0 text-sky-400" aria-hidden="true" />
                 <a href={`mailto:${CONTACT.email}`} className="transition-colors hover:text-white">
                   {CONTACT.email}
                 </a>
@@ -81,7 +81,7 @@ export function Footer({ flush = false }: { flush?: boolean } = {}) {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-plum-800 pt-7 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-navy-800 pt-7 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
             <p className="text-xs text-stone-400">
               © {year} {SITE.name}. Todos los derechos reservados.

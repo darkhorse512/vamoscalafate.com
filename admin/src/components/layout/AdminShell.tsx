@@ -61,7 +61,7 @@ export function AdminShell({
             </div>
 
             <span
-              className="grid size-8 shrink-0 place-items-center rounded-full bg-violet-700 text-[0.6875rem] font-bold text-white"
+              className="grid size-8 shrink-0 place-items-center rounded-full bg-sky-700 text-[0.6875rem] font-bold text-white"
               aria-hidden="true"
             >
               {initials}

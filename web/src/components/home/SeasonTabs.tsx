@@ -62,7 +62,7 @@ export function SeasonTabs({ seasons }: { seasons: Season[] }) {
               className={cn(
                 'inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200',
                 active
-                  ? 'bg-gradient-to-r from-violet-600 to-magenta-500 text-white shadow-[0_8px_22px_rgb(108_88_254/0.3)]'
+                  ? 'bg-gradient-to-r from-navy-700 to-sky-600 text-white shadow-[0_8px_22px_rgb(0_88_120/0.3)]'
                   : 'border border-border bg-surface text-foreground hover:border-primary/50 hover:text-primary',
               )}
             >
@@ -95,7 +95,7 @@ export function SeasonTabs({ seasons }: { seasons: Season[] }) {
                 sizes="(max-width: 1023px) 100vw, 55vw"
                 className="animate-rise-in"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-plum-950/60 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-plum-950/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-950/60 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-navy-950/10" />
               <p className="absolute bottom-5 left-5 font-display text-[2.5rem] font-bold leading-none text-white sm:text-[3.25rem]">
                 {season.name}
               </p>

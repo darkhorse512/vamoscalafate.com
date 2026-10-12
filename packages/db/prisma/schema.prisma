@@ -330,6 +330,7 @@ model Media {
   hotelVideos    HotelVideo[]
   businessImages BusinessImage[]
   blogHeroFor    BlogPost[]      @relation("BlogHero")
+  tourExtras     TourExtra[]     @relation("TourExtraImage")
   destinationHeroFor Destination[] @relation("DestinationHero")
   attractionImageFor Attraction[]  @relation("AttractionImage")
   categoryImageFor   TourCategory[] @relation("CategoryImage")
@@ -630,9 +631,41 @@ model TourPriceTier {
   sortOrder Int     @default(0)
 
   bookingItemTiers BookingItemTier[]
+  rates            TourPriceRate[]
 
   @@index([optionId, isActive])
   @@map("tour_price_tiers")
+}
+
+/// Seasonal rate for one price band over one date range.
+///
+/// `TourPriceTier.priceCents` is the standing rate; a rate row replaces it for
+/// departures inside [startDate, endDate]. Ranges may overlap — the narrowest
+/// one wins, so a one-week holiday rate can sit inside a three-month high
+/// season without either having to be split.
+///
+/// This is deliberately separate from `TourAvailability.priceCentsOverride`,
+/// which prices a single departure. A season is a rule; an override is an
+/// exception, and only the exception needs a row per date.
+model TourPriceRate {
+  id     String        @id @default(cuid())
+  tierId String
+  tier   TourPriceTier @relation(fields: [tierId], references: [id], onDelete: Cascade)
+
+  /// Shown to staff in the admin, e.g. "Temporada alta" - never to visitors.
+  label String?
+
+  /// Inclusive, normalised to UTC midnight.
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+
+  priceCents Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tierId, startDate, endDate])
+  @@map("tour_price_rates")
 }
 
 /// An add-on bought with an excursion ("Opcionales"): hotel transfer,
@@ -649,6 +682,25 @@ model TourExtra {
   description String? @db.Text
   priceCents  Int
   perPerson   Boolean @default(true)
+
+  /// Added to every booking of this tour and not removable - the operator
+  /// sells the activity and the transfer as one product but quotes the
+  /// activity alone, so the listing price excludes it and the booking
+  /// summary shows it as its own line. The total is never a surprise:
+  /// the supplement is stated before the date is chosen.
+  required Boolean @default(false)
+
+  /// Presents this add-on as an upgrade panel on the tour page, rather than
+  /// as a row in the add-on list. For Captain Club and the Gourmet VIP
+  /// service, which are the reason some visitors book at all.
+  highlight Boolean @default(false)
+  /// Short badge over the upgrade panel, e.g. "Servicio opcional".
+  badge     String?
+  /// Bullet points for the upgrade panel.
+  details   String[] @default([])
+
+  mediaId String?
+  media   Media?  @relation("TourExtraImage", fields: [mediaId], references: [id], onDelete: SetNull)
 
   isActive  Boolean @default(true)
   sortOrder Int     @default(0)

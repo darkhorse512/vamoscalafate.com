@@ -271,7 +271,7 @@ export function BookingForm({
               <li key={slot.key} className="rounded-2xl border border-border bg-surface-muted p-4 sm:p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="flex items-center gap-2.5 text-sm font-bold text-heading">
-                    <span className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-violet-600 to-magenta-500 text-xs text-white">
+                    <span className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 text-xs text-white">
                       {index + 1}
                     </span>
                     Pasajero {index + 1}
@@ -352,9 +352,9 @@ export function BookingForm({
 
       {/* ── Summary ─────────────────────────────────────────────────── */}
       <aside className="mt-8 lg:sticky lg:top-24 lg:mt-0 lg:self-start">
-        <div className="overflow-hidden rounded-[1.25rem] border border-magenta-500/30 bg-surface shadow-float">
+        <div className="overflow-hidden rounded-[1.25rem] border border-sunset-500/30 bg-surface shadow-float">
           <div className="bg-aurora px-5 py-4 text-white">
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">Tu reserva</p>
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sky-300">Tu reserva</p>
             <p className="mt-1 font-display text-lg font-semibold leading-snug">{tour.name}</p>
           </div>
 
@@ -372,6 +372,9 @@ export function BookingForm({
                 <div key={line.id} className="flex justify-between gap-3 text-muted-foreground">
                   <dt>
                     {line.quantity} × {line.label}
+                    {line.seasonLabel ? (
+                      <span className="ml-1 text-[0.6875rem] text-subtle-foreground">({line.seasonLabel})</span>
+                    ) : null}
                   </dt>
                   <dd className="shrink-0">
                     {line.unitCents === 0 ? 'Gratis' : formatMoney(line.subtotalCents, breakdown.currency)}
@@ -383,6 +386,11 @@ export function BookingForm({
                   <dt>
                     {line.label}
                     {line.quantity > 1 ? ` × ${line.quantity}` : ''}
+                    {line.required ? (
+                      <span className="ml-1 text-[0.625rem] font-semibold uppercase tracking-wide text-primary">
+                        obligatorio
+                      </span>
+                    ) : null}
                   </dt>
                   <dd className="shrink-0">{formatMoney(line.subtotalCents, breakdown.currency)}</dd>
                 </div>
@@ -442,7 +450,7 @@ export function BookingForm({
 function SectionTitle({ step, title, hint }: { step: number; title: string; hint?: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-plum-950 text-sm font-bold text-white dark:bg-violet-700">
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-navy-950 text-sm font-bold text-white dark:bg-sky-700">
         {step}
       </span>
       <div>

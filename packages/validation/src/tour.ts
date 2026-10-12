@@ -17,12 +17,33 @@ export const difficultySchema = z.enum(['EASY', 'MODERATE', 'CHALLENGING'])
 const rowIdSchema = z.string().min(1).max(80).regex(/^[\w-]+$/)
 
 /** An age band with its own price; 0 is shown to customers as "Gratis". */
+/**
+ * A seasonal rate: the price this band costs for departures inside the range.
+ *
+ * Nothing is derived from the standing price - no percentage, no uplift. The
+ * operator types what they charge, which is the only figure that can be
+ * defended to a customer.
+ */
+export const priceRateSchema = z.object({
+  id: rowIdSchema.optional(),
+  label: z.string().max(60).optional(),
+  /** `yyyy-mm-dd`, inclusive. */
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Usá el formato AAAA-MM-DD'),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Usá el formato AAAA-MM-DD'),
+  price: priceAmountSchema,
+}).refine((r) => r.endDate >= r.startDate, {
+  message: 'La fecha de fin debe ser posterior o igual a la de inicio',
+  path: ['endDate'],
+})
+
 export const priceTierSchema = z.object({
   id: rowIdSchema.optional(),
   label: safeTextSchema(2, 120, 'El nombre de la tarifa'),
   ageMin: z.number().int().min(0).max(120).optional().nullable(),
   ageMax: z.number().int().min(0).max(120).optional().nullable(),
   price: priceAmountSchema,
+  /** Dated exceptions to `price`. Ranges may overlap; the narrowest wins. */
+  rates: z.array(priceRateSchema).max(24).default([]),
 })
   .refine((t) => t.ageMin == null || t.ageMax == null || t.ageMax >= t.ageMin, {
     message: 'La edad máxima debe ser mayor o igual a la mínima',
@@ -33,9 +54,20 @@ export const priceTierSchema = z.object({
 export const tourExtraSchema = z.object({
   id: rowIdSchema.optional(),
   name: safeTextSchema(2, 120, 'El nombre del adicional'),
-  description: z.string().max(500).optional(),
+  description: z.string().max(1000).optional(),
   price: priceAmountSchema,
   perPerson: z.boolean().default(true),
+  /**
+   * Added to every booking and not removable. For a transfer the operator
+   * always provides: the listing price excludes it, the booking includes it,
+   * and the booking form names it and its price before the date is chosen.
+   */
+  required: z.boolean().default(false),
+  /** Shown as an upgrade panel on the tour page instead of as a checkbox. */
+  highlight: z.boolean().default(false),
+  badge: z.string().max(40).optional(),
+  details: z.array(z.string().max(200)).max(10).default([]),
+  mediaId: z.string().max(80).optional(),
   isActive: z.boolean().default(true),
 })
 

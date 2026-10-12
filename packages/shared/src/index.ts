@@ -16,3 +16,4 @@ export * from './errors.ts'
 //
 //   import { checkRateLimit, RATE_LIMITS } from '@vamos/shared/rate-limit'
 export * from './party.ts'
+export * from './rates.ts'

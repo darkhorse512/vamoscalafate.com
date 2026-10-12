@@ -20,6 +20,7 @@ import type {
   TourItineraryStep,
   TourExtra,
   TourOption,
+  TourPriceRate,
   TourPriceTier,
   TourPickupLocation,
   TourVideo,
@@ -44,6 +45,9 @@ export type MediaRef = Pick<
   Media,
   | 'id'
   | 'url'
+  // Distinguishes a stored video from an image, and a self-hosted video from
+  // one embedded elsewhere: a self-hosted row keeps its poster in externalUrl.
+  | 'mimeType'
   | 'altText'
   | 'caption'
   | 'width'
@@ -59,6 +63,11 @@ export type MediaRef = Pick<
 export type TourImageWithMedia = TourImage & { media: MediaRef }
 export type TourVideoWithMedia = TourVideo & { media: MediaRef }
 
+export type TourPriceRateRef = Pick<TourPriceRate, 'label' | 'startDate' | 'endDate' | 'priceCents'>
+
+/** An add-on, with the photo that the highlighted upgrade panel needs. */
+export type TourExtraWithMedia = TourExtra & { media: MediaRef | null }
+
 /** Everything the `/excursiones/[slug]` page renders. */
 export type TourDetail = Tour & {
   category: Pick<TourCategory, 'id' | 'slug' | 'name' | 'channel'>
@@ -66,8 +75,13 @@ export type TourDetail = Tour & {
   seo: SeoMetadata | null
   images: TourImageWithMedia[]
   videos: TourVideoWithMedia[]
-  options: (TourOption & { priceTiers: TourPriceTier[] })[]
-  extras: TourExtra[]
+  /**
+   * Bands carry their seasonal rates so the booking widget can price the date
+   * the visitor picks without a round trip per date. The server re-prices the
+   * booking from the same rows, so the preview can never become the charge.
+   */
+  options: (TourOption & { priceTiers: (TourPriceTier & { rates: TourPriceRateRef[] })[] })[]
+  extras: TourExtraWithMedia[]
   itinerary: TourItineraryStep[]
   pickupLocations: TourPickupLocation[]
   faqs: Faq[]

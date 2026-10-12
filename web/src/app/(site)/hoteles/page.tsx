@@ -77,7 +77,7 @@ export default async function HotelesPage({
                   <div className="flex flex-1 flex-col p-4 sm:p-5">
                     {hotel.starRating ? (
                       <p
-                        className="flex items-center gap-0.5 text-magenta-500"
+                        className="flex items-center gap-0.5 text-sunset-500"
                         aria-label={`${hotel.starRating} estrellas`}
                       >
                         {Array.from({ length: hotel.starRating }, (_, i) => (

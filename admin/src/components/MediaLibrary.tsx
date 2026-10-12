@@ -106,7 +106,7 @@ export function MediaLibrary({ items }: { items: MediaItem[] }) {
               accept="image/jpeg,image/png,image/webp,image/avif,application/pdf"
               onChange={(event) => upload(event.target.files)}
               disabled={pending}
-              className="block w-full text-[0.8125rem] text-muted-foreground file:mr-3 file:rounded-control file:border-0 file:bg-violet-700 file:px-3.5 file:py-2 file:text-[0.8125rem] file:font-medium file:text-white hover:file:bg-violet-800"
+              className="block w-full text-[0.8125rem] text-muted-foreground file:mr-3 file:rounded-control file:border-0 file:bg-sky-700 file:px-3.5 file:py-2 file:text-[0.8125rem] file:font-medium file:text-white hover:file:bg-sky-800"
             />
             <p className="mt-1 text-[0.75rem] text-subtle-foreground">
               JPG, PNG, WebP, AVIF o PDF. Máximo 8 MB por imagen. SVG no está permitido por

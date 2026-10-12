@@ -54,3 +54,8 @@ tests/e2e/.auth/
 releases/
 current/
 shared/
+
+# Video masters: huge camera originals kept out of the repo and out of
+# public/, which Next copies into every release. Run
+# scripts/prepare-video.mjs on them to publish web renditions.
+media-src/

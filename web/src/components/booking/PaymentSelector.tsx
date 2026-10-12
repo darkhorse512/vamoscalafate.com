@@ -62,7 +62,7 @@ export function PaymentSelector({
               className={cn(
                 'flex cursor-pointer items-center gap-3 rounded-control border p-4 transition-colors',
                 selected === provider.key
-                  ? 'border-violet-700 bg-primary-soft'
+                  ? 'border-sky-700 bg-primary-soft'
                   : 'border-border-strong hover:border-primary hover:bg-surface-muted',
               )}
             >

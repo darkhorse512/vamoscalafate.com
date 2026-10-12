@@ -55,11 +55,11 @@ export function TourCard({
           priority={priority}
           className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-plum-950/55 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent" />
 
         {tour.featured ? (
           <div className="absolute left-3 top-3">
-            <span className="inline-flex items-center rounded-full bg-gradient-to-r from-magenta-500 to-magenta-600 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wide text-white shadow-accent">
+            <span className="inline-flex items-center rounded-full bg-gradient-to-r from-sunset-600 to-sunset-700 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wide text-white shadow-accent">
               Destacada
             </span>
           </div>

@@ -206,7 +206,7 @@ function Pagination({
             className={cn(
               'grid size-10 place-items-center rounded-control text-sm font-medium transition-colors',
               p === page
-                ? 'bg-violet-700 text-white'
+                ? 'bg-sky-700 text-white'
                 : 'border border-border-strong text-foreground hover:border-primary hover:bg-surface-muted',
             )}
           >

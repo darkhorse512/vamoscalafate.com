@@ -25,13 +25,13 @@ export function FactsBanner({
     <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <SmartImage media={media} seed="facts-banner" alt="" sizes="100vw" quality={80} />
-        <div className="absolute inset-0 bg-plum-950/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-plum-950/80 via-transparent to-violet-950/60" />
+        <div className="absolute inset-0 bg-navy-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/80 via-transparent to-sky-950/60" />
       </div>
 
       <div className="container-page py-20 sm:py-28">
         <div className="reveal max-w-2xl">
-          <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-violet-300">
+          <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-sky-300">
             <span className="accent-rule" aria-hidden="true" />
             {eyebrow}
           </p>
@@ -46,7 +46,7 @@ export function FactsBanner({
           }`}
         >
           {items.map((fact) => (
-            <div key={fact.label} className="reveal flex flex-col bg-plum-950/40 p-6 sm:p-7">
+            <div key={fact.label} className="reveal flex flex-col bg-navy-950/40 p-6 sm:p-7">
               <dt className="order-2 mt-2 text-[0.8125rem] leading-snug text-white/70">{fact.label}</dt>
               <dd className="font-display text-[2.25rem] font-bold leading-none text-white sm:text-[2.75rem]">
                 {fact.value}

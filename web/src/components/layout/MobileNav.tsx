@@ -91,7 +91,7 @@ export function MobileNav({ tone }: { tone: 'dark' | 'light' }) {
             type="button"
             aria-label="Cerrar menú"
             onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-plum-950/55 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-navy-950/55 backdrop-blur-[2px]"
           />
 
           <div

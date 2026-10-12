@@ -23,10 +23,10 @@ const BASE =
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-gradient-to-r from-violet-600 to-violet-700 text-white shadow-[0_6px_18px_rgb(90_62_240/0.28)] ' +
-    'hover:from-violet-700 hover:to-violet-800 hover:shadow-[0_10px_24px_rgb(90_62_240/0.36)] focus-visible:ring-primary',
+    'bg-gradient-to-r from-sky-600 to-sky-700 text-white shadow-[0_6px_18px_rgb(90_62_240/0.28)] ' +
+    'hover:from-sky-700 hover:to-sky-800 hover:shadow-[0_10px_24px_rgb(90_62_240/0.36)] focus-visible:ring-primary',
   secondary:
-    'bg-plum-900 text-white hover:bg-inverse active:bg-black focus-visible:ring-plum-700',
+    'bg-navy-900 text-white hover:bg-inverse active:bg-black focus-visible:ring-navy-700',
   outline:
     'border border-border-strong bg-surface text-heading hover:border-primary hover:bg-surface-muted focus-visible:ring-primary',
   ghost: 'text-foreground hover:bg-surface-strong focus-visible:ring-primary',
@@ -35,9 +35,12 @@ const VARIANTS: Record<Variant, string> = {
   // hover in the cascade, racing the override.
   glass:
     'border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 focus-visible:ring-white/70',
+  // The booking colour. Both gradient stops are deep enough that white text
+  // clears 4.5:1 — the brand orange (sunset-500) only reaches 3.1:1, so it is
+  // reserved for badges and graphics that carry no text.
   accent:
-    'bg-gradient-to-r from-magenta-500 to-magenta-600 text-white shadow-accent ' +
-    'hover:from-magenta-600 hover:to-magenta-700 hover:shadow-[0_10px_26px_rgb(255_46_112/0.4)] focus-visible:ring-magenta-500',
+    'bg-gradient-to-r from-sunset-600 to-sunset-700 text-white shadow-accent ' +
+    'hover:from-sunset-700 hover:to-sunset-800 hover:shadow-[0_10px_26px_rgb(210_66_10/0.45)] focus-visible:ring-sunset-600',
 }
 
 const SIZES: Record<Size, string> = {

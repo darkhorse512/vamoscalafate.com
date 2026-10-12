@@ -24,8 +24,8 @@ export default async function LoginPage({
           <Image
             src="/brand/logo-light.png"
             alt="Vamos Calafate"
-            width={646}
-            height={192}
+            width={1040}
+            height={240}
             unoptimized
             priority
             className="mx-auto h-16 w-auto"

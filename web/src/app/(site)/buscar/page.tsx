@@ -87,6 +87,7 @@ export default async function BuscarPage({
                                 ? {
                                     id: result.id,
                                     url: result.imageUrl,
+                                    mimeType: 'image/webp',
                                     altText: result.imageAlt,
                                     caption: null,
                                     width: null,

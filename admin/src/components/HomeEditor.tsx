@@ -18,6 +18,8 @@ type Sections = HomeConfig['sections']
 
 const SECTION_META: Record<HomeSectionId, { title: string; description: string }> = {
   search: { title: 'Buscador', description: 'Caja de búsqueda superpuesta al pie del hero.' },
+  fleet: { title: 'Traslados y flota', description: 'Carrusel con los vehículos usados para traslados. Completá la capacidad solo si la tenés confirmada.' },
+  trust: { title: 'Trayectoria, agencias y grupos', description: 'Años de experiencia, puntos de confianza y los botones para agencias y para grupos.' },
   catalogue: { title: 'Excursiones', description: 'Grilla de excursiones con el banner «3 imperdibles» y la tarjeta de cierre.' },
   categories: { title: 'Tipos de experiencia', description: 'Mosaico de fotos por categoría (las categorías se editan en Catálogo → Categorías).' },
   spotlight: { title: 'Excursión destacada', description: 'Banner oscuro a todo el ancho con fotos, datos y precio de una excursión.' },
@@ -25,6 +27,7 @@ const SECTION_META: Record<HomeSectionId, { title: string; description: string }
   facts: { title: 'Datos del parque', description: 'Foto a todo el ancho con cifras destacadas.' },
   seasons: { title: 'Cuándo viajar', description: 'Pestañas por estación con clima, luz diurna y recomendaciones.' },
   gallery: { title: 'Galería', description: 'Dos filas de fotos en movimiento, tomadas de las excursiones publicadas.' },
+  video: { title: 'Video', description: 'Un video alojado en el sitio, con imagen de portada y reproducción al tocar.' },
   reviews: { title: 'Opiniones', description: 'Solo aparece cuando hay reseñas aprobadas (Guía local → Reseñas).' },
   why: { title: 'Por qué reservar acá', description: 'Tarjetas con ícono, título y texto.' },
   guide: { title: 'Guía de viaje', description: 'Carrusel con los últimos artículos del blog.' },
@@ -353,7 +356,7 @@ function SectionFields({
   err: (path: string) => string | undefined
 }) {
   const tourOptions = tours.map((t) => ({ value: t.slug, label: t.name }))
-  const heading = (key: 'catalogue' | 'categories' | 'destinations' | 'seasons' | 'gallery' | 'reviews' | 'why' | 'guide' | 'hotels') => (
+  const heading = (key: 'catalogue' | 'categories' | 'fleet' | 'video' | 'destinations' | 'seasons' | 'gallery' | 'reviews' | 'why' | 'guide' | 'hotels') => (
     <HeadingFields
       value={s[key].heading}
       disabled={disabled}
@@ -441,6 +444,101 @@ function SectionFields({
     case 'reviews':
     case 'hotels':
       return heading(id)
+
+    case 'fleet': {
+      const f = s.fleet
+      return (
+        <div className="space-y-4">
+          {heading('fleet')}
+          <div className="sm:max-w-md">
+            <ButtonFields label="Botón" value={f.cta} disabled={disabled} onChange={(cta) => setSection('fleet', { cta })} error={err('sections.fleet.cta.href')} />
+          </div>
+          <ItemList
+            title="Vehículos"
+            items={f.items}
+            max={10}
+            min={1}
+            disabled={disabled}
+            onChange={(items) => setSection('fleet', { items })}
+            blank={{ name: '', capacity: '', description: '', imageId: '', imageSrc: '' }}
+            render={(item, update) => (
+              <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_14rem]">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <TextField label="Nombre" value={item.name} max={60} disabled={disabled} onChange={(name) => update({ name })} />
+                  <TextField label="Capacidad" value={item.capacity} max={60} disabled={disabled} onChange={(capacity) => update({ capacity })} />
+                  <TextArea className="sm:col-span-2" label="Descripción" value={item.description} max={300} disabled={disabled} onChange={(description) => update({ description })} />
+                </div>
+                <SingleImageField label="Foto" hint="Vacío = la foto incluida en el sitio" value={item.imageId} onChange={(imageId) => update({ imageId })} />
+              </div>
+            )}
+          />
+          <Note>
+            La capacidad aparece solo si la completás. Dejala vacía antes que poner un número aproximado: un pasajero
+            que reserva pensando que entran ocho y entran seis tiene razón en reclamar.
+          </Note>
+        </div>
+      )
+    }
+
+    case 'trust': {
+      const t = s.trust
+      return (
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_17rem]">
+          <div className="space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TextField label="Antetítulo" value={t.eyebrow} max={80} disabled={disabled} onChange={(eyebrow) => setSection('trust', { eyebrow })} />
+              <TextField label="Título" value={t.title} max={160} disabled={disabled} onChange={(title) => setSection('trust', { title })} />
+              <TextField label="Cifra destacada" value={t.yearsValue} max={10} disabled={disabled} onChange={(yearsValue) => setSection('trust', { yearsValue })} />
+              <TextField label="Texto de la cifra" value={t.yearsLabel} max={120} disabled={disabled} onChange={(yearsLabel) => setSection('trust', { yearsLabel })} />
+              <TextArea className="sm:col-span-2" label="Texto" value={t.description} max={500} disabled={disabled} onChange={(description) => setSection('trust', { description })} />
+              <ButtonFields label="Botón de agencias" value={t.agencies} disabled={disabled} onChange={(agencies) => setSection('trust', { agencies })} error={err('sections.trust.agencies.href')} />
+              <ButtonFields label="Botón de grupos" value={t.groups} disabled={disabled} onChange={(groups) => setSection('trust', { groups })} error={err('sections.trust.groups.href')} />
+            </div>
+            <ItemList
+              title="Puntos de confianza"
+              items={t.points}
+              max={6}
+              min={0}
+              disabled={disabled}
+              onChange={(points) => setSection('trust', { points })}
+              blank={{ title: '', description: '' }}
+              render={(item, update) => (
+                <div className="grid gap-3">
+                  <TextField label="Título" value={item.title} max={60} disabled={disabled} onChange={(title) => update({ title })} />
+                  <TextArea label="Texto" value={item.description} max={240} disabled={disabled} onChange={(description) => update({ description })} />
+                </div>
+              )}
+            />
+            <Note>
+              Escribí solo lo que se puede comprobar. Una certificación, un premio o una cantidad de clientes que no
+              exista cuesta mucho más caro que el texto que reemplaza.
+            </Note>
+          </div>
+          <SingleImageField label="Foto" hint="Vacío = foto del hero" value={t.imageId} onChange={(imageId) => setSection('trust', { imageId })} />
+        </div>
+      )
+    }
+
+    case 'video': {
+      const v = s.video
+      return (
+        <div className="space-y-4">
+          {heading('video')}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <TextField label="Id del video en la biblioteca" value={v.mediaId} max={80} disabled={disabled} onChange={(mediaId) => setSection('video', { mediaId })} />
+            <ButtonFields label="Botón" value={v.cta} disabled={disabled} onChange={(cta) => setSection('video', { cta })} error={err('sections.video.cta.href')} />
+            <TextArea className="sm:col-span-2" label="Epígrafe" value={v.caption} max={300} disabled={disabled} onChange={(caption) => setSection('video', { caption })} />
+          </div>
+          <div className="sm:max-w-xs">
+            <SingleImageField label="Portada" hint="Vacío = el fotograma generado al subir el video" value={v.posterId} onChange={(posterId) => setSection('video', { posterId })} />
+          </div>
+          <Note>
+            Si dejás el id vacío se usa el último video subido a la biblioteca. El video no se reproduce solo: se
+            descarga recién cuando alguien toca el botón de play.
+          </Note>
+        </div>
+      )
+    }
 
     case 'spotlight':
       return (

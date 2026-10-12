@@ -1,5 +1,5 @@
 import { prisma } from '@vamos/db'
-import { AppError, toISODate } from '@vamos/shared'
+import { AppError, RATE_SELECT, type SeasonRate, priceForDate, toISODate } from '@vamos/shared'
 import type { AvailabilitySlot } from '@vamos/types'
 
 /**
@@ -18,6 +18,20 @@ export type DayAvailability = {
   slots: AvailabilitySlot[]
   seatsAvailable: number
   soldOut: boolean
+}
+
+/** Price shown for a departure: per-day override, else the band's rate for that day. */
+function slotPrice(
+  row: {
+    priceCentsOverride: number | null
+    option: { priceCents: number; priceTiers: { priceCents: number; rates: SeasonRate[] }[] }
+  },
+  date: string,
+) {
+  if (row.priceCentsOverride != null) return row.priceCentsOverride
+  const band = row.option.priceTiers[0]
+  if (!band) return row.option.priceCents
+  return priceForDate(band, date).priceCents
 }
 
 export const availabilityService = {
@@ -43,7 +57,21 @@ export const availabilityService = {
       select: {
         id: true, date: true, departureTime: true, optionId: true,
         seatsTotal: true, seatsBooked: true, priceCentsOverride: true,
-        option: { select: { priceCents: true, currency: true } },
+        // The headline band - the adult rate - is what a calendar shows, and
+        // it is the band that carries seasonal rates. `option.priceCents` is
+        // only the fallback for options loaded before bands existed.
+        option: {
+          select: {
+            priceCents: true,
+            currency: true,
+            priceTiers: {
+              where: { isActive: true },
+              orderBy: { sortOrder: 'asc' },
+              take: 1,
+              select: { priceCents: true, rates: { select: RATE_SELECT } },
+            },
+          },
+        },
       },
     })
 
@@ -58,7 +86,7 @@ export const availabilityService = {
         departureTime: row.departureTime,
         optionId: row.optionId,
         seatsAvailable,
-        priceCents: row.priceCentsOverride ?? row.option.priceCents,
+        priceCents: slotPrice(row, key),
         currency: row.option.currency,
         availabilityId: row.id,
       }
@@ -92,14 +120,28 @@ export const availabilityService = {
       select: {
         id: true, date: true, departureTime: true, optionId: true,
         seatsTotal: true, seatsBooked: true, priceCentsOverride: true,
-        option: { select: { priceCents: true, currency: true } },
+        // The headline band - the adult rate - is what a calendar shows, and
+        // it is the band that carries seasonal rates. `option.priceCents` is
+        // only the fallback for options loaded before bands existed.
+        option: {
+          select: {
+            priceCents: true,
+            currency: true,
+            priceTiers: {
+              where: { isActive: true },
+              orderBy: { sortOrder: 'asc' },
+              take: 1,
+              select: { priceCents: true, rates: { select: RATE_SELECT } },
+            },
+          },
+        },
       },
     })
 
     return rows.map((row) => ({
       date, departureTime: row.departureTime, optionId: row.optionId,
       seatsAvailable: Math.max(0, row.seatsTotal - row.seatsBooked),
-      priceCents: row.priceCentsOverride ?? row.option.priceCents,
+      priceCents: slotPrice(row, date),
       currency: row.option.currency,
       availabilityId: row.id,
     }))

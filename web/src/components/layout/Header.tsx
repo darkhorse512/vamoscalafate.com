@@ -61,7 +61,7 @@ export function Header({ overHero = false }: { overHero?: boolean }) {
         'fixed inset-x-0 top-0 z-50 h-(--header-height) transition-colors duration-300',
         solid
           ? 'border-b border-border bg-surface/95 backdrop-blur-sm'
-          : 'bg-gradient-to-b from-plum-950/55 to-transparent',
+          : 'bg-gradient-to-b from-navy-950/55 to-transparent',
       )}
     >
       <div className="container-page flex h-full items-center justify-between gap-6">

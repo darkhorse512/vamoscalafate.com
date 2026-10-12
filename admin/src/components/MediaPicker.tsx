@@ -343,7 +343,7 @@ function MediaPickerDialog({
                       </span>
 
                       {isSelected ? (
-                        <span className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-full bg-violet-600 text-[0.6875rem] font-bold text-white">
+                        <span className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-full bg-sky-600 text-[0.6875rem] font-bold text-white">
                           {multiple ? index + 1 : <Check className="size-3.5" aria-hidden="true" />}
                         </span>
                       ) : null}

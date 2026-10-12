@@ -39,13 +39,13 @@ export function SpotlightBanner({
           </div>
 
           {second ? (
-            <div className="animate-float absolute -bottom-6 right-0 aspect-[4/3] w-[44%] overflow-hidden rounded-card border-4 border-plum-950 shadow-float">
+            <div className="animate-float absolute -bottom-6 right-0 aspect-[4/3] w-[44%] overflow-hidden rounded-card border-4 border-navy-950 shadow-float">
               <SmartImage media={second} seed={`${tour.slug}-second`} alt="" sizes="22vw" />
             </div>
           ) : null}
 
           {third ? (
-            <div className="absolute -top-5 right-[6%] hidden aspect-square w-[24%] overflow-hidden rounded-card border-4 border-plum-950 shadow-float sm:block">
+            <div className="absolute -top-5 right-[6%] hidden aspect-square w-[24%] overflow-hidden rounded-card border-4 border-navy-950 shadow-float sm:block">
               <SmartImage media={third} seed={`${tour.slug}-third`} alt="" sizes="14vw" />
             </div>
           ) : null}
@@ -62,7 +62,7 @@ export function SpotlightBanner({
 
         {/* ── Copy ─────────────────────────────────────────────────────── */}
         <div className="reveal">
-          <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-magenta-300">
+          <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-sunset-300">
             <span className="accent-rule" aria-hidden="true" />
             {eyebrow} · {tour.categoryName}
           </p>
@@ -79,7 +79,7 @@ export function SpotlightBanner({
             <ul className="mt-7 grid gap-3 sm:grid-cols-2">
               {tour.highlights.map((highlight) => (
                 <li key={highlight} className="flex gap-2.5 text-[0.875rem] leading-snug text-white/85">
-                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-magenta-500/20 text-magenta-300">
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-sunset-500/20 text-sunset-300">
                     <Check className="size-3" aria-hidden="true" />
                   </span>
                   {highlight}

@@ -12,8 +12,28 @@
 
 import { fromCents } from '@vamos/shared'
 
-type TierDraft = { id?: string; label: string; ageMin: string; ageMax: string; price: number }
-type ExtraDraft = { id?: string; name: string; description: string; price: number; perPerson: boolean; isActive: boolean }
+type RateDraft = { id?: string; label: string; startDate: string; endDate: string; price: number }
+type TierDraft = {
+  id?: string
+  label: string
+  ageMin: string
+  ageMax: string
+  price: number
+  rates: RateDraft[]
+}
+type ExtraDraft = {
+  id?: string
+  name: string
+  description: string
+  price: number
+  perPerson: boolean
+  required: boolean
+  highlight: boolean
+  badge: string
+  details: string
+  mediaId: string
+  isActive: boolean
+}
 
 type OptionDraft = {
   tiers: TierDraft[]
@@ -92,7 +112,7 @@ export const EMPTY_TOUR: TourFormData = {
       name: 'Regular', description: '', price: 0, childPrice: '', currency: 'ARS',
       durationMinutes: 240, capacity: 20, minParticipants: 1, maxParticipants: 20,
       pickupIncluded: true, departureTimes: '', freeCancellationHours: 24, isActive: true,
-      tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0 }],
+      tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0, rates: [] }],
     },
   ],
   itinerary: [],
@@ -137,9 +157,16 @@ export function tourToFormData(tour: {
     capacity: number; minParticipants: number; maxParticipants: number
     pickupIncluded: boolean; departureTimes: string[]; freeCancellationHours: number
     isActive: boolean
-    priceTiers: { id: string; label: string; ageMin: number | null; ageMax: number | null; priceCents: number }[]
+    priceTiers: {
+      id: string; label: string; ageMin: number | null; ageMax: number | null; priceCents: number
+      rates: { id: string; label: string | null; startDate: Date; endDate: Date; priceCents: number }[]
+    }[]
   }[]
-  extras: { id: string; name: string; description: string | null; priceCents: number; perPerson: boolean; isActive: boolean }[]
+  extras: {
+    id: string; name: string; description: string | null; priceCents: number; perPerson: boolean
+    required: boolean; highlight: boolean; badge: string | null; details: string[]; mediaId: string | null
+    isActive: boolean
+  }[]
   itinerary: { id: string; title: string; description: string; timeLabel: string | null }[]
   pickupLocations: {
     id: string; name: string; address: string | null; offsetMinutes: number
@@ -201,6 +228,15 @@ export function tourToFormData(tour: {
         ageMin: tier.ageMin !== null ? String(tier.ageMin) : '',
         ageMax: tier.ageMax !== null ? String(tier.ageMax) : '',
         price: fromCents(tier.priceCents),
+        rates: tier.rates.map((rate) => ({
+          id: rate.id,
+          label: rate.label ?? '',
+          // A @db.Date comes back as UTC midnight; slicing the ISO string is
+          // what keeps it the calendar day the operator typed.
+          startDate: rate.startDate.toISOString().slice(0, 10),
+          endDate: rate.endDate.toISOString().slice(0, 10),
+          price: fromCents(rate.priceCents),
+        })),
       })),
     })),
     extras: tour.extras.map((extra) => ({
@@ -209,6 +245,11 @@ export function tourToFormData(tour: {
       description: extra.description ?? '',
       price: fromCents(extra.priceCents),
       perPerson: extra.perPerson,
+      required: extra.required,
+      highlight: extra.highlight,
+      badge: extra.badge ?? '',
+      details: extra.details.join('\n'),
+      mediaId: extra.mediaId ?? '',
       isActive: extra.isActive,
     })),
     itinerary: tour.itinerary.map((step) => ({

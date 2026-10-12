@@ -41,6 +41,32 @@ export const getHomeConfig = cachedQuery(
   { tags: [cacheTags.siteSettings], revalidate: REVALIDATE.content },
 )
 
+/**
+ * The video for the homepage video section.
+ *
+ * Falls back to the most recently uploaded video when no id is configured, so
+ * the section works the moment a video exists in the library and an editor
+ * does not have to go and pick one before anything appears.
+ */
+export const getHomeVideo = cachedQuery(
+  async (mediaId: string): Promise<MediaRef | null> => {
+    if (mediaId) {
+      const chosen = await prisma.media.findFirst({
+        where: { id: mediaId, type: 'VIDEO' },
+        select: mediaSelect,
+      })
+      if (chosen) return chosen
+    }
+    return prisma.media.findFirst({
+      where: { type: 'VIDEO' },
+      orderBy: { createdAt: 'desc' },
+      select: mediaSelect,
+    })
+  },
+  ['home', 'video'],
+  { tags: [cacheTags.siteSettings], revalidate: REVALIDATE.content },
+)
+
 /** Media rows by id, for images chosen in the homepage editor. */
 export const getMediaByIds = cachedQuery(
   async (ids: string[]): Promise<Record<string, MediaRef>> => {

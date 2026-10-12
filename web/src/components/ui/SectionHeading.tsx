@@ -40,7 +40,7 @@ export function SectionHeading({
           <p
             className={cn(
               'mb-3 inline-flex items-center gap-2.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em]',
-              tone === 'light' ? 'text-violet-300' : 'text-primary',
+              tone === 'light' ? 'text-sky-300' : 'text-primary',
               align === 'center' && 'justify-center',
             )}
           >

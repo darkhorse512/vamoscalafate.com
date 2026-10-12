@@ -146,7 +146,7 @@ export function Gallery({
         {count > 1 ? (
           <>
             <div
-              className="pointer-events-none absolute bottom-3 right-6 rounded-full bg-plum-950/70 px-2.5 py-1 text-[0.6875rem] font-medium text-white backdrop-blur-sm"
+              className="pointer-events-none absolute bottom-3 right-6 rounded-full bg-navy-950/70 px-2.5 py-1 text-[0.6875rem] font-medium text-white backdrop-blur-sm"
               aria-live="polite"
             >
               {railIndex + 1} / {count}
@@ -197,11 +197,11 @@ export function Gallery({
 
             {/* Subtle darkening on hover signals the tile is interactive. */}
             {openable ? (
-              <span className="absolute inset-0 bg-plum-950/0 transition-colors duration-300 group-hover/tile:bg-plum-950/10" />
+              <span className="absolute inset-0 bg-navy-950/0 transition-colors duration-300 group-hover/tile:bg-navy-950/10" />
             ) : null}
 
             {index === 4 && count > 5 ? (
-              <span className="absolute inset-0 grid place-items-center bg-plum-950/55 text-sm font-semibold text-white backdrop-blur-[2px]">
+              <span className="absolute inset-0 grid place-items-center bg-navy-950/55 text-sm font-semibold text-white backdrop-blur-[2px]">
                 <span className="inline-flex items-center gap-1.5">
                   <Expand className="size-4" aria-hidden="true" />+{count - 5} fotos
                 </span>
@@ -244,7 +244,7 @@ export function Gallery({
           role="dialog"
           aria-modal="true"
           aria-label={`${title} — imagen ${lightboxIndex + 1} de ${count}`}
-          className="fixed inset-0 z-[90] flex flex-col bg-plum-950/97 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex flex-col bg-navy-950/97 backdrop-blur-sm"
         >
           <div className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6">
             <p className="text-sm font-medium text-white/80">

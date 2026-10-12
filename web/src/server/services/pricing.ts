@@ -1,5 +1,5 @@
 import { prisma } from '@vamos/db'
-import { AppError } from '@vamos/shared'
+import { AppError, RATE_SELECT, priceForDate } from '@vamos/shared'
 import type { BookingSelection, PriceBreakdown, PriceLine } from '@vamos/types'
 
 /**
@@ -23,13 +23,25 @@ export const pricingService = {
         priceTiers: {
           where: { isActive: true },
           orderBy: { sortOrder: 'asc' },
-          select: { id: true, label: true, priceCents: true },
+          select: {
+            id: true,
+            label: true,
+            priceCents: true,
+            rates: { select: RATE_SELECT },
+          },
         },
         tour: {
           select: {
             extras: {
               where: { isActive: true },
-              select: { id: true, name: true, priceCents: true, perPerson: true },
+              orderBy: { sortOrder: 'asc' },
+              select: {
+                id: true,
+                name: true,
+                priceCents: true,
+                perPerson: true,
+                required: true,
+              },
             },
           },
         },
@@ -102,18 +114,40 @@ export const pricingService = {
       .filter((tier) => (requested.get(tier.id) ?? 0) > 0)
       .map((tier) => {
         const quantity = requested.get(tier.id)!
-        const unitCents =
-          tier.id === firstTier.id && availability?.priceCentsOverride != null
-            ? availability.priceCentsOverride
-            : tier.priceCents
-        return { id: tier.id, label: tier.label, quantity, unitCents, subtotalCents: unitCents * quantity }
+        const season = priceForDate(tier, selection.date)
+        // A per-departure override outranks the season rate: a season is a
+        // rule, an override is the exception someone entered for that day.
+        const overridden = tier.id === firstTier.id && availability?.priceCentsOverride != null
+        const unitCents = overridden ? availability.priceCentsOverride! : season.priceCents
+        return {
+          id: tier.id,
+          label: tier.label,
+          quantity,
+          unitCents,
+          subtotalCents: unitCents * quantity,
+          ...(!overridden && season.seasonLabel ? { seasonLabel: season.seasonLabel } : {}),
+        }
       })
 
     // ── Add-ons ───────────────────────────────────────────────────────────
+    //
+    // Required add-ons are priced whether or not the client sent them. These
+    // are the transfers the operator always provides for a tour: they are
+    // excluded from the listing price because the operator quotes the activity
+    // alone, but the booking cannot be made without them, so the server adds
+    // the line rather than trusting the browser to have kept it.
     const extraById = new Map(option.tour.extras.map((extra) => [extra.id, extra]))
-    const extraLines: PriceLine[] = []
+    const requestedExtras = new Map<string, number>()
     for (const line of selection.extras ?? []) {
-      if (line.quantity === 0) continue
+      if (line.quantity > 0) requestedExtras.set(line.extraId, line.quantity)
+    }
+    for (const extra of option.tour.extras) {
+      if (extra.required) requestedExtras.set(extra.id, extra.perPerson ? passengers : 1)
+    }
+
+    const extraLines: PriceLine[] = []
+    for (const [extraId, quantity] of requestedExtras) {
+      const line = { extraId, quantity }
       const extra = extraById.get(line.extraId)
       if (!extra) {
         throw new AppError('VALIDATION_ERROR', 'Unknown extra for tour', {
@@ -135,8 +169,12 @@ export const pricingService = {
         quantity: line.quantity,
         unitCents: extra.priceCents,
         subtotalCents: extra.priceCents * line.quantity,
+        ...(extra.required ? { required: true } : {}),
       })
     }
+    // Keep the configured order, so the summary reads the same as the page.
+    const extraOrder = new Map(option.tour.extras.map((extra, index) => [extra.id, index]))
+    extraLines.sort((a, b) => (extraOrder.get(a.id) ?? 0) - (extraOrder.get(b.id) ?? 0))
 
     // ── Pickup point surcharge (per passenger) ──────────────────────────────
     let pickupCostCents = 0

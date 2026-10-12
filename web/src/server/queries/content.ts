@@ -6,7 +6,7 @@ import type {
 import { cachedQuery, REVALIDATE } from '../cache.ts'
 
 export const mediaSelect = {
-  id: true, url: true, altText: true, caption: true,
+  id: true, url: true, mimeType: true, altText: true, caption: true,
   width: true, height: true, blurDataUrl: true, externalUrl: true,
   // Required to render the credit CC BY / CC BY-SA oblige us to show.
   license: true, attributionText: true, attributionUrl: true, sourceUrl: true,
@@ -321,6 +321,41 @@ export const getGlobalFaqs = cachedQuery(
     }),
   ['faqs', 'global'],
   { tags: [cacheTags.faqs], revalidate: REVALIDATE.content },
+)
+
+/**
+ * Every published FAQ, grouped by the excursion it belongs to.
+ *
+ * The general FAQ page is the page people reach from a search for "¿se puede
+ * caminar sobre el Perito Moreno?", and answering only the eight questions
+ * about payment and cancellation wastes that. The answers already exist on
+ * the tour pages; this surfaces them in one place, each one linking back to
+ * the excursion it describes, so nothing is duplicated by hand and nothing
+ * can drift out of step.
+ */
+export const getTourFaqGroups = cachedQuery(
+  async () => {
+    const tours = await prisma.tour.findMany({
+      where: {
+        ...publishedFilter,
+        faqs: { some: { isPublished: true } },
+      },
+      orderBy: { sortOrder: 'asc' },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        faqs: {
+          where: { isPublished: true },
+          orderBy: { sortOrder: 'asc' },
+          select: { id: true, question: true, answer: true },
+        },
+      },
+    })
+    return tours.filter((tour) => tour.faqs.length > 0)
+  },
+  ['faqs', 'by-tour'],
+  { tags: [cacheTags.faqs, cacheTags.tours], revalidate: REVALIDATE.content },
 )
 
 export function getStaticPage(slug: string) {

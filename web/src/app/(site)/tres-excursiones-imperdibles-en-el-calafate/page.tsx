@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { ArrowRight, Gift } from 'lucide-react'
-import { ROUTES, absoluteUrl } from '@vamos/shared'
+import { ArrowRight, Clock, Gift, MapPin, Mountain } from 'lucide-react'
+import { ROUTES, absoluteUrl, formatDuration } from '@vamos/shared'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { PageBanner } from '@/components/marketing/PageBanner'
 import { SectionHeading } from '@/components/ui/SectionHeading'
@@ -8,13 +8,21 @@ import { ButtonLink } from '@/components/ui/Button'
 import { SmartImage } from '@/components/media/SmartImage'
 import { ContactForm } from '@/components/content/ContactForm'
 import { Price } from '@/components/tours/Price'
-import { getHomeConfig, getMustSeeTours } from '@/server/queries/home'
+import { VideoPlayer } from '@/components/media/VideoPlayer'
+import { getHomeConfig, getHomeVideo, getMustSeeTours } from '@/server/queries/home'
 
 export const metadata: Metadata = {
   title: 'Tres excursiones imperdibles en El Calafate',
   description:
     'El Glaciar Perito Moreno, la Navegación Todo Glaciares y El Chaltén: las tres excursiones que no te podés perder. Bonificaciones contratando las tres.',
   alternates: { canonical: absoluteUrl(ROUTES.mustSee) },
+}
+
+const DIFFICULTY_LABELS: Record<string, string> = {
+  EASY: 'Exigencia baja',
+  MODERATE: 'Exigencia media',
+  HARD: 'Exigencia alta',
+  EXPERT: 'Exigencia muy alta',
 }
 
 /** The article text from the brief, one block per excursion, in order. */
@@ -38,7 +46,10 @@ const SECTIONS = [
 
 export default async function MustSeePage() {
   const config = await getHomeConfig()
-  const tours = await getMustSeeTours(config.sections.catalogue.banner.tourSlugs)
+  const [tours, video] = await Promise.all([
+    getMustSeeTours(config.sections.catalogue.banner.tourSlugs),
+    getHomeVideo(config.sections.video.mediaId),
+  ])
 
   return (
     <>
@@ -61,12 +72,41 @@ export default async function MustSeePage() {
       </PageBanner>
 
       <div className="container-page py-16 sm:py-20">
-        <ol className="space-y-20 sm:space-y-28">
+        {/*
+          The three read as one trip, not as three unrelated cards, so they sit
+          on a single numbered rail: the connector between the markers is what
+          turns a list into a sequence. The rail is decorative and hidden from
+          assistive technology - the <ol> already says "1 of 3".
+        */}
+        <ol className="relative space-y-16 sm:space-y-24 lg:pl-24">
+          <span
+            className="pointer-events-none absolute left-[2.3rem] top-10 hidden w-px bg-gradient-to-b from-primary via-border to-transparent lg:block"
+            style={{ height: 'calc(100% - 5rem)' }}
+            aria-hidden="true"
+          />
+
           {SECTIONS.map((section, index) => {
             const tour = tours[index]
             const reversed = index % 2 === 1
+            const facts = tour
+              ? [
+                  { icon: Clock, label: formatDuration(tour.durationMinutes) },
+                  ...(tour.location ? [{ icon: MapPin, label: tour.location }] : []),
+                  ...(DIFFICULTY_LABELS[tour.difficulty]
+                    ? [{ icon: Mountain, label: DIFFICULTY_LABELS[tour.difficulty]! }]
+                    : []),
+                ]
+              : []
+
             return (
-              <li key={section.title} className="reveal grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+              <li key={section.title} className="reveal relative grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+                <span
+                  className="absolute -left-24 top-6 hidden size-[4.6rem] place-items-center rounded-full border-4 border-background bg-gradient-to-br from-navy-700 to-sky-600 font-display text-2xl font-bold text-white shadow-raised lg:grid"
+                  aria-hidden="true"
+                >
+                  {index + 1}
+                </span>
+
                 <div className={reversed ? 'lg:order-2' : ''}>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] shadow-float">
                     <SmartImage
@@ -76,7 +116,10 @@ export default async function MustSeePage() {
                       sizes="(max-width: 1023px) 100vw, 50vw"
                       priority={index === 0}
                     />
-                    <span className="absolute left-5 top-5 grid size-14 place-items-center rounded-full bg-gradient-to-br from-violet-600 to-magenta-500 font-display text-2xl font-bold text-white shadow-accent">
+                    <span
+                      className="absolute left-5 top-5 grid size-14 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 font-display text-2xl font-bold text-white shadow-raised lg:hidden"
+                      aria-hidden="true"
+                    >
                       {index + 1}
                     </span>
                   </div>
@@ -92,8 +135,22 @@ export default async function MustSeePage() {
                   </h2>
                   <p className="mt-5 text-[1.0625rem] leading-relaxed text-foreground">{section.text}</p>
 
+                  {facts.length > 0 ? (
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {facts.map((fact) => (
+                        <li
+                          key={fact.label}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-muted px-3 py-1.5 text-[0.8125rem] font-medium text-muted-foreground"
+                        >
+                          <fact.icon className="size-3.5 text-primary" aria-hidden="true" />
+                          {fact.label}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
                   {tour ? (
-                    <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-border pt-6">
+                    <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-border pt-6">
                       <Price cents={tour.fromPriceCents} currency={tour.currency} from size="md" />
                       <ButtonLink href={ROUTES.tour(tour.slug)} variant="primary">
                         Ver la excursión
@@ -106,13 +163,32 @@ export default async function MustSeePage() {
             )
           })}
         </ol>
+
+        {video ? (
+          <section className="mt-20 grid items-center gap-10 border-t border-border pt-16 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16 sm:mt-24">
+            <div>
+              <SectionHeading
+                as="h2"
+                eyebrow="En video"
+                title="Cómo ordenar los tres días"
+                description="Las tres excursiones son de día completo y ninguna se puede combinar con otra en la misma jornada. Este video explica cómo acomodarlas según los días que tengas."
+              />
+            </div>
+            <VideoPlayer
+              src={video.url}
+              poster={video.externalUrl}
+              title={video.altText ?? 'Cómo organizar tus días en El Calafate'}
+              className="mx-auto w-full max-w-[20rem]"
+            />
+          </section>
+        ) : null}
       </div>
 
       {/* ── The bundle offer ─────────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden bg-aurora py-16 text-white sm:py-24">
         <div className="container-page grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
           <div className="reveal">
-            <span className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-magenta-500 shadow-accent">
+            <span className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-navy-700 to-sky-600 shadow-accent">
               <Gift className="size-7" aria-hidden="true" />
             </span>
             <h2 className="mt-6 font-display text-[2rem] font-bold leading-tight text-white sm:text-[2.75rem]">

@@ -19,6 +19,9 @@ import { PhotoMarquee } from '@/components/home/PhotoMarquee'
 import { StoryCarousel } from '@/components/home/StoryCarousel'
 import { ReviewsCarousel } from '@/components/home/ReviewsCarousel'
 import { MustSeeBanner } from '@/components/home/MustSeeBanner'
+import { FleetCarousel } from '@/components/home/FleetCarousel'
+import { TrustBanner } from '@/components/home/TrustBanner'
+import { VideoPlayer } from '@/components/media/VideoPlayer'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { ButtonLink } from '@/components/ui/Button'
 import { TourCard } from '@/components/tours/TourCard'
@@ -34,6 +37,7 @@ import {
   getHeroSlides,
   getHomeConfig,
   getHomeReviews,
+  getHomeVideo,
   getMediaByIds,
   getMustSeeTours,
   getSeasonImages,
@@ -90,6 +94,7 @@ export default async function HomePage() {
     catalogue,
     mustSee,
     chosenMedia,
+    homeVideo,
   ] = await Promise.all([
     getHeroSlides(),
     getHeroImage(),
@@ -104,7 +109,14 @@ export default async function HomePage() {
     getSeasonImages(),
     getCatalogue(s.catalogue.tourSlugs),
     getMustSeeTours(s.catalogue.banner.tourSlugs),
-    getMediaByIds([s.facts.imageId, s.cta.imageId, ...s.seasons.items.map((item) => item.imageId)]),
+    getMediaByIds([
+      s.facts.imageId,
+      s.cta.imageId,
+      s.trust.imageId,
+      ...s.seasons.items.map((item) => item.imageId),
+      ...s.fleet.items.map((item) => item.imageId),
+    ]),
+    s.video.enabled ? getHomeVideo(s.video.mediaId) : Promise.resolve(null),
   ])
 
   // Alternate the tinted background across the band sections that are on.
@@ -127,6 +139,66 @@ export default async function HomePage() {
         </div>
       </section>
     ),
+
+    // ── Fleet (transfers) ────────────────────────────────────────────────
+    fleet: () => (
+      <Band key="fleet" tinted={tinted.get('fleet')}>
+        <Heading content={s.fleet.heading} />
+        <div className="mt-10">
+          <FleetCarousel
+            ariaLabel="Vehículos para traslados"
+            cta={s.fleet.cta.label ? { label: s.fleet.cta.label, href: s.fleet.cta.href || ROUTES.contact } : undefined}
+            items={s.fleet.items.map((item) => ({
+              name: item.name,
+              capacity: item.capacity,
+              description: item.description,
+              imageSrc: item.imageSrc,
+              media: chosenMedia[item.imageId] ?? null,
+            }))}
+          />
+        </div>
+      </Band>
+    ),
+
+    // ── Trust: years in the business, agencies and groups ────────────────
+    trust: () => (
+      <Band key="trust" tinted={tinted.get('trust')}>
+        <TrustBanner content={s.trust} media={chosenMedia[s.trust.imageId] ?? heroImage} />
+      </Band>
+    ),
+
+    // ── Video ────────────────────────────────────────────────────────────
+    video: () => {
+      // Nothing to play: render nothing rather than an empty frame.
+      if (!homeVideo) return null
+      const poster = chosenMedia[s.video.posterId]?.url ?? homeVideo.externalUrl
+      return (
+        <Band key="video" tinted={tinted.get('video')}>
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+            <div>
+              <Heading content={s.video.heading} align="left" />
+              {s.video.caption ? (
+                <p className="mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-muted-foreground">
+                  {s.video.caption}
+                </p>
+              ) : null}
+              {s.video.cta.label ? (
+                <ButtonLink href={s.video.cta.href || ROUTES.tours} variant="accent" className="mt-7">
+                  {s.video.cta.label}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </ButtonLink>
+              ) : null}
+            </div>
+            <VideoPlayer
+              src={homeVideo.url}
+              poster={poster}
+              title={homeVideo.altText ?? s.video.heading.title}
+              className="mx-auto w-full max-w-[22rem]"
+            />
+          </div>
+        </Band>
+      )
+    },
 
     // ── Catalogue, with the "3 imperdibles" banner and closing card ──────
     catalogue: () => {
@@ -176,7 +248,7 @@ export default async function HomePage() {
                 >
                   <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-[1.25rem] bg-aurora p-7 text-white shadow-raised sm:p-9">
                     <div>
-                      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-violet-300">{closing.eyebrow}</p>
+                      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-sky-300">{closing.eyebrow}</p>
                       <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-white sm:text-[1.75rem]">
                         {closing.title}
                       </h3>
@@ -295,11 +367,11 @@ export default async function HomePage() {
         )}
       >
         <div
-          className="pointer-events-none absolute -right-40 -top-40 size-[30rem] rounded-full bg-violet-500/10 blur-3xl"
+          className="pointer-events-none absolute -right-40 -top-40 size-[30rem] rounded-full bg-sky-500/10 blur-3xl"
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-magenta-500/10 blur-3xl"
+          className="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-sunset-500/10 blur-3xl"
           aria-hidden="true"
         />
         <div className="container-page relative">
@@ -318,7 +390,7 @@ export default async function HomePage() {
                   className="reveal group rounded-[1.25rem] border border-border bg-surface p-6 shadow-subtle transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-raised"
                 >
                   <span
-                    className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-magenta-500 text-white shadow-[0_8px_20px_rgb(108_88_254/0.3)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
+                    className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-navy-700 to-sky-600 text-white shadow-[0_8px_20px_rgb(0_88_120/0.3)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
                     aria-hidden="true"
                   >
                     <Icon className="size-5" />

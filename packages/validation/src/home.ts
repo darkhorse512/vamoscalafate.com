@@ -29,6 +29,8 @@ const buttonSchema = z.object({ label: text(60), href })
 
 export const HOME_SECTION_IDS = [
   'search',
+  'fleet',
+  'trust',
   'catalogue',
   'categories',
   'spotlight',
@@ -36,6 +38,7 @@ export const HOME_SECTION_IDS = [
   'facts',
   'seasons',
   'gallery',
+  'video',
   'reviews',
   'why',
   'guide',
@@ -103,6 +106,53 @@ export const homeConfigSchema = z.object({
       }),
     }),
 
+    /**
+     * The vehicles used for transfers and excursions.
+     *
+     * Seat counts are deliberately free text and empty by default: a van's
+     * capacity depends on how it is fitted out, and a number invented here
+     * would be a promise the operator never made. The admin fills it in.
+     */
+    fleet: z.object({
+      enabled: z.boolean(),
+      heading: headingSchema,
+      cta: buttonSchema,
+      items: z
+        .array(
+          z.object({
+            name: text(60),
+            /** e.g. "Hasta 8 pasajeros" - left blank until confirmed. */
+            capacity: text(60),
+            description: text(300),
+            imageId: optionalId,
+            /** Fallback image shipped with the site, under /public. */
+            imageSrc: text(200),
+          }),
+        )
+        .min(1)
+        .max(10),
+    }),
+
+    /**
+     * Experience and the two audiences that need their own way in: travel
+     * agencies reselling the product, and families or groups asking for a
+     * quote. Both lead to an enquiry, never to an advertised discount - the
+     * figure is the operator's to give, case by case.
+     */
+    trust: z.object({
+      enabled: z.boolean(),
+      eyebrow: text(80),
+      title: text(160),
+      description: text(500),
+      /** The headline number, e.g. "15". */
+      yearsValue: text(10),
+      yearsLabel: text(120),
+      points: z.array(z.object({ title: text(60), description: text(240) })).max(6),
+      agencies: buttonSchema,
+      groups: buttonSchema,
+      imageId: optionalId,
+    }),
+
     categories: z.object({ enabled: z.boolean(), heading: headingSchema }),
 
     spotlight: z.object({
@@ -143,6 +193,23 @@ export const homeConfigSchema = z.object({
     }),
 
     gallery: z.object({ enabled: z.boolean(), heading: headingSchema, maxPhotos: z.number().int().min(4).max(30) }),
+
+    /**
+     * A single explanatory video. Shot vertically with burnt-in subtitles, so
+     * it is framed as a phone rather than stretched across the page, and it
+     * loads only when played: a 20 MB autoplay would cost every visitor the
+     * download whether or not they wanted it.
+     */
+    video: z.object({
+      enabled: z.boolean(),
+      heading: headingSchema,
+      /** Media library id of a MediaType.VIDEO row. Empty hides the section. */
+      mediaId: optionalId,
+      /** Overrides the poster frame stored on the media row. */
+      posterId: optionalId,
+      caption: text(300),
+      cta: buttonSchema,
+    }),
 
     reviews: z.object({ enabled: z.boolean(), heading: headingSchema }),
 
@@ -283,6 +350,73 @@ export const DEFAULT_HOME_CONFIG: HomeConfig = {
       },
     },
 
+    fleet: {
+      enabled: true,
+      heading: heading(
+        'Traslados',
+        'Te llevamos y te traemos',
+        'Los traslados desde tu hotel y desde el aeropuerto se hacen con vehículos propios y chofer, coordinados con el horario de cada excursión.',
+      ),
+      cta: { label: 'Consultar un traslado', href: '/contacto?asunto=traslado' },
+      items: [
+        {
+          name: 'Minivan',
+          capacity: '',
+          description: 'Para grupos chicos y familias, con espacio para equipaje de mano y mochilas.',
+          imageId: '',
+          imageSrc: '/fleet/1.jpg',
+        },
+        {
+          name: 'Minibús',
+          capacity: '',
+          description: 'Para grupos grandes y salidas de día completo, con bodega para equipaje.',
+          imageId: '',
+          imageSrc: '/fleet/2.jpg',
+        },
+        {
+          name: 'Combi',
+          capacity: '',
+          description: 'El vehículo habitual de las excursiones regulares con búsqueda por hotel.',
+          imageId: '',
+          imageSrc: '/fleet/3.jpg',
+        },
+        {
+          name: 'Auto privado',
+          capacity: '',
+          description: 'Traslados privados desde y hacia el aeropuerto, puerta a puerta.',
+          imageId: '',
+          imageSrc: '/fleet/4.jpg',
+        },
+      ],
+    },
+
+    trust: {
+      enabled: true,
+      eyebrow: 'Quiénes somos',
+      yearsValue: '15',
+      yearsLabel: 'años trabajando en el turismo de El Calafate',
+      title: 'Quince años acompañando viajes a los glaciares',
+      description:
+        'Operamos desde El Calafate, con prestadores habilitados por el Parque Nacional Los Glaciares. Cada reserva la confirma una persona, no un robot, y tenés con quién hablar antes, durante y después del viaje.',
+      points: [
+        {
+          title: 'Prestadores habilitados',
+          description: 'Trabajamos con operadores autorizados para cada actividad dentro del Parque Nacional.',
+        },
+        {
+          title: 'Confirmación con nombre y apellido',
+          description: 'Te respondemos por correo o WhatsApp con la referencia de tu reserva, no con un número de ticket.',
+        },
+        {
+          title: 'Precios y condiciones por escrito',
+          description: 'Lo que incluye y lo que no, antes de pagar. Sin cargos que aparecen al final.',
+        },
+      ],
+      agencies: { label: 'Agencias y operadores', href: '/agencias' },
+      groups: { label: 'Grupos y familias', href: '/grupos' },
+      imageId: '',
+    },
+
     categories: {
       enabled: true,
       heading: heading(
@@ -377,6 +511,19 @@ export const DEFAULT_HOME_CONFIG: HomeConfig = {
     },
 
     gallery: { enabled: true, heading: heading('Galería', 'La Patagonia austral en imágenes'), maxPhotos: 16 },
+
+    video: {
+      enabled: true,
+      heading: heading(
+        'En video',
+        'Mirá cómo es la experiencia',
+        'Un recorrido corto por lo que vas a ver, antes de decidir qué reservar.',
+      ),
+      mediaId: '',
+      posterId: '',
+      caption: '',
+      cta: { label: 'Ver excursiones', href: '/excursiones' },
+    },
 
     reviews: { enabled: true, heading: heading('Opiniones', 'Lo que cuentan quienes ya viajaron') },
 

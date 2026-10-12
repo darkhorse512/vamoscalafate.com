@@ -37,7 +37,7 @@ export function CategoryTiles({ categories }: { categories: CategoryTile[] }) {
               sizes={index === 0 ? '(max-width: 1023px) 100vw, 50vw' : '(max-width: 1023px) 50vw, 25vw'}
               className="transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-plum-950/90 via-plum-950/30 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
 
             <span className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/15 text-white opacity-0 ring-1 ring-white/25 backdrop-blur-md transition-all duration-300 group-hover:opacity-100">
               <ArrowUpRight className="size-4" aria-hidden="true" />

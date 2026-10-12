@@ -232,7 +232,7 @@ export function TourFilters({
             <SlidersHorizontal className="size-4" aria-hidden="true" />
             Filtros
             {activeCount > 0 ? (
-              <span className="ml-0.5 grid size-5 place-items-center rounded-full bg-violet-700 text-[0.625rem] font-bold text-white">
+              <span className="ml-0.5 grid size-5 place-items-center rounded-full bg-sky-700 text-[0.625rem] font-bold text-white">
                 {activeCount}
               </span>
             ) : null}
@@ -255,7 +255,7 @@ export function TourFilters({
             type="button"
             aria-label="Cerrar filtros"
             onClick={() => setMobileOpen(false)}
-            className="absolute inset-0 bg-plum-950/50"
+            className="absolute inset-0 bg-navy-950/50"
           />
           <div
             role="dialog"
@@ -306,7 +306,7 @@ function FilterChip({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.8125rem] font-medium transition-colors',
         active
-          ? 'border-transparent bg-gradient-to-r from-violet-600 to-magenta-500 text-white shadow-[0_6px_16px_rgb(108_88_254/0.25)]'
+          ? 'border-transparent bg-gradient-to-r from-navy-700 to-sky-600 text-white shadow-[0_6px_16px_rgb(0_88_120/0.25)]'
           : 'border-border-strong bg-surface text-foreground hover:border-primary hover:bg-surface-muted',
       )}
     >

@@ -22,7 +22,7 @@ export function ReviewsCarousel({ reviews }: { reviews: HomeReview[] }) {
             {Array.from({ length: 5 }, (_, i) => (
               <Star
                 key={i}
-                className={i < review.rating ? 'size-4 fill-magenta-500 text-magenta-500' : 'size-4 text-border-strong'}
+                className={i < review.rating ? 'size-4 fill-sunset-500 text-sunset-500' : 'size-4 text-border-strong'}
                 aria-hidden="true"
               />
             ))}
@@ -34,7 +34,7 @@ export function ReviewsCarousel({ reviews }: { reviews: HomeReview[] }) {
             {review.content}
           </blockquote>
           <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-magenta-500 text-sm font-bold text-white">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-700 to-sky-600 text-sm font-bold text-white">
               {review.authorName.charAt(0).toUpperCase()}
             </span>
             <span className="min-w-0">

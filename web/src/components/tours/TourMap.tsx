@@ -38,7 +38,7 @@ export function TourMap({ src, title }: { src: string; title: string }) {
           className="group absolute inset-0 flex items-end justify-center bg-transparent p-4 focus-visible:outline-none"
           aria-label={`Activar el mapa: ${title}`}
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-plum-950/85 px-4 py-2 text-xs font-semibold text-white shadow-float backdrop-blur-md transition-transform group-hover:-translate-y-0.5 group-focus-visible:ring-2 group-focus-visible:ring-white">
+          <span className="inline-flex items-center gap-2 rounded-full bg-navy-950/85 px-4 py-2 text-xs font-semibold text-white shadow-float backdrop-blur-md transition-transform group-hover:-translate-y-0.5 group-focus-visible:ring-2 group-focus-visible:ring-white">
             <Hand className="size-3.5" aria-hidden="true" />
             Hacé clic para usar el mapa
           </span>

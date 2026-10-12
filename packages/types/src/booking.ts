@@ -49,6 +49,10 @@ export type PriceLine = {
   quantity: number
   unitCents: number
   subtotalCents: number
+  /** The line cannot be removed - a transfer the operator always provides. */
+  required?: boolean
+  /** Set when a seasonal rate replaced the band's standing price. */
+  seasonLabel?: string
 }
 
 /** Transparent, line-by-line price breakdown. Never a single opaque total. */

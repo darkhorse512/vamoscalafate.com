@@ -79,7 +79,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-control bg-violet-700 text-[0.875rem] font-medium text-white transition-colors hover:bg-violet-800 disabled:opacity-60"
+      className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-control bg-sky-700 text-[0.875rem] font-medium text-white transition-colors hover:bg-sky-800 disabled:opacity-60"
     >
       {pending ? (
         <>

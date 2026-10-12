@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react'
 import { ChevronDown, Loader2, Plus, Trash2 } from 'lucide-react'
 import { slugify } from '@vamos/shared'
 import { Alert, Button } from '@/components/ui/primitives'
-import { GalleryField } from './ImageField'
+import { GalleryField, SingleImageField } from './ImageField'
 import { createTourAction, updateTourAction } from '@/server/actions/tours'
 import type { TourFormData } from '@/lib/tour-form-data'
 import { cn } from '@/lib/utils'
@@ -85,6 +85,17 @@ export function TourForm({
           ageMin: tier.ageMin !== '' ? Number(tier.ageMin) : null,
           ageMax: tier.ageMax !== '' ? Number(tier.ageMax) : null,
           price: Number(tier.price),
+          rates: tier.rates
+            // A half-filled row is a row someone started and abandoned; it is
+            // dropped rather than failing the save with a date error.
+            .filter((rate) => rate.startDate && rate.endDate)
+            .map((rate) => ({
+              ...(rate.id ? { id: rate.id } : {}),
+              ...(rate.label ? { label: rate.label } : {}),
+              startDate: rate.startDate,
+              endDate: rate.endDate,
+              price: Number(rate.price),
+            })),
         })),
         currency: option.currency,
         durationMinutes: Number(option.durationMinutes),
@@ -122,6 +133,11 @@ export function TourForm({
         description: extra.description,
         price: Number(extra.price),
         perPerson: extra.perPerson,
+        required: extra.required,
+        highlight: extra.highlight,
+        ...(extra.badge ? { badge: extra.badge } : {}),
+        details: extra.details.split('\n').map((line) => line.trim()).filter(Boolean),
+        ...(extra.mediaId ? { mediaId: extra.mediaId } : {}),
         isActive: extra.isActive,
       })),
 
@@ -562,7 +578,7 @@ export function TourForm({
                 durationMinutes: form.durationMinutes, capacity: 20, minParticipants: 1,
                 maxParticipants: 20, pickupIncluded: false, departureTimes: '',
                 freeCancellationHours: 24, isActive: true,
-                tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0 }],
+                tiers: [{ label: 'Adultos', ageMin: '', ageMax: '', price: 0, rates: [] }],
               },
             ])
           }
@@ -687,7 +703,9 @@ export function TourForm({
       <Section title={`Opcionales (${form.extras.length})`}>
         <p className="mb-3 text-[0.8125rem] text-muted-foreground">
           Adicionales que el cliente suma a la reserva: traslado desde el hotel, vianda, salón VIP…
-          «Por persona» deja elegir la cantidad (hasta el número de pasajeros).
+          «Por persona» deja elegir la cantidad (hasta el número de pasajeros). «Obligatorio» lo agrega a
+          toda reserva sin que se pueda quitar y lo deja fuera del precio «desde». «Destacado» lo muestra
+          como un panel grande en la página de la excursión en lugar de una casilla.
         </p>
         <div className="space-y-3">
           {form.extras.map((extra, index) => (
@@ -747,6 +765,73 @@ export function TourForm({
               >
                 Quitar
               </button>
+
+              <div className="flex flex-wrap items-center gap-5 border-t border-border pt-3 sm:col-span-5">
+                <label className="flex items-center gap-2 text-[0.8125rem] text-foreground">
+                  <input
+                    type="checkbox"
+                    checked={extra.required}
+                    onChange={(event) => {
+                      const next = [...form.extras]
+                      next[index] = { ...extra, required: event.target.checked }
+                      update('extras', next)
+                    }}
+                  />
+                  Obligatorio
+                </label>
+                <label className="flex items-center gap-2 text-[0.8125rem] text-foreground">
+                  <input
+                    type="checkbox"
+                    checked={extra.highlight}
+                    onChange={(event) => {
+                      const next = [...form.extras]
+                      next[index] = { ...extra, highlight: event.target.checked }
+                      update('extras', next)
+                    }}
+                  />
+                  Destacado
+                </label>
+              </div>
+
+              {extra.highlight ? (
+                <div className="grid gap-3 sm:col-span-5 sm:grid-cols-[12rem_minmax(0,1fr)]">
+                  <Field label="Etiqueta">
+                    <input
+                      value={extra.badge}
+                      onChange={(event) => {
+                        const next = [...form.extras]
+                        next[index] = { ...extra, badge: event.target.value }
+                        update('extras', next)
+                      }}
+                      placeholder="Servicio opcional"
+                      className="admin-input"
+                    />
+                  </Field>
+                  <Field label="Qué incluye (una línea por punto)">
+                    <textarea
+                      rows={4}
+                      value={extra.details}
+                      onChange={(event) => {
+                        const next = [...form.extras]
+                        next[index] = { ...extra, details: event.target.value }
+                        update('extras', next)
+                      }}
+                      className="admin-input"
+                    />
+                  </Field>
+                  <div className="sm:col-span-2">
+                    <SingleImageField
+                      label="Foto del panel"
+                      value={extra.mediaId}
+                      onChange={(mediaId) => {
+                        const next = [...form.extras]
+                        next[index] = { ...extra, mediaId }
+                        update('extras', next)
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
@@ -758,7 +843,18 @@ export function TourForm({
           onClick={() =>
             update('extras', [
               ...form.extras,
-              { name: '', description: '', price: 0, perPerson: true, isActive: true },
+              {
+                name: '',
+                description: '',
+                price: 0,
+                perPerson: true,
+                required: false,
+                highlight: false,
+                badge: '',
+                details: '',
+                mediaId: '',
+                isActive: true,
+              },
             ])
           }
         >
@@ -1099,7 +1195,15 @@ function Checkbox({
   )
 }
 
-type TierRow = { id?: string; label: string; ageMin: string; ageMax: string; price: number }
+type RateRow = { id?: string; label: string; startDate: string; endDate: string; price: number }
+type TierRow = {
+  id?: string
+  label: string
+  ageMin: string
+  ageMax: string
+  price: number
+  rates: RateRow[]
+}
 
 /**
  * Price bands for one option. The first band is the headline "Desde" price
@@ -1168,16 +1272,102 @@ function TierEditor({ tiers, onChange }: { tiers: TierRow[]; onChange: (tiers: T
                 Quitar
               </button>
             )}
+
+            <div className="col-span-2 sm:col-span-5">
+              <RateEditor rates={tier.rates} onChange={(rates) => set(index, { rates })} />
+            </div>
           </div>
         ))}
       </div>
       <button
         type="button"
-        onClick={() => onChange([...tiers, { label: '', ageMin: '', ageMax: '', price: 0 }])}
+        onClick={() => onChange([...tiers, { label: '', ageMin: '', ageMax: '', price: 0, rates: [] }])}
         className="mt-2 inline-flex items-center gap-1 text-[0.8125rem] font-semibold text-primary hover:underline"
       >
         <Plus className="size-3.5" aria-hidden="true" />
         Agregar tarifa
+      </button>
+    </div>
+  )
+}
+
+/**
+ * Seasonal rates for one price band.
+ *
+ * A rate replaces the band's standing price for departures inside its range.
+ * Ranges may overlap and the narrowest one wins, which is what lets a holiday
+ * week sit inside a three-month high season without splitting it in three.
+ *
+ * There is no percentage field anywhere here, and that is the point: the price
+ * charged is the price typed. A rate computed from a base price would drift
+ * silently the next time the base price moved.
+ */
+function RateEditor({ rates, onChange }: { rates: RateRow[]; onChange: (rates: RateRow[]) => void }) {
+  const set = (index: number, patch: Partial<RateRow>) =>
+    onChange(rates.map((rate, i) => (i === index ? { ...rate, ...patch } : rate)))
+
+  return (
+    <div className="mt-2 rounded-control border border-dashed border-border-strong p-2.5">
+      <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle-foreground">
+        Tarifas por temporada ({rates.length})
+      </p>
+
+      {rates.length > 0 ? (
+        <div className="mt-2 space-y-2">
+          {rates.map((rate, index) => (
+            <div
+              key={rate.id ?? `new-${index}`}
+              className="grid grid-cols-2 gap-2 sm:grid-cols-[minmax(0,1.4fr)_9rem_9rem_9rem_4.5rem]"
+            >
+              <input
+                aria-label="Nombre de la temporada"
+                value={rate.label}
+                onChange={(event) => set(index, { label: event.target.value })}
+                placeholder="Temporada alta"
+                className="admin-input col-span-2 sm:col-span-1"
+              />
+              <input
+                aria-label="Desde"
+                type="date"
+                value={rate.startDate}
+                onChange={(event) => set(index, { startDate: event.target.value })}
+                className="admin-input"
+              />
+              <input
+                aria-label="Hasta"
+                type="date"
+                value={rate.endDate}
+                onChange={(event) => set(index, { endDate: event.target.value })}
+                className="admin-input"
+              />
+              <input
+                aria-label="Precio de la temporada"
+                type="number"
+                min={0}
+                step="0.01"
+                value={rate.price}
+                onChange={(event) => set(index, { price: Number(event.target.value) })}
+                className="admin-input"
+              />
+              <button
+                type="button"
+                onClick={() => onChange(rates.filter((_, i) => i !== index))}
+                className="self-center text-left text-[0.8125rem] font-medium text-status-danger hover:underline"
+              >
+                Quitar
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      <button
+        type="button"
+        onClick={() => onChange([...rates, { label: '', startDate: '', endDate: '', price: 0 }])}
+        className="mt-2 inline-flex items-center gap-1 text-[0.8125rem] font-semibold text-primary hover:underline"
+      >
+        <Plus className="size-3.5" aria-hidden="true" />
+        Agregar temporada
       </button>
     </div>
   )

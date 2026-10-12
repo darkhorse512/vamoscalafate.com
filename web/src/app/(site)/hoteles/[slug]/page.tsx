@@ -73,7 +73,7 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
 
             {hotel.starRating ? (
               <p
-                className="flex items-center gap-0.5 text-magenta-500"
+                className="flex items-center gap-0.5 text-sunset-500"
                 aria-label={`${hotel.starRating} estrellas`}
               >
                 {Array.from({ length: hotel.starRating }, (_, i) => (
@@ -101,7 +101,7 @@ export default async function HotelPage({ params }: { params: Promise<{ slug: st
                       key={amenity.id}
                       className="flex items-center gap-2.5 text-[0.9375rem] text-foreground"
                     >
-                      <span className="size-1.5 shrink-0 rounded-full bg-violet-400" aria-hidden="true" />
+                      <span className="size-1.5 shrink-0 rounded-full bg-sky-400" aria-hidden="true" />
                       {amenity.name}
                     </li>
                   ))}

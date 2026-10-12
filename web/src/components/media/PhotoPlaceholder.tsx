@@ -163,7 +163,7 @@ const PALETTES = [
   {
     // Lenga forest, autumn
     skyTop: '#3d6b74', skyBottom: '#cfe0d6', sun: '#fdf6e8',
-    far: '#5f8a7b', mid: '#3a6355', near: '#21372f', // plum-950
+    far: '#5f8a7b', mid: '#3a6355', near: '#21372f', // navy-950
     water: '#417a6c', waterDeep: '#18302a', snow: '#f2fbf6',
   },
   {
