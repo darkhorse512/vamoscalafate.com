@@ -205,6 +205,33 @@ for app in web admin; do
   fi
 done
 
+# Purge the data cache.
+#
+# Pages are prerendered during the build, against whatever the database held
+# at that moment. Anything changed between the build and the restart - a
+# homepage section reordered, a price corrected - would otherwise stay
+# invisible until the next background revalidation, which is long enough for
+# someone to conclude the deploy did not work. Purging here makes the first
+# request after a deploy regenerate from current data.
+echo
+echo "── Purging the data cache ────────────────────────────────"
+REVALIDATE_SECRET="$(grep -oP '^REVALIDATE_SECRET=\K.*' "$APP_DIR/current/web/.env" 2>/dev/null | tr -d '"'"'"'\r' || true)"
+if [ -n "${REVALIDATE_SECRET:-}" ]; then
+  PURGE_STATUS="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+    -X POST http://127.0.0.1:3000/api/revalidate \
+    -H "x-revalidate-secret: $REVALIDATE_SECRET" \
+    -H 'content-type: application/json' \
+    -d '{"tags":["site-settings","tours","tour-categories","destinations","blog-posts","hotels","businesses","reviews","faqs","static-pages","sitemap"]}' || echo 000)"
+  if [ "$PURGE_STATUS" = "200" ]; then
+    echo "  purged"
+  else
+    # Not fatal: the site is up and serving, just from the build's snapshot.
+    echo "  WARNING: purge returned $PURGE_STATUS; caches expire on their own" >&2
+  fi
+else
+  echo "  WARNING: no REVALIDATE_SECRET found; skipping" >&2
+fi
+
 # Warm the image cache in the background so the first visitors after the
 # deploy are not the ones waiting for image encoding.
 nohup "$APP_DIR/deploy/scripts/warm-images.sh" >> /var/log/vamoscalafate/warm-images.log 2>&1 &
