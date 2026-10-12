@@ -215,7 +215,7 @@ done
 # request after a deploy regenerate from current data.
 echo
 echo "── Purging the data cache ────────────────────────────────"
-REVALIDATE_SECRET="$(grep -oP '^REVALIDATE_SECRET=\K.*' "$APP_DIR/current/web/.env" 2>/dev/null | tr -d '"'"'"'\r' || true)"
+REVALIDATE_SECRET="$(grep -oP '^REVALIDATE_SECRET=\K.*' "$APP_DIR/current/web/web/.env" 2>/dev/null | tr -d '"'"'"'\r' || true)"
 if [ -n "${REVALIDATE_SECRET:-}" ]; then
   PURGE_STATUS="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
     -X POST http://127.0.0.1:3000/api/revalidate \
