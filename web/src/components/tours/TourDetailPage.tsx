@@ -161,7 +161,7 @@ export function TourDetailPage({
         */}
         <div className="lg:grid lg:h-[calc(100svh-var(--header-height)-3rem)] lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-10">
           {/* ── Main column ──────────────────────────────────────────── */}
-          <div className="scroll-area min-w-0 space-y-14 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-5 lg:[scrollbar-gutter:stable]">
+          <div className="pane-scroll min-w-0 space-y-14 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-5 lg:[scrollbar-gutter:stable]">
             {/* Included, as icon tiles */}
             {tour.included.length > 0 ? (
               <section>
@@ -433,7 +433,7 @@ export function TourDetailPage({
           {/* ── Booking column ───────────────────────────────────────── */}
           <aside
             id="reservar"
-            className="scroll-area mt-14 scroll-mt-28 lg:mt-0 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-1 lg:[scrollbar-gutter:stable]"
+            className="pane-scroll mt-14 scroll-mt-28 lg:mt-0 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-2 lg:[scrollbar-gutter:stable]"
           >
             <BookingWidget tour={tour} />
           </aside>

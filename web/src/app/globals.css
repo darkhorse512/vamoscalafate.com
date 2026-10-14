@@ -684,13 +684,14 @@
 
 @supports not selector(::-webkit-scrollbar) {
   html,
-  .scroll-area {
+  .pane-scroll {
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb-from) var(--scrollbar-track);
   }
-  /* Inside a pane the track would otherwise draw a grey channel down the
-     middle of the content. */
+  /* A dropdown's track would draw a grey channel down the middle of the
+     interface; a page pane's track is wanted, as the affordance. */
   .scroll-area {
+    scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb-from) transparent;
   }
 }
@@ -737,6 +738,31 @@
 [role='listbox']::-webkit-scrollbar-thumb,
 [role='dialog'] ::-webkit-scrollbar-thumb {
   border-width: 2px;
+}
+
+/* Page-level scroll panes (the tour page's description and booking columns).
+   Deliberately more prominent than `.scroll-area`, which is for dropdowns and
+   drawers: here the scrollbar is the only thing telling a reader that the
+   column scrolls on its own rather than with the page, so it gets a visible
+   track as well as a thumb. */
+.pane-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.pane-scroll::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 9999px;
+}
+.pane-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--scrollbar-thumb-from), var(--scrollbar-thumb-to)) padding-box;
+  min-height: 40px;
+}
+.pane-scroll::-webkit-scrollbar-thumb:hover {
+  border-width: 1px;
+  background: linear-gradient(180deg, var(--scrollbar-thumb-hover-from), var(--scrollbar-thumb-hover-to))
+    padding-box;
 }
 
 /* "3 imperdibles" headline: flips between its two messages. Pure CSS, so it

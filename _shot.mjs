@@ -1,18 +1,15 @@
 import { chromium } from '@playwright/test'
 const out = process.argv[2]
 const b = await chromium.launch()
-
-// Hero, on each slide, so the brightest photograph is checked too.
-const p = await b.newPage({ viewport: { width: 1366, height: 900 } })
-await p.goto('https://vamoscalafate.com/', { waitUntil: 'networkidle', timeout: 60000 })
+const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 4 })
+await p.goto('https://vamoscalafate.com/excursiones/el-chalten-trekking-libre', { waitUntil: 'networkidle', timeout: 60000 })
 await p.getByRole('button', { name: /Aceptar/i }).click().catch(() => {})
-await p.waitForTimeout(2500)
-await p.screenshot({ path: `${out}/hero-1.png` })
-await p.getByRole('tab', { name: /Minitrekking/i }).click()
-await p.waitForTimeout(2200)
-await p.screenshot({ path: `${out}/hero-2.png` })
-await p.getByRole('tab', { name: /Todo Glaciares/i }).click()
-await p.waitForTimeout(2200)
-await p.screenshot({ path: `${out}/hero-3.png` })
-await p.close()
+await p.waitForTimeout(800)
+const box = await p.locator('aside#reservar').boundingBox()
+await p.evaluate((y) => window.scrollTo(0, y - 88), box.y)
+const left = p.locator('.scroll-area').first()
+await left.evaluate((el) => el.scrollBy(0, 400))
+await p.waitForTimeout(700)
+const lb = await left.boundingBox()
+await p.screenshot({ path: `${out}/edge-left.png`, clip: { x: lb.x + lb.width - 14, y: lb.y + 20, width: 14, height: 420 } })
 await b.close(); console.log('done')
