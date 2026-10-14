@@ -569,6 +569,32 @@
     }
   }
 
+  /*
+   * Legibility for white copy sitting directly on a photograph.
+   *
+   * The alternative - a dark gradient across the picture - costs the image:
+   * on the glacier slides it turned the ice grey and flattened exactly the
+   * blues the photograph was chosen for. The shadow travels with the glyphs
+   * instead, so the artwork is never touched.
+   *
+   * Three stacked shadows, the way cartographers set labels over terrain: a
+   * tight one for edge definition against fine detail, a medium one for body,
+   * and a wide, soft one that lifts the whole block off a busy background.
+   */
+  .text-on-photo {
+    text-shadow:
+      0 1px 2px rgb(4 33 46 / 0.55),
+      0 3px 12px rgb(4 33 46 / 0.45),
+      0 10px 34px rgb(4 33 46 / 0.38);
+  }
+
+  /* Lighter weight, for small supporting text that would otherwise smear. */
+  .text-on-photo-sm {
+    text-shadow:
+      0 1px 2px rgb(4 33 46 / 0.6),
+      0 2px 8px rgb(4 33 46 / 0.45);
+  }
+
   /* Brand gradient text, for a single emphasised word in a heading. */
   .text-gradient {
     background: linear-gradient(100deg, #2f9cc4 0%, #ff5a1f 100%);
@@ -657,9 +683,15 @@
 }
 
 @supports not selector(::-webkit-scrollbar) {
-  html {
+  html,
+  .scroll-area {
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb-from) var(--scrollbar-track);
+  }
+  /* Inside a pane the track would otherwise draw a grey channel down the
+     middle of the content. */
+  .scroll-area {
+    scrollbar-color: var(--scrollbar-thumb-from) transparent;
   }
 }
 

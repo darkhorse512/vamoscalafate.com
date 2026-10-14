@@ -32,9 +32,9 @@ const DIFFICULTY_LABEL: Record<string, string> = {
  *
  * Section order follows the decision a traveller actually makes: what it is,
  * what it costs, what happens, what is and is not included, what could go
- * wrong, and only then social proof and alternatives. The booking widget is
- * sticky on desktop and pinned to the bottom bar on mobile, so the action is
- * never more than a glance away.
+ * wrong, and only then social proof and alternatives. On desktop the booking
+ * panel is its own scroll pane beside the description, and on mobile it is
+ * pinned to the bottom bar, so the action is never more than a glance away.
  */
 export function TourDetailPage({
   tour,
@@ -143,9 +143,25 @@ export function TourDetailPage({
       </div>
 
       <div className="container-page mt-14 pb-24 lg:pb-16">
-        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-10">
+        {/*
+          Split view from `lg` up: the description and the booking panel each
+          scroll on their own, so reading the itinerary never pushes the price
+          and the date picker off screen, and a booking panel taller than the
+          viewport can still be scrolled to its end - which a sticky panel
+          could not.
+
+          Below `lg` the two are stacked in normal document flow. A nested
+          scroll region on a phone fights the browser's own gestures and hides
+          the address bar's hide-on-scroll, so the panes exist only where
+          there is room for two columns.
+
+          `100svh` rather than `100vh`: on mobile browsers `vh` is the tallest
+          the viewport ever gets, which puts the bottom of the pane under the
+          toolbar.
+        */}
+        <div className="lg:grid lg:h-[calc(100svh-var(--header-height)-3rem)] lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-10">
           {/* ── Main column ──────────────────────────────────────────── */}
-          <div className="min-w-0 space-y-14">
+          <div className="scroll-area min-w-0 space-y-14 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-5 lg:[scrollbar-gutter:stable]">
             {/* Included, as icon tiles */}
             {tour.included.length > 0 ? (
               <section>
@@ -415,7 +431,10 @@ export function TourDetailPage({
           </div>
 
           {/* ── Booking column ───────────────────────────────────────── */}
-          <aside id="reservar" className="mt-14 scroll-mt-28 lg:sticky lg:top-24 lg:mt-0 lg:self-start">
+          <aside
+            id="reservar"
+            className="scroll-area mt-14 scroll-mt-28 lg:mt-0 lg:h-full lg:overflow-y-auto lg:pb-10 lg:pr-1 lg:[scrollbar-gutter:stable]"
+          >
             <BookingWidget tour={tour} />
           </aside>
         </div>

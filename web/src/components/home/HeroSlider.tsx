@@ -172,10 +172,11 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
           )
         })}
 
-        {/* Legibility: weighted left where the copy sits, and to the bottom
-            where the selector sits. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/45 to-navy-950/5" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/10 to-navy-950/40" />
+        {/*
+          No overlay, no scrim, no blur: the photograph is shown as shot.
+          Legibility is carried by the copy itself (`.text-on-photo`), which
+          holds its contrast without touching a single pixel of the image.
+        */}
       </div>
 
       {/* ── Copy ───────────────────────────────────────────────────────── */}
@@ -200,7 +201,7 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
               <div key={isActive ? `copy-${index}` : 'idle'}>
                 <p
                   className={cn(
-                    'inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/90 ring-1 ring-inset ring-white/20 backdrop-blur-md',
+                    'inline-flex items-center gap-1.5 rounded-full bg-navy-950/55 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/25',
                     isActive && 'animate-rise-in',
                   )}
                 >
@@ -210,7 +211,7 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
 
                 <Heading
                   className={cn(
-                    'mt-5 font-display text-display-lg font-bold leading-[1.03] text-white',
+                    'text-on-photo mt-5 font-display text-display-lg font-bold leading-[1.03] text-white',
                     isActive && 'animate-rise-in [animation-delay:120ms]',
                   )}
                 >
@@ -219,7 +220,7 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
 
                 <p
                   className={cn(
-                    'mt-5 max-w-xl text-base leading-relaxed text-white/85 sm:text-[1.125rem]',
+                    'text-on-photo mt-5 max-w-xl text-base leading-relaxed text-white sm:text-[1.125rem]',
                     isActive && 'animate-rise-in [animation-delay:240ms]',
                   )}
                 >
@@ -265,7 +266,7 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
                     onClick={() => go(slideIndex)}
                     className="group flex-1 text-left"
                   >
-                    <span className="relative block h-[3px] overflow-hidden rounded-full bg-white/25 transition-[height] group-hover:h-[5px]">
+                    <span className="relative block h-[3px] overflow-hidden rounded-full bg-navy-950/45 shadow-[0_1px_3px_rgb(4_33_46/0.45)] transition-[height] group-hover:h-[5px]">
                       <span
                         ref={(element) => {
                           barRefs.current[slideIndex] = element
@@ -279,8 +280,8 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
                     </span>
                     <span
                       className={cn(
-                        'mt-2.5 hidden text-[0.75rem] font-semibold tracking-wide transition-colors sm:block',
-                        isActive ? 'text-white' : 'text-white/55 group-hover:text-white/85',
+                        'text-on-photo-sm mt-2.5 hidden text-[0.75rem] font-semibold tracking-wide transition-colors sm:block',
+                        isActive ? 'text-white' : 'text-white/75 group-hover:text-white',
                       )}
                     >
                       {slide.tabLabel}
@@ -329,7 +330,7 @@ function SliderButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/25"
+      className="grid size-10 place-items-center rounded-full border border-white/25 bg-navy-950/55 text-white transition-colors hover:bg-navy-950/75"
     >
       {children}
     </button>

@@ -41,20 +41,22 @@ export function Hero({
         ) : (
           <HeroScene />
         )}
-        <div className={media?.url ? 'absolute inset-0 scrim-full' : 'absolute inset-0 scrim-hero'} />
+        {/* A photograph is shown as shot; only the generated placeholder,
+            which has no subject to protect, keeps its scrim. */}
+        {media?.url ? null : <div className="absolute inset-0 scrim-hero" />}
       </div>
 
       <div className="container-page relative pb-14 pt-32 sm:pb-20">
-        <p className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-white/85 ring-1 ring-inset ring-white/20 backdrop-blur-sm">
+        <p className="inline-flex items-center gap-1.5 rounded-full bg-navy-950/55 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-white ring-1 ring-inset ring-white/25">
           <MapPin className="size-3" aria-hidden="true" />
           El Calafate · Santa Cruz · Argentina
         </p>
 
-        <h1 className="mt-5 max-w-3xl font-display text-display-lg font-bold leading-[1.05] text-white">
+        <h1 className="text-on-photo mt-5 max-w-3xl font-display text-display-lg font-bold leading-[1.05] text-white">
           {title}
         </h1>
 
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-white/85 sm:text-[1.0625rem]">
+        <p className="text-on-photo mt-5 max-w-xl text-base leading-relaxed text-white sm:text-[1.0625rem]">
           {subtitle}
         </p>
 
@@ -73,7 +75,7 @@ export function Hero({
           </ButtonLink>
         </div>
 
-        <ul className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/15 pt-6 text-[0.8125rem] text-white/75">
+        <ul className="text-on-photo-sm mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/20 pt-6 text-[0.8125rem] text-white/90">
           <HeroFact label="Glaciar Perito Moreno" detail="a 80 km por la Ruta 11" />
           <HeroFact label="Aeropuerto FTE" detail="a 23 km del centro" />
           <HeroFact label="Parque Nacional" detail="Patrimonio UNESCO desde 1981" />

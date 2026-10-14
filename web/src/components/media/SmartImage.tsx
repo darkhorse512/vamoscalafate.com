@@ -51,7 +51,16 @@ export function SmartImage({
     // Above-the-fold images must not be lazy - that delays the LCP element.
     loading: priority ? ('eager' as const) : ('lazy' as const),
     className: cn('object-cover', className),
-    ...(media.blurDataUrl
+    /*
+     * The blur-up placeholder is for images that arrive late: it holds the
+     * frame so the layout does not jump, and it is gone within a frame or two.
+     *
+     * A priority image is fetched eagerly and is usually the LCP element, so
+     * the placeholder buys nothing there and costs a visible blurred paint of
+     * the hero before the real photograph replaces it. Those are shown sharp
+     * or not at all.
+     */
+    ...(media.blurDataUrl && !priority
       ? { placeholder: 'blur' as const, blurDataURL: media.blurDataUrl }
       : {}),
   }

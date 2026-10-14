@@ -30,11 +30,17 @@ const VARIANTS: Record<Variant, string> = {
   outline:
     'border border-border-strong bg-surface text-heading hover:border-primary hover:bg-surface-muted focus-visible:ring-primary',
   ghost: 'text-foreground hover:bg-surface-strong focus-visible:ring-primary',
-  // Frosted, for use over photographs and dark bands. A variant of its own
-  // because `cn` does not merge: overriding `ghost` left its surface-coloured
-  // hover in the cascade, racing the override.
+  // For use over photographs and dark bands. A variant of its own because
+  // `cn` does not merge: overriding `ghost` left its surface-coloured hover in
+  // the cascade, racing the override.
+  //
+  // The fill is a dark tint rather than a frosted white one. A white tint
+  // needs `backdrop-blur` to separate itself from a bright photograph, and
+  // blurring the artwork to make a button readable is the wrong trade: the
+  // button is the small thing. A dark tint reads on snow and on a dark band
+  // alike, with no filter over the image at all.
   glass:
-    'border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 focus-visible:ring-white/70',
+    'border border-white/30 bg-navy-950/50 text-white text-on-photo-sm hover:bg-navy-950/75 focus-visible:ring-white/70',
   // The booking colour. Both gradient stops are deep enough that white text
   // clears 4.5:1 — the brand orange (sunset-500) only reaches 3.1:1, so it is
   // reserved for badges and graphics that carry no text.
