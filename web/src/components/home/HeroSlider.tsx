@@ -197,11 +197,28 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
                 isActive ? 'relative' : 'pointer-events-none absolute inset-x-0 top-32 opacity-0',
               )}
             >
-              {/* Keyed so the staggered entrance replays per slide. */}
-              <div key={isActive ? `copy-${index}` : 'idle'}>
+              {/*
+                The copy sits on its own panel, and the panel is keyed so the
+                staggered entrance replays per slide.
+
+                White text straight onto these photographs is unreadable -
+                the Spegazzini slide puts the headline over bright cyan
+                lettering, the Perito Moreno slide over sunlit ice - and the
+                usual fix, a gradient across the whole frame, is what dulled
+                the images in the first place. A panel is bounded: it ends
+                where the copy ends, and on a 16:9 hero that leaves most of
+                the photograph untouched.
+
+                No backdrop filter. The panel tints what is behind it; it
+                does not blur it.
+              */}
+              <div
+                key={isActive ? `copy-${index}` : 'idle'}
+                className="rounded-[1.75rem] bg-navy-950/62 px-6 py-7 ring-1 ring-inset ring-white/12 sm:px-9 sm:py-9"
+              >
                 <p
                   className={cn(
-                    'inline-flex items-center gap-1.5 rounded-full bg-navy-950/55 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/25',
+                    'inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/25',
                     isActive && 'animate-rise-in',
                   )}
                 >
@@ -252,55 +269,59 @@ export function HeroSlider({ slides, autoplaySeconds = 7 }: { slides: HeroSlide[
       {/* ── Controls ───────────────────────────────────────────────────── */}
       {count > 1 ? (
         <div className="absolute inset-x-0 bottom-0 z-10">
-          <div className="container-page flex items-end gap-4 pb-14 sm:pb-16">
-            <div className="flex flex-1 gap-2 sm:gap-3" role="tablist" aria-label="Elegir diapositiva">
-              {slides.map((slide, slideIndex) => {
-                const isActive = slideIndex === index
-                return (
-                  <button
-                    key={slide.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-label={`Ir a ${slide.tabLabel}`}
-                    onClick={() => go(slideIndex)}
-                    className="group flex-1 text-left"
-                  >
-                    <span className="relative block h-[3px] overflow-hidden rounded-full bg-navy-950/45 shadow-[0_1px_3px_rgb(4_33_46/0.45)] transition-[height] group-hover:h-[5px]">
-                      <span
-                        ref={(element) => {
-                          barRefs.current[slideIndex] = element
-                        }}
-                        className={cn(
-                          'absolute inset-0 origin-left rounded-full',
-                          isActive ? 'bg-white' : 'bg-white/60',
-                        )}
-                        style={{ transform: `scaleX(${slideIndex < index ? 1 : 0})` }}
-                      />
-                    </span>
-                    <span
-                      className={cn(
-                        'text-on-photo-sm mt-2.5 hidden text-[0.75rem] font-semibold tracking-wide transition-colors sm:block',
-                        isActive ? 'text-white' : 'text-white/75 group-hover:text-white',
-                      )}
+          {/* Bounded like the copy panel, for the same reason: these labels
+              are 12px and would vanish over sunlit ice. */}
+          <div className="container-page pb-14 sm:pb-16">
+            <div className="flex items-end gap-4 rounded-[1.25rem] bg-navy-950/62 px-5 py-3.5 ring-1 ring-inset ring-white/12">
+              <div className="flex flex-1 gap-2 sm:gap-3" role="tablist" aria-label="Elegir diapositiva">
+                {slides.map((slide, slideIndex) => {
+                  const isActive = slideIndex === index
+                  return (
+                    <button
+                      key={slide.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      aria-label={`Ir a ${slide.tabLabel}`}
+                      onClick={() => go(slideIndex)}
+                      className="group flex-1 text-left"
                     >
-                      {slide.tabLabel}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
+                      <span className="relative block h-[3px] overflow-hidden rounded-full bg-white/25 transition-[height] group-hover:h-[5px]">
+                        <span
+                          ref={(element) => {
+                            barRefs.current[slideIndex] = element
+                          }}
+                          className={cn(
+                            'absolute inset-0 origin-left rounded-full',
+                            isActive ? 'bg-white' : 'bg-white/60',
+                          )}
+                          style={{ transform: `scaleX(${slideIndex < index ? 1 : 0})` }}
+                        />
+                      </span>
+                      <span
+                        className={cn(
+                          'mt-2.5 hidden text-[0.75rem] font-semibold tracking-wide transition-colors sm:block',
+                          isActive ? 'text-white' : 'text-white/70 group-hover:text-white',
+                        )}
+                      >
+                        {slide.tabLabel}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
 
-            <div className="flex shrink-0 items-center gap-1.5">
-              <SliderButton label={paused ? 'Reanudar' : 'Pausar'} onClick={() => setPaused((p) => !p)}>
-                {paused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
-              </SliderButton>
-              <SliderButton label="Anterior" onClick={() => go(index - 1)}>
-                <ChevronLeft className="size-5" aria-hidden="true" />
-              </SliderButton>
-              <SliderButton label="Siguiente" onClick={() => go(index + 1)}>
-                <ChevronRight className="size-5" aria-hidden="true" />
-              </SliderButton>
+              <div className="flex shrink-0 items-center gap-1.5">
+                <SliderButton label={paused ? 'Reanudar' : 'Pausar'} onClick={() => setPaused((p) => !p)}>
+                  {paused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
+                </SliderButton>
+                <SliderButton label="Anterior" onClick={() => go(index - 1)}>
+                  <ChevronLeft className="size-5" aria-hidden="true" />
+                </SliderButton>
+                <SliderButton label="Siguiente" onClick={() => go(index + 1)}>
+                  <ChevronRight className="size-5" aria-hidden="true" />
+                </SliderButton>
+              </div>
             </div>
           </div>
         </div>
@@ -330,7 +351,7 @@ function SliderButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className="grid size-10 place-items-center rounded-full border border-white/25 bg-navy-950/55 text-white transition-colors hover:bg-navy-950/75"
+      className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 text-white transition-colors hover:bg-white/25"
     >
       {children}
     </button>
